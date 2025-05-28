@@ -1,1 +1,1 @@
-Hello World.
+这是说明书。
