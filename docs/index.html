@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,10 @@
             background: #0066CC;
             color: white;
             padding: 1.5rem 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .nav h1 {
@@ -42,7 +46,6 @@
             display: flex;
             gap: 2rem;
             list-style: none;
-            margin-top: 1rem;
         }
 
         .nav a {
@@ -59,25 +62,40 @@
         /* 英雄区域 */
         .hero {
             height: 70vh;
-            background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 102, 204, 0.8)), 
+            background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 102, 204, 0.8)),
                         url(https://picsum.photos/1920/1080?grayscale=0.3) center/cover;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             text-align: center;
             color: white;
             margin-bottom: 4rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .hero h2 {
             font-size: 3rem;
             font-weight: 700;
             margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 2rem;
+            width: 80%;
+            max-width: 800px;
         }
 
         .cta-btn {
@@ -98,6 +116,19 @@
         .section-title {
             text-align: center;
             margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-title h3 {
@@ -121,9 +152,22 @@
         .property-card {
             background: white;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             transition: transform 0.3s;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .property-card:hover {
@@ -134,6 +178,19 @@
             height: 200px;
             background-size: cover;
             background-position: center;
+            position: relative;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #0066CC;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            z-index: 1;
         }
 
         .card-content {
@@ -168,6 +225,79 @@
             font-size: 0.95rem;
         }
 
+        /* 关于我们模块 */
+        .about-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .about-section img {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-section h3 {
+            font-size: 2.2rem;
+            color: #0066CC;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .about-section p {
+            color: #666;
+            margin-bottom: 2rem;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        /* 联系我们模块 */
+        .contact-section {
+            background: #f0f5ff;
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .contact-section h3 {
+            font-size: 2.2rem;
+            color: #0066CC;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .contact-info a {
+            color: #0066CC;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: #FF9900;
+        }
+
         /* 页脚 */
         .footer {
             background: #0066CC;
@@ -199,12 +329,19 @@
                 gap: 1rem;
                 margin-top: 2rem;
             }
+
             .hero h2 {
                 font-size: 2.2rem;
+            }
+
+            .about-section img {
+                width: 200px;
+                height: 200px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- 导航栏 -->
@@ -221,7 +358,7 @@
         <!-- 英雄区域 -->
         <section class="hero" id="home">
             <h2>专注云南房产5年+</h2>
-            <p>服务超100家庭 | 昆明·普洱·版纳多城联动</p>
+            <p>服务超100家庭 | 昆明·普洱·版纳多城联动<br>为您打造理想家园</p>
             <a href="#properties" class="cta-btn">查看房源</a>
         </section>
 
@@ -308,23 +445,19 @@
             </div>
         </section>
 
-        <!-- 关于我们（简约版） -->
-        <section class="section" id="about">
-            <div class="section-title">
-                <h3>关于我们</h3>
-                <p>您身边的靠谱置业管家<br>关注我们，聆听1001个房产故事</p>
-            </div>
-            <p class="text-center">5年云南房产经验 | 多城联动服务 | 全程无忧交易</p>
+        <!-- 关于我们 -->
+        <section class="about-section" id="about">
+            <img src="https://picsum.photos/300/300?random=8" alt="团队形象">
+            <h3>关于我们</h3>
+            <p>我们是一支深耕云南房产市场5年的专业团队，始终秉持“客户至上”的服务理念，已成功帮助超100个家庭在昆明、普洱、版纳等地实现安家梦想。<br>关注我们，聆听1001个房产故事，了解每一个家背后的温暖与期待。</p>
         </section>
 
         <!-- 联系我们 -->
-        <section class="section" id="contact">
-            <div class="section-title">
-                <h3>联系我们</h3>
-                <p>欢迎随时咨询房产相关问题</p>
-            </div>
-            <div class="text-center">
-                <p>邮箱：<a href="mailto:Davi-iHomeStudio@qq.com" class="email-link">Davi-iHomeStudio@qq.com</a></p>
+        <section class="contact-section" id="contact">
+            <h3>联系我们</h3>
+            <p>无论您有购房、租房需求，还是想了解更多房产信息，欢迎随时与我们联系！</p>
+            <div class="contact-info">
+                <a href="mailto:Davi-iHomeStudio@qq.com">Davi-iHomeStudio@qq.com</a>
             </div>
         </section>
 
@@ -334,4 +467,5 @@
         </footer>
     </div>
 </body>
+
 </html>
