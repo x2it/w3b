@@ -5,524 +5,369 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Davi丨我家Studio - 云南房产服务</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            line-height: 1.6;
-            color: #333;
-            background: #f5f7fa;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* 导航栏 */
-        .nav {
-            background: #0066CC;
-            color: white;
-            padding: 1.5rem 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
-
-        .nav ul {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav a:hover {
-            color: #FF9900;
-        }
-
-        /* 英雄区域 */
-        .hero {
-            height: 70vh;
-            background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 102, 204, 0.8)),
-                        url(https://picsum.photos/1920/1080?grayscale=0.3) center/cover;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            margin-bottom: 4rem;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0066CC',
+                        secondary: '#FF9900',
+                        dark: '#333333',
+                        light: '#f5f7fa',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
             }
         }
-
-        .hero h2 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            width: 80%;
-            max-width: 800px;
-        }
-
-        .cta-btn {
-            background: #FF9900;
-            color: white;
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: transform 0.3s;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px);
-        }
-
-        /* 城市分类标题 */
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease-in-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
             }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
             }
-        }
-
-        .section-title h3 {
-            font-size: 2.2rem;
-            color: #0066CC;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-title p {
-            color: #666;
-        }
-
-        /* 房源卡片 */
-        .property-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-        }
-
-        .property-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            transition: transform 0.3s;
-            animation: slideIn 1s ease-in-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
+            .transition-all-300 {
+                transition: all 0.3s ease;
             }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
+            .hover-scale {
+                transition: transform 0.3s ease;
             }
-        }
-
-        .property-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-image {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #0066CC;
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            z-index: 1;
-        }
-
-        .card-content {
-            padding: 2rem;
-        }
-
-        .city-tag {
-            display: inline-block;
-            background: #0066CC;
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .property-type {
-            color: #FF9900;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .price {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #0066CC;
-            margin-bottom: 1rem;
-        }
-
-        .details {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .feature-tag {
-            background: #f0f5ff;
-            color: #0066CC;
-            padding: 0.2rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-
-        /* 关于我们模块 */
-        .about-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .about-section img {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-section h3 {
-            font-size: 2.2rem;
-            color: #0066CC;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .about-section p {
-            color: #666;
-            margin-bottom: 2rem;
-            width: 80%;
-            max-width: 800px;
-        }
-
-        /* 联系我们模块 */
-        .contact-section {
-            background: #f0f5ff;
-            padding: 3rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .contact-section h3 {
-            font-size: 2.2rem;
-            color: #0066CC;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .contact-section p {
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .contact-info a {
-            color: #0066CC;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .contact-info a:hover {
-            color: #FF9900;
-        }
-
-        /* 页脚 */
-        .footer {
-            background: #0066CC;
-            color: white;
-            text-align: center;
-            padding: 3rem 2rem;
-            margin-top: 5rem;
-        }
-
-        .footer p {
-            margin-bottom: 0.5rem;
-        }
-
-        .email-link {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .email-link:hover {
-            color: #FF9900;
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .nav ul {
-                flex-direction: column;
-                gap: 1rem;
-                margin-top: 2rem;
+            .hover-scale:hover {
+                transform: scale(1.03);
             }
-
-            .hero h2 {
-                font-size: 2.2rem;
+            .card-shadow {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             }
-
-            .about-section img {
-                width: 200px;
-                height: 200px;
+            .nav-shadow {
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <!-- 导航栏 -->
-        <nav class="nav">
-            <h1>Davi丨我家Studio</h1>
-            <ul>
-                <li><a href="#home">首页</a></li>
-                <li><a href="#properties">精选房源</a></li>
-                <li><a href="#about">关于我们</a></li>
-                <li><a href="#contact">联系我们</a></li>
+<body class="font-inter bg-light text-dark">
+    <!-- 移动端导航菜单按钮 -->
+    <div class="fixed top-4 right-4 z-50 md:hidden">
+        <button id="menu-toggle" class="bg-primary text-white p-2 rounded-full shadow-lg">
+            <i class="fa fa-bars text-xl"></i>
+        </button>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav id="main-nav" class="fixed w-full top-0 left-0 bg-primary text-white z-40 nav-shadow transition-all duration-300 transform translate-y-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Davi丨我家Studio</h1>
+            <ul class="hidden md:flex space-x-8 text-sm font-medium">
+                <li><a href="#home" class="hover:text-secondary transition-colors">首页</a></li>
+                <li><a href="#properties" class="hover:text-secondary transition-colors">精选房源</a></li>
+                <li><a href="#about" class="hover:text-secondary transition-colors">关于我们</a></li>
+                <li><a href="#contact" class="hover:text-secondary transition-colors">联系我们</a></li>
             </ul>
-        </nav>
+        </div>
+    </nav>
 
-        <!-- 英雄区域 -->
-        <section class="hero" id="home">
-            <h2>专注云南房产5年+</h2>
-            <p>服务超100家庭 | 昆明·普洱·版纳多城联动<br>为您打造理想家园</p>
-            <a href="#properties" class="cta-btn">查看房源</a>
-        </section>
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="fixed inset-0 bg-primary text-white z-30 transform translate-x-full transition-transform duration-300 md:hidden">
+        <div class="h-full flex flex-col justify-center items-center space-y-8">
+            <button id="close-menu" class="absolute top-4 right-4 text-white">
+                <i class="fa fa-times text-2xl"></i>
+            </button>
+            <a href="#home" class="text-2xl font-medium hover:text-secondary transition-colors">首页</a>
+            <a href="#properties" class="text-2xl font-medium hover:text-secondary transition-colors">精选房源</a>
+            <a href="#about" class="text-2xl font-medium hover:text-secondary transition-colors">关于我们</a>
+            <a href="#contact" class="text-2xl font-medium hover:text-secondary transition-colors">联系我们</a>
+        </div>
+    </div>
 
-        <!-- 精选房源 -->
-        <section class="section" id="properties">
-            <div class="section-title">
-                <h3>精选房源</h3>
-                <p>昆明、普洱、版纳优质别墅/洋房/公寓</p>
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24 md:pt-0 min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/90 to-primary">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-6 text-shadow">专注云南房产5年+</h2>
+                <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 leading-relaxed">
+                    服务超100家庭 | 昆明·普洱·版纳多城联动<br>为您打造理想家园
+                </p>
+                <a href="#properties" class="inline-block bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 px-8 rounded-full text-lg shadow-lg hover-scale">
+                    查看房源
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精选房源 -->
+    <section id="properties" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">精选房源</h3>
+                <p class="text-gray-600 text-lg">昆明、普洱、版纳优质别墅/洋房/公寓</p>
             </div>
 
-            <div class="property-grid">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- 昆明房源 -->
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=1)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">昆明</span>
-                        <div class="property-type">滇池·湖光山色别墅</div>
-                        <div class="price">568万</div>
-                        <div class="details">4室2厅2卫·240㎡·南北通透·豪华装修</div>
-                        <div class="features">
-                            <span class="feature-tag">湖景房</span>
-                            <span class="feature-tag">双卫设计</span>
-                            <span class="feature-tag">豪华装修</span>
-                            <span class="feature-tag">花园庭院</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=1" alt="滇池·湖光山色别墅" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">滇池·山海湾8号别墅</h4>
+                        <p class="text-primary font-bold text-lg mb-3">898万</p>
+                        <p class="text-gray-600 mb-4">4室2厅2卫·218㎡·南北通透·毛坯</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">滇池景观</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">双卫设计</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">端头户型</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">花园庭院</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=2)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">昆明</span>
-                        <div class="property-type">翠湖·翡翠湾洋房</div>
-                        <div class="price">189万</div>
-                        <div class="details">3室2厅1卫·120㎡·南北通透·拎包入住</div>
-                        <div class="features">
-                            <span class="feature-tag">学区房</span>
-                            <span class="feature-tag">低密度社区</span>
-                            <span class="feature-tag">近地铁</span>
-                            <span class="feature-tag">花园洋房</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=2" alt="翠湖·翡翠湾洋房" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">翠湖·金康园洋房</h4>
+                        <p class="text-primary font-bold text-lg mb-3">235万</p>
+                        <p class="text-gray-600 mb-4">3室2厅1卫·126㎡·南北通透·中等装修</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">学区房</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">低密度社区</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近地铁</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">花园洋房</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=3)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">昆明</span>
-                        <div class="property-type">万达·华府公寓</div>
-                        <div class="price">128万</div>
-                        <div class="details">2室1厅1卫·89㎡·南北通透·精装修</div>
-                        <div class="features">
-                            <span class="feature-tag">市中心</span>
-                            <span class="feature-tag">配套齐全</span>
-                            <span class="feature-tag">地铁口</span>
-                            <span class="feature-tag">拎包入住</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=3" alt="万达·华府公寓" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">万达·昆明双塔公寓</h4>
+                        <p class="text-primary font-bold text-lg mb-3">135万</p>
+                        <p class="text-gray-600 mb-4">2室1厅1卫·92㎡·南北通透·精装修</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">市中心</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">配套齐全</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">地铁口</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 普洱房源 -->
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=4)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">普洱</span>
-                        <div class="property-type">茶源·山水间洋房</div>
-                        <div class="price">168万</div>
-                        <div class="details">3室2厅1卫·115㎡·南北通透·花园洋房</div>
-                        <div class="features">
-                            <span class="feature-tag">生态社区</span>
-                            <span class="feature-tag">低密度</span>
-                            <span class="feature-tag">近公园</span>
-                            <span class="feature-tag">山景房</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=4" alt="茶源·山水间洋房" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">普洱</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">普洱茶小镇洋房</h4>
+                        <p class="text-primary font-bold text-lg mb-3">79.8万</p>
+                        <p class="text-gray-600 mb-4">2室2厅1卫·89㎡·南北通透·毛坯</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">生态社区</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">低密度</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近公园</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">山景房</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=5)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">普洱</span>
-                        <div class="property-type">阳光·国际公寓</div>
-                        <div class="price">98万</div>
-                        <div class="details">1室1厅1卫·65㎡·南北通透·精装修</div>
-                        <div class="features">
-                            <span class="feature-tag">小户型</span>
-                            <span class="feature-tag">配套齐全</span>
-                            <span class="feature-tag">拎包入住</span>
-                            <span class="feature-tag">近商圈</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=5" alt="阳光·国际公寓" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">普洱</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">普洱中心公寓</h4>
+                        <p class="text-primary font-bold text-lg mb-3">56.8万</p>
+                        <p class="text-gray-600 mb-4">1室1厅1卫·58㎡·南北通透·精装修</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">小户型</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">配套齐全</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近商圈</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 版纳房源 -->
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=6)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">版纳</span>
-                        <div class="property-type">雨林·曼听御园别墅</div>
-                        <div class="price">780万</div>
-                        <div class="details">5室3厅3卫·320㎡·南北通透·豪华装修</div>
-                        <div class="features">
-                            <span class="feature-tag">豪华别墅</span>
-                            <span class="feature-tag">私人泳池</span>
-                            <span class="feature-tag">热带雨林景观</span>
-                            <span class="feature-tag">高端社区</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=6" alt="雨林·曼听御园别墅" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">版纳</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">融创·曼听公园别墅</h4>
+                        <p class="text-primary font-bold text-lg mb-3">368万</p>
+                        <p class="text-gray-600 mb-4">3室2厅2卫·135㎡·南北通透·精装修</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">豪华别墅</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">私人泳池</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">热带雨林景观</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">高端社区</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="property-card">
-                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=7)"></div>
-                    <div class="card-content">
-                        <span class="city-tag">版纳</span>
-                        <div class="property-type">融创·旅游度假区公寓</div>
-                        <div class="price">88万</div>
-                        <div class="details">1室1厅1卫·60㎡·南北通透·精装修</div>
-                        <div class="features">
-                            <span class="feature-tag">旅游度假区</span>
-                            <span class="feature-tag">度假配套</span>
-                            <span class="feature-tag">拎包入住</span>
-                            <span class="feature-tag">近景区</span>
+                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
+                    <div class="h-60 overflow-hidden">
+                        <img src="https://picsum.photos/600/400?random=7" alt="融创·旅游度假区公寓" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">版纳</span>
+                        <h4 class="text-xl font-bold text-dark mb-2">告庄西双景公寓</h4>
+                        <p class="text-primary font-bold text-lg mb-3">42.8万</p>
+                        <p class="text-gray-600 mb-4">1室1厅1卫·45㎡·南北通透·精装修</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">旅游度假区</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">度假配套</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
+                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近景区</span>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- 关于我们 -->
-        <section class="about-section" id="about">
-            <img src="https://picsum.photos/300/300?random=8" alt="团队形象">
-            <h3>关于我们</h3>
-            <p>我们是一支深耕云南房产市场5年的专业团队，始终秉持“客户至上”的服务理念，已成功帮助超100个家庭在昆明、普洱、版纳等地实现安家梦想。<br>关注我们，聆听1001个房产故事，了解每一个家背后的温暖与期待。</p>
-        </section>
-
-        <!-- 联系我们 -->
-        <section class="contact-section" id="contact">
-            <h3>联系我们</h3>
-            <p>无论您有购房、租房需求，还是想了解更多房产信息，欢迎随时与我们联系！</p>
-            <div class="contact-info">
-                <a href="mailto:Davi-iHomeStudio@qq.com">Davi-iHomeStudio@qq.com</a>
+    <!-- 关于我们 -->
+    <section id="about" class="py-16 md:py-24 bg-light">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">关于我们</h3>
             </div>
-        </section>
 
-        <!-- 页脚 -->
-        <footer class="footer">
-            <p>© 2025 Davi丨我家Studio 版权所有</p>
-        </footer>
-    </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="text-center mb-8">
+                    <img src="https://picsum.photos/300/300?random=8" alt="团队形象" class="w-48 h-48 rounded-full mx-auto object-cover shadow-lg">
+                </div>
+                <p class="text-gray-600 text-lg mb-6 leading-relaxed text-center">
+                    我们是一支深耕云南房产市场5年的专业团队，始终秉持"客户至上"的服务理念，已成功帮助超100个家庭在昆明、普洱、版纳等地实现安家梦想。
+                </p>
+                <p class="text-gray-600 text-lg leading-relaxed text-center">
+                    关注我们，聆听1001个房产故事，了解每一个家背后的温暖与期待。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们 -->
+    <section id="contact" class="py-16 md:py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">联系我们</h3>
+                <p class="text-gray-600 text-lg">无论您有购房、租房需求，还是想了解更多房产信息，欢迎随时与我们联系！</p>
+            </div>
+
+            <div class="max-w-md mx-auto">
+                <div class="bg-light rounded-xl p-8 shadow-lg">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="bg-primary/10 p-4 rounded-full">
+                            <i class="fa fa-envelope text-primary text-2xl"></i>
+                        </div>
+                    </div>
+                    <a href="mailto:Davi-iHomeStudio@qq.com" class="block text-center text-primary font-semibold text-xl hover:text-primary/80 transition-colors">
+                        Davi-iHomeStudio@qq.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-primary text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-lg mb-4">Davi丨我家Studio</p>
+            <p>© 2025 版权所有</p>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+        <i class="fa fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const closeMenu = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mainNav = document.getElementById('main-nav');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenu.classList.add('translate-x-0');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        // 点击菜单项关闭菜单
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                mainNav.classList.add('py-2');
+                mainNav.classList.remove('py-3');
+            } else {
+                mainNav.classList.add('py-3');
+                mainNav.classList.remove('py-2');
+            }
+
+            // 返回顶部按钮显示/隐藏
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+            }
+        });
+
+        // 返回顶部功能
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
