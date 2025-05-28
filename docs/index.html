@@ -5,85 +5,336 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Davi丨我家Studio - 云南房产服务</title>
     <style>
-        * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif;}
-        body {background:#f8f9fa;}
-        .nav {background:#0066cc; color:white; padding:1rem 2rem;}
-        .hero {height:80vh; background:url(https://picsum.photos/1920/1080) center/cover; display:flex; align-items:center; justify-content:center; text-align:center; color:white;}
-        .section {padding:4rem 2rem;}
-        .footer {background:#1e293b; color:white; text-align:center; padding:2rem;}
-        .btn {display:inline-block; background:#ff9900; color:white; padding:1rem 2rem; text-decoration:none; margin-top:1rem; border-radius:4px;}
-        .container {max-width:1200px; margin:0 auto;}
-        .grid {display:grid; gap:2rem; grid-template-columns:1fr;}
-        @media (min-width:768px) {.grid {grid-template-columns:1fr 1fr;}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 导航栏 */
+        .nav {
+            background: #0066CC;
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #FF9900;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            height: 70vh;
+            background: linear-gradient(rgba(0, 102, 204, 0.8), rgba(0, 102, 204, 0.8)), 
+                        url(https://picsum.photos/1920/1080?grayscale=0.3) center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: #FF9900;
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* 城市分类标题 */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h3 {
+            font-size: 2.2rem;
+            color: #0066CC;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+        }
+
+        /* 房源卡片 */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-content {
+            padding: 2rem;
+        }
+
+        .city-tag {
+            display: inline-block;
+            background: #0066CC;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .property-type {
+            color: #FF9900;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #0066CC;
+            margin-bottom: 1rem;
+        }
+
+        .details {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* 页脚 */
+        .footer {
+            background: #0066CC;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        .email-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .email-link:hover {
+            color: #FF9900;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 2rem;
+            }
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
-    <nav class="nav">
-        <div class="container">
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="nav">
             <h1>Davi丨我家Studio</h1>
             <ul>
                 <li><a href="#home">首页</a></li>
-                <li><a href="#about">关于</a></li>
-                <li><a href="#properties">房源</a></li>
-                <li><a href="#contact">联系</a></li>
+                <li><a href="#properties">精选房源</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系我们</a></li>
             </ul>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- 英雄区域 -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h2>5年+房产经验 | 服务超100家庭</h2>
-            <p>昆明、普洱、版纳多城联动<br>您身边的靠谱置业管家</p>
-            <a href="#contact" class="btn">立即咨询</a>
-        </div>
-    </section>
+        <!-- 英雄区域 -->
+        <section class="hero" id="home">
+            <h2>专注云南房产5年+</h2>
+            <p>服务超100家庭 | 昆明·普洱·版纳多城联动</p>
+            <a href="#properties" class="cta-btn">查看房源</a>
+        </section>
 
-    <!-- 关于我们 -->
-    <section class="section" id="about">
-        <div class="container">
-            <h3>关于我们</h3>
-            <p>专注云南房产5年，帮助超100个家庭安家。<br>提供购房咨询、房源匹配、交易代办等一站式服务。</p>
-            <p>关注我们，聆听1001个房产故事</p>
-        </div>
-    </section>
+        <!-- 精选房源 -->
+        <section class="section" id="properties">
+            <div class="section-title">
+                <h3>精选房源</h3>
+                <p>昆明、普洱、版纳优质别墅/洋房/公寓</p>
+            </div>
 
-    <!-- 精选房源 -->
-    <section class="section bg-white" id="properties">
-        <div class="container">
-            <h3>精选房源</h3>
-            <div class="grid">
-                <div>
-                    <img src="https://picsum.photos/300/200" alt="房源1">
-                    <h4>昆明·市中心公寓</h4>
-                    <p>89㎡ | 2室1厅 | 128万</p>
+            <div class="property-grid">
+                <!-- 昆明房源 -->
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=1)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">昆明</span>
+                        <div class="property-type">别墅</div>
+                        <div class="price">568万</div>
+                        <div class="details">滇池畔·4室2厅·240㎡·南北通透</div>
+                    </div>
                 </div>
-                <div>
-                    <img src="https://picsum.photos/300/200" alt="房源2">
-                    <h4>版纳·雨林别墅</h4>
-                    <p>240㎡ | 4室2厅 | 568万</p>
+
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=2)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">昆明</span>
+                        <div class="property-type">洋房</div>
+                        <div class="price">189万</div>
+                        <div class="details">翠湖旁·3室2厅·120㎡·带花园</div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=3)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">昆明</span>
+                        <div class="property-type">公寓</div>
+                        <div class="price">128万</div>
+                        <div class="details">市中心·2室1厅·89㎡·地铁旁</div>
+                    </div>
+                </div>
+
+                <!-- 普洱房源 -->
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=4)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">普洱</span>
+                        <div class="property-type">洋房</div>
+                        <div class="price">168万</div>
+                        <div class="details">茶园边·3室2厅·115㎡·生态社区</div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=5)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">普洱</span>
+                        <div class="property-type">公寓</div>
+                        <div class="price">98万</div>
+                        <div class="details">市区·1室1厅·65㎡·配套齐全</div>
+                    </div>
+                </div>
+
+                <!-- 版纳房源 -->
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=6)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">版纳</span>
+                        <div class="property-type">别墅</div>
+                        <div class="price">780万</div>
+                        <div class="details">雨林旁·5室3厅·320㎡·带泳池</div>
+                    </div>
+                </div>
+
+                <div class="property-card">
+                    <div class="card-image" style="background-image: url(https://picsum.photos/600/400?random=7)"></div>
+                    <div class="card-content">
+                        <span class="city-tag">版纳</span>
+                        <div class="property-type">公寓</div>
+                        <div class="price">88万</div>
+                        <div class="details">度假区·1室1厅·60㎡·拎包入住</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- 联系我们 -->
-    <section class="section" id="contact">
-        <div class="container">
-            <h3>联系我们</h3>
-            <p>邮箱：<a href="mailto:Davi-iHomeStudio@qq.com">Davi-iHomeStudio@qq.com</a></p>
-            <p>电话：17279192001</p>
-            <p>地址：昆明市盘龙区·贝壳找房</p>
-        </div>
-    </section>
+        <!-- 关于我们（简约版） -->
+        <section class="section" id="about">
+            <div class="section-title">
+                <h3>关于我们</h3>
+                <p>您身边的靠谱置业管家<br>关注我们，聆听1001个房产故事</p>
+            </div>
+            <p class="text-center">5年云南房产经验 | 多城联动服务 | 全程无忧交易</p>
+        </section>
 
-    <!-- 页脚 -->
-    <footer class="footer">
-        <div class="container">
+        <!-- 联系我们 -->
+        <section class="section" id="contact">
+            <div class="section-title">
+                <h3>联系我们</h3>
+                <p>欢迎随时咨询房产相关问题</p>
+            </div>
+            <div class="text-center">
+                <p>邮箱：<a href="mailto:Davi-iHomeStudio@qq.com" class="email-link">Davi-iHomeStudio@qq.com</a></p>
+                <p>电话：0871-6888-XXXX</p>
+                <p>地址：昆明市五华区XX路XX号</p>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
             <p>© 2025 Davi丨我家Studio 版权所有</p>
-        
-        </div>
-    </footer>
+            <p>滇ICP备XXXXXX号</p>
+        </footer>
+    </div>
 </body>
 </html>
