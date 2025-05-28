@@ -1,606 +1,572 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Davi选房系统 - 昆明版</title>
-  <!-- 引入Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- 引入Font Awesome -->
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <!-- 引入Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
-  <!-- 引入Leaflet地图库 -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  
-  <!-- Tailwind配置 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#165DFF',
-            secondary: '#FF7D00',
-            success: '#00B42A',
-            warning: '#FF7D00',
-            danger: '#F53F3F',
-            neutral: {
-              100: '#F2F3F5',
-              200: '#E5E6EB',
-              300: '#C9CDD4',
-              400: '#86909C',
-              500: '#4E5969',
-              600: '#272E3B',
-              700: '#1D2129',
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Davi丨我家Studio - 昆明精品房产服务</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    
+    <!-- 配置Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0066CC', // 深蓝色作为主色调，传达专业与可靠
+                        secondary: '#FF9900', // 橙色作为辅助色，增添活力
+                        accent: '#00A651', // 绿色作为强调色，象征自然与生长
+                        dark: '#1E293B',
+                        light: '#F8FAFC',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                }
             }
-          },
-          fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif'],
-          },
-          boxShadow: {
-            'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
-            'card-hover': '0 8px 30px rgba(0, 0, 0, 0.12)',
-          }
-        },
-      }
-    }
-  </script>
-  
-  <!-- 自定义工具类 -->
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .text-shadow {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      .transition-transform-opacity {
-        transition-property: transform, opacity;
-      }
-      .backdrop-blur {
-        backdrop-filter: blur(8px);
-      }
-    }
-  </style>
-  
-  <style>
-    /* 基础动画 */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+        }
+    </script>
     
-    .animate-fade-in {
-      animation: fadeIn 0.5s ease forwards;
-    }
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .text-shadow-lg {
+                text-shadow: 0 4px 8px rgba(0,0,0,0.25);
+            }
+            .backdrop-blur-sm {
+                backdrop-filter: blur(4px);
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-15px); }
+                100% { transform: translateY(0px); }
+            }
+            .clip-path-slant {
+                clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            }
+            .clip-path-slant-reverse {
+                clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+    </style>
     
-    /* 平滑滚动 */
-    html {
-      scroll-behavior: smooth;
-    }
-    
-    /* 自定义滚动条 */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 10px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
-    }
-    
-    /* 地图容器样式 */
-    #map {
-      height: 400px;
-      width: 100%;
-      border-radius: 12px;
-    }
-    
-    /* 评分星星样式 */
-    .star-rating {
-      display: inline-flex;
-      direction: rtl;
-    }
-    
-    .star-rating input {
-      display: none;
-    }
-    
-    .star-rating label {
-      color: #E5E6EB;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    
-    .star-rating label:before {
-      content: "\f005";
-      font-family: FontAwesome;
-      font-size: 18px;
-    }
-    
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-      color: #FFC107;
-    }
-    
-    /* 雷达图样式 */
-    .radar-chart-container {
-      position: relative;
-      width: 100%;
-      height: 240px;
-    }
-    
-    /* 片区选择器样式 */
-    .district-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 8px;
-    }
-    
-    .district-btn {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #E5E6EB;
-      background-color: white;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-      font-size: 14px;
-    }
-    
-    .district-btn:hover {
-      background-color: #F2F3F5;
-    }
-    
-    .district-btn.active {
-      background-color: #165DFF;
-      color: white;
-      border-color: #165DFF;
-    }
-    
-    /* 价格滑块样式 */
-    .price-slider {
-      width: 100%;
-      height: 4px;
-      background: #E5E6EB;
-      border-radius: 5px;
-      outline: none;
-    }
-    
-    .price-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #165DFF;
-      cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .price-slider::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #165DFF;
-      cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    /* 房价走势图样式 */
-    .price-chart-container {
-      height: 200px;
-    }
-    
-    /* 自定义工具提示 */
-    .tooltip {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 200px;
-      background-color: #555;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -100px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .tooltip .tooltiptext::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #555 transparent transparent transparent;
-    }
-    
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-    }
-  </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
-<body class="font-inter bg-neutral-100 text-neutral-700 min-h-screen flex flex-col">
-  <!-- 导航栏 -->
-  <header id="navbar" class="fixed w-full z-50 transition-all duration-300">
-    <div class="bg-white/90 backdrop-blur shadow-sm">
-      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <!-- Logo -->
-        <a href="#" class="flex items-center space-x-2">
-          <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-            <i class="fa fa-home text-white text-xl"></i>
-          </div>
-          <span class="text-xl font-bold text-neutral-700">Davi<span class="text-primary">选房</span></span>
-        </a>
-        
-        <!-- 桌面导航 -->
-        <nav class="hidden md:flex items-center space-x-8">
-          <a href="#home" class="text-neutral-600 hover:text-primary transition-colors font-medium">首页</a>
-          <a href="#features" class="text-neutral-600 hover:text-primary transition-colors font-medium">核心功能</a>
-          <a href="#system" class="text-neutral-600 hover:text-primary transition-colors font-medium">评分系统</a>
-          <a href="#properties" class="text-neutral-600 hover:text-primary transition-colors font-medium">热门房源</a>
-          <a href="#about" class="text-neutral-600 hover:text-primary transition-colors font-medium">关于我们</a>
-        </nav>
-        
-        <!-- 用户操作 -->
-        <div class="flex items-center space-x-4">
-          <button class="hidden md:block px-4 py-2 text-primary border border-primary rounded-lg hover:bg-primary/5 transition-colors">
-            登录
-          </button>
-          <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors shadow-sm hover:shadow">
-            免费注册
-          </button>
-          <!-- 移动端菜单按钮 -->
-          <button id="mobile-menu-button" class="md:hidden text-neutral-600 hover:text-primary">
-            <i class="fa fa-bars text-xl"></i>
-          </button>
+<body class="font-inter bg-light text-dark antialiased">
+    <!-- 导航栏 -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold font-montserrat text-white text-shadow-lg">
+                Davi<span class="text-secondary">丨</span>我家Studio
+            </a>
+            
+            <!-- 桌面导航 -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#home" class="text-white hover:text-secondary transition-colors font-medium">首页</a>
+                <a href="#about" class="text-white hover:text-secondary transition-colors font-medium">关于我们</a>
+                <a href="#properties" class="text-white hover:text-secondary transition-colors font-medium">精选房源</a>
+                <a href="#services" class="text-white hover:text-secondary transition-colors font-medium">服务项目</a>
+                <a href="#contact" class="text-white hover:text-secondary transition-colors font-medium">联系我们</a>
+            </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button id="menu-toggle" class="md:hidden text-white text-2xl">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
-      </div>
-    </div>
-    
-    <!-- 移动端导航菜单 -->
-    <div id="mobile-menu" class="md:hidden bg-white shadow-lg rounded-b-lg mx-4 overflow-hidden hidden animate-fade-in">
-      <nav class="flex flex-col p-4 space-y-4">
-        <a href="#home" class="text-neutral-600 hover:text-primary transition-colors py-2 border-b border-neutral-100">首页</a>
-        <a href="#features" class="text-neutral-600 hover:text-primary transition-colors py-2 border-b border-neutral-100">核心功能</a>
-        <a href="#system" class="text-neutral-600 hover:text-primary transition-colors py-2 border-b border-neutral-100">评分系统</a>
-        <a href="#properties" class="text-neutral-600 hover:text-primary transition-colors py-2 border-b border-neutral-100">热门房源</a>
-        <a href="#about" class="text-neutral-600 hover:text-primary transition-colors py-2">关于我们</a>
-        <a href="#" class="text-primary hover:text-primary/80 transition-colors py-2 border-t border-neutral-100 mt-2">登录</a>
-      </nav>
-    </div>
-  </header>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/90 backdrop-blur-sm absolute w-full">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#home" class="text-primary hover:text-secondary transition-colors font-medium py-2">首页</a>
+                <a href="#about" class="text-primary hover:text-secondary transition-colors font-medium py-2">关于我们</a>
+                <a href="#properties" class="text-primary hover:text-secondary transition-colors font-medium py-2">精选房源</a>
+                <a href="#services" class="text-primary hover:text-secondary transition-colors font-medium py-2">服务项目</a>
+                <a href="#contact" class="text-primary hover:text-secondary transition-colors font-medium py-2">联系我们</a>
+            </div>
+        </div>
+    </nav>
 
-  <!-- 主内容 -->
-  <main class="flex-grow pt-16">
     <!-- 英雄区域 -->
-    <section id="home" class="relative bg-gradient-to-br from-primary/95 to-primary overflow-hidden">
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1067/1920/1080')] bg-cover bg-center"></div>
-      </div>
-      <div class="container mx-auto px-4 py-20 md:py-32 relative z-10">
-        <div class="max-w-3xl">
-          <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white leading-tight text-shadow mb-6">
-            昆明五维评分系统<br>让选房决策更精准
-          </h1>
-          <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 max-w-2xl">
-            基于地段、配套、户型、物业、口碑五大维度，结合AI算法与大数据分析，为您提供专业、客观的昆明房源评估报告。
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <button class="px-8 py-3 bg-white text-primary font-medium rounded-lg hover:bg-neutral-100 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300">
-              <i class="fa fa-search mr-2"></i>开始找房
-            </button>
-            <button class="px-8 py-3 bg-transparent border-2 border-white text-white font-medium rounded-lg hover:bg-white/10 transition-colors">
-              <i class="fa fa-play-circle mr-2"></i>观看演示
-            </button>
-          </div>
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://picsum.photos/id/1048/1920/1080" alt="昆明城市风光" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-primary/60"></div>
         </div>
-      </div>
-      
-      <!-- 波浪装饰 -->
-      <div class="absolute bottom-0 left-0 right-0">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120">
-          <path fill="#F2F3F5" fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
-        </svg>
-      </div>
+        
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="text-[clamp(2.5rem,8vw,5rem)] font-bold font-montserrat text-white mb-4 leading-tight text-shadow-lg">
+                发现昆明<span class="text-secondary">理想家园</span>
+            </h1>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] text-white/90 max-w-3xl mx-auto mb-8 text-shadow">
+                专业的昆明房产服务，为您提供全方位的购房、租房解决方案
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#properties" class="px-8 py-3 bg-secondary text-white rounded-lg font-medium hover:bg-secondary/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    查看房源
+                </a>
+                <a href="#contact" class="px-8 py-3 bg-transparent border-2 border-white text-white rounded-lg font-medium hover:bg-white/10 transition-all">
+                    联系我们
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+            <a href="#about" class="text-white">
+                <i class="fa fa-angle-down text-3xl"></i>
+            </a>
+        </div>
     </section>
-    
-    <!-- 功能筛选区 -->
-    <section class="container mx-auto px-4 py-12 -mt-24 relative z-20">
-      <div class="bg-white rounded-2xl shadow-card p-6 md:p-8">
-        <!-- 昆明特色筛选 -->
-        <div class="mb-8">
-          <h3 class="text-lg font-semibold text-neutral-700 mb-4">昆明片区选择</h3>
-          <div class="district-selector" id="districtSelector">
-            <div class="district-btn active" data-district="all">全部区域</div>
-            <div class="district-btn" data-district="north">北市区</div>
-            <div class="district-btn" data-district="west">西市区</div>
-            <div class="district-btn" data-district="east">东市区</div>
-            <div class="district-btn" data-district="south">南市区</div>
-            <div class="district-btn" data-district="chenggong">呈贡新区</div>
-            <div class="district-btn" data-district="huankelu">环湖路片区</div>
-            <div class="district-btn" data-district="jinning">晋宁区</div>
-            <div class="district-btn" data-district="center">市中心</div>
-          </div>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1062/800/600" alt="昆明城市风光" class="w-full h-auto rounded-lg shadow-xl">
+                        <div class="absolute -bottom-6 -right-6 bg-secondary text-white p-6 rounded-lg shadow-lg">
+                            <p class="text-4xl font-bold font-montserrat">8+</p>
+                            <p class="text-sm">年昆明房产经验</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold font-montserrat text-primary mb-6">
+                        关于<span class="text-secondary">Davi丨我家Studio</span>
+                    </h2>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        我们是一支专注于昆明房地产市场的专业团队，致力于为客户提供高品质的房产服务。自2015年成立以来，我们已经帮助超过500个家庭在昆明找到理想的家园。
+                    </p>
+                    <p class="text-gray-700 mb-8 leading-relaxed">
+                        我们深入了解昆明各区域的房产市场，无论是繁华的市中心、宜居的城郊还是风景秀丽的度假区，我们都能为您提供专业的建议和全方位的服务。我们的使命是让每一位客户都能在昆明找到属于自己的幸福家园。
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-lg mr-4">
+                                <i class="fa fa-map-marker text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">熟悉本地市场</h3>
+                                <p class="text-gray-600">深入了解昆明各区域房产特点</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-lg mr-4">
+                                <i class="fa fa-users text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">专业团队</h3>
+                                <p class="text-gray-600">由经验丰富的房产顾问组成</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-lg mr-4">
+                                <i class="fa fa-key text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">优质房源</h3>
+                                <p class="text-gray-600">精选各类优质房源满足需求</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-primary/10 p-3 rounded-lg mr-4">
+                                <i class="fa fa-heart text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg mb-2">客户至上</h3>
+                                <p class="text-gray-600">以客户需求为中心的服务理念</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#services" class="inline-flex items-center text-primary font-medium hover:text-secondary transition-colors">
+                        了解更多服务 <i class="fa fa-long-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <!-- 价格筛选 - 昆明特色 -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-neutral-500">价格区间 (万元)</label>
-            <div class="relative">
-              <input type="range" min="50" max="500" value="200" class="price-slider" id="priceSlider">
-              <div class="flex justify-between mt-2 text-sm text-neutral-500">
-                <span id="minPrice">50</span>
-                <span id="maxPrice">500</span>
-              </div>
-              <div class="absolute top-[-30px] left-[50%] transform -translate-x-1/2 bg-primary text-white px-3 py-1 rounded-lg text-sm" id="priceDisplay">
-                200
-              </div>
-            </div>
-          </div>
-          
-          <!-- 户型筛选 -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-neutral-500">户型</label>
-            <div class="grid grid-cols-3 gap-2">
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-home text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">一室</span>
-              </button>
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-home text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">二室</span>
-              </button>
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-home text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">三室</span>
-              </button>
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-home text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">四室</span>
-              </button>
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-home text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">五室+</span>
-              </button>
-              <button class="p-2 border border-neutral-200 rounded-lg hover:bg-neutral-50 transition-colors flex flex-col items-center justify-center">
-                <i class="fa fa-sliders text-neutral-400 text-lg mb-1"></i>
-                <span class="text-sm">更多</span>
-              </button>
-            </div>
-          </div>
-          
-          <!-- 梯队筛选 - 昆明特色 -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-neutral-500">梯队 | 圈层</label>
-            <div class="relative">
-              <select class="w-full appearance-none rounded-lg border border-neutral-200 bg-white py-3 px-4 pr-10 text-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors">
-                <option>全部梯队</option>
-                <option>第一圈层 (高端改善)</option>
-                <option>第二圈层 (刚需/刚改)</option>
-                <option>第三圈层 (投资/刚需)</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-neutral-400">
-                <i class="fa fa-chevron-down"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 高级筛选 -->
-        <div class="flex flex-wrap gap-4 mb-6">
-          <div class="flex items-center">
-            <label class="text-sm font-medium text-neutral-500 mr-3">五维评分：</label>
-            <div class="flex items-center space-x-1">
-              <i class="fa fa-star text-yellow-400"></i>
-              <i class="fa fa-star text-yellow-400"></i>
-              <i class="fa fa-star text-yellow-400"></i>
-              <i class="fa fa-star text-yellow-400"></i>
-              <i class="fa fa-star text-neutral-200"></i>
-              <span class="ml-2 text-sm text-neutral-500">4.0分以上</span>
-            </div>
-          </div>
-          
-          <div class="flex items-center">
-            <label class="text-sm font-medium text-neutral-500 mr-3">配套：</label>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">地铁</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">学校</span>
-              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">商场</span>
-            </div>
-          </div>
-          
-          <div class="flex items-center">
-            <label class="text-sm font-medium text-neutral-500 mr-3">特色：</label>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-3 py-1 bg-success/10 text-success rounded-full text-sm">湖景房</span>
-              <span class="px-3 py-1 bg-warning/10 text-warning rounded-full text-sm">学区房</span>
-              <span class="px-3 py-1 bg-danger/10 text-danger rounded-full text-sm">公园旁</span>
-            </div>
-          </div>
-          
-          <button class="ml-auto text-primary hover:text-primary/80 transition-colors text-sm font-medium flex items-center">
-            <i class="fa fa-sliders mr-1"></i> 更多筛选
-          </button>
-        </div>
-        
-        <!-- 搜索按钮 -->
-        <div class="flex justify-center">
-          <button class="px-8 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 flex items-center">
-            <i class="fa fa-search mr-2"></i> 搜索房源
-          </button>
-        </div>
-      </div>
     </section>
-    
-    <!-- 片区分析区 - 昆明特色 -->
-    <section class="container mx-auto px-4 py-16">
-      <div class="text-center mb-16">
-        <h2 class="text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-neutral-700 mb-4">昆明片区分析</h2>
-        <p class="text-neutral-500 max-w-2xl mx-auto">深入了解昆明各片区特点、发展潜力和房价走势，为您的购房决策提供专业参考</p>
-      </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- 片区卡片1 - 北市区 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1031/600/400" alt="北市区" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 7.8</span>
+
+    <!-- 精选房源 -->
+    <section id="properties" class="py-24 bg-light clip-path-slant-reverse">
+        <div class="container mx-auto px-4 pt-12">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold font-montserrat text-primary mb-4">
+                    精选<span class="text-secondary">房源</span>
+                </h2>
+                <p class="text-gray-600">
+                    探索昆明各区域优质房源，总有一处适合您
+                </p>
             </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">北市区</h3>
-            <p class="text-neutral-500 mb-4">是除中心区以外最早发展起来的区域，人口密集，教育、医疗配套设施完善，但交通拥挤，居住体验差，可供开发土地少，后期发展空间有限。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">1.5-2.5万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              </button>
+            
+            <!-- 筛选器 -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="px-6 py-2 rounded-full bg-primary text-white font-medium">全部</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors">公寓</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors">别墅</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors">洋房</button>
+                <button class="px-6 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-colors">商业地产</button>
             </div>
-          </div>
+            
+            <!-- 房源网格 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 房源1 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1048/600/400" alt="市中心公寓" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            热销中
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            128万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">春城国际公寓</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 五华区市中心
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">89㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">户型</p>
+                                <p class="font-medium">2室1厅</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">朝向</p>
+                                <p class="font-medium">南北通透</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 房源2 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1047/600/400" alt="滇池别墅" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            新上市
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            568万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">滇池畔别墅</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 西山区滇池路
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">240㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">户型</p>
+                                <p class="font-medium">4室2厅</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">朝向</p>
+                                <p class="font-medium">南北通透</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 房源3 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1067/600/400" alt="洋房" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            热销中
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            189万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">翠湖花园洋房</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 盘龙区翠湖路
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">120㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">户型</p>
+                                <p class="font-medium">3室2厅</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">朝向</p>
+                                <p class="font-medium">朝南</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 房源4 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1059/600/400" alt="公寓" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            新上市
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            98万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">呈贡大学城公寓</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 呈贡区大学城
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">65㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">户型</p>
+                                <p class="font-medium">1室1厅</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">朝向</p>
+                                <p class="font-medium">东南</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 房源5 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1060/600/400" alt="别墅" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-secondary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            热销中
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            780万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">金殿森林公园别墅</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 盘龙区金殿公园旁
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">320㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">户型</p>
+                                <p class="font-medium">5室3厅</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">朝向</p>
+                                <p class="font-medium">南北通透</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 房源6 -->
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="relative">
+                        <img src="https://picsum.photos/id/1061/600/400" alt="商业地产" class="w-full h-64 object-cover">
+                        <div class="absolute top-4 left-4 bg-accent text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            新上市
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-lg text-sm font-medium">
+                            350万
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold font-montserrat mb-2">南屏街商铺</h3>
+                        <p class="text-gray-600 mb-4 flex items-center">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i> 五华区南屏街商圈
+                        </p>
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">面积</p>
+                                <p class="font-medium">120㎡</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">类型</p>
+                                <p class="font-medium">临街商铺</p>
+                            </div>
+                            <div class="text-center bg-gray-100 p-2 rounded-lg">
+                                <p class="text-sm text-gray-500">状态</p>
+                                <p class="font-medium">空置</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-primary font-medium hover:text-secondary transition-colors">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                            <button class="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                                <i class="fa fa-heart-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center px-8 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    查看更多房源 <i class="fa fa-long-arrow-right ml-2"></i>
+                </a>
+            </div>
         </div>
-        
-        <!-- 片区卡片2 - 西市区 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1036/600/400" alt="西市区" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 7.5</span>
+    </section>
+
+    <!-- 服务项目 -->
+    <section id="services" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold font-montserrat text-primary mb-4">
+                    我们的<span class="text-secondary">服务</span>
+                </h2>
+                <p class="text-gray-600">
+                    提供全方位的房产服务，满足您的各种需求
+                </p>
             </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">西市区</h3>
-            <p class="text-neutral-500 mb-4">早期是昆明的工业区，经过"退二进三"战略后，环境得到改善，配套逐渐引入。根据十四五规划，草海片区将打造新的昆明门户，规划有客运西站。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">1.4-2.2万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 片区卡片3 - 南市区 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1040/600/400" alt="南市区" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 8.2</span>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">南市区</h3>
-            <p class="text-neutral-500 mb-4">多为低密度住宅区，面向滇池，商业体众多，是昆明富人区的主要居住片区，房价相对较高，不过好学校和好医院较少。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">2.0-4.0万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 片区卡片4 - 呈贡新区 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1050/600/400" alt="呈贡新区" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 7.3</span>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">呈贡新区</h3>
-            <p class="text-neutral-500 mb-4">是2000年昆明跳跃式发展的新城，前期发展缓慢，被称为"鬼城"，但在昆明北拓南延战略下，机关、学校、医院等相继搬迁至此，加上高铁站开通，最近五年高速发展，房价直追主城。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">1.0-1.8万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 片区卡片5 - 市中心 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1060/600/400" alt="市中心" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 8.8</span>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">市中心</h3>
-            <p class="text-neutral-500 mb-4">位于二环以内，集中了优质的学校、医疗、高端商业配套以及大量企业和公司。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">2.5-4.5万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 片区卡片6 - 环湖路片区 -->
-        <div class="bg-white rounded-xl shadow-card overflow-hidden hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1">
-          <div class="relative">
-            <img src="https://picsum.photos/id/1072/600/400" alt="环湖路片区" class="w-full h-48 object-cover">
-            <div class="absolute top-3 left-3">
-              <span class="px-3 py-1 bg-primary text-white text-sm font-medium rounded-full">五维评分: 9.0</span>
-            </div>
-          </div>
-          <div class="p-5">
-            <h3 class="text-lg font-semibold text-neutral-700 mb-2">环湖路片区</h3>
-            <p class="text-neutral-500 mb-4">沿着滇池沿岸发展，滇池是稀缺资源，该片区以洋房、别墅、大平层等高端产品为主，是有钱人的居住地。</p>
-            <div class="flex justify-between items-center">
-              <div>
-                <div class="text-lg font-semibold text-primary">3.0-8.0万/㎡</div>
-                <div class="text-xs text-neutral-500">均价区间</div>
-              </div>
-              <button class="px-4 py-1.5 bg-primary/10 text-primary text-sm font-medium rounded-lg hover:bg-primary/20 transition-colors">
-                查看详情
-              
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 服务1 -->
+                <div class="bg-light p-8 rounded-xl shadow-lg relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full transition-all duration-300 group-hover:scale-150"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa fa-home"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-montserrat mb-4">购房咨询</h3>
+                        <p class="text-gray-600 mb-4">
+                            提供专业的购房咨询服务，根据您的需求和预算，为您推荐合适的房源。
+                        </p>
+                        <a href="#" class="text-primary font-medium hover:text-secondary transition-colors inline-flex items-center">
+                            了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 服务2 -->
+                <div class="bg-light p-8 rounded-xl shadow-lg relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full transition-all duration-300 group-hover:scale-150"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa fa-building"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-montserrat mb-4">房产评估</h3>
+                        <p class="text-gray-600 mb-4">
+                            专业的房产评估服务，为您的房产提供准确的市场价值评估，助您做出明智决策。
+                        </p>
+                        <a href="#" class="text-primary font-medium hover:text-secondary transition-colors inline-flex items-center">
+                            了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 服务3 -->
+                <div class="bg-light p-8 rounded-xl shadow-lg relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full transition-all duration-300 group-hover:scale-150"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa fa-handshake-o"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-montserrat mb-4">房产交易</h3>
+                        <p class="text-gray-600 mb-4">
+                            全程协助房产交易，从签订合同到过户手续，为您提供专业的交易服务。
+                        </p>
+                        <a href="#" class="text-primary font-medium hover:text-secondary transition-colors inline-flex items-center">
+                            了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 服务4 -->
+                <div class="bg-light p-8 rounded-xl shadow-lg relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full transition-all duration-300 group-hover:scale-150"></div>
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary text-2xl">
+                            <i class="fa fa-key"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-montserrat mb-4">租房服务</h3>
+                        <p class="text-gray-600 mb-4">
+                            提供各类租房信息和服务，帮助您快速找到合适的房源，解决您的居住需求。
+                        </p>
+                        <a href="#" class="text-primary font-medium hover:text-secondary transition-colors inline-flex items-center">
+                            了解更多 <i class="fa fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 服务5 -->
+                <div class="bg-light p-8 rounded-xl shadow-lg relative overflow-hidden group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full transition-all duration-300 group-hover:scale-150"></div>
+                    
