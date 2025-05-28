@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusFlow - 番茄钟任务管理</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- 配置Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#FF7D00',
+                        success: '#00B42A',
+                        danger: '#F53F3F',
+                        warning: '#FF7D00',
+                        info: '#86909C',
+                        light: '#F2F3F5',
+                        dark: '#1D2129',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .timer-shadow {
+                box-shadow: 0 0 0 15px rgba(22, 93, 255, 0.1);
+            }
+            .task-hover {
+                transition: all 0.2s ease;
+            }
+            .task-hover:hover {
+                transform: translateY(-2px);
+            }
+            .btn-pulse {
+                animation: pulse 2s infinite;
+            }
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(22, 93, 255, 0.4);
+                }
+                70% {
+                    transform: scale(1.02);
+                    box-shadow: 0 0 0 10px rgba(22, 93, 255, 0);
+                }
+                100% {
+                    transform: scale(1);
+                    box-shadow: 0 0 0 0 rgba(22, 93, 255, 0);
+                }
+            }
+            .progress-ring-circle {
+                transition: stroke-dashoffset 0.35s;
+                transform: rotate(-90deg);
+                transform-origin: 50% 50%;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light dark:bg-dark text-dark dark:text-light transition-colors duration-300 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark/80 backdrop-blur-md shadow-sm">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                    <i class="fa fa-tomato text-white"></i>
+                </div>
+                <h1 class="text-xl font-bold text-primary">FocusFlow</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i class="fa fa-moon-o dark:hidden text-gray-600"></i>
+                    <i class="fa fa-sun-o hidden dark:inline text-yellow-400"></i>
+                </button>
+                
+                <button id="bg-color-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i class="fa fa-paint-brush text-gray-600 dark:text-gray-300"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- 左侧：番茄钟 -->
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fa fa-clock-o mr-2 text-primary"></i>
+                        番茄钟
+                    </h2>
+                    
+                    <!-- 模式选择 -->
+                    <div class="flex justify-between mb-6">
+                        <button id="work-mode" class="flex-1 py-2 px-4 rounded-lg bg-primary text-white font-medium transition-all">
+                            工作
+                        </button>
+                        <button id="short-break-mode" class="flex-1 py-2 px-4 rounded-lg mx-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium transition-all">
+                            短休息
+                        </button>
+                        <button id="long-break-mode" class="flex-1 py-2 px-4 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-medium transition-all">
+                            长休息
+                        </button>
+                    </div>
+                    
+                    <!-- 计时器 -->
+                    <div class="relative flex justify-center items-center mb-8">
+                        <svg class="w-64 h-64" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="#f0f0f0" stroke-width="10" />
+                            <circle id="progress-ring" class="progress-ring-circle" cx="50" cy="50" r="45" fill="none" stroke="#165DFF" stroke-width="10" stroke-dasharray="283" stroke-dashoffset="0" />
+                        </svg>
+                        <div class="absolute text-center">
+                            <div id="timer-display" class="text-5xl font-bold">25:00</div>
+                            <div id="session-count" class="text-gray-500 dark:text-gray-400 mt-2">
+                                第 <span id="current-session">1</span> 个番茄
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 控制按钮 -->
+                    <div class="flex justify-center space-x-4">
+                        <button id="start-timer" class="px-6 py-3 bg-primary text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition-all flex items-center">
+                            <i class="fa fa-play mr-2"></i> 开始
+                        </button>
+                        <button id="reset-timer" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-all flex items-center">
+                            <i class="fa fa-refresh mr-2"></i> 重置
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 统计信息 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fa fa-bar-chart mr-2 text-primary"></i>
+                        统计信息
+                    </h2>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary">12</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">今日番茄</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary">48</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">本周番茄</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary">192</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">本月番茄</div>
+                        </div>
+                        <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 text-center">
+                            <div class="text-3xl font-bold text-primary">1280</div>
+                            <div class="text-sm text-gray-500 dark:text-gray-400">总番茄数</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧：任务列表 -->
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300">
+                    <h2 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fa fa-tasks mr-2 text-primary"></i>
+                        任务列表
+                    </h2>
+                    
+                    <!-- 添加任务 -->
+                    <div class="flex mb-6">
+                        <input id="new-task-input" type="text" placeholder="添加新任务..." class="flex-1 px-4 py-3 rounded-l-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <button id="add-task-btn" class="px-6 py-3 bg-primary text-white rounded-r-lg font-medium hover:bg-primary/90 transition-colors">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 任务过滤器 -->
+                    <div class="flex justify-between mb-4">
+                        <div class="flex space-x-2">
+                            <button id="all-tasks" class="px-3 py-1 rounded-md bg-primary text-white text-sm font-medium">全部</button>
+                            <button id="active-tasks" class="px-3 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">进行中</button>
+                            <button id="completed-tasks" class="px-3 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">已完成</button>
+                        </div>
+                        <div>
+                            <button id="clear-completed" class="text-gray-500 dark:text-gray-400 hover:text-danger dark:hover:text-danger text-sm flex items-center">
+                                <i class="fa fa-trash-o mr-1"></i> 清除已完成
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 任务列表 -->
+                    <div id="task-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                        <!-- 任务项会通过JavaScript动态添加 -->
+                    </div>
+                    
+                    <!-- 空状态 -->
+                    <div id="empty-state" class="py-12 text-center hidden">
+                        <i class="fa fa-list-ul text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
+                        <p class="text-gray-500 dark:text-gray-400">还没有任务，添加一个新任务开始吧！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white dark:bg-gray-800 py-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 text-center text-gray-500 dark:text-gray-400 text-sm">
+            <p>© 2023 FocusFlow - 专注工作，高效生活</p>
+            <div class="flex justify-center space-x-4 mt-3">
+                <a href="#" class="hover:text-primary transition-colors"><i class="fa fa-github"></i></a>
+                <a href="#" class="hover:text-primary transition-colors"><i class="fa fa-twitter"></i></a>
+                <a href="#" class="hover:text-primary transition-colors"><i class="fa fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 背景色选择器模态框 -->
+    <div id="bg-color-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">选择背景颜色</h3>
+                <button id="close-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-3 mb-6">
+                <button class="color-option w-full h-12 rounded-lg bg-[#F2F3F5]" data-color="#F2F3F5"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#E6F7FF]" data-color="#E6F7FF"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#FFF2E8]" data-color="#FFF2E8"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#F0F9EB]" data-color="#F0F9EB"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#1D2129]" data-color="#1D2129"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#141414]" data-color="#141414"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#271845]" data-color="#271845"></button>
+                <button class="color-option w-full h-12 rounded-lg bg-[#163047]" data-color="#163047"></button>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="custom-color-btn" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    自定义颜色
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定义颜色输入模态框 -->
+    <div id="custom-color-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">自定义背景颜色</h3>
+                <button id="close-custom-modal" class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">颜色值</label>
+                    <div class="flex">
+                        <input id="custom-color-input" type="text" placeholder="#FFFFFF" class="flex-1 px-4 py-2 rounded-l-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <input id="custom-color-picker" type="color" class="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-r-lg cursor-pointer">
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-2">
+                    <button id="cancel-custom-color" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        取消
+                    </button>
+                    <button id="save-custom-color" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM 元素
+        const themeToggle = document.getElementById('theme-toggle');
+        const bgColorToggle = document.getElementById('bg-color-toggle');
+        const bgColorModal = document.getElementById('bg-color-modal');
+        const closeModal = document.getElementById('close-modal');
+        const customColorBtn = document.getElementById('custom-color-btn');
+        const customColorModal = document.getElementById('custom-color-modal');
+        const closeCustomModal = document.getElementById('close-custom-modal');
+        const cancelCustomColor = document.getElementById('cancel-custom-color');
+        const saveCustomColor = document.getElementById('save-custom-color');
+        const customColorInput = document.getElementById('custom-color-input');
+        const customColorPicker = document.getElementById('custom-color-picker');
+        
+        const workModeBtn = document.getElementById('work-mode');
+        const shortBreakModeBtn = document.getElementById('short-break-mode');
+        const longBreakModeBtn = document.getElementById('long-break-mode');
+        const startTimerBtn = document.getElementById('start-timer');
+        const resetTimerBtn = document.getElementById('reset-timer');
+        const timerDisplay = document.getElementById('timer-display');
+        const sessionCount = document.getElementById('current-session');
+        const progressRing = document.getElementById('progress-ring');
+        
+        const newTaskInput = document.getElementById('new-task-input');
+        const addTaskBtn = document.getElementById('add-task-btn');
+        const taskList = document.getElementById('task-list');
+        const emptyState = document.getElementById('empty-state');
+        const allTasksBtn = document.getElementById('all-tasks');
+        const activeTasksBtn = document.getElementById('active-tasks');
+        const completedTasksBtn = document.getElementById('completed-tasks');
+        const clearCompletedBtn = document.getElementById('clear-completed');
+        
+        // 状态变量
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let currentBackgroundColor = localStorage.getItem('bgColor') || '#F2F3F5';
+        let currentMode = 'work';
+        let timer;
+        let isTimerRunning = false;
+        let timeLeft = 25 * 60; // 默认25分钟
+        let currentSession = parseInt(localStorage.getItem('currentSession')) || 1;
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        let filter = 'all';
+        
+        // 初始化
+        document.documentElement.classList.toggle('dark', isDarkMode);
+        document.body.style.backgroundColor = currentBackgroundColor;
+        sessionCount.textContent = `第 ${currentSession} 个番茄`;
+        
+        // 主题切换
+        themeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.documentElement.classList.toggle('dark', isDarkMode);
+            localStorage.setItem('darkMode', isDarkMode);
+        });
+        
+        // 背景色选择器
+        bgColorToggle.addEventListener('click', () => {
+            bgColorModal.classList.remove('hidden');
+        });
+        
+        closeModal.addEventListener('click', () => {
+            bgColorModal.classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        bgColorModal.addEventListener('click', (e) => {
+            if (e.target === bgColorModal) {
+                bgColorModal.classList.add('hidden');
+            }
+        });
+        
+        // 自定义颜色模态框
+        customColorBtn.addEventListener('click', () => {
+            bgColorModal.classList.add('hidden');
+            customColorModal.classList.remove('hidden');
+            customColorInput.value = currentBackgroundColor;
+            customColorPicker.value = currentBackgroundColor;
+        });
+        
+        closeCustomModal.addEventListener('click', () => {
+            customColorModal.classList.add('hidden');
+        });
+        
+        cancelCustomColor.addEventListener('click', () => {
+            customColorModal.classList.add('hidden');
+        });
+        
+        // 点击模态框外部关闭
+        customColorModal.addEventListener('click', (e) => {
+            if (e.target === customColorModal) {
+                customColorModal.classList.add('hidden');
+            }
+        });
+        
+        // 颜色选择
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const color = option.dataset.color;
+                document.body.style.backgroundColor = color;
+                currentBackgroundColor = color;
+                localStorage.setItem('bgColor', color);
+                bgColorModal.classList.add('hidden');
+            });
+        });
+        
+        // 自定义颜色
+        customColorPicker.addEventListener('input', (e) => {
+            customColorInput.value = e.target.value;
+        });
+        
+        customColorInput.addEventListener('input', (e) => {
+            // 验证颜色格式
+            const colorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+            if (colorRegex.test(e.target.value)) {
+                customColorPicker.value = e.target.value;
+            }
+        });
+        
+        saveCustomColor.addEventListener('click', () => {
+            const color = customColorInput.value;
+            const colorRegex = /^#([0-9A-F]{3}){1,2}$/i;
+            
+            if (colorRegex.test(color)) {
+                document.body.style.backgroundColor = color;
+                currentBackgroundColor = color;
+                localStorage.setItem('bgColor', color);
+                customColorModal.classList.add('hidden');
+            } else {
+                alert('请输入有效的颜色值，例如 #FFFFFF');
+            }
+        });
+        
+        // 番茄钟功能
+        workModeBtn.addEventListener('click', () => {
+            setMode('work');
+        });
+        
+        shortBreakModeBtn.addEventListener('click', () => {
+            setMode('short-break');
+        });
+        
+        longBreakModeBtn.addEventListener('click', () => {
+            setMode('long-break');
+        });
+        
+        startTimerBtn.addEventListener('click', () => {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        });
+        
+        resetTimerBtn.addEventListener('click', () => {
+            resetTimer();
+        });
+        
+        function setMode(mode) {
+            currentMode = mode;
+            
+            // 更新按钮样式
+            workModeBtn.classList.remove('bg-primary', 'text-white');
+            workModeBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            shortBreakModeBtn.classList.remove('bg-primary', 'text-white');
+            shortBreakModeBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            longBreakModeBtn.classList.remove('bg-primary', 'text-white');
+            longBreakModeBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            if (mode === 'work') {
+                workModeBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                workModeBtn.classList.add('bg-primary', 'text-white');
+                timeLeft = 25 * 60;
+                progressRing.setAttribute('stroke', '#165DFF');
+            } else if (mode === 'short-break') {
+                shortBreakModeBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                shortBreakModeBtn.classList.add('bg-primary', 'text-white');
+                timeLeft = 5 * 60;
+                progressRing.setAttribute('stroke', '#00B42A');
+            } else if (mode === 'long-break') {
+                longBreakModeBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                longBreakModeBtn.classList.add('bg-primary', 'text-white');
+                timeLeft = 15 * 60;
+                progressRing.setAttribute('stroke', '#FF7D00');
+            }
+            
+            updateTimerDisplay();
+            updateProgressRing();
+            
+            if (isTimerRunning) {
+                resetTimer();
+            }
+        }
+        
+        function startTimer() {
+            isTimerRunning = true;
+            startTimerBtn.innerHTML = '<i class="fa fa-pause mr-2"></i> 暂停';
+            startTimerBtn.classList.add('btn-pulse');
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                updateProgressRing();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    isTimerRunning = false;
+                    startTimerBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始';
+                    startTimerBtn.classList.remove('btn-pulse');
+                    
+                    // 播放提示音
+                    playNotificationSound();
+                    
+                    // 自动切换到下一个模式
+                    if (currentMode === 'work') {
+                        currentSession++;
+                        localStorage.setItem('currentSession', currentSession);
+                        sessionCount.textContent = `第 ${currentSession} 个番茄`;
+                        
+                        // 每完成4个番茄，进入长休息
+                        if (currentSession % 4 === 0) {
+                            setMode('long-break');
+                        } else {
+                            setMode('short-break');
+                        }
+                    } else {
+                        setMode('work');
+                    }
+                }
+            }, 1000);
+        }
+        
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timer);
+            startTimerBtn.innerHTML = '<i class="fa fa-play mr-2"></i> 开始';
+            startTimerBtn.classList.remove('btn-pulse');
+        }
+        
+        function resetTimer() {
+            pauseTimer();
+            
+            if (currentMode === 'work') {
+                timeLeft = 25 * 60;
+            } else if (currentMode === 'short-break') {
+                timeLeft = 5 * 60;
+            } else if (currentMode === 'long-break') {
+                timeLeft = 15 * 60;
+            }
+            
+            updateTimerDisplay();
+            updateProgressRing();
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function updateProgressRing() {
+            let totalTime;
+            if (currentMode === 'work') {
+                totalTime = 25 * 60;
+            } else if (currentMode === 'short-break') {
+                totalTime = 5 * 60;
+            } else {
+                totalTime = 15 * 60;
+            }
+            
+            const circumference = 2 * Math.PI * 45; // 2πr
+            const offset = circumference - (timeLeft / totalTime) * circumference;
+            
+            progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+            progressRing.style.strokeDashoffset = offset;
+        }
+        
+        function playNotificationSound() {
+            // 这里可以添加提示音
+            // const audio = new Audio('notification.mp3');
+            // audio.play();
+            
+            // 简单的视觉反馈
+            document.body.classList.add('animate-pulse');
+            setTimeout(() => {
+                document.body.classList.remove('animate-pulse');
+            }, 1000);
+        }
+        
+        // 任务管理功能
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            let filteredTasks = tasks;
+            
+            if (filter === 'active') {
+                filteredTasks = tasks.filter(task => !task.completed);
+            } else if (filter === 'completed') {
+                filteredTasks = tasks.filter(task => task.completed);
+            }
+            
+            if (filteredTasks.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+            
+            filteredTasks.forEach((task, index) => {
+                const taskItem = document.createElement('div');
+                taskItem.className = `flex items-center p-3 bg-white dark:bg-gray-700 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600 task-hover ${task.completed ? 'opacity-70' : ''}`;
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'w-5 h-5 rounded border-gray-300 dark:border-gray-500 text-primary focus:ring-primary mr-3';
+                checkbox.checked = task.completed;
+                checkbox.addEventListener('change', () => {
+                    toggleTaskCompletion(index);
+                });
+                
+                const taskText = document.createElement('span');
+                taskText.className = `flex-1 ${task.completed ? 'line-through text-gray-500 dark:text-gray-400' : ''}`;
+                taskText.textContent = task.text;
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'text-gray-400 hover:text-danger dark:text-gray-500 dark:hover:text-danger transition-colors';
+                deleteBtn.innerHTML = '<i class="fa fa-trash-o"></i>';
+                deleteBtn.addEventListener('click', () => {
+                    deleteTask(index);
+                });
+                
+                taskItem.appendChild(checkbox);
+                taskItem.appendChild(taskText);
+                taskItem.appendChild(deleteBtn);
+                
+                taskList.appendChild(taskItem);
+            });
+        }
+        
+        function addTask() {
+            const text = newTaskInput.value.trim();
+            if (text) {
+                tasks.push({
+                    id: Date.now(),
+                    text,
+                    completed: false
+                });
+                
+                saveTasks();
+                renderTasks();
+                newTaskInput.value = '';
+                newTaskInput.focus();
+            }
+        }
+        
+        function toggleTaskCompletion(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasks();
+            renderTasks();
+        }
+        
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function clearCompletedTasks() {
+            tasks = tasks.filter(task => !task.completed);
+            saveTasks();
+            renderTasks();
+        }
+        
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+        
+        // 事件监听器
+        addTaskBtn.addEventListener('click', addTask);
+        
+        newTaskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+        
+        allTasksBtn.addEventListener('click', () => {
+            filter = 'all';
+            updateFilterButtons();
+            renderTasks();
+        });
+        
+        activeTasksBtn.addEventListener('click', () => {
+            filter = 'active';
+            updateFilterButtons();
+            renderTasks();
+        });
+        
+        completedTasksBtn.addEventListener('click', () => {
+            filter = 'completed';
+            updateFilterButtons();
+            renderTasks();
+        });
+        
+        clearCompletedBtn.addEventListener('click', clearCompletedTasks);
+        
+        function updateFilterButtons() {
+            allTasksBtn.classList.remove('bg-primary', 'text-white');
+            allTasksBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            activeTasksBtn.classList.remove('bg-primary', 'text-white');
+            activeTasksBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            completedTasksBtn.classList.remove('bg-primary', 'text-white');
+            completedTasksBtn.classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            
+            if (filter === 'all') {
+                allTasksBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                allTasksBtn.classList.add('bg-primary', 'text-white');
+            } else if (filter === 'active') {
+                activeTasksBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                activeTasksBtn.classList.add('bg-primary', 'text-white');
+            } else if (filter === 'completed') {
+                completedTasksBtn.classList.remove('bg-gray-200', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+                completedTasksBtn.classList.add('bg-primary', 'text-white');
+            }
+        }
+        
+        // 初始化任务列表
+        renderTasks();
+        updateFilterButtons();
+    </script>
+</body>
+</html>
