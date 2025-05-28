@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailHub - 在线邮件发送系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#36CFC9',
+                        success: '#52C41A',
+                        warning: '#FAAD14',
+                        danger: '#FF4D4F',
+                        info: '#1890FF',
+                        dark: '#1D2129',
+                        light: '#F2F3F5',
+                        muted: '#86909C'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'dropdown': '0 8px 24px rgba(0, 0, 0, 0.12)',
+                        'hover': '0 10px 25px rgba(0, 0, 0, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .transition-custom {
+                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .sidebar-item-active {
+                @apply bg-primary/10 text-primary border-l-4 border-primary;
+            }
+            .sidebar-item {
+                @apply flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition-all duration-200;
+            }
+            .btn {
+                @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:bg-primary/90 focus:ring-primary/50;
+            }
+            .btn-secondary {
+                @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-200;
+            }
+            .btn-icon {
+                @apply p-2 rounded-full hover:bg-gray-100 transition-all duration-200;
+            }
+            .form-input {
+                @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary;
+            }
+            .email-item {
+                @apply flex items-center justify-between p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-all duration-200;
+            }
+            .email-item.active {
+                @apply bg-primary/5 border-l-4 border-primary;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-inter bg-light text-dark min-h-screen flex flex-col">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm z-10 sticky top-0">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 左侧Logo和汉堡菜单 -->
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 md:hidden btn-icon">
+                        <i class="fa fa-bars text-gray-600"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+                        <h1 class="ml-2 text-xl font-bold text-primary">MailHub</h1>
+                    </div>
+                </div>
+                
+                <!-- 中间搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <input type="text" placeholder="搜索邮件..." class="form-input pl-10 bg-gray-50 border-0">
+                        <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fa fa-search"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center">
+                    <button class="btn-icon relative">
+                        <i class="fa fa-bell-o text-gray-600"></i>
+                        <span class="absolute top-0 right-0 w-2 h-2 bg-danger rounded-full"></span>
+                    </button>
+                    <button class="btn-icon ml-2">
+                        <i class="fa fa-cog text-gray-600"></i>
+                    </button>
+                    <div class="ml-4 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                            <span class="font-medium">DH</span>
+                        </div>
+                        <span class="ml-2 hidden md:inline-block font-medium">Doubao</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="w-64 bg-white shadow-sm transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-20 h-[calc(100vh-4rem)] overflow-y-auto">
+            <div class="p-4">
+                <button class="w-full btn btn-primary flex items-center justify-center shadow-md hover:shadow-lg">
+                    <i class="fa fa-pencil mr-2"></i> 新建邮件
+                </button>
+                
+                <nav class="mt-6">
+                    <ul>
+                        <li class="sidebar-item sidebar-item-active">
+                            <i class="fa fa-inbox w-5 text-center"></i>
+                            <span class="ml-3">收件箱</span>
+                            <span class="ml-auto bg-primary/10 text-primary text-xs px-2 py-0.5 rounded-full">12</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <i class="fa fa-paper-plane w-5 text-center"></i>
+                            <span class="ml-3">已发送</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <i class="fa fa-star-o w-5 text-center"></i>
+                            <span class="ml-3">星标邮件</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <i class="fa fa-clock-o w-5 text-center"></i>
+                            <span class="ml-3">草稿</span>
+                        </li>
+                        <li class="sidebar-item">
+                            <i class="fa fa-trash-o w-5 text-center"></i>
+                            <span class="ml-3">垃圾箱</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-6 px-4">
+                        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">联系人</h3>
+                        <ul class="mt-3">
+                            <li class="flex items-center px-2 py-2 rounded-lg hover:bg-gray-100">
+                                <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xs">
+                                    李
+                                </div>
+                                <span class="ml-2 text-sm">李明</span>
+                            </li>
+                            <li class="flex items-center px-2 py-2 rounded-lg hover:bg-gray-100">
+                                <div class="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xs">
+                                    王
+                                </div>
+                                <span class="ml-2 text-sm">王芳</span>
+                            </li>
+                            <li class="flex items-center px-2 py-2 rounded-lg hover:bg-gray-100">
+                                <div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-xs">
+                                    张
+                                </div>
+                                <span class="ml-2 text-sm">张伟</span>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1 overflow-hidden flex flex-col">
+            <!-- 邮件列表头部 -->
+            <div class="bg-white border-b border-gray-200 p-3 flex items-center justify-between">
+                <div class="flex items-center">
+                    <button class="btn-icon">
+                        <i class="fa fa-check-square-o text-gray-600"></i>
+                    </button>
+                    <button class="btn-icon ml-2">
+                        <i class="fa fa-refresh text-gray-600"></i>
+                    </button>
+                </div>
+                
+                <div class="flex items-center">
+                    <div class="text-sm text-gray-500">显示 1-20 条，共 48 条</div>
+                    <div class="ml-4 flex items-center">
+                        <button class="btn-icon">
+                            <i class="fa fa-chevron-left text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-chevron-right text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 邮件列表 -->
+            <div class="flex-1 overflow-y-auto scrollbar-hide">
+                <div class="email-item active">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                            <span class="font-medium">DH</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">Doubao</div>
+                            <div class="text-sm text-gray-500 mt-1">测试邮件：这是一封测试邮件，请查收。</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">10:25</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <span class="font-medium">李</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">李明</div>
+                            <div class="text-sm text-gray-500 mt-1">会议邀请：下周一上午10点项目讨论会</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">昨天</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                            <span class="font-medium">王</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">王芳</div>
+                            <div class="text-sm text-gray-500 mt-1">项目进度报告：第三季度完成情况</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">9月15日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-yellow-400">
+                                <i class="fa fa-star"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+                            <span class="font-medium">张</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">张伟</div>
+                            <div class="text-sm text-gray-500 mt-1">合作方案：关于新产品推广的建议</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">9月10日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
+                            <i class="fa fa-envelope-o"></i>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">系统通知</div>
+                            <div class="text-sm text-gray-500 mt-1">您的邮箱存储空间已使用80%，请及时清理</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">9月5日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 更多邮件项目 -->
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                            <span class="font-medium">陈</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">陈静</div>
+                            <div class="text-sm text-gray-500 mt-1">重要：关于年度绩效评估的通知</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">9月1日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <span class="font-medium">赵</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">赵伟</div>
+                            <div class="text-sm text-gray-500 mt-1">新产品发布：下周三新品发布会邀请</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">8月28日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="email-item">
+                    <div class="flex items-center">
+                        <input type="checkbox" class="mr-3">
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                            <span class="font-medium">周</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-medium">周明</div>
+                            <div class="text-sm text-gray-500 mt-1">技术支持：关于服务器性能优化的建议</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm font-medium">8月25日</div>
+                        <div class="mt-1">
+                            <button class="btn-icon text-gray-400">
+                                <i class="fa fa-star-o"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 邮件详情 -->
+        <div id="email-detail" class="hidden lg:block w-2/5 bg-white border-l border-gray-200 overflow-y-auto h-[calc(100vh-4rem)]">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold">测试邮件：这是一封测试邮件，请查收。</h2>
+                    <div class="flex items-center">
+                        <button class="btn-icon">
+                            <i class="fa fa-reply text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon ml-2">
+                            <i class="fa fa-reply-all text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon ml-2">
+                            <i class="fa fa-forward text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon ml-2">
+                            <i class="fa fa-ellipsis-v text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                        <span class="font-medium">DH</span>
+                    </div>
+                    <div class="ml-3">
+                        <div class="font-medium">Doubao <doubao@example.com></div>
+                        <div class="text-sm text-gray-500 mt-1">发送给 我</div>
+                    </div>
+                    <div class="ml-auto text-sm text-gray-500">10:25</div>
+                </div>
+                
+                <div class="prose max-w-none mb-6">
+                    <p>尊敬的用户：</p>
+                    <p>这是一封测试邮件，用于测试MailHub在线邮件系统的功能。</p>
+                    <p>您可以看到这封邮件包含了以下内容：</p>
+                    <ul>
+                        <li>邮件标题和发送时间</li>
+                        <li>发件人和收件人信息</li>
+                        <li>邮件正文内容</li>
+                        <li>邮件操作按钮（回复、转发等）</li>
+                    </ul>
+                    <p>如果您有任何问题或建议，请随时联系我们的客服团队。</p>
+                    <p>感谢您使用MailHub在线邮件系统！</p>
+                    <p>此致<br>MailHub团队</p>
+                </div>
+                
+                <div class="border-t border-gray-200 pt-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-medium">附件 (1)</h3>
+                        <button class="text-primary text-sm hover:underline">全部下载</button>
+                    </div>
+                    
+                    <div class="flex items-center p-3 bg-gray-50 rounded-lg">
+                        <div class="w-10 h-10 bg-blue-100 rounded flex items-center justify-center text-blue-600">
+                            <i class="fa fa-file-pdf-o"></i>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <div class="font-medium">系统使用指南.pdf</div>
+                            <div class="text-sm text-gray-500">2.4 MB</div>
+                        </div>
+                        <button class="btn-icon text-gray-600">
+                            <i class="fa fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-end">
+                    <button class="btn btn-secondary mr-3">
+                        <i class="fa fa-reply mr-2"></i> 回复
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fa fa-share mr-2"></i> 转发
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新建邮件模态框 -->
+    <div id="new-email-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-end justify-center">
+        <div class="bg-white w-full max-w-2xl rounded-t-lg shadow-lg transform transition-transform duration-300 translate-y-full">
+            <div class="p-4 bg-primary text-white flex items-center justify-between">
+                <h3 class="font-medium">新建邮件</h3>
+                <div class="flex items-center">
+                    <button class="btn-icon text-white">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                    <button class="btn-icon text-white ml-2">
+                        <i class="fa fa-expand"></i>
+                    </button>
+                    <button class="btn-icon text-white ml-2" id="close-new-email">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4">
+                <div class="mb-3">
+                    <label class="text-sm text-gray-500">收件人</label>
+                    <input type="text" class="form-input mt-1" placeholder="输入收件人邮箱地址">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-sm text-gray-500">抄送</label>
+                    <input type="text" class="form-input mt-1" placeholder="输入抄送人邮箱地址">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="text-sm text-gray-500">主题</label>
+                    <input type="text" class="form-input mt-1" placeholder="输入邮件主题">
+                </div>
+                
+                <div class="border border-gray-300 rounded-lg mb-4">
+                    <div class="p-2 border-b border-gray-200 flex items-center">
+                        <button class="btn-icon">
+                            <i class="fa fa-bold text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-italic text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-underline text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-list-ul text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-list-ol text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-link text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-image text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon">
+                            <i class="fa fa-smile-o text-gray-600"></i>
+                        </button>
+                    </div>
+                    <textarea class="w-full p-3 min-h-[200px] focus:outline-none" placeholder="输入邮件内容..."></textarea>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <button class="btn-icon">
+                            <i class="fa fa-paperclip text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon ml-2">
+                            <i class="fa fa-smile-o text-gray-600"></i>
+                        </button>
+                        <button class="btn-icon ml-2">
+                            <i class="fa fa-calendar text-gray-600"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="btn btn-secondary mr-3">
+                            <i class="fa fa-save mr-2"></i> 保存草稿
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fa fa-paper-plane mr-2"></i> 发送
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 侧边栏切换
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 新建邮件模态框
+        document.querySelectorAll('.btn-primary:has(.fa-pencil)').forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = document.getElementById('new-email-modal');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.querySelector('div').classList.remove('translate-y-full');
+                }, 10);
+            });
+        });
+        
+        document.getElementById('close-new-email').addEventListener('click', function() {
+            const modal = document.getElementById('new-email-modal');
+            modal.querySelector('div').classList.add('translate-y-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        });
+        
+        // 邮件项目点击事件
+        document.querySelectorAll('.email-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 移除其他项目的active状态
+                document.querySelectorAll('.email-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // 添加当前项目的active状态
+                this.classList.add('active');
+                
+                // 在移动端显示邮件详情
+                if (window.innerWidth < 1024) {
+                    const main = document.querySelector('main');
+                    const emailDetail = document.getElementById('email-detail');
+                    
+                    main.classList.add('hidden');
+                    emailDetail.classList.remove('hidden');
+                    emailDetail.classList.add('fixed', 'inset-0', 'z-30');
+                }
+            });
+        });
+        
+        // 关闭邮件详情（移动端）
+        document.querySelector('#email-detail .fa-times').addEventListener('click', function() {
+            if (window.innerWidth < 1024) {
+                const main = document.querySelector('main');
+                const emailDetail = document.getElementById('email-detail');
+                
+                main.classList.remove('hidden');
+                emailDetail.classList.add('hidden');
+                emailDetail.classList.remove('fixed', 'inset-0', 'z-30');
+            }
+        });
+        
+        // 窗口大小变化时的处理
+        window.addEventListener('resize', function() {
+            const emailDetail = document.getElementById('email-detail');
+            
+            if (window.innerWidth >= 1024) {
+                emailDetail.classList.remove('fixed', 'inset-0', 'z-30');
+                if (document.querySelector('.email-item.active')) {
+                    emailDetail.classList.remove('hidden');
+                }
+            } else if (!document.querySelector('.email-item.active')) {
+                emailDetail.classList.add('hidden');
+            }
+        });
+        
+        // 滚动时导航栏效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.classList.add('shadow');
+            } else {
+                header.classList.remove('shadow');
+            }
+        });
+    </script>
+</body>
+</html>
