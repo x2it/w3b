@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>房产直播大屏 - 专业房源分析工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- 配置Tailwind自定义颜色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#FF7D00',
+            success: '#00B42A',
+            warning: '#FF7D00',
+            danger: '#F53F3F',
+            dark: '#1D2129',
+            light: '#F2F3F5',
+            'price-up': '#F53F3F',
+            'price-down': '#00B42A',
+            'neutral-100': '#F7F8FA',
+            'neutral-200': '#E5E6EB',
+            'neutral-300': '#C9CDD4',
+            'neutral-400': '#86909C',
+            'neutral-500': '#4E5969',
+            'neutral-600': '#272E3B',
+            'neutral-700': '#1D2129',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .shadow-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .text-balance {
+        text-wrap: balance;
+      }
+      .transition-custom {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+      }
+      .animate-pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .glow-effect {
+        box-shadow: 0 0 15px rgba(22, 93, 255, 0.5);
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #165DFF 0%, #0A38A8 100%);
+      }
+    }
+  </style>
+  
+  <!-- 全局样式 -->
+  <style>
+    body {
+      background-color: #f7f8fa;
+    }
+    
+    .live-indicator {
+      animation: blink 2s infinite;
+    }
+    
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+    
+    .scroll-indicator {
+      animation: bounce 2s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #c9cdd4;
+      border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #86909c;
+    }
+  </style>
+</head>
+
+<body class="font-inter text-neutral-700 min-h-screen overflow-x-hidden">
+  <!-- 直播状态提示 -->
+  <div class="gradient-bg text-white py-2 px-4 fixed top-0 left-0 right-0 z-50 flex items-center justify-between">
+    <div class="flex items-center">
+      <div class="bg-danger rounded-full w-3 h-3 mr-2 live-indicator"></div>
+      <span class="font-semibold">正在直播中</span>
+      <span class="mx-2">•</span>
+      <span id="live-time" class="text-sm">00:25:18</span>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center">
+        <i class="fa fa-eye mr-1"></i>
+        <span id="live-viewers" class="font-medium">12,586</span>
+      </div>
+      <div class="flex items-center">
+        <i class="fa fa-comments-o mr-1"></i>
+        <span id="live-comments" class="font-medium">328</span>
+      </div>
+      <div class="flex items-center">
+        <i class="fa fa-heart-o mr-1"></i>
+        <span id="live-likes" class="font-medium">1,895</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 pt-16 pb-8">
+    <!-- 主标题区域 -->
+    <div class="text-center mb-8 mt-4">
+      <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-neutral-800 text-shadow">
+        昆明2025年优质房源对比分析
+      </h1>
+      <p class="text-lg text-neutral-500 mt-2">专业团队实时解析，助您把握购房良机</p>
+    </div>
+    
+    <!-- 核心内容区域 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- 左侧房源数据 -->
+      <div class="lg:col-span-8 space-y-6">
+        <!-- 房源对比表格 -->
+        <div class="bg-white rounded-xl shadow-card overflow-hidden">
+          <div class="gradient-bg text-white p-4 flex justify-between items-center">
+            <h2 class="text-xl font-bold">房源综合对比分析表</h2>
+            <div class="flex items-center space-x-3">
+              <button id="toggle-fullscreen" class="p-2 hover:bg-white/20 rounded-lg transition-custom">
+                <i class="fa fa-expand"></i>
+              </button>
+              <button id="export-data" class="p-2 hover:bg-white/20 rounded-lg transition-custom">
+                <i class="fa fa-download"></i>
+              </button>
+            </div>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-neutral-200">
+              <thead class="bg-neutral-50">
+                <tr>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">房源维度</th>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">评分标准</th>
+                  <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">房源A</th>
+                  <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">房源B</th>
+                  <th scope="col" class="px-6 py-4 text-center text-xs font-medium text-neutral-500 uppercase tracking-wider">房源C</th>
+                  <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">对比总结</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-neutral-200">
+                <!-- 地理位置 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-map-marker text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">地理位置</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">交通便利性、商圈成熟度、噪音指数</td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold text-primary">C最优</span>（地铁5号线直达，翠湖商圈环绕）
+                  </td>
+                </tr>
+                
+                <!-- 户型结构 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-th-large text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">户型结构</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">南北通透、动静分区、得房率</td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
+                      ▲绿色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-warning/10 text-warning">
+                      ▲黄色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger/10 text-danger">
+                      ▲红色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold">A方正通透</span>，C动线杂乱
+                  </td>
+                </tr>
+                
+                <!-- 装修情况 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-paint-brush text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">装修情况</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">新旧程度、软装搭配、维护成本</td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold">B精装拎包入住</span>
+                  </td>
+                </tr>
+                
+                <!-- 价格竞争力 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-tag text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">价格竞争力</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">单价对比、总价区间、议价空间</td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      ■蓝色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-danger/10 text-danger">
+                      ■红色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
+                      ■绿色
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold text-success">C单价最低</span>，B溢价高
+                  </td>
+                </tr>
+                
+                <!-- 配套设施 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-shield text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">配套设施</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">物业水平、停车位、学区/医疗资源</td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold text-primary">A物业TOP3</span>，B无学区
+                  </td>
+                </tr>
+                
+                <!-- 稀缺性 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-diamond text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">稀缺性</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">景观资源、户型稀缺性、楼层优势</td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                      ★湖景房
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-center">-</td>
+                  <td class="px-6 py-4 text-center">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                      ★学区房
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold text-primary">A看湖景</span>，C学区房
+                  </td>
+                </tr>
+                
+                <!-- 性价比雷达图 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-line-chart text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">性价比雷达图</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">（可视化区域）</td>
+                  <td class="px-6 py-4">
+                    <div class="h-32 flex items-center justify-center">
+                      <canvas id="radarChartA"></canvas>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="h-32 flex items-center justify-center">
+                      <canvas id="radarChartB"></canvas>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="h-32 flex items-center justify-center">
+                      <canvas id="radarChartC"></canvas>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">直观对比综合实力</td>
+                </tr>
+                
+                <!-- 主播推荐指数 -->
+                <tr class="hover:bg-neutral-50 transition-custom">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="w-4 h-4 bg-primary/10 rounded-full flex items-center justify-center mr-2">
+                        <i class="fa fa-star text-xs text-primary"></i>
+                      </div>
+                      <span class="font-medium">主播推荐指数</span>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-600">★★★★★（最高）</td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                      <i class="fa fa-star-o text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center">
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                      <i class="fa fa-star text-yellow-400"></i>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-sm text-neutral-700">
+                    <span class="font-semibold text-primary">C为TOP推荐</span>，A性价比高
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- 房源详情卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- 房源A卡片 -->
+          <div class="bg-white rounded-xl shadow-card overflow-hidden hover-lift border-2 border-primary">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/1048/800/600');">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-white">
+                <span class="bg-primary/90 text-white text-xs font-bold px-2 py-1 rounded">
+                  推荐房源
+                </span>
+              </div>
+              <div class="absolute top-3 right-3 text-white">
+                <span class="text-sm font-medium">
+                  <i class="fa fa-heart-o mr-1"></i> 128
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-bold">滇池半岛 120㎡</h3>
+                <span class="bg-success/10 text-success text-xs font-medium px-2 py-1 rounded-full">
+                  价格优势
+                </span>
+              </div>
+              <div class="flex items-center text-sm text-neutral-500 mb-3">
+                <i class="fa fa-map-marker mr-1"></i> 西山区·滇池路
+                <span class="mx-2">•</span>
+                <i class="fa fa-building-o mr-1"></i> 2023年
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="text-sm text-neutral-500">
+                  <span class="text-2xl font-bold text-primary">198</span> 万
+                </div>
+                <div class="text-sm text-neutral-500">
+                  <span class="text-lg font-bold text-primary">1.65</span> 万/㎡
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-sm">
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">户型</div>
+                  <div class="font-medium">3室2厅</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">面积</div>
+                  <div class="font-medium">120㎡</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">朝向</div>
+                  <div class="font-medium">南北通透</div>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <button class="text-primary font-medium hover:underline">查看详情</button>
+                <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-custom">
+                  预约看房
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 房源B卡片 -->
+          <div class="bg-white rounded-xl shadow-card overflow-hidden hover-lift">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/1067/800/600');">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-white">
+                <span class="bg-secondary/90 text-white text-xs font-bold px-2 py-1 rounded">
+                  热门房源
+                </span>
+              </div>
+              <div class="absolute top-3 right-3 text-white">
+                <span class="text-sm font-medium">
+                  <i class="fa fa-heart-o mr-1"></i> 95
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-bold">呈贡新区 95㎡</h3>
+                <span class="bg-warning/10 text-warning text-xs font-medium px-2 py-1 rounded-full">
+                  溢价较高
+                </span>
+              </div>
+              <div class="flex items-center text-sm text-neutral-500 mb-3">
+                <i class="fa fa-map-marker mr-1"></i> 呈贡区·春融街
+                <span class="mx-2">•</span>
+                <i class="fa fa-building-o mr-1"></i> 2024年
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="text-sm text-neutral-500">
+                  <span class="text-2xl font-bold text-primary">158</span> 万
+                </div>
+                <div class="text-sm text-neutral-500">
+                  <span class="text-lg font-bold text-primary">1.66</span> 万/㎡
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-sm">
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">户型</div>
+                  <div class="font-medium">2室2厅</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">面积</div>
+                  <div class="font-medium">95㎡</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">朝向</div>
+                  <div class="font-medium">东南</div>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <button class="text-primary font-medium hover:underline">查看详情</button>
+                <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-custom">
+                  预约看房
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 房源C卡片 -->
+          <div class="bg-white rounded-xl shadow-card overflow-hidden hover-lift border-2 border-danger">
+            <div class="h-48 bg-cover bg-center relative" style="background-image: url('https://picsum.photos/id/1060/800/600');">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div class="absolute bottom-3 left-3 text-white">
+                <span class="bg-danger/90 text-white text-xs font-bold px-2 py-1 rounded">
+                  特惠房源
+                </span>
+              </div>
+              <div class="absolute top-3 right-3 text-white">
+                <span class="text-sm font-medium">
+                  <i class="fa fa-heart-o mr-1"></i> 156
+                </span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start mb-3">
+                <h3 class="text-lg font-bold">翠湖周边 110㎡</h3>
+                <span class="bg-success/10 text-success text-xs font-medium px-2 py-1 rounded-full">
+                  性价比高
+                </span>
+              </div>
+              <div class="flex items-center text-sm text-neutral-500 mb-3">
+                <i class="fa fa-map-marker mr-1"></i> 五华区·翠湖路
+                <span class="mx-2">•</span>
+                <i class="fa fa-building-o mr-1"></i> 2022年
+              </div>
+              <div class="flex justify-between items-center mb-4">
+                <div class="text-sm text-neutral-500">
+                  <span class="text-2xl font-bold text-primary">238</span> 万
+                </div>
+                <div class="text-sm text-neutral-500">
+                  <span class="text-lg font-bold text-primary">2.16</span> 万/㎡
+                </div>
+              </div>
+              <div class="grid grid-cols-3 gap-2 text-sm">
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">户型</div>
+                  <div class="font-medium">3室1厅</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">面积</div>
+                  <div class="font-medium">110㎡</div>
+                </div>
+                <div class="bg-neutral-50 p-2 rounded-lg text-center">
+                  <div class="text-neutral-500">朝向</div>
+                  <div class="font-medium">南</div>
+                </div>
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <button class="text-primary font-medium hover:underline">查看详情</button>
+                <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-custom">
+                  预约看房
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 观众互动区 -->
+        <div class="bg-white rounded-xl shadow-card p-5">
+          <div class="gradient-bg text-white p-3 rounded-lg mb-4">
+            <h2 class="text-lg font-bold">观众互动</h2>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 投票区 -->
+            <div>
+              <h3 class="text-md font-medium mb-3">您更倾向于选择哪套房源？</h3>
+              <div class="space-y-3">
+                <div class="flex items-center">
+                  <input type="radio" id="voteA" name="vote" class="w-4 h-4 text-primary focus:ring-primary">
+                  <label for="voteA" class="ml-2 text-sm font-medium">房源A - 滇池半岛</label>
+                  <div class="ml-auto flex items-center">
+                    <div class="w-24 bg-neutral-200 rounded-full h-2.5">
+                      <div class="bg-primary h-2.5 rounded-full" style="width: 45%"></div>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary">45%</span>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="voteB" name="vote" class="w-4 h-4 text-primary focus:ring-primary">
+                  <label for="voteB" class="ml-2 text-sm font-medium">房源B - 呈贡新区</label>
+                  <div class="ml-auto flex items-center">
+                    <div class="w-24 bg-neutral-200 rounded-full h-2.5">
+                      <div class="bg-primary h-2.5 rounded-full" style="width: 25%"></div>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary">25%</span>
+                  </div>
+                </div>
+                <div class="flex items-center">
+                  <input type="radio" id="voteC" name="vote" class="w-4 h-4 text-primary focus:ring-primary">
+                  <label for="voteC" class="ml-2 text-sm font-medium">房源C - 翠湖周边</label>
+                  <div class="ml-auto flex items-center">
+                    <div class="w-24 bg-neutral-200 rounded-full h-2.5">
+                      <div class="bg-primary h-2.5 rounded-full" style="width: 30%"></div>
+                    </div>
+                    <span class="ml-2 text-sm font-medium text-primary">30%</span>
+                  </div>
+                </div>
+              </div>
+              <button class="mt-4 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-custom">
+                提交投票
+              </button>
+            </div>
+            
+            <!-- 评论区 -->
+            <div>
+              <h3 class="text-md font-medium mb-3">观众留言</h3>
+              <div class="space-y-4 max-h-64 overflow-y-auto pr-2">
+                <div class="flex">
+                  <img src="https://picsum.photos/id/1005/100/100" alt="用户头像" class="w-10 h-10 rounded-full mr-3">
+                  <div>
+                    <div class="flex items-center">
+                      <span class="font-medium text-sm">李先生</span>
+                      <span class="ml-2 bg-primary/10 text-primary text-xs px-1.5 py-0.5 rounded">新用户</span>
+                      <span class="ml-2 text-xs text-neutral-500">2分钟前</span>
+                    </div>
+                    <p class="text-sm text-neutral-600 mt-1">滇池半岛的湖景真的很漂亮，不知道实际采光怎么样？</p>
+                  </div>
+                </div>
+                <div class="flex">
+                  <img src="https://picsum.photos/id/1012/100/100" alt="用户头像" class="w-10 h-10 rounded-full mr-3">
+                  <div>
+                    <div class="flex items-center">
+                      <span class="font-medium text-sm">王女士</span>
+                      <span class="ml-2 bg-yellow-100 text-yellow-800 text-xs px-1.5 py-0.5 rounded">VIP</span>
+                      <span class="ml-2 text-xs text-neutral-500">5分钟前</span>
+                    </div>
+                    <p class="text-sm text-neutral-600 mt-1">翠湖周边的价格确实很有吸引力，周边学校配套如何？</p>
+                  </div>
+                </div>
+                <div class="flex">
+                  <img src="https://picsum.photos/id/1027/100/100" alt="用户头像" class="w-10 h-10 rounded-full mr-3">
+                  <div>
+                    <div class="flex items-center">
+                      <span class="font-medium text-sm">张先生</span>
+                      <span class="ml-2 text-xs text-neutral-500">10分钟前</span>
+                    </div>
+                    <p class="text-sm text-neutral-600 mt-1">呈贡新区的装修风格我很喜欢，不知道首付最低可以多少？</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 flex">
+                <input type="text" placeholder="输入您的问题..." class="flex-1 border border-neutral-200 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-lg transition-custom">
+                  发送
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 右侧直播信息 -->
+      <div class="lg:col-span-4 space-y-6">
+        <!-- 主播信息 -->
+        <div class="bg-white rounded-xl shadow-card p-5">
+          <div class="flex items-center mb-4">
+            <img src="https://picsum.photos/id/1025/100/100" alt="主播头像" class="w-16 h-16 rounded-full mr-4 border-2 border-primary">
+            <div>
+              <h3 class="text-lg font-bold">王老师</h3>
+              <div class="flex items-center mt-1">
+                <span class="bg-primary/10 text-primary text-xs px-2 py-0.5 rounded">房产专家</span>
+                <span class="mx-2 text-neutral-400">•</span>
+                <span class="text-sm text-neutral-500">10年从业经验</span>
+              </div>
+            </div>
+          </div>
+          
+          <p class="text-sm text-neutral-600 mb-4">专注昆明房产市场分析，擅长投资型房产选择，累计服务客户500+</p>
+          
+          <div class="flex justify-between text-center text-sm mb-4">
+            <div>
+              <div class="font-bold text-lg">28</div>
+              <div class="text-neutral-500">直播场次</div>
+            </div>
+            <div>
+              <div class="font-bold text-lg">12.5k</div>
+              <div class="text-neutral-500">关注人数</div>
+            </div>
+            <div>
+              <div class="font-bold text-lg">4.9</div>
+              <div class="text-neutral-500">评分</div>
+            </div>
+          </div>
+          
+          <button class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-custom flex items-center justify-center">
+            <i class="fa fa-plus-circle mr-2"></i> 关注主播
+          </button>
+        </div>
+        
+        <!-- 直播信息 -->
+        <div class="bg-white rounded-xl shadow-card p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">直播信息</h3>
+            <span class="bg-danger text-white text-xs px-2 py-0.5 rounded animate-pulse">
+              正在直播
+            </span>
+          </div>
+          
+          <div class="space-y-3">
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-500">直播标题</span>
+              <span class="font-medium">昆明三大优质房源对比分析</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-500">直播时间</span>
+              <span id="live-duration">00:25:18</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-500">观看人数</span>
+              <span id="viewer-count">12,586</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-500">点赞数</span>
+              <span id="like-count">1,895</span>
+            </div>
+            <div class="flex justify-between text-sm">
+              <span class="text-neutral-500">分享数</span>
+              <span>328</span>
+            </div>
+          </div>
+          
+          <div class="mt-4 pt-4 border-t border-neutral-100">
+            <div class="flex justify-between mb-3">
+              <h4 class="font-medium">直播数据趋势</h4>
+              <select class="text-xs border border-neutral-200 rounded px-2 py-1">
+                <option>近30分钟</option>
+                <option>近1小时</option>
+                <option>全部</option>
+              </select>
+            </div>
+            <div class="h-48">
+              <canvas id="viewerChart"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 观众提问 -->
+        <div class="bg-white rounded-xl shadow-card p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">热门问题</h3>
+            <button class="text-primary text-sm">更多</button>
+          </div>
+          
+          <div class="space-y-4">
+            <div class="bg-neutral-50 p-3 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">滇池半岛的物业费是多少？</span>
+                <span class="text-xs text-neutral-500">5分钟前</span>
+              </div>
+              <p class="text-sm text-neutral-600">答：滇池半岛的物业费是2.8元/㎡·月，包含24小时安保和绿化维护。</p>
+            </div>
+            
+            <div class="bg-neutral-50 p-3 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">呈贡新区的交通配套如何？</span>
+                <span class="text-xs text-neutral-500">12分钟前</span>
+              </div>
+              <p class="text-sm text-neutral-600">答：呈贡新区临近地铁1号线春融街站，小区门口有多条公交线路，交通便利。</p>
+            </div>
+            
+            <div class="bg-neutral-50 p-3 rounded-lg">
+              <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium">翠湖周边的学区是哪个学校？</span>
+                <span class="text-xs text-neutral-500">20分钟前</span>
+              </div>
+              <p class="text-sm text-neutral-600">答：翠湖周边属于武成小学和昆一中的学区范围，教育资源优质。</p>
+            </div>
+          </div>
+          
+          <button class="mt-4 w-full border border-primary text-primary hover:bg-primary/5 py-2 rounded-lg transition-custom flex items-center justify-center">
+            <i class="fa fa-question-circle mr-2"></i> 我要提问
+          </button>
+        </div>
+        
+        <!-- 直播二维码 -->
+        <div class="bg-white rounded-xl shadow-card p-5 text-center">
+          <h3 class="text-lg font-bold mb-3">扫码关注直播</h3>
+          <div class="w-40 h-40 mx-auto mb-3 bg-neutral-100 rounded-lg flex items-center justify-center">
+            <div class="text-neutral-400">
+              <i class="fa fa-qrcode text-5xl"></i>
+            </div>
+          </div>
+          <p class="text-sm text-neutral-500">扫描二维码，获取更多昆明优质房源信息</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t border-neutral-200 py-6 mt-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center">
+            <i class="fa fa-home text-primary text-xl mr-2"></i>
+            <span class="font-bold text-lg">房产直播大屏</span>
+          </div>
+          <p class="text-sm text-neutral-500 mt-1">专业的房产直播工具，助您高效展示房源亮点</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="#" class="text-neutral-500 hover:text-primary transition-custom">
+            <i class="fa fa-weibo text-xl"></i>
+          </a>
+          <a href="#" class="text-neutral-500 hover:text-primary transition-custom">
+            <i class="fa fa-wechat text-xl"></i>
+          </a>
+          <a href="#" class="text-neutral-500 hover:text-primary transition-custom">
+            <i class="fa fa-qq text-xl"></i>
+          </a>
+          <a href="#" class="text-neutral-500 hover:text-primary transition-custom">
+            <i class="fa fa-envelope text-xl"></i>
+          </a>
+        </div>
+      </div>
+      <div class="mt-6 pt-6 border-t border-neutral-100 text-center text-sm text-neutral-500">
+        © 2025 Davi丨我家Studio 版权所有
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 初始化雷达图
+    function initRadarCharts() {
+      // 房源A雷达图
+      const ctxA = document.getElementById('radarChartA').getContext('2d');
+      new Chart(ctxA, {
+        type: 'radar',
+        data: {
+          labels: ['地段', '户型', '价格', '装修', '配套', '稀缺性'],
+          datasets: [{
+            label: '房源A',
+            data: [8, 9, 7, 6, 8, 9],
+            backgroundColor: 'rgba(22, 93, 255, 0.2)',
+            borderColor: 'rgba(22, 93, 255, 1)',
+            pointBackgroundColor: 'rgba(22, 93, 255, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(22, 93, 255, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 10
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          elements: {
+            line: {
+              borderWidth: 2
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+      
+      // 房源B雷达图
+      const ctxB = document.getElementById('radarChartB').getContext('2d');
+      new Chart(ctxB, {
+        type: 'radar',
+        data: {
+          labels: ['地段', '户型', '价格', '装修', '配套', '稀缺性'],
+          datasets: [{
+            label: '房源B',
+            data: [7, 6, 5, 8, 5, 6],
+            backgroundColor: 'rgba(255, 125, 0, 0.2)',
+            borderColor: 'rgba(255, 125, 0, 1)',
+            pointBackgroundColor: 'rgba(255, 125, 0, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(255, 125, 0, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 10
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          elements: {
+            line: {
+              borderWidth: 2
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+      
+      // 房源C雷达图
+      const ctxC = document.getElementById('radarChartC').getContext('2d');
+      new Chart(ctxC, {
+        type: 'radar',
+        data: {
+          labels: ['地段', '户型', '价格', '装修', '配套', '稀缺性'],
+          datasets: [{
+            label: '房源C',
+            data: [9, 5, 9, 5, 7, 8],
+            backgroundColor: 'rgba(0, 180, 42, 0.2)',
+            borderColor: 'rgba(0, 180, 42, 1)',
+            pointBackgroundColor: 'rgba(0, 180, 42, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(0, 180, 42, 1)'
+          }]
+        },
+        options: {
+          scales: {
+            r: {
+              angleLines: {
+                display: true
+              },
+              suggestedMin: 0,
+              suggestedMax: 10
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+          elements: {
+            line: {
+              borderWidth: 2
+            }
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+    
+    // 初始化观众数据图表
+    function initViewerChart() {
+      const ctx = document.getElementById('viewerChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['19:00', '19:10', '19:20', '19:30', '19:40', '19:50', '20:00'],
+          datasets: [{
+            label: '观看人数',
+            data: [5600, 6200, 7800, 9500, 11200, 12000, 12586],
+            borderColor: '#165DFF',
+            backgroundColor: 'rgba(22, 93, 255, 0.1)',
+            fill: true,
+            tension: 0.4,
+            pointRadius: 3,
+            pointBackgroundColor: '#165DFF'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              grid: {
+                display: true,
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
+        }
+      });
+    }
+    
+    // 更新直播时间
+    function updateLiveTime() {
+      const liveTimeElement = document.getElementById('live-time');
+      const liveDurationElement = document.getElementById('live-duration');
+      
+      if (liveTimeElement && liveDurationElement) {
+        const currentTime = new Date();
+        const hours = String(currentTime.getHours()).padStart(2, '0');
+        const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+        const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+        
+        liveTimeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        liveDurationElement.textContent = liveTimeElement.textContent;
+      }
+    }
+    
+    // 更新观众数据
+    function updateViewerData() {
+      const viewerCount = document.getElementById('viewer-count');
+      const likeCount = document.getElementById('like-count');
+      
+      if (viewerCount && likeCount) {
+        // 随机增减观众数
+        const currentViewerCount = parseInt(viewerCount.textContent.replace(/,/g, ''));
+        const change = Math.floor(Math.random() * 21) - 10; // -10 到 +10 之间的随机数
+        const newViewerCount = Math.max(10000, currentViewerCount + change);
+        viewerCount.textContent = newViewerCount.toLocaleString();
+        
+        // 随机增加点赞数
+        const currentLikeCount = parseInt(likeCount.textContent.replace(/,/g, ''));
+        const likeChange = Math.floor(Math.random() * 6) + 1; // 1 到 6 之间的随机数
+        const newLikeCount = currentLikeCount + likeChange;
+        likeCount.textContent = newLikeCount.toLocaleString();
+      }
+    }
+    
+    // 全屏切换
+    function initFullscreenToggle() {
+      const toggleButton = document.getElementById('toggle-fullscreen');
+      
+      if (toggleButton) {
+        toggleButton.addEventListener('click', function() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+              console.error(`全屏请求错误: ${err.message}`);
+            });
+            this.innerHTML = '<i class="fa fa-compress"></i>';
+          } else {
+            if (document.exitFullscreen) {
+              document.exitFullscreen();
+              this.innerHTML = '<i class="fa fa-expand"></i>';
+            }
+          }
+        });
+      }
+    }
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      initRadarCharts();
+      initViewerChart();
+      initFullscreenToggle();
+      
+      // 定时更新直播时间和观众数据
+      setInterval(updateLiveTime, 1000);
+      setInterval(updateViewerData, 3000);
+    });
+  </script>
+</body>
+</html>
