@@ -6,7 +6,6 @@
   <title>Davi丨我家Studio - 专业房产直播平台</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
   
   <!-- 配置Tailwind自定义颜色 -->
   <script>
@@ -16,20 +15,8 @@
           colors: {
             primary: '#165DFF',
             secondary: '#FF7D00',
-            success: '#00B42A',
-            warning: '#FF7D00',
-            danger: '#F53F3F',
             dark: '#1D2129',
             light: '#F2F3F5',
-            'price-up': '#F53F3F',
-            'price-down': '#00B42A',
-            'neutral-100': '#F7F8FA',
-            'neutral-200': '#E5E6EB',
-            'neutral-300': '#C9CDD4',
-            'neutral-400': '#86909C',
-            'neutral-500': '#4E5969',
-            'neutral-600': '#272E3B',
-            'neutral-700': '#1D2129',
           },
           fontFamily: {
             inter: ['Inter', 'system-ui', 'sans-serif'],
@@ -45,40 +32,11 @@
       .content-auto {
         content-visibility: auto;
       }
-      .shadow-card {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      }
-      .text-balance {
-        text-wrap: balance;
-      }
-      .transition-custom {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
       .hover-lift {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
       }
       .hover-lift:hover {
         transform: translateY(-4px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-      }
-      .animate-pulse-slow {
-        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      }
-      .glow-effect {
-        box-shadow: 0 0 15px rgba(22, 93, 255, 0.5);
-      }
-      .text-shadow {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      .gradient-bg {
-        background: linear-gradient(135deg, #165DFF 0%, #0A38A8 100%);
-      }
-      .scrollbar-hide {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .scrollbar-hide::-webkit-scrollbar {
-        display: none;
       }
     }
   </style>
@@ -103,7 +61,290 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(to right, rgba(22, 93, 255, 0.8), rgba(22, 93, 255, 0.4));
+      background: rgba(22, 93, 255, 0.8);
     }
     
-    .nav-link {
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* 卡片悬停效果 */
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+    }
+  </style>
+</head>
+
+<body class="font-inter text-neutral-700 min-h-screen overflow-x-hidden">
+  <!-- 导航栏 -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <i class="fa fa-home text-xl mr-2"></i>
+        <a href="index.html" class="text-xl font-bold">Davi丨我家Studio</a>
+      </div>
+      
+      <!-- 桌面端导航 -->
+      <div class="hidden md:flex space-x-6">
+        <a href="index.html" class="font-medium hover:text-white/80 transition-custom">首页</a>
+        <a href="live.html" class="font-medium hover:text-white/80 transition-custom">直播</a>
+        <a href="dashboard.html" class="font-medium hover:text-white/80 transition-custom">大屏</a>
+        <a href="focusflow.html" class="font-medium hover:text-white/80 transition-custom">关注</a>
+        <a href="mailhub.html" class="font-medium hover:text-white/80 transition-custom">消息</a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button class="md:hidden p-2 hover:bg-white/20 rounded-lg transition-custom" id="mobile-menu-button">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobile-menu">
+      <div class="container mx-auto py-4 px-6">
+        <div class="flex flex-col space-y-4">
+          <a href="index.html" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">首页</a>
+          <a href="live.html" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">直播</a>
+          <a href="dashboard.html" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">大屏</a>
+          <a href="focusflow.html" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">关注</a>
+          <a href="mailhub.html" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">消息</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 英雄区域 -->
+  <header class="hero-bg h-screen flex items-center justify-center relative">
+    <div class="container mx-auto px-6 relative z-10 text-white text-center">
+      <h1 class="text-[clamp(2rem,6vw,4rem)] font-bold mb-4">Davi丨我家Studio</h1>
+      <p class="text-[clamp(1rem,3vw,1.5rem)] mb-8 max-w-3xl mx-auto">
+        专业房产直播平台<br>
+        让您的房产展示更高效
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="index.html" class="bg-white hover:bg-neutral-100 text-primary px-8 py-4 rounded-lg font-medium transition-custom hover-lift flex items-center justify-center">
+          <i class="fa fa-home mr-2"></i> 访问主页
+        </a>
+        <a href="live.html" class="bg-transparent hover:bg-white/20 text-white border-2 border-white px-8 py-4 rounded-lg font-medium transition-custom hover-lift flex items-center justify-center">
+          <i class="fa fa-play-circle-o mr-2"></i> 观看直播
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容 -->
+  <main class="container mx-auto px-4 py-16">
+    <!-- 快速链接 -->
+    <section class="mb-16">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-neutral-800 mb-2">快速链接</h2>
+        <p class="text-neutral-500">一键访问我们的主要功能</p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <!-- 首页链接 -->
+        <a href="index.html" class="bg-white rounded-xl shadow-md p-6 text-center card-hover">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-home text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800">首页</h3>
+          <p class="text-sm text-neutral-500 mt-2">平台概览</p>
+        </a>
+        
+        <!-- 直播链接 -->
+        <a href="live.html" class="bg-white rounded-xl shadow-md p-6 text-center card-hover">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-play-circle-o text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800">直播</h3>
+          <p class="text-sm text-neutral-500 mt-2">观看直播</p>
+        </a>
+        
+        <!-- 大屏链接 -->
+        <a href="dashboard.html" class="bg-white rounded-xl shadow-md p-6 text-center card-hover">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-line-chart text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800">大屏</h3>
+          <p class="text-sm text-neutral-500 mt-2">数据展示</p>
+        </a>
+        
+        <!-- 关注链接 -->
+        <a href="focusflow.html" class="bg-white rounded-xl shadow-md p-6 text-center card-hover">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-heart-o text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800">关注</h3>
+          <p class="text-sm text-neutral-500 mt-2">关注主播</p>
+        </a>
+        
+        <!-- 消息链接 -->
+        <a href="mailhub.html" class="bg-white rounded-xl shadow-md p-6 text-center card-hover">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-envelope-o text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800">消息</h3>
+          <p class="text-sm text-neutral-500 mt-2">消息中心</p>
+        </a>
+      </div>
+    </section>
+    
+    <!-- 平台特色 -->
+    <section class="mb-16">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-neutral-800 mb-2">平台特色</h2>
+        <p class="text-neutral-500">我们的核心优势</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 特色1 -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <i class="fa fa-line-chart text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800 mb-3">专业数据大屏</h3>
+          <p class="text-neutral-600">全方位的房源数据对比分析，帮助您做出更明智的决策</p>
+        </div>
+        
+        <!-- 特色2 -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <i class="fa fa-users text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800 mb-3">实时观众互动</h3>
+          <p class="text-neutral-600">集成多种互动方式，帮助您与观众建立紧密连接</p>
+        </div>
+        
+        <!-- 特色3 -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <i class="fa fa-comments-o text-xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-bold text-neutral-800 mb-3">智能消息中心</h3>
+          <p class="text-neutral-600">集中管理观众消息和预约看房请求，不错过任何机会</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 直播预告 -->
+    <section class="mb-16">
+      <div class="text-center mb-10">
+        <h2 class="text-2xl font-bold text-neutral-800 mb-2">近期直播</h2>
+        <p class="text-neutral-500">即将开始的精彩直播</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 直播1 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1060/600/400" alt="直播封面" class="w-full h-48 object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="bg-secondary text-white text-xs font-bold px-2 py-1 rounded">
+                即将开始
+              </span>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 text-white text-xs font-medium px-2 py-1 rounded">
+              <i class="fa fa-clock-o mr-1"></i> 1小时后
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold mb-2">昆明2025年优质房源对比分析</h3>
+            <p class="text-neutral-600 text-sm mb-4">专业团队实时解析，助您把握购房良机</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <img src="https://picsum.photos/id/1025/100/100" alt="主播头像" class="w-8 h-8 rounded-full mr-2">
+                <span class="text-sm font-medium">王老师</span>
+              </div>
+              <a href="live.html" class="text-primary text-sm font-medium hover:underline">预约提醒</a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 直播2 -->
+        <div class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1048/600/400" alt="直播封面" class="w-full h-48 object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="bg-secondary text-white text-xs font-bold px-2 py-1 rounded">
+                即将开始
+              </span>
+            </div>
+            <div class="absolute bottom-3 right-3 bg-black/60 text-white text-xs font-medium px-2 py-1 rounded">
+              <i class="fa fa-clock-o mr-1"></i> 3小时后
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold mb-2">滇池半岛湖景房专场</h3>
+            <p class="text-neutral-600 text-sm mb-4">独家探访滇池半岛湖景房，解析投资价值</p>
+            <div class="flex justify-between items-center">
+              <div class="flex items-center">
+                <img src="https://picsum.photos/id/1012/100/100" alt="主播头像" class="w-8 h-8 rounded-full mr-2">
+                <span class="text-sm font-medium">李主播</span>
+              </div>
+              <a href="live.html" class="text-primary text-sm font-medium hover:underline">预约提醒</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 订阅区域 -->
+    <section>
+      <div class="bg-primary rounded-xl p-8 text-white">
+        <div class="text-center mb-6">
+          <h2 class="text-xl font-bold mb-2">获取最新房产资讯</h2>
+          <p class="text-white/80">订阅我们的邮件，及时获取最新房产动态和直播预告</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input type="email" placeholder="输入您的邮箱地址" class="flex-1 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50 text-neutral-700">
+          <button class="bg-white hover:bg-neutral-100 text-primary px-6 py-3 rounded-lg font-medium transition-custom">
+            立即订阅
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white border-t border-neutral-200 py-8">
+    <div class="container mx-auto px-4">
+      <div class="text-center text-sm text-neutral-500">
+        © 2025 Davi丨我家Studio 版权所有
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // 移动端菜单切换
+    function initMobileMenu() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          if (mobileMenu.classList.contains('opacity-0')) {
+            mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+            mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            mobileMenuButton.innerHTML = '<i class="fa fa-times"></i>';
+          } else {
+            mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+            mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            mobileMenuButton.innerHTML = '<i class="fa fa-bars"></i>';
+          }
+        });
+      }
+    }
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      initMobileMenu();
+    });
+  </script>
+</body>
+</html>
