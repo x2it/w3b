@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>热门二手房话题与关键词云</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义颜色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#FF7D00',
+            success: '#00B42A',
+            warning: '#FF7D00',
+            danger: '#F53F3F',
+            dark: '#1D2129',
+            light: '#F2F3F5',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .keyword-hover {
+        transition: all 0.3s ease;
+      }
+      .keyword-hover:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+      }
+    }
+  </style>
+  
+  <!-- 全局样式 -->
+  <style>
+    body {
+      background-color: #f7f8fa;
+    }
+    
+    .keyword-container {
+      min-height: 500px;
+      position: relative;
+    }
+    
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* 关键词悬停效果 */
+    .keyword {
+      transition: all 0.3s ease;
+    }
+    
+    .keyword:hover {
+      transform: scale(1.1);
+      cursor: pointer;
+    }
+    
+    /* 卡片悬停效果 */
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+    }
+  </style>
+</head>
+
+<body class="font-inter text-neutral-700 min-h-screen overflow-x-hidden">
+  <!-- 导航栏 -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-primary text-white shadow-md">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center">
+        <i class="fa fa-home text-xl mr-2"></i>
+        <a href="#" class="text-xl font-bold">Davi丨我家Studio</a>
+      </div>
+      
+      <!-- 桌面端导航 -->
+      <div class="hidden md:flex space-x-6">
+        <a href="#" class="font-medium hover:text-white/80 transition-custom">首页</a>
+        <a href="#" class="font-medium hover:text-white/80 transition-custom">热门话题</a>
+        <a href="#" class="font-medium hover:text-white/80 transition-custom">市场分析</a>
+        <a href="#" class="font-medium hover:text-white/80 transition-custom">直播预告</a>
+        <a href="#" class="font-medium hover:text-white/80 transition-custom">联系我们</a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button class="md:hidden p-2 hover:bg-white/20 rounded-lg transition-custom" id="mobile-menu-button">
+        <i class="fa fa-bars"></i>
+      </button>
+    </div>
+    
+    <!-- 移动端菜单 -->
+    <div class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobile-menu">
+      <div class="container mx-auto py-4 px-6">
+        <div class="flex flex-col space-y-4">
+          <a href="#" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">首页</a>
+          <a href="#" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">热门话题</a>
+          <a href="#" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">市场分析</a>
+          <a href="#" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">直播预告</a>
+          <a href="#" class="py-2 px-4 hover:bg-neutral-100 rounded-lg transition-custom">联系我们</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主要内容 -->
+  <main class="container mx-auto px-4 py-24">
+    <!-- 页面标题 -->
+    <div class="text-center mb-12">
+      <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-neutral-800 mb-4">热门二手房话题与关键词云</h1>
+      <p class="text-lg text-neutral-500 max-w-3xl mx-auto">探索当前房地产市场中最受关注的二手房相关话题和关键词</p>
+    </div>
+    
+    <!-- 关键词云 -->
+    <section class="mb-16">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="text-center mb-8">
+          <h2 class="text-xl font-bold text-neutral-800 mb-2">热门关键词</h2>
+          <p class="text-neutral-500">点击关键词了解更多详情</p>
+        </div>
+        
+        <!-- 关键词云容器 -->
+        <div class="keyword-container bg-neutral-50 rounded-lg p-4 relative overflow-hidden">
+          <!-- 关键词云SVG -->
+          <svg width="100%" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+            <!-- 背景 -->
+            <rect width="800" height="500" fill="#f7f8fa" rx="10" ry="10"/>
+            
+            <!-- 标题 -->
+            <text x="400" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#165DFF">热门二手房话题与关键词</text>
+            
+            <!-- 关键词云 -->
+            <g transform="translate(400, 250)">
+              <!-- 主关键词 -->
+              <text x="0" y="0" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="#165DFF" transform="rotate(0)" class="keyword" data-keyword="二手房价格">二手房价格</text>
+              <text x="0" y="80" font-family="Arial, sans-serif" font-size="42" font-weight="bold" text-anchor="middle" fill="#165DFF" transform="rotate(0)" class="keyword" data-keyword="学区房">学区房</text>
+              <text x="0" y="-80" font-family="Arial, sans-serif" font-size="42" font-weight="bold" text-anchor="middle" fill="#165DFF" transform="rotate(0)" class="keyword" data-keyword="装修状况">装修状况</text>
+              <text x="-150" y="0" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#165DFF" transform="rotate(-15)" class="keyword" data-keyword="昆明房价">昆明房价</text>
+              <text x="150" y="0" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#165DFF" transform="rotate(15)" class="keyword" data-keyword="地铁房">地铁房</text>
+              
+              <!-- 次关键词 -->
+              <text x="-200" y="-100" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#FF7D00" transform="rotate(-30)" class="keyword" data-keyword="满五唯一">满五唯一</text>
+              <text x="200" y="-100" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#FF7D00" transform="rotate(30)" class="keyword" data-keyword="南北通透">南北通透</text>
+              <text x="-200" y="100" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#FF7D00" transform="rotate(-30)" class="keyword" data-keyword="次新房">次新房</text>
+              <text x="200" y="100" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="#FF7D00" transform="rotate(30)" class="keyword" data-keyword="低首付">低首付</text>
+              
+              <!-- 其他关键词 -->
+              <text x="-250" y="-150" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(-45)" class="keyword" data-keyword="税费计算">税费计算</text>
+              <text x="250" y="-150" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(45)" class="keyword" data-keyword="小区环境">小区环境</text>
+              <text x="-250" y="150" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(-45)" class="keyword" data-keyword="市场行情">市场行情</text>
+              <text x="250" y="150" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(45)" class="keyword" data-keyword="性价比">性价比</text>
+              
+              <text x="-180" y="-50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(-20)" class="keyword" data-keyword="交通便利">交通便利</text>
+              <text x="180" y="-50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(20)" class="keyword" data-keyword="房龄">房龄</text>
+              <text x="-180" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(-20)" class="keyword" data-keyword="户型结构">户型结构</text>
+              <text x="180" y="50" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(20)" class="keyword" data-keyword="周边配套">周边配套</text>
+              
+              <text x="-220" y="0" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(-30)" class="keyword" data-keyword="采光通风">采光通风</text>
+              <text x="220" y="0" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(30)" class="keyword" data-keyword="议价空间">议价空间</text>
+              
+              <text x="0" y="-130" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(0)" class="keyword" data-keyword="楼层选择">楼层选择</text>
+              <text x="0" y="130" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#00B42A" transform="rotate(0)" class="keyword" data-keyword="物业管理">物业管理</text>
+            </g>
+            
+            <!-- 装饰元素 -->
+            <circle cx="400" cy="250" r="250" fill="none" stroke="#165DFF" stroke-width="2" stroke-dasharray="5,5"/>
+            <circle cx="400" cy="250" r="200" fill="none" stroke="#165DFF" stroke-width="2" stroke-dasharray="5,5"/>
+            <circle cx="400" cy="250" r="150" fill="none" stroke="#165DFF" stroke-width="2" stroke-dasharray="5,5"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 关键词详情 -->
+    <section id="keyword-details" class="mb-16">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="text-center mb-8">
+          <h2 class="text-xl font-bold text-neutral-800 mb-2">关键词详情</h2>
+          <p class="text-neutral-500">选择上方关键词查看详细解释</p>
+        </div>
+        
+        <!-- 默认显示内容 -->
+        <div id="default-content" class="text-center py-12">
+          <i class="fa fa-search text-4xl text-neutral-300 mb-4"></i>
+          <p class="text-neutral-500">请点击上方关键词查看详细解释</p>
+        </div>
+        
+        <!-- 关键词详情内容 (默认隐藏) -->
+        <div id="keyword-content" class="hidden">
+          <h3 class="text-xl font-bold text-neutral-800 mb-4" id="keyword-title">关键词标题</h3>
+          <div class="prose max-w-none" id="keyword-description">
+            <p>关键词详细解释将显示在这里...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 热门话题文章 -->
+    <section class="mb-16">
+      <div class="text-center mb-8">
+        <h2 class="text-xl font-bold text-neutral-800 mb-2">热门话题文章</h2>
+        <p class="text-neutral-500">探索更多二手房相关话题</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- 文章1 -->
+        <a href="#" class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1060/600/400" alt="二手房价格趋势" class="w-full h-48 object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="bg-primary text-white text-xs font-bold px-2 py-1 rounded">
+                价格趋势
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-neutral-800 mb-2">2025年昆明二手房价格走势分析</h3>
+            <p class="text-neutral-600 text-sm mb-4 line-clamp-2">深入分析昆明各区域二手房价格走势，预测未来市场趋势</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-neutral-500">2025-05-15</span>
+              <span class="text-xs text-neutral-500">阅读 2,345</span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- 文章2 -->
+        <a href="#" class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1048/600/400" alt="学区房指南" class="w-full h-48 object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="bg-secondary text-white text-xs font-bold px-2 py-1 rounded">
+                学区房
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-neutral-800 mb-2">昆明优质学区房选购指南</h3>
+            <p class="text-neutral-600 text-sm mb-4 line-clamp-2">如何选择优质学区房？这些因素你必须考虑</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-neutral-500">2025-05-10</span>
+              <span class="text-xs text-neutral-500">阅读 1,876</span>
+            </div>
+          </div>
+        </a>
+        
+        <!-- 文章3 -->
+        <a href="#" class="bg-white rounded-xl shadow-md overflow-hidden card-hover">
+          <div class="relative">
+            <img src="https://picsum.photos/id/1067/600/400" alt="装修攻略" class="w-full h-48 object-cover">
+            <div class="absolute top-3 left-3">
+              <span class="bg-success text-white text-xs font-bold px-2 py-1 rounded">
+                装修攻略
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-bold text-neutral-800 mb-2">二手房装修省钱攻略大全</h3>
+            <p class="text-neutral-600 text-sm mb-4 line-clamp-2">从设计到施工，全方位解析二手房装修省钱技巧</p>
+            <div class="flex justify-between items-center">
+              <span class="text-xs text-neutral-500">2025-05-05</span>
+              <span class="text-xs text-neutral-500">阅读 3,120</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+    
+    <!-- 相关直播预告 -->
+    <section>
+      <div class="text-center mb-8">
+        <h2 class="text-xl font-bold text-neutral-800 mb-2">相关直播预告</h2>
+        <p class="text-neutral-500">参与我们的直播，获取更多专业解读</p>
+      </div>
+      
+      <div class="bg-primary rounded-xl p-8 text-white">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="md:w-1/3">
+            <img src="https://picsum.photos/id/1025/400/300" alt="直播封面" class="rounded-lg shadow-lg w-full">
+          </div>
+          <div class="md:w-2/3">
+            <h3 class="text-2xl font-bold mb-4">昆明二手房市场深度解析</h3>
+            <p class="text-white/80 mb-6">我们的专业房产分析师将深度解析昆明二手房市场现状，解答您的疑问</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <div class="bg-white/10 rounded-lg p-4 text-center">
+                <i class="fa fa-calendar text-xl mb-2"></i>
+                <p class="font-medium">2025年5月30日</p>
+              </div>
+              <div class="bg-white/10 rounded-lg p-4 text-center">
+                <i class="fa fa-clock-o text-xl mb-2"></i>
+                <p class="font-medium">19:30-21:00</p>
+              </div>
+              <div class="bg-white/10 rounded-lg p-4 text-center">
+                <i class="fa fa-user text-xl mb-2"></i>
+                <p class="font-medium">王老师</p>
+              </div>
+            </div>
+            <a href="#" class="inline-block bg-white hover:bg-neutral-100 text-primary px-8 py-3 rounded-lg font-medium transition-custom">
+              <i class="fa fa-calendar-check-o mr-2"></i> 预约直播
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white border-t border-neutral-200 py-8 mt-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center text-sm text-neutral-500">
+        <p>© 2025 Davi丨我家Studio 版权所有</p>
+        <p class="mt-2">专业的房产直播平台，助您高效展示房源亮点</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 关键词详情数据 -->
+  <script>
+    const keywordData = {
+      "二手房价格": {
+        title: "二手房价格",
+        description: "二手房价格是购房者最关心的因素之一。昆明二手房价格受多种因素影响，包括地理位置、房龄、装修状况、小区环境等。近年来，昆明二手房市场价格总体保持稳定，但不同区域差异较大。市中心和优质学区周边的二手房价格相对较高，而偏远区域价格较为亲民。购房者在选择二手房时，应综合考虑自身需求和经济实力，同时关注市场动态，以便做出明智的决策。"
+      },
+      "学区房": {
+        title: "学区房",
+        description: "学区房是指位于优质学校学区范围内的房产。在昆明，学区房一直是房地产市场的热门话题，因为优质教育资源相对集中。购买学区房不仅可以解决子女上学问题，还具有一定的投资价值。然而，学区房价格普遍较高，且政策可能会有所调整，购房者在选择学区房时应注意核实学校划片范围，了解政策变化，并考虑房屋本身的性价比。"
+      },
+      "装修状况": {
+        title: "装修状况",
+        description: "二手房的装修状况直接影响购房者的入住成本和时间。装修状况主要分为毛坯房、简装房和精装房。毛坯房需要购房者自行装修，成本较高但可以按照自己的喜好设计；简装房一般可以直接入住，但可能需要进行一些局部改造；精装房则可以直接拎包入住，但装修风格可能不符合购房者的喜好。购房者在选择二手房时，应根据自己的需求和预算，综合考虑装修状况。"
+      },
+      "昆明房价": {
+        title: "昆明房价",
+        description: "昆明作为云南省的省会城市，房价一直备受关注。近年来，昆明房价总体保持稳定，略有上涨。不同区域的房价差异较大，市中心和滇池周边的房价较高，而郊区和新区的房价相对较低。影响昆明房价的因素包括地理位置、经济发展、政策调控等。购房者在选择昆明房产时，应根据自己的需求和经济实力，选择合适的区域和房源。"
+      },
+      "地铁房": {
+        title: "地铁房",
+        description: "地铁房是指距离地铁站较近的房产。在昆明，随着地铁线路的不断完善，地铁房的价值日益凸显。地铁房具有交通便利、出行效率高的优势，因此受到很多购房者的青睐。一般来说，距离地铁站步行10分钟以内的房产被称为'正地铁房'，步行10-15分钟的房产被称为'近地铁房'。购房者在选择地铁房时，应注意核实地铁线路和站点位置，并考虑房屋本身的性价比。"
+      },
+      "满五唯一": {
+        title: "满五唯一",
+        description: "满五唯一是指房产证满五年且是家庭唯一住房。在二手房交易中，满五唯一的房产可以免征个人所得税和增值税，从而降低交易成本。购房者在选择二手房时，应注意核实房屋是否满五唯一，并在购房合同中明确约定相关税费的承担方。"
+      },
+      "南北通透": {
+        title: "南北通透",
+        description: "南北通透是指房屋的客厅和主要卧室朝南，厨房和卫生间朝北，形成空气对流。南北通透的房屋具有采光好、通风佳的优势，居住舒适度较高。购房者在选择二手房时，应注意房屋的朝向和户型结构，尽量选择南北通透的房屋。"
+      },
+      "次新房": {
+        title: "次新房",
+        description: "次新房是指房龄在5年以内的二手房。次新房通常具有较新的装修和设施，房屋质量较好，且周边配套设施相对完善。与新房相比，次新房的价格相对较低，且可以更快地入住。购房者在选择次新房时，应注意核实房屋的产权情况和使用年限，并考虑房屋本身的性价比。"
+      },
+      "低首付": {
+        title: "低首付",
+        description: "低首付是指购房者在购买房产时可以支付较低的首付款。在昆明，根据相关政策，购房者购买首套房的最低首付比例为20%，购买二套房的最低首付比例为30%。一些开发商和中介机构还推出了首付分期、首付贷款等低首付购房方案。购房者在选择低首付购房方案时，应注意了解相关政策和风险，并根据自己的经济实力做出合理的决策。"
+      },
+      "税费计算": {
+        title: "税费计算",
+        description: "二手房交易涉及多种税费，包括契税、个人所得税、增值税、印花税等。税费的具体金额根据房屋的性质、面积、房龄等因素而定。购房者在购买二手房时，应了解相关税费的计算方法和承担方，并在购房合同中明确约定。一般来说，契税由购房者承担，个人所得税和增值税由卖方承担，但在实际交易中，这些税费可能会转嫁给购房者。"
+      },
+      "小区环境": {
+        title: "小区环境",
+        description: "小区环境是指房屋所在小区的自然环境和人文环境。良好的小区环境可以提高居住舒适度和生活品质。购房者在选择二手房时，应注意考察小区的绿化、卫生、安全、配套设施等方面的情况。此外，小区的物业管理水平也直接影响小区环境的质量，购房者应选择物业管理规范、服务周到的小区。"
+      },
+      "市场行情": {
+        title: "市场行情",
+        description: "市场行情是指房地产市场的供求关系和价格走势。了解市场行情可以帮助购房者做出明智的购房决策。购房者在选择二手房时，应关注当地房地产市场的动态，了解房价走势、成交量、供需关系等方面的情况。此外，购房者还可以参考专业机构的市场分析报告和专家意见，以便更好地把握市场行情。"
+      },
+      "性价比": {
+        title: "性价比",
+        description: "性价比是指房屋的性能和价格之间的比例关系。购房者在选择二手房时，应综合考虑房屋的地理位置、面积、户型、装修、配套设施等因素，以及房屋的价格，选择性价比高的房屋。一般来说，性价比高的房屋具有较高的实用性和投资价值。"
+      },
+      "交通便利": {
+        title: "交通便利",
+        description: "交通便利是指房屋周边的交通条件良好，出行方便。购房者在选择二手房时，应注意考察房屋周边的公交、地铁、道路等交通设施的情况。交通便利的房屋不仅可以提高出行效率，还可以节省交通成本。此外，交通便利的房屋也具有较高的投资价值。"
+      },
+      "房龄": {
+        title: "房龄",
+        description: "房龄是指房屋建成至今的时间。房龄是影响二手房价格和质量的重要因素之一。一般来说，房龄较短的二手房价格相对较高，但房屋质量较好；房龄较长的二手房价格相对较低，但可能存在一些质量问题。购房者在选择二手房时，应注意核实房屋的真实房龄，并考虑房屋的质量和维护情况。"
+      },
+      "户型结构": {
+        title: "户型结构",
+        description: "户型结构是指房屋内部的空间布局和功能分区。合理的户型结构可以提高居住舒适度和空间利用率。购房者在选择二手房时，应注意考察房屋的户型结构，尽量选择方正、通透、动静分离的户型。此外，购房者还应根据自己的家庭人口和生活需求，选择合适的户型面积和功能分区。"
+      },
+      "周边配套": {
+        title: "周边配套",
+        description: "周边配套是指房屋周边的商业、教育、医疗、休闲等配套设施。完善的周边配套可以提高居住舒适度和生活品质。购房者在选择二手房时，应注意考察房屋周边的配套设施情况，尽量选择周边配套完善的房屋。此外，购房者还应根据自己的生活需求，选择合适的配套设施。"
+      },
+      "采光通风": {
+        title: "采光通风",
+        description: "采光通风是指房屋内部的采光和通风条件。良好的采光通风可以提高居住舒适度和健康水平。购房者在选择二手房时，应注意考察房屋的采光通风情况，尽量选择采光充足、通风良好的房屋。一般来说，朝南的房屋采光较好，南北通透的房屋通风较好。"
+      },
+      "议价空间": {
+        title: "议价空间",
+        description: "议价空间是指购房者在购买二手房时可以与卖方协商降低价格的幅度。议价空间的大小取决于多种因素，包括市场行情、房屋的情况、卖方的心态等。购房者在选择二手房时，应了解当地房地产市场的行情，掌握房屋的真实情况，并与卖方进行充分的沟通和协商，争取获得较大的议价空间。"
+      },
+      "楼层选择": {
+        title: "楼层选择",
+        description: "楼层选择是指购房者在购买二手房时选择合适的楼层。楼层的选择应根据自己的需求和喜好来决定。一般来说，低楼层的房屋出行方便，但可能存在采光不足、噪音大等问题；高楼层的房屋采光好、视野开阔，但可能存在电梯等待时间长、水压不足等问题。购房者在选择楼层时，应综合考虑各种因素，并根据自己的实际情况做出选择。"
+      },
+      "物业管理": {
+        title: "物业管理",
+        description: "物业管理是指物业服务企业对房屋及配套的设施设备和相关场地进行维修、养护、管理，维护物业管理区域内的环境卫生和相关秩序的活动。良好的物业管理可以提高居住舒适度和生活品质，保障房屋的保值增值。购房者在选择二手房时，应注意考察小区的物业管理情况，选择物业管理规范、服务周到的小区。"
+      }
+    };
+    
+    // 移动端菜单切换
+    function initMobileMenu() {
+      const mobileMenuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+          if (mobileMenu.classList.contains('opacity-0')) {
+            mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+            mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            mobileMenuButton.innerHTML = '<i class="fa fa-times"></i>';
+          } else {
+            mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+            mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            mobileMenuButton.innerHTML = '<i class="fa fa-bars"></i>';
+          }
+        });
+      }
+    }
+    
+    // 关键词点击事件
+    function initKeywordClick() {
+      const keywords = document.querySelectorAll('.keyword');
+      const defaultContent = document.getElementById('default-content');
+      const keywordContent = document.getElementById('keyword-content');
+      const keywordTitle = document.getElementById('keyword-title');
+      const keywordDescription = document.getElementById('keyword-description');
+      
+      keywords.forEach(keyword => {
+        keyword.addEventListener('click', function() {
+          const keywordText = this.getAttribute('data-keyword');
+          const keywordInfo = keywordData[keywordText];
+          
+          if (keywordInfo) {
+            // 显示关键词详情
+            defaultContent.classList.add('hidden');
+            keywordContent.classList.remove('hidden');
+            
+            // 更新关键词详情内容
+            keywordTitle.textContent = keywordInfo.title;
+            keywordDescription.innerHTML = keywordInfo.description;
+            
+            // 滚动到详情区域
+            document.getElementById('keyword-details').scrollIntoView({
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    }
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+      initMobileMenu();
+      initKeywordClick();
+    });
+  </script>
+</body>
+</html>
