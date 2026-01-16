@@ -22,9 +22,10 @@
             overflow: hidden;
             color: #00ff41;
             touch-action: manipulation;
+            cursor: crosshair;
         }
 
-        /* 代码雨背景 - 移动端性能优化 */
+        /* 层级结构：代码雨底 → 爆炸层 → 粒子层 → 内容层 */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -35,10 +36,29 @@
             opacity: 0.6;
         }
 
-        /* 主容器 - 适配刘海屏 */
+        #explosion-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        #particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 3;
+            pointer-events: none;
+        }
+
         .container {
             position: relative;
-            z-index: 2;
+            z-index: 4;
             width: 100vw;
             height: 100vh;
             display: flex;
@@ -50,7 +70,7 @@
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* 头像标识 - 动态呼吸光效 */
+        /* 头像呼吸光效 */
         .avatar {
             width: 80px;
             height: 80px;
@@ -62,6 +82,12 @@
             margin-bottom: 1.2rem;
             box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
             animation: pulse 2.5s infinite alternate;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
         }
 
         .avatar-icon {
@@ -69,21 +95,27 @@
             color: #00ff41;
         }
 
-        /* 简介卡片 - 移动端大圆角 */
+        /* 简介卡片 - 点击触发爆炸 */
         .profile-card {
             max-width: 500px;
             width: 100%;
             border: 1px solid #00ff41;
-            padding: 1.5rem 1.2rem;
+            padding: 1.8rem 1.2rem;
             background: rgba(0, 0, 0, 0.9);
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.35);
             border-radius: 12px;
             position: relative;
             overflow: hidden;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        /* 卡片流光边框 */
+        .profile-card:hover {
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
+            transform: translateY(-5px);
+        }
+
         .profile-card::before,
         .profile-card::after {
             content: '';
@@ -100,7 +132,7 @@
             animation-direction: reverse;
         }
 
-        /* 新文案样式 - 中英符号点缀 */
+        /* 文案样式 */
         .profile-text {
             font-size: 1.2rem;
             line-height: 2;
@@ -110,17 +142,30 @@
             animation: fadeIn 1.2s ease-in-out 0.8s forwards;
         }
 
-        .profile-text span {
+        .profile-text .cyber-text {
             color: #00ffff;
             font-size: 1.3rem;
         }
 
-        /* 音效开关 - 增大触控区域 */
+        /* 手写体 Davi 动效 */
+        .davi-handwrite {
+            display: inline-block;
+            font-size: 1.8rem;
+            font-family: 'Brush Script MT', cursive;
+            color: #00ff41;
+            text-shadow: 0 0 12px #00ff41, 0 0 20px rgba(0, 255, 65, 0.6);
+            animation: handwriting 2s ease-in-out 2s forwards, neonGlow 3s infinite alternate;
+            width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* 音效开关 */
         .audio-toggle {
             position: fixed;
             top: 1.2rem;
             right: 1.2rem;
-            z-index: 3;
+            z-index: 5;
             width: 55px;
             height: 55px;
             border-radius: 50%;
@@ -141,7 +186,7 @@
             transform: scale(1.05);
         }
 
-        /* 动画定义 - 移动端性能优化 */
+        /* 动画定义 */
         @keyframes pulse {
             0% { box-shadow: 0 0 15px #00ff41, inset 0 0 8px #00ff41; }
             100% { box-shadow: 0 0 25px #00ff41, inset 0 0 15px #00ff41; }
@@ -157,54 +202,74 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* ===== 分尺寸响应式适配 ===== */
+        @keyframes handwriting {
+            0% { width: 0; }
+            100% { width: 90px; }
+        }
+
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 10px #00ff41, 0 0 20px rgba(0, 255, 65, 0.5); }
+            100% { text-shadow: 0 0 20px #00ff41, 0 0 30px rgba(0, 255, 65, 0.8); }
+        }
+
+        /* 响应式适配 */
         @media (min-width: 480px) {
             .avatar { width: 90px; height: 90px; margin-bottom: 1.5rem; }
             .avatar-icon { font-size: 3.2rem; }
-            .profile-card { padding: 1.8rem 1.5rem; }
+            .profile-card { padding: 2rem 1.5rem; }
             .profile-text { font-size: 1.3rem; }
-            .profile-text span { font-size: 1.4rem; }
+            .profile-text .cyber-text { font-size: 1.4rem; }
+            .davi-handwrite { font-size: 2rem; }
+            @keyframes handwriting { 100% { width: 100px; } }
             .audio-toggle { width: 60px; height: 60px; font-size: 1.5rem; }
         }
 
         @media (min-width: 768px) {
             .avatar { width: 100px; height: 100px; margin-bottom: 1.8rem; }
             .avatar-icon { font-size: 3.5rem; }
-            .profile-card { padding: 2rem; max-width: 550px; }
+            .profile-card { padding: 2.2rem; max-width: 550px; }
             .profile-text { font-size: 1.4rem; letter-spacing: 3px; }
-            .profile-text span { font-size: 1.5rem; }
+            .profile-text .cyber-text { font-size: 1.5rem; }
+            .davi-handwrite { font-size: 2.2rem; }
+            @keyframes handwriting { 100% { width: 110px; } }
         }
 
         @media (min-width: 1024px) {
             .profile-card { max-width: 600px; }
             .profile-text { font-size: 1.5rem; }
+            .davi-handwrite { font-size: 2.5rem; }
+            @keyframes handwriting { 100% { width: 120px; } }
         }
 
         @media (max-width: 360px) {
             .profile-text { font-size: 1.1rem; line-height: 1.8; }
-            .profile-text span { font-size: 1.2rem; }
+            .profile-text .cyber-text { font-size: 1.2rem; }
+            .davi-handwrite { font-size: 1.6rem; }
+            @keyframes handwriting { 100% { width: 80px; } }
             .audio-toggle { width: 50px; height: 50px; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
     <canvas id="matrix-bg"></canvas>
+    <canvas id="explosion-bg"></canvas>
+    <canvas id="particle-bg"></canvas>
     <div class="audio-toggle" id="audioToggle">🔊</div>
     <div class="container">
-        <div class="avatar">
+        <div class="avatar" id="triggerExplosion">
             <span class="avatar-icon">⚡</span>
         </div>
-        <div class="profile-card">
+        <div class="profile-card" id="triggerExplosionCard">
             <p class="profile-text">
-                <span>〓</span> 网海寻踪 创意作舟 <span>〓</span><br>
-                <span>►</span> Cyber Trailblazer <span>◄</span><br>
-                <span>〓</span> 酷炫 <span>〓</span>
+                <span class="cyber-text">〓</span> 网海寻踪 创意作舟 <span class="cyber-text">〓</span><br>
+                <span class="cyber-text">►</span> Cyber Trailblazer <span class="cyber-text">◄</span><br>
+                <span class="cyber-text">〓</span> <span class="davi-handwrite">Davi</span> <span class="cyber-text">〓</span>
             </p>
         </div>
     </div>
 
     <script>
-        // 代码雨 - 移动端性能优化版
+        // ========== 1. 代码雨特效 ==========
         class MatrixCode {
             constructor(canvas) {
                 this.canvas = canvas;
@@ -249,19 +314,154 @@
             }
         }
 
-        // 黑客帝国原版背景音效
+        // ========== 2. 霓虹粒子跟随特效 ==========
+        class NeonParticle {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.maxParticles = window.innerWidth < 768 ? 30 : 50;
+                this.resizeCanvas();
+                this.bindEvents();
+                this.animate();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            createParticle(x, y) {
+                if (this.particles.length >= this.maxParticles) return;
+                this.particles.push({
+                    x, y,
+                    size: Math.random() * 3 + 1,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5,
+                    color: Math.random() > 0.5 ? '#00ff41' : '#00ffff',
+                    alpha: 1,
+                    decay: Math.random() * 0.01 + 0.005
+                });
+            }
+
+            bindEvents() {
+                document.addEventListener('mousemove', (e) => {
+                    this.createParticle(e.clientX, e.clientY);
+                });
+                document.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    this.createParticle(touch.clientX, touch.clientY);
+                }, { passive: false });
+            }
+
+            updateParticles() {
+                this.particles.forEach((p, index) => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    p.alpha -= p.decay;
+                    if (p.alpha <= 0) this.particles.splice(index, 1);
+                });
+            }
+
+            drawParticles() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.particles.forEach(p => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `${p.color}${Math.floor(p.alpha * 255).toString(16).padStart(2, '0')}`;
+                    this.ctx.fill();
+                });
+            }
+
+            animate() {
+                this.updateParticles();
+                this.drawParticles();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        // ========== 3. 全屏代码爆炸特效 ==========
+        class CodeExplosion {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.explosionChars = [];
+                this.isExploding = false;
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            // 生成爆炸字符
+            createExplosion(x, y) {
+                if (this.isExploding) return;
+                this.isExploding = true;
+                this.explosionChars = [];
+                const count = window.innerWidth < 768 ? 80 : 150;
+                const chars = '01ABCDEFァィゥェォカキクケコ';
+                
+                for (let i = 0; i < count; i++) {
+                    this.explosionChars.push({
+                        x, y,
+                        char: chars[Math.floor(Math.random() * chars.length)],
+                        size: Math.random() * 12 + 8,
+                        speedX: (Math.random() - 0.5) * 8,
+                        speedY: (Math.random() - 0.5) * 8,
+                        color: Math.random() > 0.3 ? '#00ff41' : '#00ffff',
+                        alpha: 1,
+                        decay: Math.random() * 0.02 + 0.01
+                    });
+                }
+                this.animateExplosion();
+            }
+
+            animateExplosion() {
+                const animate = () => {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    let alive = false;
+
+                    this.explosionChars.forEach(char => {
+                        if (char.alpha > 0) {
+                            char.x += char.speedX;
+                            char.y += char.speedY;
+                            char.alpha -= char.decay;
+                            char.speedY += 0.2; // 重力效果
+
+                            this.ctx.fillStyle = `${char.color}${Math.floor(char.alpha * 255).toString(16).padStart(2, '0')}`;
+                            this.ctx.font = `${char.size}px Courier New`;
+                            this.ctx.fillText(char.char, char.x, char.y);
+                            alive = true;
+                        }
+                    });
+
+                    if (alive) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        this.isExploding = false;
+                    }
+                };
+                animate();
+            }
+        }
+
+        // ========== 4. 音效控制 ==========
         let audio = null;
         let isAudioPlay = false;
         const audioToggle = document.getElementById('audioToggle');
+        const explosionAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-explosion-1699.mp3');
 
         function initAudio() {
-            // 替换为黑客帝国经典背景音（循环播放）
             audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-hacker-typing-on-keyboard-2545.mp3');
             audio.loop = true;
             audio.volume = 0.3;
         }
 
-        // 音效开关逻辑
         audioToggle.addEventListener('click', () => {
             if (!audio) initAudio();
             if (isAudioPlay) {
@@ -274,10 +474,34 @@
             isAudioPlay = !isAudioPlay;
         });
 
-        // 页面初始化
+        // ========== 页面初始化 & 事件绑定 ==========
         window.addEventListener('load', () => {
-            const canvas = document.getElementById('matrix-bg');
-            new MatrixCode(canvas);
+            // 初始化各特效
+            const matrixCanvas = document.getElementById('matrix-bg');
+            new MatrixCode(matrixCanvas);
+
+            const particleCanvas = document.getElementById('particle-bg');
+            new NeonParticle(particleCanvas);
+
+            const explosionCanvas = document.getElementById('explosion-bg');
+            const codeExplosion = new CodeExplosion(explosionCanvas);
+
+            // 绑定爆炸触发事件（头像+卡片点击）
+            const trigger1 = document.getElementById('triggerExplosion');
+            const trigger2 = document.getElementById('triggerExplosionCard');
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            trigger1.addEventListener('click', () => {
+                codeExplosion.createExplosion(centerX, centerY);
+                explosionAudio.play();
+            });
+
+            trigger2.addEventListener('click', () => {
+                codeExplosion.createExplosion(centerX, centerY);
+                explosionAudio.play();
+            });
+
             // 移动端触摸唤醒音效
             document.addEventListener('touchstart', () => {
                 if (!audio) initAudio();
