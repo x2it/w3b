@@ -14,17 +14,17 @@
             font-family: 'Courier New', Courier, monospace;
             user-select: none;
             -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: #000;
             overflow: hidden;
             color: #00ff41;
-            touch-action: manipulation; /* 优化移动端触控 */
+            touch-action: manipulation;
         }
 
-        /* 代码雨背景 - 适配移动端性能 */
+        /* 代码雨背景 - 移动端性能优化 */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -35,7 +35,7 @@
             opacity: 0.6;
         }
 
-        /* 主容器 - 全屏居中，适配小屏 */
+        /* 主容器 - 适配刘海屏 */
         .container {
             position: relative;
             z-index: 2;
@@ -45,12 +45,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 1rem; /* 移动端减小内边距 */
-            padding-top: env(safe-area-inset-top); /* 适配刘海屏 */
+            padding: 1rem;
+            padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* 头像标识 - 移动端比例优化 */
+        /* 头像标识 - 动态呼吸光效 */
         .avatar {
             width: 80px;
             height: 80px;
@@ -69,21 +69,21 @@
             color: #00ff41;
         }
 
-        /* 简介卡片 - 移动端触控友好 */
+        /* 简介卡片 - 移动端大圆角 */
         .profile-card {
             max-width: 500px;
             width: 100%;
             border: 1px solid #00ff41;
-            padding: 1.5rem 1.2rem; /* 移动端上下左右内边距适配 */
+            padding: 1.5rem 1.2rem;
             background: rgba(0, 0, 0, 0.9);
             box-shadow: 0 0 30px rgba(0, 255, 65, 0.35);
-            border-radius: 12px; /* 大圆角更贴合移动端审美 */
+            border-radius: 12px;
             position: relative;
             overflow: hidden;
             text-align: center;
         }
 
-        /* 卡片流光线条 - 优化动画性能 */
+        /* 卡片流光边框 */
         .profile-card::before,
         .profile-card::after {
             content: '';
@@ -100,27 +100,28 @@
             animation-direction: reverse;
         }
 
-        /* 精简简介文字 - 中英混排+符号，适配小屏阅读 */
+        /* 新文案样式 - 中英符号点缀 */
         .profile-text {
-            font-size: 1rem; /* 移动端基础字号 */
-            line-height: 1.8;
-            letter-spacing: 1.2px;
-            text-shadow: 0 0 6px #00ff41;
+            font-size: 1.2rem;
+            line-height: 2;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #00ff41;
             opacity: 0;
             animation: fadeIn 1.2s ease-in-out 0.8s forwards;
         }
 
         .profile-text span {
-            color: #00ffff; /* 青蓝色点缀，增强层次感 */
+            color: #00ffff;
+            font-size: 1.3rem;
         }
 
-        /* 音效开关按钮 - 增大触控区域，适配手机点击 */
+        /* 音效开关 - 增大触控区域 */
         .audio-toggle {
             position: fixed;
             top: 1.2rem;
             right: 1.2rem;
             z-index: 3;
-            width: 55px; /* 增大按钮尺寸 */
+            width: 55px;
             height: 55px;
             border-radius: 50%;
             border: 2px solid #00ff41;
@@ -140,7 +141,7 @@
             transform: scale(1.05);
         }
 
-        /* 动画定义 - 优化移动端性能 */
+        /* 动画定义 - 移动端性能优化 */
         @keyframes pulse {
             0% { box-shadow: 0 0 15px #00ff41, inset 0 0 8px #00ff41; }
             100% { box-shadow: 0 0 25px #00ff41, inset 0 0 15px #00ff41; }
@@ -156,66 +157,59 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* ====== 分尺寸响应式适配 ====== */
-        /* 大屏手机 (480px - 768px) */
+        /* ===== 分尺寸响应式适配 ===== */
         @media (min-width: 480px) {
             .avatar { width: 90px; height: 90px; margin-bottom: 1.5rem; }
             .avatar-icon { font-size: 3.2rem; }
             .profile-card { padding: 1.8rem 1.5rem; }
-            .profile-text { font-size: 1.05rem; letter-spacing: 1.5px; }
+            .profile-text { font-size: 1.3rem; }
+            .profile-text span { font-size: 1.4rem; }
             .audio-toggle { width: 60px; height: 60px; font-size: 1.5rem; }
         }
 
-        /* 平板 (768px - 1024px) */
         @media (min-width: 768px) {
             .avatar { width: 100px; height: 100px; margin-bottom: 1.8rem; }
             .avatar-icon { font-size: 3.5rem; }
             .profile-card { padding: 2rem; max-width: 550px; }
-            .profile-text { font-size: 1.1rem; line-height: 1.9; }
-            .audio-toggle { top: 1.5rem; right: 1.5rem; }
+            .profile-text { font-size: 1.4rem; letter-spacing: 3px; }
+            .profile-text span { font-size: 1.5rem; }
         }
 
-        /* 电脑端 (1024px+) */
         @media (min-width: 1024px) {
             .profile-card { max-width: 600px; }
-            .profile-text { font-size: 1.15rem; letter-spacing: 2px; }
+            .profile-text { font-size: 1.5rem; }
         }
 
-        /* 超小屏手机 (<360px) */
         @media (max-width: 360px) {
-            .profile-text { font-size: 0.9rem; line-height: 1.7; }
+            .profile-text { font-size: 1.1rem; line-height: 1.8; }
+            .profile-text span { font-size: 1.2rem; }
             .audio-toggle { width: 50px; height: 50px; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
-    <!-- 代码雨背景画布 -->
     <canvas id="matrix-bg"></canvas>
-    <!-- 音效开关按钮 -->
     <div class="audio-toggle" id="audioToggle">🔊</div>
-    <!-- 主内容 -->
     <div class="container">
         <div class="avatar">
             <span class="avatar-icon">⚡</span>
         </div>
         <div class="profile-card">
             <p class="profile-text">
-                𝕮𝖞𝖇𝖊𝖗-𝖂𝖆𝖓𝖉𝖊𝖗𝖊𝖗 〡 以网络为壤的漫游者<br>
-                <span>Player & Creator</span> 〡 痴迷数码科技的深邃<br>
-                不恋花哨，唯喜简素 〡 慢行求索 <span>Never Follow the Hype</span><br>
-                只守一段 <span>Free & Peaceful</span> 的网上时光
+                <span>〓</span> 网海寻踪 创意作舟 <span>〓</span><br>
+                <span>►</span> Cyber Trailblazer <span>◄</span><br>
+                <span>〓</span> 酷炫 <span>〓</span>
             </p>
         </div>
     </div>
 
     <script>
-        // 黑客帝国代码雨 - 移动端性能优化版
+        // 代码雨 - 移动端性能优化版
         class MatrixCode {
             constructor(canvas) {
                 this.canvas = canvas;
                 this.ctx = canvas.getContext('2d');
                 this.resizeCanvas();
-                // 移动端减少列数，降低性能消耗
                 this.columns = Math.floor(this.canvas.width / (window.innerWidth < 768 ? 15 : 20));
                 this.drops = Array(this.columns).fill(1);
                 this.chars = '01アイウエオカキクケコサシス';
@@ -232,7 +226,6 @@
             }
 
             draw() {
-                // 移动端降低背景透明度，减少渲染压力
                 this.ctx.fillStyle = window.innerWidth < 768 ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.05)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 this.ctx.fillStyle = '#00ff41';
@@ -256,14 +249,14 @@
             }
         }
 
-        // 音效控制功能
+        // 黑客帝国原版背景音效
         let audio = null;
         let isAudioPlay = false;
         const audioToggle = document.getElementById('audioToggle');
 
-        // 初始化音效（黑客帝国经典滴声，按需替换链接）
         function initAudio() {
-            audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
+            // 替换为黑客帝国经典背景音（循环播放）
+            audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-hacker-typing-on-keyboard-2545.mp3');
             audio.loop = true;
             audio.volume = 0.3;
         }
@@ -281,17 +274,17 @@
             isAudioPlay = !isAudioPlay;
         });
 
-        // 页面加载完成后初始化
+        // 页面初始化
         window.addEventListener('load', () => {
             const canvas = document.getElementById('matrix-bg');
             new MatrixCode(canvas);
-            // 移动端点击空白处可唤醒音效（可选）
+            // 移动端触摸唤醒音效
             document.addEventListener('touchstart', () => {
                 if (!audio) initAudio();
             }, { once: true });
         });
 
-        // 禁用右键，增强沉浸感
+        // 禁用右键
         document.addEventListener('contextmenu', (e) => e.preventDefault());
     </script>
 </body>
