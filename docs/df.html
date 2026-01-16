@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <title>三角洲游戏人脸验证解决方法</title>
     <style>
         /* 全局样式重置 */
@@ -11,6 +13,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: "Microsoft YaHei", sans-serif;
+            -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
         }
 
         /* 页面背景与基础样式 */
@@ -18,14 +21,18 @@
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            padding-bottom: 2rem; /* 底部留空，避免遮挡 */
         }
 
-        /* 导航栏样式 */
+        /* 导航栏样式 - 适配移动端触控 */
         header {
             background-color: #2c3e50;
             color: white;
             padding: 1rem 5%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 999; /* 导航栏置顶 */
         }
 
         .nav-container {
@@ -35,8 +42,9 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem; /* 移动端缩小标题 */
             font-weight: bold;
+            white-space: nowrap; /* 标题不换行 */
         }
 
         nav ul {
@@ -45,117 +53,124 @@
         }
 
         nav li {
-            margin-left: 2rem;
+            margin-left: 1.2rem; /* 移动端减小间距 */
         }
 
         nav a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
+            font-size: 0.9rem; /* 移动端缩小导航文字 */
+            padding: 0.3rem 0; /* 增大点击区域 */
         }
 
         nav a:hover {
             color: #3498db;
         }
 
-        /* 横幅样式 */
+        /* 横幅样式 - 适配小屏 */
         .banner {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://picsum.photos/1920/500') center/cover no-repeat;
             color: white;
             text-align: center;
-            padding: 6rem 5%;
+            padding: 4rem 5%; /* 移动端减少内边距 */
         }
 
         .banner h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem; /* 移动端缩小标题 */
             margin-bottom: 1rem;
+            line-height: 1.4; /* 优化行高 */
         }
 
         .banner p {
-            font-size: 1.2rem;
+            font-size: 1rem;
             max-width: 800px;
             margin: 0 auto;
         }
 
-        /* 内容容器 */
+        /* 内容容器 - 优化移动端边距 */
         .container {
             max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 5%;
+            margin: 2rem auto; /* 移动端减少外边距 */
+            padding: 0 4%;
         }
 
-        /* 核心步骤区 */
+        /* 核心步骤区 - 增强移动端可读性 */
         .steps-section {
             background-color: white;
-            padding: 2rem;
-            border-radius: 8px;
+            padding: 1.5rem; /* 移动端减少内边距 */
+            border-radius: 12px; /* 增大圆角，更贴合移动端风格 */
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .steps-section h2 {
             color: #2c3e50;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #3498db;
+            font-size: 1.3rem;
         }
 
         .step-item {
-            margin-bottom: 2rem;
-            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            padding-left: 0.8rem;
             border-left: 3px solid #3498db;
         }
 
         .step-item h3 {
             color: #3498db;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
             display: flex;
             align-items: center;
         }
 
         .step-item h3 span {
             display: inline-block;
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             background-color: #3498db;
             color: white;
             border-radius: 50%;
             text-align: center;
-            line-height: 28px;
-            margin-right: 10px;
-            font-size: 1rem;
+            line-height: 26px;
+            margin-right: 8px;
+            font-size: 0.9rem;
         }
 
         .step-item p {
             color: #555;
-            margin-bottom: 0.8rem;
-            line-height: 1.8;
+            margin-bottom: 0.6rem;
+            line-height: 1.7;
+            font-size: 0.95rem; /* 移动端调整文字大小 */
         }
 
         .step-item a {
             color: #3498db;
             text-decoration: none;
+            word-break: break-all; /* 链接自动换行，避免溢出 */
         }
 
         .step-item a:hover {
             text-decoration: underline;
         }
 
-        /* 暗号提示区 */
+        /* 暗号提示区 - 优化移动端触控 */
         .code-section {
             background-color: #e8f4fd;
-            padding: 2rem;
-            border-radius: 8px;
+            padding: 1.5rem;
+            border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .code-section h2 {
             color: #2c3e50;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #3498db;
+            font-size: 1.3rem;
         }
 
         .input-group {
@@ -167,26 +182,29 @@
             margin-bottom: 0.5rem;
             font-weight: bold;
             color: #2c3e50;
+            font-size: 0.95rem;
         }
 
         #codeInput {
             width: 100%;
-            max-width: 400px;
-            padding: 0.8rem 1rem;
+            padding: 1rem; /* 增大输入框内边距，提升触控体验 */
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
+            -webkit-appearance: none; /* 去除iOS默认样式 */
         }
 
         #checkBtn {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 4px;
+            padding: 1rem 2rem; /* 增大按钮内边距 */
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
             transition: background-color 0.3s;
+            width: 100%; /* 移动端按钮全屏宽，方便点击 */
+            margin-top: 0.5rem;
         }
 
         #checkBtn:hover {
@@ -194,10 +212,11 @@
         }
 
         #hintResult {
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
             padding: 1rem;
-            border-radius: 4px;
+            border-radius: 8px;
             display: none;
+            font-size: 0.95rem;
         }
 
         .success-hint {
@@ -212,46 +231,88 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* 注意事项区 */
+        /* 注意事项区 - 适配移动端 */
         .notice-section {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 4px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
         }
 
         .notice-section h2 {
             color: #856404;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
         }
 
         .notice-section ul {
-            margin-left: 1.5rem;
+            margin-left: 1.2rem;
             color: #856404;
+            font-size: 0.95rem;
         }
 
-        /* 响应式适配 */
-        @media (max-width: 768px) {
+        .notice-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 页脚 - 适配移动端 */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem 5%;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            border-radius: 12px 12px 0 0; /* 顶部圆角 */
+        }
+
+        /* 平板适配 (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .logo {
+                font-size: 1.4rem;
+            }
+            nav a {
+                font-size: 1rem;
+            }
+            .banner h1 {
+                font-size: 2.2rem;
+            }
+            .steps-section, .code-section {
+                padding: 2rem;
+            }
+            #checkBtn {
+                width: auto;
+                padding: 1rem 3rem;
+            }
+        }
+
+        /* 大屏手机适配 (480px - 767px) */
+        @media (min-width: 480px) and (max-width: 767px) {
+            .banner {
+                padding: 5rem 5%;
+            }
+        }
+
+        /* 小屏手机适配 (小于480px) */
+        @media (max-width: 479px) {
             .nav-container {
                 flex-direction: column;
+                gap: 0.8rem;
             }
-
             nav ul {
-                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.8rem;
             }
-
             nav li {
-                margin-left: 1rem;
-                margin-right: 1rem;
+                margin-left: 0;
             }
-
             .banner h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
-
-            #codeInput {
-                max-width: 100%;
+            .step-item p {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -330,7 +391,7 @@
     </div>
 
     <!-- 页脚 -->
-    <footer style="background-color: #2c3e50; color: white; text-align: center; padding: 2rem 5%; margin-top: 3rem;">
+    <footer>
         <p>© 2026 三角洲游戏人脸验证指南 - 内容仅供参考</p>
     </footer>
 
@@ -370,6 +431,16 @@
             if (e.key === 'Enter') {
                 document.getElementById('checkBtn').click();
             }
+        });
+
+        // 移动端平滑滚动
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>
