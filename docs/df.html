@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角洲游戏人脸验证解决方法</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        /* 页面背景与基础样式 */
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* 导航栏样式 */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 5%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin-left: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #3498db;
+        }
+
+        /* 横幅样式 */
+        .banner {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://picsum.photos/1920/500') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 6rem 5%;
+        }
+
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 内容容器 */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 5%;
+        }
+
+        /* 核心步骤区 */
+        .steps-section {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .steps-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .step-item {
+            margin-bottom: 2rem;
+            padding-left: 1rem;
+            border-left: 3px solid #3498db;
+        }
+
+        .step-item h3 {
+            color: #3498db;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .step-item h3 span {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            margin-right: 10px;
+            font-size: 1rem;
+        }
+
+        .step-item p {
+            color: #555;
+            margin-bottom: 0.8rem;
+            line-height: 1.8;
+        }
+
+        .step-item a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .step-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* 暗号提示区 */
+        .code-section {
+            background-color: #e8f4fd;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .code-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #codeInput {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        #checkBtn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        #checkBtn:hover {
+            background-color: #2980b9;
+        }
+
+        #hintResult {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .success-hint {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error-hint {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* 注意事项区 */
+        .notice-section {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+
+        .notice-section h2 {
+            color: #856404;
+            margin-bottom: 1rem;
+        }
+
+        .notice-section ul {
+            margin-left: 1.5rem;
+            color: #856404;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+            }
+
+            nav li {
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            .banner h1 {
+                font-size: 2rem;
+            }
+
+            #codeInput {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">三角洲游戏人脸验证解决方法</div>
+            <nav>
+                <ul>
+                    <li><a href="#steps">操作步骤</a></li>
+                    <li><a href="#code">暗号提示</a></li>
+                    <li><a href="#notice">注意事项</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 横幅区域 -->
+    <section class="banner">
+        <h1>三角洲游戏人脸验证实操指南</h1>
+        <p>详细的IP设置、账号测试及人脸验证处理流程</p>
+    </section>
+
+    <!-- 主要内容容器 -->
+    <div class="container">
+        <!-- 核心操作步骤区域 -->
+        <section id="steps" class="steps-section">
+            <h2>核心操作步骤</h2>
+            
+            <div class="step-item">
+                <h3><span>1</span>IP软件配置</h3>
+                <p>1. 下载IP代理软件：推荐豌豆IP（<a href="https://www.wandouip.com" target="_blank">https://www.wandouip.com</a>）、爱加速等；</p>
+                <p>2. 完成软件的注册与登录流程；</p>
+                <p>3. 所有操作设备需选择<strong>同一个相同的节点</strong>，例如：昆明电信7054节点。</p>
+            </div>
+
+            <div class="step-item">
+                <h3><span>2</span>账号测试</h3>
+                <p>1. 登录三角洲账号（V/Q区均可）；</p>
+                <p>2. 登录后<strong>不要先起装备</strong>，避免不必要的风险；</p>
+                <p>3. 使用普通制式券进入普通大坝场景，测试是否会触发人脸验证。</p>
+            </div>
+
+            <div class="step-item">
+                <h3><span>3</span>人脸验证处理</h3>
+                <p>1. 若测试过程中弹出人脸验证：</p>
+                <p>   - 号主配合完成认证，认证通过后账号可正常出租；</p>
+                <p>   - 若认证不通过，需为租客办理退款；</p>
+                <p>2. 若遇到验证异常问题，可通过下方暗号输入框获取专属解决提示。</p>
+            </div>
+        </section>
+
+        <!-- 暗号提示区域 -->
+        <section id="code" class="code-section">
+            <h2>暗号提示查询</h2>
+            <div class="input-group">
+                <label for="codeInput">输入暗号获取异常解决提示：</label>
+                <input type="text" id="codeInput" placeholder="请输入暗号（例如：8899）">
+                <button id="checkBtn">查询提示</button>
+            </div>
+            <div id="hintResult"></div>
+        </section>
+
+        <!-- 注意事项区域 -->
+        <section id="notice" class="notice-section">
+            <h2>重要注意事项</h2>
+            <ul>
+                <li>务必确保所有操作设备使用相同IP节点，否则易触发异地验证风险；</li>
+                <li>测试阶段禁止使用高级装备，避免验证失败造成装备损失；</li>
+                <li>人脸验证需由号主本人配合完成，禁止使用第三方代验证；</li>
+                <li>退款需在验证失败后及时处理，保障租客权益。</li>
+            </ul>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer style="background-color: #2c3e50; color: white; text-align: center; padding: 2rem 5%; margin-top: 3rem;">
+        <p>© 2026 三角洲游戏人脸验证指南 - 内容仅供参考</p>
+    </footer>
+
+    <script>
+        // 暗号提示逻辑
+        document.getElementById('checkBtn').addEventListener('click', function() {
+            const codeInput = document.getElementById('codeInput');
+            const hintResult = document.getElementById('hintResult');
+            const inputValue = codeInput.value.trim();
+            
+            // 清空之前的提示
+            hintResult.style.display = 'none';
+            
+            // 验证暗号
+            if (inputValue === '8899') {
+                hintResult.className = 'success-hint';
+                hintResult.innerHTML = `
+                    <strong>异常解决提示：</strong><br>
+                    1）同IP节点登录/给密码授权登录出异常→异地IP设置受信设备、解除限制；<br>
+                    2）转给微信好友同IP辅助验证；<br>
+                    3）解除后还不行的话→不登录节点的试试。
+                `;
+                hintResult.style.display = 'block';
+            } else if (inputValue === '') {
+                hintResult.className = 'error-hint';
+                hintResult.textContent = '请输入暗号后再查询！';
+                hintResult.style.display = 'block';
+            } else {
+                hintResult.className = 'error-hint';
+                hintResult.textContent = '输入的暗号不正确，请核对后重新输入！';
+                hintResult.style.display = 'block';
+            }
+        });
+
+        // 支持回车查询
+        document.getElementById('codeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('checkBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>
