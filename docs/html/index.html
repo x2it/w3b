@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>网络漫游者 | .7e5N3O</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Cyber-Wanderer | Matrix Style</title>
     <style>
-        /* 全局重置与基础样式 */
         * {
             margin: 0;
             padding: 0;
@@ -13,15 +14,17 @@
             font-family: 'Courier New', Courier, monospace;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
         }
 
         body {
             background: #000;
             overflow: hidden;
             color: #00ff41;
+            touch-action: manipulation; /* 优化移动端触控 */
         }
 
-        /* 代码雨背景容器 */
+        /* 代码雨背景 - 适配移动端性能 */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -29,10 +32,10 @@
             width: 100vw;
             height: 100vh;
             z-index: 1;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
-        /* 主内容容器 */
+        /* 主容器 - 全屏居中，适配小屏 */
         .container {
             position: relative;
             z-index: 2;
@@ -42,42 +45,45 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 1rem; /* 移动端减小内边距 */
+            padding-top: env(safe-area-inset-top); /* 适配刘海屏 */
+            padding-bottom: env(safe-area-inset-bottom);
         }
 
-        /* 头像/标识区域 */
+        /* 头像标识 - 移动端比例优化 */
         .avatar {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border: 2px solid #00ff41;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.2rem;
             box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
-            animation: pulse 3s infinite alternate;
+            animation: pulse 2.5s infinite alternate;
         }
 
         .avatar-icon {
-            font-size: 4rem;
+            font-size: 2.8rem;
             color: #00ff41;
         }
 
-        /* 个人简介卡片 */
+        /* 简介卡片 - 移动端触控友好 */
         .profile-card {
-            max-width: 800px;
+            max-width: 500px;
             width: 100%;
             border: 1px solid #00ff41;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-            border-radius: 8px;
+            padding: 1.5rem 1.2rem; /* 移动端上下左右内边距适配 */
+            background: rgba(0, 0, 0, 0.9);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.35);
+            border-radius: 12px; /* 大圆角更贴合移动端审美 */
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
 
-        /* 卡片装饰线条 */
+        /* 卡片流光线条 - 优化动画性能 */
         .profile-card::before,
         .profile-card::after {
             content: '';
@@ -85,181 +91,162 @@
             width: 100%;
             height: 2px;
             background: linear-gradient(90deg, transparent, #00ff41, transparent);
-            animation: lineMove 3s linear infinite;
+            animation: lineFlow 3s linear infinite;
         }
 
-        .profile-card::before {
-            top: 0;
-            left: 0;
-        }
-
-        .profile-card::after {
-            bottom: 0;
-            left: 0;
+        .profile-card::before { top: 0; }
+        .profile-card::after { 
+            bottom: 0; 
             animation-direction: reverse;
         }
 
-        /* 简介标题 */
-        .profile-title {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-shadow: 0 0 10px #00ff41;
-            opacity: 0;
-            animation: fadeIn 1s ease-in-out 0.5s forwards;
-        }
-
-        /* 简介文本 */
+        /* 精简简介文字 - 中英混排+符号，适配小屏阅读 */
         .profile-text {
-            font-size: 1.1rem;
+            font-size: 1rem; /* 移动端基础字号 */
             line-height: 1.8;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            text-shadow: 0 0 6px #00ff41;
             opacity: 0;
-            animation: fadeIn 1.5s ease-in-out 1s forwards;
-            text-align: justify;
+            animation: fadeIn 1.2s ease-in-out 0.8s forwards;
         }
 
-        /* 动画定义 */
+        .profile-text span {
+            color: #00ffff; /* 青蓝色点缀，增强层次感 */
+        }
+
+        /* 音效开关按钮 - 增大触控区域，适配手机点击 */
+        .audio-toggle {
+            position: fixed;
+            top: 1.2rem;
+            right: 1.2rem;
+            z-index: 3;
+            width: 55px; /* 增大按钮尺寸 */
+            height: 55px;
+            border-radius: 50%;
+            border: 2px solid #00ff41;
+            background: rgba(0, 0, 0, 0.95);
+            color: #00ff41;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            box-shadow: 0 0 15px #00ff41;
+            transition: all 0.3s ease;
+        }
+
+        .audio-toggle:hover {
+            box-shadow: 0 0 25px #00ff41;
+            transform: scale(1.05);
+        }
+
+        /* 动画定义 - 优化移动端性能 */
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
-            }
-            100% {
-                box-shadow: 0 0 30px #00ff41, inset 0 0 20px #00ff41;
-            }
+            0% { box-shadow: 0 0 15px #00ff41, inset 0 0 8px #00ff41; }
+            100% { box-shadow: 0 0 25px #00ff41, inset 0 0 15px #00ff41; }
         }
 
-        @keyframes lineMove {
-            0% {
-                transform: translateX(-100%);
-            }
-            100% {
-                transform: translateX(100%);
-            }
+        @keyframes lineFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* 响应式适配 */
-        @media (max-width: 768px) {
-            .avatar {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 1.5rem;
-            }
-            .avatar-icon {
-                font-size: 3rem;
-            }
-            .profile-card {
-                padding: 1.5rem;
-            }
-            .profile-title {
-                font-size: 1.5rem;
-            }
-            .profile-text {
-                font-size: 1rem;
-                line-height: 1.7;
-            }
+        /* ====== 分尺寸响应式适配 ====== */
+        /* 大屏手机 (480px - 768px) */
+        @media (min-width: 480px) {
+            .avatar { width: 90px; height: 90px; margin-bottom: 1.5rem; }
+            .avatar-icon { font-size: 3.2rem; }
+            .profile-card { padding: 1.8rem 1.5rem; }
+            .profile-text { font-size: 1.05rem; letter-spacing: 1.5px; }
+            .audio-toggle { width: 60px; height: 60px; font-size: 1.5rem; }
         }
 
-        @media (max-width: 480px) {
-            .container {
-                padding: 1rem;
-            }
-            .avatar {
-                width: 80px;
-                height: 80px;
-            }
-            .avatar-icon {
-                font-size: 2.5rem;
-            }
-            .profile-card {
-                padding: 1rem;
-            }
-            .profile-text {
-                text-align: left;
-            }
+        /* 平板 (768px - 1024px) */
+        @media (min-width: 768px) {
+            .avatar { width: 100px; height: 100px; margin-bottom: 1.8rem; }
+            .avatar-icon { font-size: 3.5rem; }
+            .profile-card { padding: 2rem; max-width: 550px; }
+            .profile-text { font-size: 1.1rem; line-height: 1.9; }
+            .audio-toggle { top: 1.5rem; right: 1.5rem; }
+        }
+
+        /* 电脑端 (1024px+) */
+        @media (min-width: 1024px) {
+            .profile-card { max-width: 600px; }
+            .profile-text { font-size: 1.15rem; letter-spacing: 2px; }
+        }
+
+        /* 超小屏手机 (<360px) */
+        @media (max-width: 360px) {
+            .profile-text { font-size: 0.9rem; line-height: 1.7; }
+            .audio-toggle { width: 50px; height: 50px; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
     <!-- 代码雨背景画布 -->
     <canvas id="matrix-bg"></canvas>
-    
+    <!-- 音效开关按钮 -->
+    <div class="audio-toggle" id="audioToggle">🔊</div>
     <!-- 主内容 -->
     <div class="container">
-        <!-- 头像区域 -->
         <div class="avatar">
             <span class="avatar-icon">⚡</span>
         </div>
-        
-        <!-- 个人简介卡片 -->
         <div class="profile-card">
-            <h2 class="profile-title">个人简介</h2>
             <p class="profile-text">
-                以网络为壤的漫游者，兼为玩家与创作者。痴迷数码科技的深邃，亦乐此不疲地打磨创意点滴。
-                不恋花哨，唯喜简素，在钟情的天地里慢行求索，不趋附热潮，只守一段自在的网上时光。
+                𝕮𝖞𝖇𝖊𝖗-𝖂𝖆𝖓𝖉𝖊𝖗𝖊𝖗 〡 以网络为壤的漫游者<br>
+                <span>Player & Creator</span> 〡 痴迷数码科技的深邃<br>
+                不恋花哨，唯喜简素 〡 慢行求索 <span>Never Follow the Hype</span><br>
+                只守一段 <span>Free & Peaceful</span> 的网上时光
             </p>
         </div>
     </div>
 
     <script>
-        // 黑客帝国代码雨核心逻辑
+        // 黑客帝国代码雨 - 移动端性能优化版
         class MatrixCode {
             constructor(canvas) {
                 this.canvas = canvas;
                 this.ctx = canvas.getContext('2d');
                 this.resizeCanvas();
-                this.columns = Math.floor(this.canvas.width / 20);
+                // 移动端减少列数，降低性能消耗
+                this.columns = Math.floor(this.canvas.width / (window.innerWidth < 768 ? 15 : 20));
                 this.drops = Array(this.columns).fill(1);
-                this.chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ';
+                this.chars = '01アイウエオカキクケコサシス';
                 this.animationId = null;
                 this.startAnimation();
                 window.addEventListener('resize', () => this.resizeCanvas());
             }
 
-            // 适配画布尺寸
             resizeCanvas() {
                 this.canvas.width = window.innerWidth;
                 this.canvas.height = window.innerHeight;
-                this.columns = Math.floor(this.canvas.width / 20);
+                this.columns = Math.floor(this.canvas.width / (window.innerWidth < 768 ? 15 : 20));
                 this.drops = Array(this.columns).fill(1);
             }
 
-            // 绘制代码雨
             draw() {
-                // 半透明黑色背景，营造拖影效果
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                // 移动端降低背景透明度，减少渲染压力
+                this.ctx.fillStyle = window.innerWidth < 768 ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.05)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                
-                // 设置文字样式
                 this.ctx.fillStyle = '#00ff41';
-                this.ctx.font = '15px Courier New';
-                
-                // 逐列绘制字符
+                this.ctx.font = `${window.innerWidth < 768 ? 12 : 15}px Courier New`;
                 for (let i = 0; i < this.drops.length; i++) {
                     const text = this.chars[Math.floor(Math.random() * this.chars.length)];
-                    this.ctx.fillText(text, i * 20, this.drops[i] * 20);
-                    
-                    // 随机重置下落位置，营造无限下落效果
-                    if (this.drops[i] * 20 > this.canvas.height && Math.random() > 0.975) {
+                    this.ctx.fillText(text, i * (window.innerWidth < 768 ? 15 : 20), this.drops[i] * (window.innerWidth < 768 ? 15 : 20));
+                    if (this.drops[i] * (window.innerWidth < 768 ? 15 : 20) > this.canvas.height && Math.random() > 0.97) {
                         this.drops[i] = 0;
                     }
-                    
                     this.drops[i]++;
                 }
             }
 
-            // 启动动画
             startAnimation() {
                 const animate = () => {
                     this.draw();
@@ -267,23 +254,45 @@
                 };
                 animate();
             }
-
-            // 停止动画（可选）
-            stopAnimation() {
-                cancelAnimationFrame(this.animationId);
-            }
         }
 
-        // 页面加载完成后初始化代码雨
+        // 音效控制功能
+        let audio = null;
+        let isAudioPlay = false;
+        const audioToggle = document.getElementById('audioToggle');
+
+        // 初始化音效（黑客帝国经典滴声，按需替换链接）
+        function initAudio() {
+            audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
+            audio.loop = true;
+            audio.volume = 0.3;
+        }
+
+        // 音效开关逻辑
+        audioToggle.addEventListener('click', () => {
+            if (!audio) initAudio();
+            if (isAudioPlay) {
+                audio.pause();
+                audioToggle.textContent = '🔊';
+            } else {
+                audio.play();
+                audioToggle.textContent = '🔇';
+            }
+            isAudioPlay = !isAudioPlay;
+        });
+
+        // 页面加载完成后初始化
         window.addEventListener('load', () => {
             const canvas = document.getElementById('matrix-bg');
             new MatrixCode(canvas);
+            // 移动端点击空白处可唤醒音效（可选）
+            document.addEventListener('touchstart', () => {
+                if (!audio) initAudio();
+            }, { once: true });
         });
 
-        // 禁用右键（可选，增强黑客风格沉浸感）
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-        });
+        // 禁用右键，增强沉浸感
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
     </script>
 </body>
 </html>
