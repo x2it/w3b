@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>网络漫游者 | .7e5N3O</title>
+    <style>
+        /* 全局重置与基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            color: #00ff41;
+        }
+
+        /* 代码雨背景容器 */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        /* 主内容容器 */
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        /* 头像/标识区域 */
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #00ff41;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
+            animation: pulse 3s infinite alternate;
+        }
+
+        .avatar-icon {
+            font-size: 4rem;
+            color: #00ff41;
+        }
+
+        /* 个人简介卡片 */
+        .profile-card {
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid #00ff41;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 卡片装饰线条 */
+        .profile-card::before,
+        .profile-card::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: lineMove 3s linear infinite;
+        }
+
+        .profile-card::before {
+            top: 0;
+            left: 0;
+        }
+
+        .profile-card::after {
+            bottom: 0;
+            left: 0;
+            animation-direction: reverse;
+        }
+
+        /* 简介标题 */
+        .profile-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px #00ff41;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 0.5s forwards;
+        }
+
+        /* 简介文本 */
+        .profile-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out 1s forwards;
+            text-align: justify;
+        }
+
+        /* 动画定义 */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
+            }
+            100% {
+                box-shadow: 0 0 30px #00ff41, inset 0 0 20px #00ff41;
+            }
+        }
+
+        @keyframes lineMove {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .avatar {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 1.5rem;
+            }
+            .avatar-icon {
+                font-size: 3rem;
+            }
+            .profile-card {
+                padding: 1.5rem;
+            }
+            .profile-title {
+                font-size: 1.5rem;
+            }
+            .profile-text {
+                font-size: 1rem;
+                line-height: 1.7;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+            .avatar-icon {
+                font-size: 2.5rem;
+            }
+            .profile-card {
+                padding: 1rem;
+            }
+            .profile-text {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 代码雨背景画布 -->
+    <canvas id="matrix-bg"></canvas>
+    
+    <!-- 主内容 -->
+    <div class="container">
+        <!-- 头像区域 -->
+        <div class="avatar">
+            <span class="avatar-icon">⚡</span>
+        </div>
+        
+        <!-- 个人简介卡片 -->
+        <div class="profile-card">
+            <h2 class="profile-title">个人简介</h2>
+            <p class="profile-text">
+                以网络为壤的漫游者，兼为玩家与创作者。痴迷数码科技的深邃，亦乐此不疲地打磨创意点滴。
+                不恋花哨，唯喜简素，在钟情的天地里慢行求索，不趋附热潮，只守一段自在的网上时光。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 黑客帝国代码雨核心逻辑
+        class MatrixCode {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.resizeCanvas();
+                this.columns = Math.floor(this.canvas.width / 20);
+                this.drops = Array(this.columns).fill(1);
+                this.chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヰヱヲンガギグゲゴザジズゼゾダヂヅデドバビブベボパピプペポ';
+                this.animationId = null;
+                this.startAnimation();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+
+            // 适配画布尺寸
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.columns = Math.floor(this.canvas.width / 20);
+                this.drops = Array(this.columns).fill(1);
+            }
+
+            // 绘制代码雨
+            draw() {
+                // 半透明黑色背景，营造拖影效果
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // 设置文字样式
+                this.ctx.fillStyle = '#00ff41';
+                this.ctx.font = '15px Courier New';
+                
+                // 逐列绘制字符
+                for (let i = 0; i < this.drops.length; i++) {
+                    const text = this.chars[Math.floor(Math.random() * this.chars.length)];
+                    this.ctx.fillText(text, i * 20, this.drops[i] * 20);
+                    
+                    // 随机重置下落位置，营造无限下落效果
+                    if (this.drops[i] * 20 > this.canvas.height && Math.random() > 0.975) {
+                        this.drops[i] = 0;
+                    }
+                    
+                    this.drops[i]++;
+                }
+            }
+
+            // 启动动画
+            startAnimation() {
+                const animate = () => {
+                    this.draw();
+                    this.animationId = requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            // 停止动画（可选）
+            stopAnimation() {
+                cancelAnimationFrame(this.animationId);
+            }
+        }
+
+        // 页面加载完成后初始化代码雨
+        window.addEventListener('load', () => {
+            const canvas = document.getElementById('matrix-bg');
+            new MatrixCode(canvas);
+        });
+
+        // 禁用右键（可选，增强黑客风格沉浸感）
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
