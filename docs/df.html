@@ -13,21 +13,18 @@
             padding: 0;
             box-sizing: border-box;
             font-family: "Microsoft YaHei", sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none; /* 禁止文本选中 */
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
+            -webkit-tap-highlight-color: transparent; /* 去除移动端点击高亮 */
         }
 
+        /* 页面背景与基础样式 */
         body {
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
-            padding-bottom: 2rem;
+            padding-bottom: 2rem; /* 底部留空，避免遮挡 */
         }
 
-        /* 导航栏样式 */
+        /* 导航栏样式 - 适配移动端触控 */
         header {
             background-color: #2c3e50;
             color: white;
@@ -35,7 +32,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 999;
+            z-index: 999; /* 导航栏置顶 */
         }
 
         .nav-container {
@@ -45,9 +42,9 @@
         }
 
         .logo {
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* 移动端缩小标题 */
             font-weight: bold;
-            white-space: nowrap;
+            white-space: nowrap; /* 标题不换行 */
         }
 
         nav ul {
@@ -56,33 +53,33 @@
         }
 
         nav li {
-            margin-left: 1.2rem;
+            margin-left: 1.2rem; /* 移动端减小间距 */
         }
 
         nav a {
             color: white;
             text-decoration: none;
             transition: color 0.3s;
-            font-size: 0.9rem;
-            padding: 0.3rem 0;
+            font-size: 0.9rem; /* 移动端缩小导航文字 */
+            padding: 0.3rem 0; /* 增大点击区域 */
         }
 
         nav a:hover {
             color: #3498db;
         }
 
-        /* 横幅样式 */
+        /* 横幅样式 - 适配小屏 */
         .banner {
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://picsum.photos/1920/500') center/cover no-repeat;
             color: white;
             text-align: center;
-            padding: 4rem 5%;
+            padding: 4rem 5%; /* 移动端减少内边距 */
         }
 
         .banner h1 {
-            font-size: 1.8rem;
+            font-size: 1.8rem; /* 移动端缩小标题 */
             margin-bottom: 1rem;
-            line-height: 1.4;
+            line-height: 1.4; /* 优化行高 */
         }
 
         .banner p {
@@ -91,18 +88,18 @@
             margin: 0 auto;
         }
 
-        /* 内容容器 */
+        /* 内容容器 - 优化移动端边距 */
         .container {
             max-width: 1200px;
-            margin: 2rem auto;
+            margin: 2rem auto; /* 移动端减少外边距 */
             padding: 0 4%;
         }
 
-        /* 核心步骤区 */
+        /* 核心步骤区 - 增强移动端可读性 */
         .steps-section {
             background-color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
+            padding: 1.5rem; /* 移动端减少内边距 */
+            border-radius: 12px; /* 增大圆角，更贴合移动端风格 */
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             margin-bottom: 1.5rem;
         }
@@ -146,20 +143,20 @@
             color: #555;
             margin-bottom: 0.6rem;
             line-height: 1.7;
-            font-size: 0.95rem;
+            font-size: 0.95rem; /* 移动端调整文字大小 */
         }
 
         .step-item a {
             color: #3498db;
             text-decoration: none;
-            word-break: break-all;
+            word-break: break-all; /* 链接自动换行，避免溢出 */
         }
 
         .step-item a:hover {
             text-decoration: underline;
         }
 
-        /* 暗号提示区 */
+        /* 暗号提示区 - 优化移动端触控 */
         .code-section {
             background-color: #e8f4fd;
             padding: 1.5rem;
@@ -190,25 +187,23 @@
 
         #codeInput {
             width: 100%;
-            padding: 1rem;
+            padding: 1rem; /* 增大输入框内边距，提升触控体验 */
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
-            -webkit-appearance: none;
-            user-select: text; /* 输入框允许选中 */
-            -webkit-user-select: text;
+            -webkit-appearance: none; /* 去除iOS默认样式 */
         }
 
         #checkBtn {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1rem 2rem; /* 增大按钮内边距 */
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
             transition: background-color 0.3s;
-            width: 100%;
+            width: 100%; /* 移动端按钮全屏宽，方便点击 */
             margin-top: 0.5rem;
         }
 
@@ -236,7 +231,7 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* 注意事项区 */
+        /* 注意事项区 - 适配移动端 */
         .notice-section {
             background-color: #fff3cd;
             border-left: 4px solid #ffc107;
@@ -261,7 +256,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* 页脚 */
+        /* 页脚 - 适配移动端 */
         footer {
             background-color: #2c3e50;
             color: white;
@@ -269,10 +264,10 @@
             padding: 1.5rem 5%;
             margin-top: 2rem;
             font-size: 0.85rem;
-            border-radius: 12px 12px 0 0;
+            border-radius: 12px 12px 0 0; /* 顶部圆角 */
         }
 
-        /* 平板适配 */
+        /* 平板适配 (768px - 1024px) */
         @media (min-width: 768px) and (max-width: 1024px) {
             .logo {
                 font-size: 1.4rem;
@@ -292,14 +287,14 @@
             }
         }
 
-        /* 大屏手机适配 */
+        /* 大屏手机适配 (480px - 767px) */
         @media (min-width: 480px) and (max-width: 767px) {
             .banner {
                 padding: 5rem 5%;
             }
         }
 
-        /* 小屏手机适配 */
+        /* 小屏手机适配 (小于480px) */
         @media (max-width: 479px) {
             .nav-container {
                 flex-direction: column;
@@ -323,6 +318,7 @@
     </style>
 </head>
 <body>
+    <!-- 导航栏 -->
     <header>
         <div class="nav-container">
             <div class="logo">三角洲游戏人脸验证解决方法</div>
@@ -336,26 +332,32 @@
         </div>
     </header>
 
+    <!-- 横幅区域 -->
     <section class="banner">
         <h1>三角洲游戏人脸验证实操指南</h1>
         <p>详细的IP设置、账号测试及人脸验证处理流程</p>
     </section>
 
+    <!-- 主要内容容器 -->
     <div class="container">
+        <!-- 核心操作步骤区域 -->
         <section id="steps" class="steps-section">
             <h2>核心操作步骤</h2>
+            
             <div class="step-item">
                 <h3><span>1</span>IP软件配置</h3>
                 <p>1. 下载IP代理软件：推荐豌豆IP（<a href="https://www.wandouip.com" target="_blank">https://www.wandouip.com</a>）、爱加速等；</p>
                 <p>2. 完成软件的注册与登录流程；</p>
                 <p>3. 所有操作设备需选择<strong>同一个相同的节点</strong>，例如：昆明电信7054节点。</p>
             </div>
+
             <div class="step-item">
                 <h3><span>2</span>账号测试</h3>
                 <p>1. 登录三角洲账号（V/Q区均可）；</p>
                 <p>2. 登录后<strong>不要先起装备</strong>，避免不必要的风险；</p>
                 <p>3. 使用普通制式券进入普通大坝场景，测试是否会触发人脸验证。</p>
             </div>
+
             <div class="step-item">
                 <h3><span>3</span>人脸验证处理</h3>
                 <p>1. 若测试过程中弹出人脸验证：</p>
@@ -365,6 +367,7 @@
             </div>
         </section>
 
+        <!-- 暗号提示区域 -->
         <section id="code" class="code-section">
             <h2>暗号提示查询</h2>
             <div class="input-group">
@@ -375,6 +378,7 @@
             <div id="hintResult"></div>
         </section>
 
+        <!-- 注意事项区域 -->
         <section id="notice" class="notice-section">
             <h2>重要注意事项</h2>
             <ul>
@@ -386,49 +390,30 @@
         </section>
     </div>
 
+    <!-- 页脚 -->
     <footer>
         <p>© 2026 三角洲游戏人脸验证指南 - 内容仅供参考</p>
     </footer>
 
     <script>
-        // ========== 核心加密与防护逻辑 ==========
-        // 1. Base64 加密存储提示内容（避免明文）
-        const encryptHint = "MSkuKiDpgq7nlLXorr7nlL_mlL/nqIvnoYDvvIgvZ3JhZnRlciBHQ+W6lw==";
-        // 解码函数
-        function decodeBase64(str) {
-            try {
-                return decodeURIComponent(escape(window.atob(str)));
-            } catch (e) {
-                return "提示内容解码失败";
-            }
-        }
-
-        // 2. 禁用右键菜单
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            alert('禁止右键操作！');
-        });
-
-        // 3. 禁用F12（开发者工具）
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-                e.preventDefault();
-                alert('禁止打开开发者工具！');
-            }
-        });
-
-        // 4. 暗号验证逻辑
+        // 暗号提示逻辑
         document.getElementById('checkBtn').addEventListener('click', function() {
             const codeInput = document.getElementById('codeInput');
             const hintResult = document.getElementById('hintResult');
             const inputValue = codeInput.value.trim();
             
+            // 清空之前的提示
             hintResult.style.display = 'none';
             
+            // 验证暗号
             if (inputValue === '8899') {
                 hintResult.className = 'success-hint';
-                // 动态解码并插入提示内容
-                hintResult.innerHTML = `<strong>异常解决提示：</strong><br>${decodeBase64(encryptHint)}`;
+                hintResult.innerHTML = `
+                    <strong>异常解决提示：</strong><br>
+                    1）同IP节点登录/给密码授权登录出异常→异地IP设置受信设备、解除限制；<br>
+                    2）转给微信好友同IP辅助验证；<br>
+                    3）解除后还不行的话→不登录节点的试试。
+                `;
                 hintResult.style.display = 'block';
             } else if (inputValue === '') {
                 hintResult.className = 'error-hint';
@@ -441,14 +426,14 @@
             }
         });
 
-        // 回车查询
+        // 支持回车查询
         document.getElementById('codeInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('checkBtn').click();
             }
         });
 
-        // 平滑滚动
+        // 移动端平滑滚动
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
