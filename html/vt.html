@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手动版 链接访问工具（仅显示选中范围链接）</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        button.stop {
+            background: #dc3545;
+        }
+        button.secondary {
+            background: #6c757d;
+        }
+        button.success {
+            background: #28a745;
+        }
+        .progress {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .link-list {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+        }
+        .link-item {
+            padding: 12px 15px;
+            margin: 0;
+            border-bottom: 1px solid #e9ecef;
+            border-left: 4px solid #6c757d;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .link-item:last-child {
+            border-bottom: none;
+        }
+        /* 未点击状态 */
+        .link-item.pending {
+            border-left-color: #6c757d;
+            background: #f8f9fa;
+        }
+        /* 已点击状态 */
+        .link-item.clicked {
+            border-left-color: #28a745;
+            background: #f0fff4;
+        }
+        /* 当前选中/待点击状态 */
+        .link-item.current {
+            border-left-color: #17a2b8;
+            background: #e8f4f8;
+            font-weight: bold;
+        }
+        .warning {
+            color: #ffc107;
+            background: #fff8e1;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .import-section, .range-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .file-input-wrapper, .range-input-wrapper {
+            margin: 10px 0;
+        }
+        #linkTextarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            resize: vertical;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+        .import-info, .range-info {
+            color: #6c757d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .link-info {
+            flex: 1;
+        }
+        .link-actions {
+            margin-left: 15px;
+        }
+        .open-btn {
+            padding: 6px 12px;
+            font-size: 14px;
+            background: #28a745;
+        }
+        .open-btn:disabled {
+            background: #6c757d;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            padding: 8px 12px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+        .stat-number {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .clicked-number {
+            color: #28a745;
+        }
+        .range-input-wrapper input {
+            width: 80px;
+            padding: 8px;
+            margin: 0 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>手动版 链接访问工具（仅显示选中范围链接）</h1>
+        
+        <div class="warning">
+            ⚠️ 注意：点击"打开链接"按钮会在新标签页中打开链接，点击后会标记为已访问状态！
+        </div>
+
+        <!-- 导入链接区域 -->
+        <div class="import-section">
+            <h3 style="margin-bottom: 10px;">链接导入/编辑</h3>
+            <div class="file-input-wrapper">
+                <input type="file" id="linkFileInput" accept=".txt" style="margin-right: 10px;">
+                <button id="importBtn" class="secondary">导入文本文件</button>
+                <button id="saveBtn" class="success">保存当前链接</button>
+                <button id="clearBtn" class="stop">清空链接库</button>
+            </div>
+            <p class="import-info">📝 文本文件要求：每行一个链接；也可直接在下方文本框编辑链接</p>
+            <textarea id="linkTextarea" placeholder="请输入链接，每行一个..."></textarea>
+            <button id="applyTextBtn">应用文本框中的链接</button>
+        </div>
+
+        <!-- 范围选择区域 -->
+        <div class="range-section">
+            <h3 style="margin-bottom: 10px;">链接范围选择</h3>
+            <div class="range-input-wrapper">
+                <label>选择范围：</label>
+                从 <input type="number" id="startRangeInput" value="1" min="1" disabled> 
+                到 <input type="number" id="endRangeInput" value="1" min="1" disabled>
+                <button id="applyRangeBtn" disabled>应用范围</button>
+                <button id="resetRangeBtn" disabled>重置范围（显示全部）</button>
+            </div>
+            <p class="range-info">📌 应用范围后，仅显示和操作指定范围内的链接</p>
+        </div>
+
+        <!-- 统计信息 -->
+        <div class="stats">
+            <div class="stat-item">总链接数：<span id="totalCount" class="stat-number">0</span></div>
+            <div class="stat-item">当前显示数：<span id="rangeCount" class="stat-number">0</span></div>
+            <div class="stat-item">已点击数：<span id="clickedCount" class="stat-number clicked-number">0</span></div>
+            <div class="stat-item">未点击数：<span id="pendingCount" class="stat-number">0</span></div>
+            <div class="stat-item">完成率：<span id="completionRate" class="stat-number">0%</span></div>
+        </div>
+
+        <div class="controls">
+            <button id="resetBtn">重置所有点击状态</button>
+            <button id="openNextBtn" disabled>打开下一个未点击链接</button>
+        </div>
+
+        <div class="progress">
+            <p>当前状态：<span id="statusText">未导入链接</span></p>
+        </div>
+
+        <!-- 链接列表 -->
+        <div class="link-list" id="linkListContainer">
+            <!-- 链接列表会在这里动态生成 -->
+            <div style="padding: 20px; text-align: center; color: #6c757d;">
+                请先导入或输入链接
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== 全局变量 ==========
+        let LINK_LIBRARY = [];      // 完整链接库
+        let clickStatus = [];       // 点击状态数组 (true=已点击, false=未点击)
+        let currentIndex = 0;       // 当前待点击的链接索引
+        // 范围选择变量
+        let rangeStart = 1;         // 范围起始编号
+        let rangeEnd = 1;           // 范围结束编号
+        let isRangeActive = false;  // 是否启用范围筛选
+
+        // DOM 元素
+        const linkFileInput = document.getElementById('linkFileInput');
+        const importBtn = document.getElementById('importBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const linkTextarea = document.getElementById('linkTextarea');
+        const applyTextBtn = document.getElementById('applyTextBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const openNextBtn = document.getElementById('openNextBtn');
+        const linkListContainer = document.getElementById('linkListContainer');
+        const statusText = document.getElementById('statusText');
+        // 范围选择元素
+        const startRangeInput = document.getElementById('startRangeInput');
+        const endRangeInput = document.getElementById('endRangeInput');
+        const applyRangeBtn = document.getElementById('applyRangeBtn');
+        const resetRangeBtn = document.getElementById('resetRangeBtn');
+        // 统计元素
+        const totalCount = document.getElementById('totalCount');
+        const rangeCount = document.getElementById('rangeCount');
+        const clickedCount = document.getElementById('clickedCount');
+        const pendingCount = document.getElementById('pendingCount');
+        const completionRate = document.getElementById('completionRate');
+
+        // ========== 核心工具函数 ==========
+        // 获取当前范围内的链接索引列表
+        function getCurrentRangeIndexes() {
+            if (!isRangeActive || LINK_LIBRARY.length === 0) {
+                // 未启用范围，返回所有索引
+                return Array.from({ length: LINK_LIBRARY.length }, (_, i) => i);
+            }
+            // 启用范围，返回指定区间的索引（编号转索引：编号-1）
+            const startIdx = rangeStart - 1;
+            const endIdx = rangeEnd - 1;
+            return Array.from({ length: endIdx - startIdx + 1 }, (_, i) => startIdx + i);
+        }
+
+        // 更新统计信息（仅统计当前显示的链接）
+        function updateStats() {
+            const total = LINK_LIBRARY.length;
+            // 获取当前显示的链接索引
+            const currentRangeIndexes = getCurrentRangeIndexes();
+            const displayTotal = currentRangeIndexes.length;
+            
+            // 计算当前显示范围内的已点击数
+            const clicked = currentRangeIndexes.filter(idx => clickStatus[idx]).length;
+            const pending = displayTotal - clicked;
+            const rate = displayTotal > 0 ? Math.round((clicked / displayTotal) * 100) : 0;
+
+            // 更新显示
+            totalCount.textContent = total;
+            rangeCount.textContent = displayTotal;
+            clickedCount.textContent = clicked;
+            pendingCount.textContent = pending;
+            completionRate.textContent = `${rate}%`;
+
+            // 更新按钮状态
+            openNextBtn.disabled = pending === 0;
+            applyRangeBtn.disabled = total === 0;
+            resetRangeBtn.disabled = !isRangeActive;
+            startRangeInput.disabled = total === 0;
+            endRangeInput.disabled = total === 0;
+            
+            // 更新状态文本
+            if (total === 0) {
+                statusText.textContent = '未导入链接';
+            } else if (isRangeActive) {
+                if (pending === 0) {
+                    statusText.textContent = `范围 ${rangeStart}-${rangeEnd} 内所有链接已点击完成（共${displayTotal}个）`;
+                } else {
+                    statusText.textContent = `范围 ${rangeStart}-${rangeEnd} 内还有${pending}个链接未点击`;
+                }
+            } else {
+                if (pending === 0) {
+                    statusText.textContent = `所有链接已点击完成（共${total}个）`;
+                } else {
+                    statusText.textContent = `还有${pending}个链接未点击，点击"打开下一个"继续`;
+                }
+            }
+        }
+
+        // 渲染链接列表（仅渲染当前范围内的链接）
+        function renderLinkList() {
+            linkListContainer.innerHTML = '';
+            
+            // 如果没有链接，显示提示
+            if (LINK_LIBRARY.length === 0) {
+                linkListContainer.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #6c757d;">
+                        请先导入或输入链接
+                    </div>
+                `;
+                updateStats();
+                return;
+            }
+
+            // 获取当前需要显示的链接索引
+            const currentRangeIndexes = getCurrentRangeIndexes();
+
+            // 如果当前范围无链接，显示提示
+            if (currentRangeIndexes.length === 0) {
+                linkListContainer.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #6c757d;">
+                        当前选择的范围 ${rangeStart}-${rangeEnd} 内无链接
+                    </div>
+                `;
+                updateStats();
+                return;
+            }
+
+            // 生成当前范围内的链接列表
+            currentRangeIndexes.forEach((index) => {
+                const link = LINK_LIBRARY[index];
+                const linkNumber = index + 1;
+                const isClicked = clickStatus[index];
+                
+                // 设置链接项的样式类
+                let itemClass = 'link-item ';
+                if (isClicked) {
+                    itemClass += 'clicked';
+                } else if (index === currentIndex) {
+                    itemClass += 'current';
+                } else {
+                    itemClass += 'pending';
+                }
+
+                const linkItem = document.createElement('div');
+                linkItem.className = itemClass;
+                linkItem.id = `link-${index}`;
+                linkItem.innerHTML = `
+                    <div class="link-info">
+                        <strong>链接 ${linkNumber}：</strong> 
+                        <a href="${link}" target="_blank" style="word-break: break-all;">${link}</a>
+                        <br>
+                        <small style="color: #6c757d; margin-top: 4px; display: block;">
+                            状态：${isClicked ? '✅ 已点击' : '⏳ 未点击'}
+                        </small>
+                    </div>
+                    <div class="link-actions">
+                        <button class="open-btn" id="open-${index}" ${isClicked ? 'disabled' : ''}>
+                            ${isClicked ? '已打开' : '打开链接'}
+                        </button>
+                    </div>
+                `;
+                linkListContainer.appendChild(linkItem);
+
+                // 绑定打开链接按钮事件
+                const openBtn = document.getElementById(`open-${index}`);
+                openBtn.addEventListener('click', () => openLink(index));
+            });
+
+            // 更新统计信息
+            updateStats();
+        }
+
+        // 打开指定索引的链接
+        function openLink(index) {
+            if (index >= LINK_LIBRARY.length || clickStatus[index]) return;
+
+            const link = LINK_LIBRARY[index];
+            const linkNumber = index + 1;
+
+            // 在新标签页打开链接
+            window.open(link, '_blank');
+
+            // 更新点击状态
+            clickStatus[index] = true;
+
+            // 更新当前链接项的样式和按钮状态
+            const linkItem = document.getElementById(`link-${index}`);
+            if (linkItem) { // 仅当链接在当前显示范围内时更新
+                const openBtn = document.getElementById(`open-${index}`);
+                
+                linkItem.classList.remove('pending', 'current');
+                linkItem.classList.add('clicked');
+                openBtn.disabled = true;
+                openBtn.textContent = '已打开';
+                
+                // 更新状态文本
+                linkItem.querySelector('small').textContent = `状态：✅ 已点击`;
+            }
+
+            // 查找当前范围内下一个未点击的链接
+            const currentRangeIndexes = getCurrentRangeIndexes();
+            const nextIndex = currentRangeIndexes.find(idx => !clickStatus[idx]);
+            currentIndex = nextIndex !== undefined ? nextIndex : currentIndex;
+            
+            // 高亮下一个未点击的链接（先清除所有高亮）
+            document.querySelectorAll('.link-item.current').forEach(el => {
+                el.classList.remove('current');
+            });
+            // 高亮新的当前链接（仅当在显示范围内）
+            if (currentIndex !== undefined) {
+                const nextLinkItem = document.getElementById(`link-${currentIndex}`);
+                if (nextLinkItem) {
+                    nextLinkItem.classList.add('current');
+                }
+            }
+
+            // 更新统计和状态提示
+            updateStats();
+            statusText.textContent = `已打开链接 ${linkNumber}：${link}`;
+        }
+
+        // 打开下一个未点击的链接
+        function openNextLink() {
+            // 找到当前范围内第一个未点击的链接
+            const currentRangeIndexes = getCurrentRangeIndexes();
+            const nextIndex = currentRangeIndexes.find(idx => !clickStatus[idx]);
+            
+            if (nextIndex === undefined) {
+                alert(isRangeActive ? '范围内所有链接都已点击完成！' : '所有链接都已点击完成！');
+                openNextBtn.disabled = true;
+                return;
+            }
+
+            openLink(nextIndex);
+        }
+
+        // 重置所有点击状态
+        function resetClickStatus() {
+            if (confirm('确定要重置所有链接的点击状态吗？')) {
+                clickStatus = new Array(LINK_LIBRARY.length).fill(false);
+                currentIndex = getCurrentRangeIndexes()[0] || 0;
+                renderLinkList();
+                statusText.textContent = isRangeActive ? 
+                    `已重置范围内链接的点击状态` : `已重置所有链接的点击状态`;
+            }
+        }
+
+        // 应用范围选择（核心修改：仅显示选中范围）
+        function applyRange() {
+            const newStart = parseInt(startRangeInput.value);
+            const newEnd = parseInt(endRangeInput.value);
+            const totalLinks = LINK_LIBRARY.length;
+
+            // 验证输入合法性
+            if (newStart < 1 || newStart > totalLinks) {
+                alert(`起始编号必须在 1-${totalLinks} 之间！`);
+                startRangeInput.value = rangeStart;
+                return;
+            }
+            if (newEnd < 1 || newEnd > totalLinks) {
+                alert(`结束编号必须在 1-${totalLinks} 之间！`);
+                endRangeInput.value = rangeEnd;
+                return;
+            }
+            if (newStart > newEnd) {
+                alert('起始编号不能大于结束编号！');
+                return;
+            }
+
+            // 更新范围变量
+            rangeStart = newStart;
+            rangeEnd = newEnd;
+            isRangeActive = true;
+            // 设置当前索引为范围第一个链接
+            currentIndex = rangeStart - 1;
+
+            // 重新渲染仅当前范围的链接列表
+            renderLinkList();
+            statusText.textContent = `已应用范围：${rangeStart}-${rangeEnd}（共${rangeEnd - rangeStart + 1}个链接）`;
+        }
+
+        // 重置范围选择（显示全部）
+        function resetRange() {
+            rangeStart = 1;
+            rangeEnd = LINK_LIBRARY.length;
+            isRangeActive = false;
+            startRangeInput.value = 1;
+            endRangeInput.value = LINK_LIBRARY.length;
+            currentIndex = 0;
+
+            // 重新渲染全部链接
+            renderLinkList();
+            statusText.textContent = `已重置范围，显示所有 ${LINK_LIBRARY.length} 个链接`;
+        }
+
+        // ========== 导入导出功能 ==========
+        function importLinkFile() {
+            const file = linkFileInput.files[0];
+            if (!file) {
+                alert('请先选择一个文本文件！');
+                return;
+            }
+
+            if (file.type !== 'text/plain' && !file.name.endsWith('.txt')) {
+                alert('请选择 .txt 格式的文本文件！');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const content = e.target.result;
+                    const links = content.split('\n')
+                        .map(link => link.trim())
+                        .filter(link => link && link.length > 0);
+                    
+                    if (links.length === 0) {
+                        alert('文件中未找到有效链接！');
+                        return;
+                    }
+
+                    // 重置所有状态
+                    LINK_LIBRARY = links;
+                    clickStatus = new Array(links.length).fill(false);
+                    rangeStart = 1;
+                    rangeEnd = links.length;
+                    isRangeActive = false;
+                    currentIndex = 0;
+
+                    // 更新范围输入框
+                    startRangeInput.max = links.length;
+                    endRangeInput.max = links.length;
+                    startRangeInput.value = 1;
+                    endRangeInput.value = links.length;
+
+                    // 更新文本框并渲染列表
+                    linkTextarea.value = links.join('\n');
+                    renderLinkList();
+                    alert(`成功导入 ${links.length} 个链接！`);
+                } catch (error) {
+                    alert(`导入失败：${error.message}`);
+                }
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        function applyTextareaLinks() {
+            const text = linkTextarea.value.trim();
+            if (!text) {
+                // 清空链接库
+                LINK_LIBRARY = [];
+                clickStatus = [];
+                rangeStart = 1;
+                rangeEnd = 1;
+                isRangeActive = false;
+                currentIndex = 0;
+                startRangeInput.value = 1;
+                endRangeInput.value = 1;
+                renderLinkList();
+                alert('已清空链接库！');
+                return;
+            }
+
+            // 解析文本框中的链接
+            const links = text.split('\n')
+                .map(link => link.trim())
+                .filter(link => link && link.length > 0);
+            
+            // 重置状态
+            LINK_LIBRARY = links;
+            clickStatus = new Array(links.length).fill(false);
+            rangeStart = 1;
+            rangeEnd = links.length;
+            isRangeActive = false;
+            currentIndex = 0;
+
+            // 更新范围输入框
+            startRangeInput.max = links.length;
+            endRangeInput.max = links.length;
+            startRangeInput.value = 1;
+            endRangeInput.value = links.length;
+
+            // 渲染列表
+            renderLinkList();
+            alert(`成功应用 ${links.length} 个链接！`);
+        }
+
+        function saveLinksToFile() {
+            if (LINK_LIBRARY.length === 0) {
+                alert('链接库为空，无内容可保存！');
+                return;
+            }
+
+            const content = LINK_LIBRARY.join('\n');
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `链接库_${new Date().toLocaleString().replace(/[/:\s]/g, '-')}.txt`;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function clearLinkLibrary() {
+            if (confirm('确定要清空链接库吗？')) {
+                LINK_LIBRARY = [];
+                clickStatus = [];
+                rangeStart = 1;
+                rangeEnd = 1;
+                isRangeActive = false;
+                currentIndex = 0;
+                startRangeInput.value = 1;
+                endRangeInput.value = 1;
+                renderLinkList();
+                alert('链接库已清空！');
+            }
+        }
+
+        // ========== 事件绑定 ==========
+        resetBtn.addEventListener('click', resetClickStatus);
+        openNextBtn.addEventListener('click', openNextLink);
+        applyRangeBtn.addEventListener('click', applyRange);
+        resetRangeBtn.addEventListener('click', resetRange);
+        importBtn.addEventListener('click', importLinkFile);
+        saveBtn.addEventListener('click', saveLinksToFile);
+        clearBtn.addEventListener('click', clearLinkLibrary);
+        applyTextBtn.addEventListener('click', applyTextareaLinks);
+
+        // 页面初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            renderLinkList();
+        });
+    </script>
+</body>
+</html>
