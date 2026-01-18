@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知行实验室 - 内容目录</title>
+    <meta name="description" content="Davi iHome Studio 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
+    <title>Davi iHome Studio | 理会·践行 - 知行合一的现代探索</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
-        /* 基础与重置 - 保持完全一致 */
+        /* 基础与重置 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
@@ -18,283 +19,208 @@
             margin: 0 auto;
             padding: 20px;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
         }
 
-        /* 头部 */
+        /* 头部与导航 */
         header {
             text-align: center;
-            padding: 4rem 1rem 3rem;
+            padding: 4rem 1rem;
             border-bottom: 1px solid #eee;
             position: relative;
-            margin-bottom: 2rem;
         }
-        .lab-title {
-            font-size: clamp(2.2rem, 6vw, 3.8rem);
+        .site-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 300;
             letter-spacing: -0.05em;
-            margin-bottom: 0.8rem;
-            color: #222;
-            position: relative;
-            display: inline-block;
-        }
-        .lab-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #d2232a, transparent);
-        }
-        .lab-subtitle {
-            font-size: 1.2rem;
-            font-weight: 400;
-            color: #666;
-            max-width: 700px;
-            margin: 1.5rem auto;
-        }
-        .lab-description {
-            color: #777;
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        /* 目录网格系统 */
-        .directory-container {
-            padding: 2rem 1rem 5rem;
-        }
-        .directory-intro {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 3rem;
-            color: #555;
-            font-size: 1.05rem;
-            padding: 0 1rem;
-        }
-        .categories-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .category-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-            border: 1px solid #f0f0f0;
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .category-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(210, 35, 42, 0.12);
-            border-color: rgba(210, 35, 42, 0.2);
-        }
-        .category-header {
-            padding: 2rem 2rem 1.5rem;
-            border-bottom: 1px solid #f5f5f5;
-            background: linear-gradient(135deg, #fafafa, #f0f0f0);
-            position: relative;
-        }
-        .category-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.2rem;
-            font-size: 1.8rem;
-            color: #d2232a;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            border: 2px solid rgba(210, 35, 42, 0.1);
-        }
-        .category-title {
-            font-size: 1.5rem;
-            font-weight: 600;
             margin-bottom: 0.5rem;
             color: #222;
         }
-        .category-count {
-            display: inline-block;
-            background: rgba(210, 35, 42, 0.1);
-            color: #d2232a;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
+        .site-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
         }
-        .category-content {
-            padding: 1.8rem 2rem 2rem;
-            flex-grow: 1;
+
+        /* 主要章节 */
+        section {
+            padding: 5rem 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-of-type { border-bottom: none; }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #222;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: #d2232a;
+            margin: 0.5rem auto;
+        }
+
+        /* 第一章：理会 - 粒子画布 */
+        #particle-section {
+            min-height: 70vh;
             display: flex;
             flex-direction: column;
-        }
-        .category-description {
-            color: #555;
-            margin-bottom: 1.8rem;
-            line-height: 1.7;
-            flex-grow: 1;
-        }
-        .links-list {
-            list-style: none;
-            margin-top: auto;
-        }
-        .link-item {
-            margin-bottom: 0.9rem;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-        .link-item::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: #d2232a;
-            font-weight: bold;
-            transition: transform 0.3s ease;
-        }
-        .link-item:hover::before {
-            transform: translateX(5px);
-        }
-        .link-item a {
-            color: #444;
-            text-decoration: none;
-            font-weight: 500;
-            display: block;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid transparent;
-            transition: all 0.3s ease;
-        }
-        .link-item a:hover {
-            color: #d2232a;
-            border-bottom-color: rgba(210, 35, 42, 0.3);
-            padding-left: 5px;
-        }
-        .link-status {
-            display: inline-block;
-            font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-        .status-active {
-            background: rgba(42, 123, 210, 0.1);
-            color: #2a7bd2;
-        }
-        .status-new {
-            background: rgba(210, 35, 42, 0.1);
-            color: #d2232a;
-        }
-        .status-upcoming {
-            background: rgba(155, 155, 155, 0.1);
-            color: #777;
-        }
-        .category-footer {
-            padding: 1.5rem 2rem;
-            background: #f9f9f9;
-            border-top: 1px solid #f0f0f0;
-            text-align: center;
-        }
-        .view-all {
-            display: inline-flex;
-            align-items: center;
             justify-content: center;
+            position: relative;
+        }
+        #particle-canvas {
+            width: 100%;
+            height: 400px;
+            background: transparent;
+            border-radius: 2px;
+        }
+        .particle-controls {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .control-btn {
             background: #222;
             color: white;
-            text-decoration: none;
-            padding: 0.7rem 1.8rem;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            margin: 0 0.5rem;
             border-radius: 30px;
-            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            width: 100%;
-            max-width: 200px;
         }
-        .view-all:hover {
+        .control-btn:hover {
             background: #d2232a;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
         }
 
-        /* 视觉分隔 */
-        .section-divider {
-            text-align: center;
-            margin: 4rem auto;
+        /* 第二章：践行 - 时间线 */
+        .timeline {
             position: relative;
             max-width: 800px;
+            margin: 0 auto;
         }
-        .section-divider::before {
+        .timeline::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #ddd, transparent);
-            z-index: 1;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+            transform: translateX(-50%);
         }
-        .divider-text {
-            display: inline-block;
-            background: white;
-            padding: 0 2rem;
+        .timeline-item {
             position: relative;
-            z-index: 2;
-            color: #777;
-            font-weight: 500;
+            margin-bottom: 3rem;
+            width: 100%;
         }
-
-        /* 索引快速访问 */
-        .quick-access {
-            max-width: 1000px;
-            margin: 3rem auto 5rem;
-            padding: 2.5rem;
-            background: #f8f9fa;
-            border-radius: 16px;
-            border: 1px solid #eee;
+        .timeline-content {
+            position: relative;
+            width: calc(50% - 40px);
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 3px solid #d2232a;
         }
-        .quick-access h3 {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            border-left: none;
+            border-right: 3px solid #222;
+        }
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
             color: #222;
         }
-        .access-tags {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-        .access-tag {
-            background: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            color: #444;
-            font-weight: 500;
-            border: 1px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        .access-tag:hover {
-            background: #d2232a;
-            color: white;
-            border-color: #d2232a;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(210, 35, 42, 0.15);
+        .timeline-content p {
+            color: #555;
+            font-size: 0.95rem;
         }
 
-        /* 页脚链接模块样式 - 保持完全一致 */
+        /* 第三章：知行合一 - 平衡器 */
+        .balance-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .balance-visual {
+            height: 200px;
+            position: relative;
+            margin: 3rem 0;
+        }
+        .balance-beam {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 4px;
+            background: #222;
+            transform: translate(-50%, -50%) rotate(var(--beam-angle, 0deg));
+            transform-origin: center;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .weight {
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            background: #d2232a;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(210, 35, 42, 0.3);
+        }
+        .weight-knowledge { left: 30%; }
+        .weight-action { left: 70%; }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .slider-wrapper {
+            flex: 1;
+            max-width: 250px;
+        }
+        .slider-wrapper label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #222;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* 页脚链接模块样式 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -344,445 +270,251 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
-            .categories-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
+            .timeline::before { left: 30px; }
+            .timeline-content {
+                width: calc(100% - 70px);
+                margin-left: 70px !important;
+                border-left: 3px solid #d2232a !important;
+                border-right: none !important;
             }
-            .category-header, .category-content, .category-footer {
-                padding: 1.5rem;
-            }
-            .quick-access {
-                padding: 1.5rem;
-                margin: 2rem auto 3rem;
-            }
-            .access-tags {
-                gap: 0.7rem;
-            }
-            .access-tag {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.9rem;
-            }
-            .footer-links {
-                gap: 1rem;
-                padding: 1rem;
-                flex-wrap: wrap;
-            }
+            .slider-container { flex-direction: column; gap: 1.5rem; }
+            .slider-wrapper { max-width: 100%; }
+            .footer-links { gap: 1rem; padding: 1rem; }
         }
     </style>
 </head>
 <body>
     <!-- 页眉 -->
     <header>
-        <h1 class="lab-title">知行实验室</h1>
-        <p class="lab-subtitle">内容目录 · 知识索引 · 资源导航</p>
-        <div class="lab-description">
-            这里汇集了所有项目、思考和资源的系统化索引。每个分类代表一个探索方向，每个链接都是一扇通往深度内容的大门。设计遵循"理会"与"践行"的循环哲学。
-        </div>
+        <h1 class="site-title">理会 · 践行</h1>
+        <p class="site-subtitle">知是行之始，行是知之成。一个关于认知与行动的交互探索。</p>
     </header>
 
-    <!-- 目录主体 -->
-    <div class="directory-container">
-        <div class="directory-intro">
-            <p>本目录采用网格化分类设计，共包含 <strong>6个核心分类</strong>，<strong>24个主要内容链接</strong>，以及多个专题索引。所有内容持续更新中，点击分类卡片可查看详细内容。</p>
+    <!-- 第一章：理会 -->
+    <section id="particle-section">
+        <h2 class="section-title">理会 · 洞察本质</h2>
+        <canvas id="particle-canvas"></canvas>
+        <div class="particle-controls">
+            <button class="control-btn" id="btn-order">有序思维</button>
+            <button class="control-btn" id="btn-chaos">发散联想</button>
+            <button class="control-btn" id="btn-focus">专注凝聚</button>
         </div>
+        <p style="text-align: center; margin-top: 2rem; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
+            思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为"理"之过程。
+        </p>
+    </section>
 
-        <!-- 第一行分类 -->
-        <div class="categories-grid">
-            <!-- 核心思想 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🧠</div>
-                    <h3 class="category-title">核心思想</h3>
-                    <span class="category-count">8个条目</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">关于"理会"与"践行"的哲学基础、理论框架和核心概念的系统阐述。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                理会·践行的起源与演变
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                从朱熹到王阳明：知行观
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                现代语境下的知行合一
-                                <span class="link-status status-new">新内容</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                思维方法论专题
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部思想资源</a>
+    <!-- 第二章：践行 -->
+    <section>
+        <h2 class="section-title">践行 · 时间之径</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>《尚书》 · 知易行难</h3>
+                    <p>"非知之艰，行之惟艰。" 中国思想史上对知行关系最早的著名论断。</p>
                 </div>
             </div>
-
-            <!-- 技术实现 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">⚙️</div>
-                    <h3 class="category-title">技术实现</h3>
-                    <span class="category-count">6个条目</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">前端技术、交互设计和实现细节，展示"技术含量内蕴"的设计哲学。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                Canvas粒子系统详解
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                原生JS交互设计模式
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                响应式时间线实现
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                性能优化与最佳实践
-                                <span class="link-status status-upcoming">筹备中</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部技术文档</a>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>朱熹 · 理会践行</h3>
+                    <p>"只有两件事：理会，践行。" 强调穷理与力行的先后次序与必要性。</p>
                 </div>
             </div>
-
-            <!-- 项目展示 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🚀</div>
-                    <h3 class="category-title">项目展示</h3>
-                    <span class="category-count">5个条目</span>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>王阳明 · 知行合一</h3>
+                    <p>"知是行的主意，行是知的功夫。" 在心学体系中实现了知与行的本体统一。</p>
                 </div>
-                <div class="category-content">
-                    <p class="category-description">完整的项目案例，从概念到实现，体现"理会"与"践行"的完整循环。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="/index.html">
-                                知行可视化系统
-                                <span class="link-status status-active">已上线</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                iHome Studio知识库
-                                <span class="link-status status-upcoming">开发中</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                交互式哲学实验
-                                <span class="link-status status-new">新项目</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                开源组件库
-                                <span class="link-status status-upcoming">计划中</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部项目</a>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" style="border-color: #2a7bd2;">
+                    <h3>当下 · 你的行动</h3>
+                    <p>每一个项目、每一次选择，都是古老思想在当下的实践与回响。</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- 第二行分类 -->
-        <div class="categories-grid" style="margin-top: 2rem;">
-            <!-- 文章随笔 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">📝</div>
-                    <h3 class="category-title">文章随笔</h3>
-                    <span class="category-count">12+篇</span>
+    <!-- 第三章：合一 -->
+    <section>
+        <h2 class="section-title">知行合一 · 动态平衡</h2>
+        <div class="balance-container">
+            <p style="color: #555; margin-bottom: 2rem;">"知"与"行"并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
+            <div class="balance-visual">
+                <div class="balance-beam" id="balanceBeam"></div>
+                <div class="weight weight-knowledge" id="weightKnow">知</div>
+                <div class="weight weight-action" id="weightAction">行</div>
+            </div>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <label for="knowledgeSlider">理的深度 (知)：<span id="knowledgeValue">50</span>%</label>
+                    <input type="range" id="knowledgeSlider" min="0" max="100" value="50">
                 </div>
-                <div class="category-content">
-                    <p class="category-description">技术思考、哲学笔记和创作心得，记录思考过程和实践体会。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                朴素界面的技术深度
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计中的留白哲学
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                从概念到实现：完整流程
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                数字时代的知行关系
-                                <span class="link-status status-new">新文章</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部文章</a>
+                <div class="slider-wrapper">
+                    <label for="actionSlider">行的力度 (行)：<span id="actionValue">50</span>%</label>
+                    <input type="range" id="actionSlider" min="0" max="100" value="50">
                 </div>
             </div>
-
-            <!-- 资源工具 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🔧</div>
-                    <h3 class="category-title">资源工具</h3>
-                    <span class="category-count">15+项</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">实用工具、资源推荐和学习材料，支持持续学习和实践。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                前端开发工具链
-                                <span class="link-status status-active">已整理</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计资源精选
-                                <span class="link-status status-active">已整理</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                哲学原著电子版
-                                <span class="link-status status-upcoming">整理中</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                学习路径建议
-                                <span class="link-status status-new">新内容</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部资源</a>
-                </div>
-            </div>
-
-            <!-- 关于实验室 -->
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🏛️</div>
-                    <h3 class="category-title">关于实验室</h3>
-                    <span class="category-count">4个条目</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">实验室的起源、理念、更新日志和未来计划，了解背后的故事。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                实验室理念与使命
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                版本更新日志
-                                <span class="link-status status-active">持续更新</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计规范与原则
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                未来路线图
-                                <span class="link-status status-new">2026计划</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">关于我们</a>
-                </div>
-            </div>
+            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: #222;">状态：知行均衡</p>
         </div>
-
-        <!-- 快速访问 -->
-        <div class="quick-access">
-            <h3>快速索引</h3>
-            <div class="access-tags">
-                <a href="#核心思想" class="access-tag">核心思想</a>
-                <a href="#技术实现" class="access-tag">技术实现</a>
-                <a href="#项目展示" class="access-tag">项目展示</a>
-                <a href="#文章随笔" class="access-tag">文章随笔</a>
-                <a href="#资源工具" class="access-tag">资源工具</a>
-                <a href="#实验室" class="access-tag">实验室信息</a>
-                <a href="#最新内容" class="access-tag">最新内容</a>
-                <a href="#即将上线" class="access-tag">即将上线</a>
-            </div>
-        </div>
-    </div>
+    </section>
 
     <!-- 页脚 -->
     <footer>
-        <!-- 链接模块 -->
         <div class="footer-links">
-            <a href="/index.html" class="footer-link" title="返回主站点">主站·理会践行</a>
+            <a href="directory.html" class="footer-link" title="浏览完整内容目录">目录</a>
             <span class="link-divider">|</span>
-            <a href="/blog.html" class="footer-link" title="访问博客">博客</a>
+            <a href="#particle-section" class="footer-link" title="回到思维粒子">理会</a>
             <span class="link-divider">|</span>
-            <a href="/lab" class="footer-link" title="实验室主页">实验室</a>
+            <a href="#balanceState" class="footer-link" title="查看知行平衡">践行</a>
         </div>
         
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 Davi iHome Studio - 理会 · 践行 | 本页采用原生HTML/CSS/JS构建</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 Davi iHome Studio - 理会 · 践行 | 原生构建</p>
     </footer>
 
     <script>
-        // 卡片交互效果
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.category-card');
-            
-            cards.forEach(card => {
-                // 鼠标进入时的动画
-                card.addEventListener('mouseenter', function() {
-                    const icon = this.querySelector('.category-icon');
-                    if (icon) {
-                        icon.style.transform = 'scale(1.1) rotate(5deg)';
-                        icon.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)';
-                    }
-                    
-                    // 轻微背景色变化
-                    this.style.background = 'linear-gradient(to bottom, #ffffff, #fcfcfc)';
-                });
-                
-                // 鼠标离开时的动画
-                card.addEventListener('mouseleave', function() {
-                    const icon = this.querySelector('.category-icon');
-                    if (icon) {
-                        icon.style.transform = 'scale(1) rotate(0deg)';
-                    }
-                    
-                    this.style.background = 'white';
-                });
-                
-                // 点击效果
-                card.addEventListener('click', function(e) {
-                    // 如果不是链接元素，则添加点击反馈
-                    if (!e.target.closest('a')) {
-                        this.style.transform = 'translateY(-5px) scale(1.02)';
-                        setTimeout(() => {
-                            this.style.transform = 'translateY(-10px)';
-                        }, 150);
-                    }
-                });
-            });
-            
-            // 链接状态指示器
-            const links = document.querySelectorAll('.links-list a');
-            links.forEach(link => {
-                link.addEventListener('mouseenter', function() {
-                    const status = this.querySelector('.link-status');
-                    if (status) {
-                        status.style.transform = 'translateX(3px)';
-                        status.style.transition = 'transform 0.2s ease';
-                    }
-                });
-                
-                link.addEventListener('mouseleave', function() {
-                    const status = this.querySelector('.link-status');
-                    if (status) {
-                        status.style.transform = 'translateX(0)';
-                    }
-                });
-            });
-            
-            // 快速访问标签点击效果
-            const tags = document.querySelectorAll('.access-tag');
-            tags.forEach(tag => {
-                tag.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // 视觉反馈
-                    this.style.transform = 'translateY(-5px) scale(1.05)';
-                    
-                    // 获取目标分类
-                    const targetCategory = this.textContent.trim();
-                    
-                    // 模拟搜索或跳转效果
-                    console.log(`快速访问: ${targetCategory}`);
-                    
-                    // 重置效果
-                    setTimeout(() => {
-                        this.style.transform = 'translateY(-3px)';
-                    }, 200);
-                    setTimeout(() => {
-                        this.style.transform = 'translateY(0)';
-                    }, 400);
-                });
-            });
-            
-            // 页面加载动画
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-                document.body.style.transition = 'opacity 0.5s ease';
-            }, 100);
-            
-            // 初始化透明度
-            document.body.style.opacity = '0';
-        });
-        
-        // 简单的滚动动画
-        window.addEventListener('scroll', function() {
-            const cards = document.querySelectorAll('.category-card');
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            
-            cards.forEach((card, index) => {
-                const rect = card.getBoundingClientRect();
-                if (rect.top < windowHeight - 100) {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        // 粒子系统
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        let particles = [];
+        let mode = 'order';
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = 0;
+                this.vy = 0;
+                this.size = Math.random() * 2 + 0.5;
+                this.color = `rgba(34, 34, 34, ${0.7})`;
+                this.originalX = this.x;
+                this.originalY = this.y;
+            }
+            update() {
+                if (mode === 'order') {
+                    const gridX = Math.round(this.x / 40) * 40 + 20;
+                    const gridY = Math.round(this.y / 40) * 40 + 20;
+                    this.vx += (gridX - this.x) * 0.01;
+                    this.vy += (gridY - this.y) * 0.01;
+                } else if (mode === 'chaos') {
+                    this.vx += (Math.random() - 0.5) * 0.2;
+                    this.vy += (Math.random() - 0.5) * 0.2;
+                } else if (mode === 'focus') {
+                    const dx = canvas.width / 2 - this.x;
+                    const dy = canvas.height / 2 - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    this.vx += (dx / dist) * 0.05;
+                    this.vy += (dy / dist) * 0.05;
                 }
+
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = (mode === 'focus') ? 150 : 80;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (mode !== 'chaos') {
+                ctx.strokeStyle = 'rgba(210, 35, 42, 0.1)';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 60) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
             });
+            requestAnimationFrame(animateParticles);
+        }
+
+        document.getElementById('btn-order').addEventListener('click', () => { mode = 'order'; initParticles(); });
+        document.getElementById('btn-chaos').addEventListener('click', () => { mode = 'chaos'; initParticles(); });
+        document.getElementById('btn-focus').addEventListener('click', () => { mode = 'focus'; initParticles(); });
+
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            initParticles();
         });
-        
-        // 触发初始动画
-        setTimeout(() => {
-            window.dispatchEvent(new Event('scroll'));
-        }, 300);
+
+        initParticles();
+        animateParticles();
+
+        // 平衡器
+        const knowledgeSlider = document.getElementById('knowledgeSlider');
+        const actionSlider = document.getElementById('actionSlider');
+        const knowledgeValue = document.getElementById('knowledgeValue');
+        const actionValue = document.getElementById('actionValue');
+        const balanceBeam = document.getElementById('balanceBeam');
+        const balanceState = document.getElementById('balanceState');
+
+        function updateBalance() {
+            const know = parseInt(knowledgeSlider.value);
+            const action = parseInt(actionSlider.value);
+
+            knowledgeValue.textContent = know;
+            actionValue.textContent = action;
+
+            const diff = action - know;
+            const angle = diff * 0.3;
+            balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
+
+            const absDiff = Math.abs(diff);
+            if (absDiff < 10) {
+                balanceState.textContent = "状态：知行合一 (理想平衡)";
+                balanceState.style.color = "#2a7bd2";
+            } else if (diff > 0) {
+                balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
+                balanceState.style.color = "#d2232a";
+            } else {
+                balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
+                balanceState.style.color = "#222";
+            }
+        }
+
+        knowledgeSlider.addEventListener('input', updateBalance);
+        actionSlider.addEventListener('input', updateBalance);
+        updateBalance();
     </script>
 </body>
 </html>
