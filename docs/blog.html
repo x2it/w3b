@@ -50,7 +50,6 @@
             body { padding: 15px; }
         }
         
-        /* 头部 */
         header {
             text-align: center;
             padding: 3rem 1rem;
@@ -126,7 +125,6 @@
             background: rgba(210, 35, 42, 0.1);
         }
         
-        /* 章节 */
         section {
             padding: 4rem 1rem;
             border-bottom: 1px solid var(--gray-border);
@@ -167,7 +165,6 @@
             margin: 0.75rem auto;
         }
         
-        /* 关于我 */
         .about-container {
             display: flex;
             align-items: center;
@@ -251,7 +248,6 @@
             transform: translateY(-2px);
         }
         
-        /* 文章网格 */
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -353,7 +349,6 @@
             opacity: 0.5;
         }
         
-        /* 项目展示 */
         .projects-container {
             max-width: 1000px;
             margin: 0 auto;
@@ -453,7 +448,6 @@
             box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
         }
         
-        /* 联系区域 */
         .contact-container {
             max-width: 800px;
             margin: 0 auto;
@@ -530,7 +524,6 @@
             font-size: 0.95rem;
         }
         
-        /* 页脚导航 - 统一样式 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -599,7 +592,6 @@
             }
         }
         
-        /* 页脚 */
         footer {
             text-align: center;
             padding: 2.5rem 1rem;
@@ -613,14 +605,13 @@
         }
         
         .copyright {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             opacity: 0.8;
             margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- 页眉 -->
     <header>
         <h1 class="blog-title">Davi's Blog</h1>
         <p class="blog-subtitle">记录思考，分享实践。在理与行之间寻找平衡。</p>
@@ -633,7 +624,6 @@
         </div>
     </header>
 
-    <!-- 第一章：关于我 -->
     <section id="about">
         <h2 class="section-title">关于我</h2>
         <div class="about-container">
@@ -654,7 +644,6 @@
         </div>
     </section>
 
-    <!-- 第二章：最新文章 -->
     <section id="articles">
         <h2 class="section-title">最新文章</h2>
         <div class="articles-grid">
@@ -688,7 +677,6 @@
         </div>
     </section>
 
-    <!-- 第三章：项目展示 -->
     <section id="projects">
         <h2 class="section-title">项目展示</h2>
         <div class="projects-container">
@@ -723,7 +711,6 @@
         </div>
     </section>
 
-    <!-- 第四章：联系与扩展区域 -->
     <section id="contact">
         <h2 class="section-title">联系与连接</h2>
         <div class="contact-container">
@@ -759,21 +746,21 @@
         </div>
     </section>
 
-    <!-- 页脚 -->
     <footer>
         <div class="footer-links">
-            <a href="index.html" class="footer-link" title="返回主站理念">理会·践行</a>
+            <a href="index.html" class="footer-link" title="返回主站">返回</a>
+            <span class="link-divider">|</span>
+            <a href="#articles" class="footer-link" title="查看博客文章">理会</a>
             <span class="link-divider">|</span>
             <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
         </div>
         
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行 | 原生构建</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 导航链接激活状态
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -783,11 +770,9 @@
                         const targetElement = document.getElementById(targetId);
                         
                         if (targetElement) {
-                            // 更新激活状态
                             navLinks.forEach(l => l.classList.remove('active'));
                             this.classList.add('active');
                             
-                            // 平滑滚动
                             window.scrollTo({
                                 top: targetElement.offsetTop - 80,
                                 behavior: 'smooth'
@@ -797,7 +782,6 @@
                 });
             });
 
-            // 滚动时激活对应导航
             const sections = document.querySelectorAll('section');
             window.addEventListener('scroll', function() {
                 let current = '';
@@ -820,7 +804,6 @@
                 });
             });
             
-            // 触摸设备优化
             document.addEventListener('touchstart', function() {}, {passive: true});
         });
     </script>
