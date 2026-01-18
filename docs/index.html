@@ -3,177 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Davi iHome Studio - 理会 · 践行</title>
+    <meta name="description" content="Davi iHome Studio 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
+    <title>Davi iHome Studio | 理会·践行 - 知行合一的现代探索</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
-        /* 基础与重置 */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        :root {
+            --primary-color: #d2232a;
+            --dark-color: #222;
+            --light-color: #fefefe;
+            --gray-light: #f8f9fa;
+            --gray-border: #eee;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: #888;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+        }
+        
         body {
             font-family: 'Noto Sans SC', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #fefefe;
+            color: var(--text-primary);
+            background-color: var(--light-color);
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
             overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
         }
-
-        /* 头部与导航 */
+        
+        /* 响应式字体 */
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            body { padding: 15px; }
+        }
+        
+        /* 头部 */
         header {
             text-align: center;
-            padding: 4rem 1rem;
-            border-bottom: 1px solid #eee;
-            position: relative;
+            padding: 3rem 1rem;
+            border-bottom: 1px solid var(--gray-border);
         }
+        
+        @media (max-width: 768px) {
+            header { padding: 2rem 1rem; }
+        }
+        
         .site-title {
             font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 300;
-            letter-spacing: -0.05em;
-            margin-bottom: 0.5rem;
-            color: #222;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            color: var(--dark-color);
+            line-height: 1.2;
         }
+        
         .site-subtitle {
             font-size: 1.1rem;
             font-weight: 400;
-            color: #666;
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.5;
         }
-
-        /* 主要章节 */
+        
+        /* 章节 */
         section {
-            padding: 5rem 1rem;
-            border-bottom: 1px solid #eee;
+            padding: 4rem 1rem;
+            border-bottom: 1px solid var(--gray-border);
         }
-        section:last-of-type { border-bottom: none; }
-
+        
+        section:last-of-type { 
+            border-bottom: none; 
+        }
+        
+        @media (max-width: 768px) {
+            section { 
+                padding: 3rem 1rem; 
+            }
+        }
+        
         .section-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 500;
             text-align: center;
-            margin-bottom: 3rem;
-            color: #222;
+            margin-bottom: 2.5rem;
+            color: var(--dark-color);
             position: relative;
         }
+        
+        @media (max-width: 768px) {
+            .section-title { 
+                font-size: 1.6rem; 
+                margin-bottom: 2rem; 
+            }
+        }
+        
         .section-title::after {
             content: '';
             display: block;
             width: 60px;
             height: 2px;
-            background: #d2232a;
-            margin: 0.5rem auto;
+            background: var(--primary-color);
+            margin: 0.75rem auto;
         }
-
-        /* 第一章：理会 - 粒子画布 */
+        
+        /* 粒子系统 */
         #particle-section {
-            min-height: 70vh;
+            min-height: 60vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: relative;
         }
+        
+        @media (max-width: 768px) {
+            #particle-section { 
+                min-height: 50vh; 
+            }
+        }
+        
         #particle-canvas {
             width: 100%;
             height: 400px;
             background: transparent;
-            border-radius: 2px;
+            border-radius: 4px;
         }
+        
+        @media (max-width: 768px) {
+            #particle-canvas { 
+                height: 300px; 
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #particle-canvas { 
+                height: 250px; 
+            }
+        }
+        
         .particle-controls {
             text-align: center;
             margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
         }
+        
         .control-btn {
-            background: #222;
+            background: var(--dark-color);
             color: white;
             border: none;
-            padding: 0.7rem 1.5rem;
-            margin: 0 0.5rem;
+            padding: 0.8rem 1.5rem;
             border-radius: 30px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
             transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 120px;
+            touch-action: manipulation;
         }
+        
+        @media (max-width: 480px) {
+            .control-btn {
+                min-width: 110px;
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+        
         .control-btn:hover {
-            background: #d2232a;
+            background: var(--primary-color);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
         }
-
-        /* 第二章：践行 - 时间线 */
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 时间线 */
         .timeline {
             position: relative;
             max-width: 800px;
             margin: 0 auto;
         }
+        
         .timeline::before {
             content: '';
             position: absolute;
-            left: 50%;
+            left: 30px;
             top: 0;
             bottom: 0;
             width: 2px;
             background: #ddd;
-            transform: translateX(-50%);
         }
+        
+        @media (min-width: 769px) {
+            .timeline::before {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        
         .timeline-item {
             position: relative;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             width: 100%;
         }
+        
         .timeline-content {
             position: relative;
-            width: calc(50% - 40px);
+            width: calc(100% - 70px);
+            margin-left: 70px;
             padding: 1.5rem;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-left: 3px solid #d2232a;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 3px solid var(--primary-color);
         }
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-left: auto;
-            border-left: none;
-            border-right: 3px solid #222;
+        
+        @media (min-width: 769px) {
+            .timeline-content {
+                width: calc(50% - 40px);
+                margin-left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content {
+                margin-left: auto;
+                border-left: none;
+                border-right: 3px solid var(--dark-color);
+            }
         }
+        
         .timeline-content h3 {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 0.5rem;
-            color: #222;
+            color: var(--dark-color);
         }
+        
         .timeline-content p {
-            color: #555;
+            color: var(--text-secondary);
             font-size: 0.95rem;
+            line-height: 1.5;
         }
-
-        /* 第三章：知行合一 - 平衡器 */
+        
+        /* 平衡器 */
         .balance-container {
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
+        
         .balance-visual {
-            height: 200px;
+            height: 180px;
             position: relative;
-            margin: 3rem 0;
+            margin: 2.5rem 0;
         }
+        
+        @media (max-width: 768px) {
+            .balance-visual { 
+                height: 160px; 
+                margin: 2rem 0;
+            }
+        }
+        
         .balance-beam {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 80%;
+            width: 85%;
             height: 4px;
-            background: #222;
+            background: var(--dark-color);
             transform: translate(-50%, -50%) rotate(var(--beam-angle, 0deg));
             transform-origin: center;
             transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        
         .weight {
             position: absolute;
             top: 50%;
             width: 50px;
             height: 50px;
-            background: #d2232a;
+            background: var(--primary-color);
             border-radius: 50%;
             transform: translate(-50%, -50%);
             display: flex;
@@ -181,104 +308,160 @@
             justify-content: center;
             color: white;
             font-weight: bold;
-            box-shadow: 0 5px 15px rgba(210, 35, 42, 0.3);
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.25);
         }
+        
+        @media (max-width: 480px) {
+            .weight { 
+                width: 45px; 
+                height: 45px; 
+                font-size: 1rem; 
+            }
+        }
+        
         .weight-knowledge { left: 30%; }
         .weight-action { left: 70%; }
+        
         .slider-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 2rem;
+            gap: 1.5rem;
             margin-top: 2rem;
         }
-        .slider-wrapper {
-            flex: 1;
-            max-width: 250px;
+        
+        @media (min-width: 481px) {
+            .slider-container {
+                flex-direction: row;
+                justify-content: center;
+                gap: 2rem;
+            }
         }
+        
+        .slider-wrapper {
+            width: 100%;
+            max-width: 280px;
+        }
+        
         .slider-wrapper label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 500;
-            color: #444;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
         }
+        
         input[type="range"] {
             width: 100%;
             height: 6px;
             -webkit-appearance: none;
-            background: #ddd;
+            background: #e0e0e0;
             border-radius: 3px;
             outline: none;
         }
+        
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            background: #222;
+            width: 22px;
+            height: 22px;
+            background: var(--dark-color);
             border-radius: 50%;
             cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-
-        /* 页脚链接模块样式 */
+        
+        input[type="range"]::-webkit-slider-thumb:active {
+            background: var(--primary-color);
+        }
+        
+        /* 页脚导航 - 统一样式 */
         .footer-links {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
             gap: 1.5rem;
             margin-bottom: 2rem;
-            padding: 1.2rem;
-            background: #f8f9fa;
+            padding: 1.5rem;
+            background: var(--gray-light);
             border-radius: 12px;
-            border: 1px solid #eee;
+            border: 1px solid var(--gray-border);
         }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+        }
+        
         .footer-link {
-            color: #444;
+            color: var(--text-primary);
             text-decoration: none;
             font-size: 1rem;
             font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
             transition: all 0.3s ease;
             position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
         }
+        
+        @media (max-width: 480px) {
+            .footer-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 1rem;
+                min-width: 90px;
+            }
+        }
+        
         .footer-link:hover {
-            color: #d2232a;
+            color: var(--primary-color);
             background: rgba(210, 35, 42, 0.05);
             transform: translateY(-2px);
         }
-        .footer-link:first-child {
-            color: #d2232a;
-            border: 1px solid rgba(210, 35, 42, 0.3);
-            font-weight: 600;
+        
+        .footer-link:active {
+            transform: translateY(0);
         }
-        .footer-link:first-child:hover {
-            background: rgba(210, 35, 42, 0.1);
-        }
+        
         .link-divider {
             color: #ccc;
             font-weight: 300;
+            font-size: 1.2rem;
         }
-
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
         /* 页脚 */
         footer {
             text-align: center;
-            padding: 3rem 1rem;
-            color: #888;
+            padding: 2.5rem 1rem;
+            color: var(--text-light);
             font-size: 0.9rem;
         }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .timeline::before { left: 30px; }
-            .timeline-content {
-                width: calc(100% - 70px);
-                margin-left: 70px !important;
-                border-left: 3px solid #d2232a !important;
-                border-right: none !important;
-            }
-            .slider-container { flex-direction: column; gap: 1.5rem; }
-            .slider-wrapper { max-width: 100%; }
-            .footer-links { gap: 1rem; padding: 1rem; }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
@@ -298,8 +481,8 @@
             <button class="control-btn" id="btn-chaos">发散联想</button>
             <button class="control-btn" id="btn-focus">专注凝聚</button>
         </div>
-        <p style="text-align: center; margin-top: 2rem; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
-            思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为“理”之过程。
+        <p style="text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
+            思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为"理"之过程。
         </p>
     </section>
 
@@ -310,19 +493,19 @@
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>《尚书》 · 知易行难</h3>
-                    <p>“非知之艰，行之惟艰。” 中国思想史上对知行关系最早的著名论断。</p>
+                    <p>"非知之艰，行之惟艰。" 中国思想史上对知行关系最早的著名论断。</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>朱熹 · 理会践行</h3>
-                    <p>“只有两件事：理会，践行。” 强调穷理与力行的先后次序与必要性。</p>
+                    <p>"只有两件事：理会，践行。" 强调穷理与力行的先后次序与必要性。</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>王阳明 · 知行合一</h3>
-                    <p>“知是行的主意，行是知的功夫。” 在心学体系中实现了知与行的本体统一。</p>
+                    <p>"知是行的主意，行是知的功夫。" 在心学体系中实现了知与行的本体统一。</p>
                 </div>
             </div>
             <div class="timeline-item">
@@ -338,7 +521,7 @@
     <section>
         <h2 class="section-title">知行合一 · 动态平衡</h2>
         <div class="balance-container">
-            <p style="color: #555; margin-bottom: 2rem;">“知”与“行”并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">"知"与"行"并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
             <div class="balance-visual">
                 <div class="balance-beam" id="balanceBeam"></div>
                 <div class="weight weight-knowledge" id="weightKnow">知</div>
@@ -354,49 +537,61 @@
                     <input type="range" id="actionSlider" min="0" max="100" value="50">
                 </div>
             </div>
-            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: #222;">状态：知行均衡</p>
+            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: var(--dark-color); font-size: 1.1rem;">状态：知行均衡</p>
         </div>
     </section>
 
     <!-- 页脚 -->
     <footer>
-        <!-- 新增的链接模块 -->
         <div class="footer-links">
-            <a href="/html" class="footer-link" title="进入起始目录">目录</a>
+            <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
             <span class="link-divider">|</span>
-            <a href="#particle-section" class="footer-link" title="回到思维粒子">理会</a>
-            <span class="link-divider">|</span>
-            <a href="#balanceState" class="footer-link" title="查看知行平衡">践行</a>
+            <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
         </div>
         
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 Davi iHome Studio - 理会 · 践行 | 本页采用原生HTML/CSS/JS构建</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行 | 原生构建</p>
     </footer>
 
     <script>
-        // 第一章：粒子系统
+        // 粒子系统
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-
+        
+        function initCanvasSize() {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            
+            ctx.scale(dpr, dpr);
+            
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = rect.height + 'px';
+            
+            return { width: rect.width, height: rect.height };
+        }
+        
+        let canvasSize = initCanvasSize();
         let particles = [];
-        let mode = 'order'; // 默认有序模式
+        let mode = 'order';
+        let animationId = null;
 
         class Particle {
             constructor() {
                 this.reset();
             }
+            
             reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
+                this.x = Math.random() * canvasSize.width;
+                this.y = Math.random() * canvasSize.height;
                 this.vx = 0;
                 this.vy = 0;
                 this.size = Math.random() * 2 + 0.5;
                 this.color = `rgba(34, 34, 34, ${0.7})`;
-                this.originalX = this.x;
-                this.originalY = this.y;
             }
+            
             update() {
                 // 根据模式更新粒子行为
                 if (mode === 'order') {
@@ -411,11 +606,13 @@
                     this.vy += (Math.random() - 0.5) * 0.2;
                 } else if (mode === 'focus') {
                     // 专注：向中心聚集
-                    const dx = canvas.width / 2 - this.x;
-                    const dy = canvas.height / 2 - this.y;
+                    const dx = canvasSize.width / 2 - this.x;
+                    const dy = canvasSize.height / 2 - this.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    this.vx += (dx / dist) * 0.05;
-                    this.vy += (dy / dist) * 0.05;
+                    if (dist > 0) {
+                        this.vx += (dx / dist) * 0.05;
+                        this.vy += (dy / dist) * 0.05;
+                    }
                 }
 
                 // 应用速度并添加阻尼
@@ -425,10 +622,12 @@
                 this.y += this.vy;
 
                 // 边界处理
-                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                if (this.x < -10 || this.x > canvasSize.width + 10 || 
+                    this.y < -10 || this.y > canvasSize.height + 10) {
                     this.reset();
                 }
             }
+            
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -440,7 +639,7 @@
         // 初始化粒子
         function initParticles() {
             particles = [];
-            const particleCount = (mode === 'focus') ? 150 : 80;
+            const particleCount = (mode === 'focus') ? 120 : 60;
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
@@ -459,7 +658,7 @@
                         const dx = particles[i].x - particles[j].x;
                         const dy = particles[i].y - particles[j].y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
-                        if (distance < 60) {
+                        if (distance < 50) {
                             ctx.beginPath();
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
@@ -474,33 +673,40 @@
                 p.update();
                 p.draw();
             });
-            requestAnimationFrame(animateParticles);
+            
+            animationId = requestAnimationFrame(animateParticles);
         }
 
         // 模式控制
-        document.getElementById('btn-order').addEventListener('click', () => { mode = 'order'; initParticles(); });
-        document.getElementById('btn-chaos').addEventListener('click', () => { mode = 'chaos'; initParticles(); });
-        document.getElementById('btn-focus').addEventListener('click', () => { mode = 'focus'; initParticles(); });
+        function setMode(newMode) {
+            mode = newMode;
+            initParticles();
+        }
+
+        document.getElementById('btn-order').addEventListener('click', () => setMode('order'));
+        document.getElementById('btn-chaos').addEventListener('click', () => setMode('chaos'));
+        document.getElementById('btn-focus').addEventListener('click', () => setMode('focus'));
 
         // 窗口调整
         window.addEventListener('resize', () => {
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            canvasSize = initCanvasSize();
             initParticles();
+            animateParticles();
         });
 
         // 启动粒子系统
         initParticles();
         animateParticles();
 
-        // 第三章：知行平衡器
+        // 知行平衡器
         const knowledgeSlider = document.getElementById('knowledgeSlider');
         const actionSlider = document.getElementById('actionSlider');
         const knowledgeValue = document.getElementById('knowledgeValue');
         const actionValue = document.getElementById('actionValue');
         const balanceBeam = document.getElementById('balanceBeam');
-        const weightKnow = document.getElementById('weightKnow');
-        const weightAction = document.getElementById('weightAction');
         const balanceState = document.getElementById('balanceState');
 
         function updateBalance() {
@@ -510,9 +716,9 @@
             knowledgeValue.textContent = know;
             actionValue.textContent = action;
 
-            // 计算天平倾斜角度（简单模拟）
+            // 计算天平倾斜角度
             const diff = action - know;
-            const angle = diff * 0.3; // 缩放因子
+            const angle = diff * 0.3;
             balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
 
             // 根据差值更新状态文本
@@ -532,6 +738,9 @@
         knowledgeSlider.addEventListener('input', updateBalance);
         actionSlider.addEventListener('input', updateBalance);
         updateBalance(); // 初始化
+        
+        // 触摸设备优化
+        document.addEventListener('touchstart', function() {}, {passive: true});
     </script>
 </body>
 </html>
