@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Davi iHome Studio 的个人博客 - 记录技术、设计与思考的实践，分享理会与践行的个人探索">
-    <title>Davi's Blog - Davi iHome Studio 的思考与实践记录</title>
+    <meta name="description" content="Davi iHome Studio - AI与Web3时代的理会与践行">
+    <title>理会 · AI与Web3的思考 - Davi iHome Studio</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         :root {
@@ -16,6 +16,8 @@
             --text-primary: #333;
             --text-secondary: #666;
             --text-light: #888;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 8px 24px rgba(210, 35, 42, 0.1);
         }
         
         * { 
@@ -39,6 +41,9 @@
             padding: 20px;
             overflow-x: hidden;
             -webkit-text-size-adjust: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
         }
         
         @media (max-width: 768px) {
@@ -47,21 +52,33 @@
         
         @media (max-width: 480px) {
             html { font-size: 14px; }
-            body { padding: 15px; }
+            body { 
+                padding: 15px; 
+                background-image: none;
+            }
         }
         
+        /* 与主页一致的标题样式 */
         header {
             text-align: center;
-            padding: 3rem 1rem;
+            padding: 3rem 1rem 2.5rem;
             border-bottom: 1px solid var(--gray-border);
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-top: 1rem;
         }
         
         @media (max-width: 768px) {
-            header { padding: 2rem 1rem; }
+            header { 
+                padding: 2rem 1rem 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
         }
         
         .blog-title {
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 300;
             letter-spacing: -0.02em;
             margin-bottom: 0.75rem;
@@ -74,55 +91,50 @@
             font-weight: 400;
             color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto 1.5rem;
+            margin: 0 auto 1rem;
             line-height: 1.5;
         }
         
-        .nav-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
+        /* 与主页一致的导航卡片样式 */
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            max-width: 800px;
+            margin: 2rem auto 0;
         }
         
         @media (max-width: 480px) {
-            .nav-links {
-                gap: 0.5rem;
+            .nav-cards {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
             }
         }
         
-        .nav-link {
-            color: var(--text-primary);
+        .nav-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 8px;
             text-decoration: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 20px;
+            color: var(--text-primary);
+            text-align: center;
+            border: 1px solid var(--gray-border);
             transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
+            box-shadow: var(--card-shadow);
             min-height: 44px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 500;
             touch-action: manipulation;
         }
         
-        @media (max-width: 480px) {
-            .nav-link {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-                min-height: 40px;
-            }
-        }
-        
-        .nav-link:hover {
+        .nav-card:hover {
             color: var(--primary-color);
             background: rgba(210, 35, 42, 0.05);
-        }
-        
-        .nav-link.active {
-            color: var(--primary-color);
-            background: rgba(210, 35, 42, 0.1);
+            transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(210, 35, 42, 0.2);
         }
         
         section {
@@ -140,6 +152,7 @@
             }
         }
         
+        /* 与主页一致的标题样式 */
         .section-title {
             font-size: 1.8rem;
             font-weight: 500;
@@ -159,95 +172,79 @@
         .section-title::after {
             content: '';
             display: block;
-            width: 50px;
+            width: 60px;
             height: 2px;
             background: var(--primary-color);
             margin: 0.75rem auto;
         }
         
-        .about-container {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            max-width: 900px;
+        /* 与主页一致的时间线样式 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
             margin: 0 auto;
         }
         
-        @media (max-width: 768px) {
-            .about-container { 
-                flex-direction: column; 
-                text-align: center; 
-                gap: 2rem;
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+        }
+        
+        @media (min-width: 769px) {
+            .timeline::before {
+                left: 50%;
+                transform: translateX(-50%);
             }
         }
         
-        .about-avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: #999;
-            flex-shrink: 0;
-            border: 3px solid white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            width: 100%;
         }
         
-        @media (max-width: 480px) {
-            .about-avatar {
-                width: 120px;
-                height: 120px;
-                font-size: 2rem;
+        .timeline-content {
+            position: relative;
+            width: calc(100% - 70px);
+            margin-left: 70px;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        @media (min-width: 769px) {
+            .timeline-content {
+                width: calc(50% - 40px);
+                margin-left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content {
+                margin-left: auto;
+                border-left: none;
+                border-right: 3px solid var(--dark-color);
             }
         }
         
-        .about-text {
-            flex: 1;
+        .timeline-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
         }
         
-        .about-text p {
-            margin-bottom: 1.2rem;
+        .timeline-content p {
             color: var(--text-secondary);
-            line-height: 1.6;
+            font-size: 0.95rem;
+            line-height: 1.5;
         }
         
-        .skills-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
-            margin-top: 1.5rem;
-        }
-        
-        @media (max-width: 480px) {
-            .skills-tags {
-                gap: 0.5rem;
-                justify-content: center;
-            }
-        }
-        
-        .skill-tag {
-            background: #f1f1f1;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-            min-height: 36px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .skill-tag:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
+        /* 与主页一致的卡片设计 */
         .articles-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -265,21 +262,26 @@
         
         .article-card {
             background: white;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
             border: 1px solid var(--gray-border);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .article-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(210, 35, 42, 0.2);
         }
         
         .article-header {
             padding: 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid var(--gray-border);
+            background: linear-gradient(135deg, var(--gray-light), #f0f0f0);
         }
         
         .article-category {
@@ -309,221 +311,130 @@
         .article-content {
             padding: 1.5rem;
             color: var(--text-secondary);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .article-content p {
             margin-bottom: 1rem;
             line-height: 1.6;
+            flex-grow: 1;
         }
         
+        /* 与主页一致的按钮样式 */
         .read-more {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             color: var(--primary-color);
             text-decoration: none;
             font-weight: 500;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
             font-size: 0.95rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            align-self: flex-start;
         }
         
         .read-more:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--primary-color);
+            padding-left: 5px;
         }
         
-        .placeholder-article {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            color: #aaa;
+        /* 联系部分样式 */
+        .contact-simple {
             text-align: center;
-            padding: 2rem;
-            border: 2px dashed var(--gray-border);
-            border-radius: 8px;
-            background: var(--gray-light);
-        }
-        
-        .placeholder-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-        
-        .projects-container {
-            max-width: 1000px;
+            max-width: 600px;
             margin: 0 auto;
-        }
-        
-        .project-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        @media (min-width: 769px) {
-            .project-item {
-                flex-direction: row;
-                align-items: center;
-            }
-            
-            .project-item:nth-child(even) {
-                flex-direction: row-reverse;
-            }
-        }
-        
-        .project-visual {
-            flex: 1;
-            height: 220px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 1.3rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
             border: 1px solid var(--gray-border);
-            padding: 1rem;
         }
         
-        @media (max-width: 480px) {
-            .project-visual {
-                height: 180px;
-                font-size: 1.1rem;
-            }
-        }
-        
-        .project-info {
-            flex: 1;
-        }
-        
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: var(--dark-color);
-        }
-        
-        .project-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-        
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .tech-tag {
-            background: #f1f1f1;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .project-link {
+        .email-link {
             display: inline-block;
-            background: var(--dark-color);
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
             text-decoration: none;
-            font-weight: 500;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            margin: 1rem 0;
             transition: all 0.3s ease;
-            min-height: 44px;
-            min-width: 120px;
-            text-align: center;
-            touch-action: manipulation;
+            background: rgba(210, 35, 42, 0.05);
         }
         
-        .project-link:hover {
+        .email-link:hover {
             background: var(--primary-color);
+            color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
         }
         
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
+        /* 支持赞助样式 */
+        .support-section {
             text-align: center;
+            max-width: 600px;
+            margin: 2rem auto 0;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(210, 35, 42, 0.03), rgba(34, 34, 34, 0.03));
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
         }
         
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+        .support-title {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
         }
         
-        @media (max-width: 480px) {
-            .contact-methods {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
+        .support-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
         }
         
-        .contact-method {
+        .support-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .support-method {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1.5rem;
+            padding: 1rem;
+            background: white;
             border-radius: 8px;
-            background: var(--gray-light);
+            min-width: 120px;
+            border: 1px solid var(--gray-border);
             transition: all 0.3s ease;
-            min-height: 140px;
-            justify-content: center;
         }
         
-        .contact-method:hover {
-            background: rgba(210, 35, 42, 0.05);
+        .support-method:hover {
             transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(210, 35, 42, 0.2);
         }
         
-        .contact-icon {
+        .support-icon {
             font-size: 1.8rem;
-            color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
         
-        .contact-name {
+        .support-name {
             font-weight: 500;
+            font-size: 0.9rem;
             color: var(--dark-color);
-            font-size: 0.95rem;
         }
         
-        .contact-value {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.4;
-        }
-        
-        .expansion-note {
-            margin-top: 3rem;
-            padding: 1.5rem;
-            background: var(--gray-light);
-            border-radius: 8px;
-            border-left: 4px solid var(--primary-color);
-            text-align: left;
-        }
-        
-        .expansion-note h3 {
-            color: var(--dark-color);
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
-        }
-        
-        .expansion-note p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-        
+        /* 与主页完全一致的底部导航 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -560,6 +471,8 @@
             min-width: 100px;
             text-align: center;
             touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
         }
         
         @media (max-width: 480px) {
@@ -567,6 +480,7 @@
                 font-size: 0.95rem;
                 padding: 0.5rem 1rem;
                 min-width: 90px;
+                flex: 1;
             }
         }
         
@@ -574,6 +488,8 @@
             color: var(--primary-color);
             background: rgba(210, 35, 42, 0.05);
             transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
         }
         
         .footer-link:active {
@@ -597,6 +513,9 @@
             padding: 2.5rem 1rem;
             color: var(--text-light);
             font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            margin-top: 2rem;
         }
         
         footer p {
@@ -613,144 +532,150 @@
 </head>
 <body>
     <header>
-        <h1 class="blog-title">Davi's Blog</h1>
-        <p class="blog-subtitle">记录思考，分享实践。在理与行之间寻找平衡。</p>
-        <div class="nav-links">
-            <a href="#about" class="nav-link active">关于</a>
-            <a href="#articles" class="nav-link">文章</a>
-            <a href="#projects" class="nav-link">项目</a>
-            <a href="#contact" class="nav-link">联系</a>
-            <a href="index.html" class="nav-link">返回主站</a>
+        <h1 class="blog-title">理会 · 认知</h1>
+        <p class="blog-subtitle">理解AI本质，洞察Web3未来，探索数字时代的认知边界</p>
+        <div class="nav-cards">
+            <a href="#insights" class="nav-card">AI洞察</a>
+            <a href="#evolution" class="nav-card">技术演化</a>
+            <a href="#articles" class="nav-card">深度思考</a>
+            <a href="#contact" class="nav-card">联系交流</a>
         </div>
     </header>
 
-    <section id="about">
-        <h2 class="section-title">关于我</h2>
-        <div class="about-container">
-            <div class="about-avatar">D</div>
-            <div class="about-text">
-                <p>你好，我是 Davi。一名探索在技术、设计与哲学交叉领域的思考者与实践者。</p>
-                <p>我相信"理会"与"践行"的循环是创造价值的核心路径。这个博客将记录我在这条路上的思考、学习与实践。</p>
-                <p>目前专注于现代Web技术、交互设计和产品思维，同时对古典哲学、认知科学和创意表达有着持续的兴趣。</p>
-                <div class="skills-tags">
-                    <span class="skill-tag">HTML/CSS/JS</span>
-                    <span class="skill-tag">交互设计</span>
-                    <span class="skill-tag">产品思维</span>
-                    <span class="skill-tag">哲学思考</span>
-                    <span class="skill-tag">内容创作</span>
-                    <span class="skill-tag">知行合一</span>
+    <section id="insights">
+        <h2 class="section-title">AI时代的理会之道</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>范式转移：从工具到伙伴</h3>
+                    <p>AI不再仅仅是提高效率的工具，而是成为创意过程的合作者。理解这种关系转变，是有效运用AI的前提。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>技术内蕴：朴素界面的深度</h3>
+                    <p>最简洁的对话界面背后，是千亿参数的大语言模型。理解技术本质，才能避免被表象迷惑。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>价值判断：AI时代的知行合一</h3>
+                    <p>在AI生成内容泛滥的时代，更需要人类的判断力和价值观指导。知是AI的能力，行是人的选择。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="articles">
-        <h2 class="section-title">最新文章</h2>
+        <h2 class="section-title">深度思考 · 最新文章</h2>
         <div class="articles-grid">
             <article class="article-card">
                 <div class="article-header">
-                    <span class="article-category">技术思考</span>
-                    <h3 class="article-title">朴素界面的技术深度</h3>
-                    <div class="article-date">2024年3月15日</div>
+                    <span class="article-category">AI哲学</span>
+                    <h3 class="article-title">大模型时代的知行关系重构</h3>
+                    <div class="article-date">2024年3月18日</div>
                 </div>
                 <div class="article-content">
-                    <p>如何用最简洁的视觉形式承载复杂的技术实现？本文探讨了"简单朴素但技术含量内蕴"的设计哲学，并以Canvas粒子系统为例，分析如何将抽象思维可视化。</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
+                    <p>当AI能够"知"（理解、分析、生成）一切时，人类的"行"（选择、判断、创造）价值何在？探讨人机协作中的新知行观。</p>
+                    <a href="#article1" class="read-more">阅读思考 →</a>
                 </div>
             </article>
             <article class="article-card">
                 <div class="article-header">
-                    <span class="article-category">哲学笔记</span>
-                    <h3 class="article-title">从朱熹到王阳明：知行观的演变</h3>
-                    <div class="article-date">2024年3月10日</div>
+                    <span class="article-category">Web3生态</span>
+                    <h3 class="article-title">去中心化的践行挑战</h3>
+                    <div class="article-date">2024年3月12日</div>
                 </div>
                 <div class="article-content">
-                    <p>追溯"理会，践行"的思想源流，比较朱熹"知先行后"与王阳明"知行合一"的理论差异，探讨这些古典智慧对现代创作者的意义。</p>
-                    <a href="#" class="read-more">阅读全文 →</a>
+                    <p>从理想到现实：分析Web3理念在实际应用中的困境与突破。技术易得，共识难建，实践是检验去中心化的唯一标准。</p>
+                    <a href="#article2" class="read-more">阅读思考 →</a>
                 </div>
             </article>
-            <div class="article-card placeholder-article">
-                <div class="placeholder-icon">+</div>
-                <p>更多文章正在创作中</p>
-                <p style="font-size: 0.9rem; margin-top: 0.5rem;">此处预留未来内容空间</p>
-            </div>
+            <article class="article-card">
+                <div class="article-header">
+                    <span class="article-category">内容创作</span>
+                    <h3 class="article-title">创作者的本真性危机</h3>
+                    <div class="article-date">2024年3月8日</div>
+                </div>
+                <div class="article-content">
+                    <p>在AI辅助创作成为常态的时代，如何保持创作者的独特视角和本真表达？探讨技术赋能下的人文坚守。</p>
+                    <a href="#article3" class="read-more">阅读思考 →</a>
+                </div>
+            </article>
         </div>
     </section>
 
-    <section id="projects">
-        <h2 class="section-title">项目展示</h2>
-        <div class="projects-container">
-            <div class="project-item">
-                <div class="project-visual">理会·践行<br>交互探索</div>
-                <div class="project-info">
-                    <h3 class="project-title">知行可视化系统</h3>
-                    <p class="project-description">一个将"理会"与"践行"哲学概念通过现代Web技术进行可视化表达的交互项目。包含动态粒子系统、时间线展示和知行平衡模拟器。</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">HTML5 Canvas</span>
-                        <span class="tech-tag">CSS3动画</span>
-                        <span class="tech-tag">原生JavaScript</span>
-                        <span class="tech-tag">响应式设计</span>
-                    </div>
-                    <a href="index.html" class="project-link">查看项目</a>
+    <section id="evolution">
+        <h2 class="section-title">技术演化 · 认知迭代</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content" style="border-color: #2a7bd2;">
+                    <h3>AI 1.0：模式识别时代</h3>
+                    <p>机器学习主导，关注分类与预测。特征工程是关键，人类需要深刻理解问题域。</p>
                 </div>
             </div>
-            <div class="project-item">
-                <div class="project-visual">个人知识<br>管理系统</div>
-                <div class="project-info">
-                    <h3 class="project-title">iHome Studio 知识库</h3>
-                    <p class="project-description">正在构建中的个人知识管理系统，旨在将碎片化信息转化为结构化知识，实践"输入-整理-输出"的完整学习循环。</p>
-                    <div class="project-tech">
-                        <span class="tech-tag">Markdown</span>
-                        <span class="tech-tag">静态站点生成</span>
-                        <span class="tech-tag">知识图谱</span>
-                        <span class="tech-tag">数字花园</span>
-                    </div>
-                    <a href="#" class="project-link">即将上线</a>
+            <div class="timeline-item">
+                <div class="timeline-content" style="border-color: #f7931a;">
+                    <h3>AI 2.0：生成创造时代</h3>
+                    <p>大语言模型崛起，AI具备创造能力。提示工程成为新技能，人类需要学习与AI对话。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" style="border-color: #8e44ad;">
+                    <h3>人机共生：第三阶段的知行合一</h3>
+                    <p>AI理解人类意图，人类理解AI能力边界。真正的协作需要双方的深度理会与默契践行。</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="contact">
-        <h2 class="section-title">联系与连接</h2>
-        <div class="contact-container">
-            <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">欢迎交流思想、合作项目或分享反馈。</p>
-            <div class="contact-methods">
-                <div class="contact-method">
-                    <div class="contact-icon">✉️</div>
-                    <div class="contact-name">邮箱</div>
-                    <div class="contact-value">contact@example.com</div>
+        <h2 class="section-title">联系与交流</h2>
+        <div class="contact-simple">
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; line-height: 1.6;">
+                欢迎就AI、Web3、内容创作等话题进行交流讨论
+            </p>
+            <a href="mailto:x.dw@qq.com" class="email-link">
+                x.dw@qq.com
+            </a>
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 1rem;">
+                通常会在24小时内回复邮件
+            </p>
+        </div>
+        
+        <div class="support-section">
+            <h3 class="support-title">支持与赞助</h3>
+            <p class="support-desc">
+                如果您觉得这些思考有价值，欢迎支持独立创作。每一份支持都是对深度思考的肯定。
+            </p>
+            
+            <div class="support-methods">
+                <div class="support-method">
+                    <div class="support-icon">❤️</div>
+                    <div class="support-name">精神支持</div>
                 </div>
-                <div class="contact-method">
-                    <div class="contact-icon">🐦</div>
-                    <div class="contact-name">Twitter</div>
-                    <div class="contact-value">@davi_ihome</div>
+                <div class="support-method">
+                    <div class="support-icon">☕️</div>
+                    <div class="support-name">咖啡鼓励</div>
                 </div>
-                <div class="contact-method">
-                    <div class="contact-icon">💼</div>
-                    <div class="contact-name">GitHub</div>
-                    <div class="contact-value">github.com/davi</div>
-                </div>
-                <div class="contact-method">
-                    <div class="contact-icon">📝</div>
-                    <div class="contact-name">订阅</div>
-                    <div class="contact-value">RSS Feed</div>
+                <div class="support-method">
+                    <div class="support-icon">💰</div>
+                    <div class="support-name">实质赞助</div>
                 </div>
             </div>
             
-            <div class="expansion-note">
-                <h3>🚀 未来扩展空间</h3>
-                <p>此区域为未来功能预留，可考虑添加：文章归档系统、项目动态时间线、阅读笔记库、作品集画廊、访客留言板等模块。</p>
-                <p style="margin-top: 0.8rem; font-size: 0.9rem;">设计保持了结构的灵活性，便于后续添加新内容而不破坏现有视觉一致性。</p>
-            </div>
+            <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 1.5rem;">
+                赞助将用于服务器维护和深度研究
+            </p>
         </div>
     </section>
 
+    <!-- 与主页完全一致的底部导航 -->
     <footer>
         <div class="footer-links">
             <a href="index.html" class="footer-link" title="返回主站">返回</a>
             <span class="link-divider">|</span>
-            <a href="#articles" class="footer-link" title="查看博客文章">理会</a>
+            <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
             <span class="link-divider">|</span>
             <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
         </div>
@@ -761,50 +686,80 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    if (this.getAttribute('href').startsWith('#')) {
+            // 卡片悬停效果 - 与主页一致
+            const cards = document.querySelectorAll('.article-card, .nav-card, .support-method');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (window.matchMedia('(hover: hover)').matches) {
+                        this.style.transition = 'all 0.3s ease';
+                    }
+                });
+            });
+            
+            // 移动端触摸优化
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // 防止双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // 触摸反馈
+            const touchElements = document.querySelectorAll('a, .nav-card, .email-link, .support-method');
+            touchElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                }, {passive: true});
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                }, {passive: true});
+            });
+            
+            // 平滑滚动
+            const navCards = document.querySelectorAll('.nav-card');
+            navCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.startsWith('#')) {
                         e.preventDefault();
-                        const targetId = this.getAttribute('href').substring(1);
-                        const targetElement = document.getElementById(targetId);
-                        
-                        if (targetElement) {
-                            navLinks.forEach(l => l.classList.remove('active'));
-                            this.classList.add('active');
-                            
+                        const target = document.querySelector(href);
+                        if (target) {
                             window.scrollTo({
-                                top: targetElement.offsetTop - 80,
+                                top: target.offsetTop - 80,
                                 behavior: 'smooth'
                             });
                         }
                     }
                 });
             });
-
-            const sections = document.querySelectorAll('section');
-            window.addEventListener('scroll', function() {
-                let current = '';
-                const scrollPosition = window.scrollY + 100;
-                
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    const sectionHeight = section.clientHeight;
-                    
-                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                        current = section.getAttribute('id');
-                    }
-                });
-
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
-                        link.classList.add('active');
-                    }
-                });
-            });
             
-            document.addEventListener('touchstart', function() {}, {passive: true});
+            // 邮箱链接复制功能（可选）
+            const emailLink = document.querySelector('.email-link');
+            if (emailLink) {
+                emailLink.addEventListener('click', function(e) {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        e.preventDefault();
+                        navigator.clipboard.writeText('x.dw@qq.com').then(() => {
+                            const originalText = this.textContent;
+                            this.textContent = '邮箱已复制';
+                            this.style.background = 'rgba(46, 204, 113, 0.1)';
+                            this.style.borderColor = '#2ecc71';
+                            
+                            setTimeout(() => {
+                                this.textContent = originalText;
+                                this.style.background = '';
+                                this.style.borderColor = '';
+                            }, 2000);
+                        });
+                    }
+                });
+            }
         });
     </script>
 </body>
