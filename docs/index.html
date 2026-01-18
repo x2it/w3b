@@ -1,373 +1,487 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Davi丨我家Studio - 云南房产服务</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#0066CC',
-                        secondary: '#FF9900',
-                        dark: '#333333',
-                        light: '#f5f7fa',
-                    },
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
+    <title>Davi iHome Studio - 理会 · 践行</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        /* 基础与重置 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fefefe;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-x: hidden;
         }
-    </script>
-    <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
+
+        /* 头部与导航 */
+        header {
+            text-align: center;
+            padding: 4rem 1rem;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        .site-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+        .site-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* 主要章节 */
+        section {
+            padding: 5rem 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-of-type { border-bottom: none; }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #222;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 2px;
+            background: #d2232a;
+            margin: 0.5rem auto;
+        }
+
+        /* 第一章：理会 - 粒子画布 */
+        #particle-section {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+        #particle-canvas {
+            width: 100%;
+            height: 400px;
+            background: transparent;
+            border-radius: 2px;
+        }
+        .particle-controls {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .control-btn {
+            background: #222;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .control-btn:hover {
+            background: #d2232a;
+            transform: translateY(-2px);
+        }
+
+        /* 第二章：践行 - 时间线 */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #ddd;
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+        .timeline-content {
+            position: relative;
+            width: calc(50% - 40px);
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 3px solid #d2232a;
+        }
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            border-left: none;
+            border-right: 3px solid #222;
+        }
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+        .timeline-content p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* 第三章：知行合一 - 平衡器 */
+        .balance-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .balance-visual {
+            height: 200px;
+            position: relative;
+            margin: 3rem 0;
+        }
+        .balance-beam {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 4px;
+            background: #222;
+            transform: translate(-50%, -50%) rotate(var(--beam-angle, 0deg));
+            transform-origin: center;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .weight {
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 50px;
+            background: #d2232a;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(210, 35, 42, 0.3);
+        }
+        .weight-knowledge { left: 30%; }
+        .weight-action { left: 70%; }
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .slider-wrapper {
+            flex: 1;
+            max-width: 250px;
+        }
+        .slider-wrapper label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #222;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .timeline::before { left: 30px; }
+            .timeline-content {
+                width: calc(100% - 70px);
+                margin-left: 70px !important;
+                border-left: 3px solid #d2232a !important;
+                border-right: none !important;
             }
-            .text-shadow {
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            }
-            .transition-all-300 {
-                transition: all 0.3s ease;
-            }
-            .hover-scale {
-                transition: transform 0.3s ease;
-            }
-            .hover-scale:hover {
-                transform: scale(1.03);
-            }
-            .card-shadow {
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            }
-            .nav-shadow {
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            }
+            .slider-container { flex-direction: column; gap: 1.5rem; }
+            .slider-wrapper { max-width: 100%; }
         }
     </style>
 </head>
+<body>
+    <!-- 页眉 -->
+    <header>
+        <h1 class="site-title">理会 · 践行</h1>
+        <p class="site-subtitle">知是行之始，行是知之成。一个关于认知与行动的交互探索。</p>
+    </header>
 
-<body class="font-inter bg-light text-dark">
-    <!-- 移动端导航菜单按钮 -->
-    <div class="fixed top-4 right-4 z-50 md:hidden">
-        <button id="menu-toggle" class="bg-primary text-white p-2 rounded-full shadow-lg">
-            <i class="fa fa-bars text-xl"></i>
-        </button>
-    </div>
-
-    <!-- 导航栏 -->
-    <nav id="main-nav" class="fixed w-full top-0 left-0 bg-primary text-white z-40 nav-shadow transition-all duration-300 transform translate-y-0">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Davi丨我家Studio</h1>
-            <ul class="hidden md:flex space-x-8 text-sm font-medium">
-                <li><a href="#home" class="hover:text-secondary transition-colors">首页</a></li>
-                <li><a href="#properties" class="hover:text-secondary transition-colors">精选房源</a></li>
-                <li><a href="#about" class="hover:text-secondary transition-colors">关于我们</a></li>
-                <li><a href="#contact" class="hover:text-secondary transition-colors">联系我们</a></li>
-            </ul>
+    <!-- 第一章：理会 -->
+    <section id="particle-section">
+        <h2 class="section-title">理会 · 洞察本质</h2>
+        <canvas id="particle-canvas"></canvas>
+        <div class="particle-controls">
+            <button class="control-btn" id="btn-order">有序思维</button>
+            <button class="control-btn" id="btn-chaos">发散联想</button>
+            <button class="control-btn" id="btn-focus">专注凝聚</button>
         </div>
-    </nav>
-
-    <!-- 移动端导航菜单 -->
-    <div id="mobile-menu" class="fixed inset-0 bg-primary text-white z-30 transform translate-x-full transition-transform duration-300 md:hidden">
-        <div class="h-full flex flex-col justify-center items-center space-y-8">
-            <button id="close-menu" class="absolute top-4 right-4 text-white">
-                <i class="fa fa-times text-2xl"></i>
-            </button>
-            <a href="#home" class="text-2xl font-medium hover:text-secondary transition-colors">首页</a>
-            <a href="#properties" class="text-2xl font-medium hover:text-secondary transition-colors">精选房源</a>
-            <a href="#about" class="text-2xl font-medium hover:text-secondary transition-colors">关于我们</a>
-            <a href="#contact" class="text-2xl font-medium hover:text-secondary transition-colors">联系我们</a>
-        </div>
-    </div>
-
-    <!-- 英雄区域 -->
-    <section id="home" class="pt-24 md:pt-0 min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/90 to-primary">
-        <div class="container mx-auto px-4 py-16 md:py-24">
-            <div class="max-w-3xl mx-auto text-center">
-                <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-white mb-6 text-shadow">专注云南房产5年+</h2>
-                <p class="text-[clamp(1rem,2vw,1.25rem)] text-white/90 mb-8 leading-relaxed">
-                    服务百余家庭 | 昆明·普洱·版纳多城联动<br>为您找到理想家园
-                </p>
-                <a href="#properties" class="inline-block bg-secondary hover:bg-secondary/90 text-white font-semibold py-3 px-8 rounded-full text-lg shadow-lg hover-scale">
-                    查看房源
-                </a>
-            </div>
-        </div>
+        <p style="text-align: center; margin-top: 2rem; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
+            思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为“理”之过程。
+        </p>
     </section>
 
-    <!-- 精选房源 -->
-    <section id="properties" class="py-16 md:py-24 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">精选房源</h3>
-                <p class="text-gray-600 text-lg">昆明、普洱、版纳优质别墅/洋房/公寓</p>
+    <!-- 第二章：践行 -->
+    <section>
+        <h2 class="section-title">践行 · 时间之径</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>《尚书》 · 知易行难</h3>
+                    <p>“非知之艰，行之惟艰。” 中国思想史上对知行关系最早的著名论断。</p>
+                </div>
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- 昆明房源 -->
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=1" alt="滇池·湖光山色别墅" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">滇池·山海湾8号别墅</h4>
-                        <p class="text-primary font-bold text-lg mb-3">898万</p>
-                        <p class="text-gray-600 mb-4">4室2厅2卫·218㎡·南北通透·毛坯</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">滇池景观</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">双卫设计</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">端头户型</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">花园庭院</span>
-                        </div>
-                    </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>朱熹 · 理会践行</h3>
+                    <p>“只有两件事：理会，践行。” 强调穷理与力行的先后次序与必要性。</p>
                 </div>
-
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=2" alt="翠湖·翡翠湾洋房" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">翠湖·金康园洋房</h4>
-                        <p class="text-primary font-bold text-lg mb-3">235万</p>
-                        <p class="text-gray-600 mb-4">3室2厅1卫·126㎡·南北通透·中等装修</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">学区房</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">低密度社区</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近地铁</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">花园洋房</span>
-                        </div>
-                    </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>王阳明 · 知行合一</h3>
+                    <p>“知是行的主意，行是知的功夫。” 在心学体系中实现了知与行的本体统一。</p>
                 </div>
-
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=3" alt="万达·华府公寓" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">昆明</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">万达·昆明双塔公寓</h4>
-                        <p class="text-primary font-bold text-lg mb-3">135万</p>
-                        <p class="text-gray-600 mb-4">2室1厅1卫·92㎡·南北通透·精装修</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">市中心</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">配套齐全</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">地铁口</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 普洱房源 -->
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=4" alt="茶源·山水间洋房" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">普洱</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">普洱茶小镇洋房</h4>
-                        <p class="text-primary font-bold text-lg mb-3">79.8万</p>
-                        <p class="text-gray-600 mb-4">2室2厅1卫·89㎡·南北通透·毛坯</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">生态社区</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">低密度</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近公园</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">山景房</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=5" alt="阳光·国际公寓" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">普洱</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">普洱中心公寓</h4>
-                        <p class="text-primary font-bold text-lg mb-3">56.8万</p>
-                        <p class="text-gray-600 mb-4">1室1厅1卫·58㎡·南北通透·精装修</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">小户型</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">配套齐全</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近商圈</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 版纳房源 -->
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=6" alt="雨林·曼听御园别墅" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">版纳</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">融创·曼听公园别墅</h4>
-                        <p class="text-primary font-bold text-lg mb-3">368万</p>
-                        <p class="text-gray-600 mb-4">3室2厅2卫·135㎡·南北通透·精装修</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">豪华别墅</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">私人泳池</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">热带雨林景观</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">高端社区</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl overflow-hidden card-shadow hover-scale">
-                    <div class="h-60 overflow-hidden">
-                        <img src="https://picsum.photos/600/400?random=7" alt="融创·旅游度假区公寓" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <span class="inline-block bg-primary text-white text-sm px-3 py-1 rounded-full mb-3">版纳</span>
-                        <h4 class="text-xl font-bold text-dark mb-2">告庄西双景公寓</h4>
-                        <p class="text-primary font-bold text-lg mb-3">42.8万</p>
-                        <p class="text-gray-600 mb-4">1室1厅1卫·45㎡·南北通透·精装修</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">旅游度假区</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">度假配套</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">拎包入住</span>
-                            <span class="bg-blue-50 text-primary text-xs px-3 py-1 rounded-full">近景区</span>
-                        </div>
-                    </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" style="border-color: #2a7bd2;">
+                    <h3>当下 · 你的行动</h3>
+                    <p>每一个项目、每一次选择，都是古老思想在当下的实践与回响。</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 关于我们 -->
-    <section id="about" class="py-16 md:py-24 bg-light">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">关于我们</h3>
+    <!-- 第三章：合一 -->
+    <section>
+        <h2 class="section-title">知行合一 · 动态平衡</h2>
+        <div class="balance-container">
+            <p style="color: #555; margin-bottom: 2rem;">“知”与“行”并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
+            <div class="balance-visual">
+                <div class="balance-beam" id="balanceBeam"></div>
+                <div class="weight weight-knowledge" id="weightKnow">知</div>
+                <div class="weight weight-action" id="weightAction">行</div>
             </div>
-
-            <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-8">
-                    <img src="https://picsum.photos/300/300?random=8" alt="团队形象" class="w-48 h-48 rounded-full mx-auto object-cover shadow-lg">
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <label for="knowledgeSlider">理的深度 (知)：<span id="knowledgeValue">50</span>%</label>
+                    <input type="range" id="knowledgeSlider" min="0" max="100" value="50">
                 </div>
-                <p class="text-gray-600 text-lg mb-6 leading-relaxed text-center">
-                    我们是一支深耕云南房产市场5年的专业团队，始终秉持"客户至上"的服务理念，已成功帮助超100个家庭在昆明、普洱、版纳等地实现安家梦想。
-                </p>
-                <p class="text-gray-600 text-lg leading-relaxed text-center">
-                    关注我们，聆听1001个房产故事，了解每一个家背后的温暖与期待。
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- 联系我们 -->
-    <section id="contact" class="py-16 md:py-24 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h3 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-primary mb-4">联系我们</h3>
-                <p class="text-gray-600 text-lg">无论您有购房、租房需求，还是想了解更多房产信息，欢迎随时与我们联系！</p>
-            </div>
-
-            <div class="max-w-md mx-auto">
-                <div class="bg-light rounded-xl p-8 shadow-lg">
-                    <div class="flex items-center justify-center mb-6">
-                        <div class="bg-primary/10 p-4 rounded-full">
-                            <i class="fa fa-envelope text-primary text-2xl"></i>
-                        </div>
-                    </div>
-                    <a href="mailto:Davi-iHomeStudio@qq.com" class="block text-center text-primary font-semibold text-xl hover:text-primary/80 transition-colors">
-                        Davi-iHomeStudio@qq.com
-                    </a>
+                <div class="slider-wrapper">
+                    <label for="actionSlider">行的力度 (行)：<span id="actionValue">50</span>%</label>
+                    <input type="range" id="actionSlider" min="0" max="100" value="50">
                 </div>
             </div>
+            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: #222;">状态：知行均衡</p>
         </div>
     </section>
 
     <!-- 页脚 -->
-    <footer class="bg-primary text-white py-12">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-lg mb-4">Davi丨我家Studio</p>
-            <p>© 2025 版权所有</p>
-        </div>
+    <footer>
+        <p>理无专在，而学无止境也。然则问可少耶？</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2023 知行实验室 | 本页采用原生HTML/CSS/JS构建</p>
     </footer>
 
-    <!-- 返回顶部按钮 -->
-    <button id="back-to-top" class="fixed bottom-6 right-6 bg-primary text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
-        <i class="fa fa-arrow-up"></i>
-    </button>
-
     <script>
-        // 移动端菜单切换
-        const menuToggle = document.getElementById('menu-toggle');
-        const closeMenu = document.getElementById('close-menu');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mainNav = document.getElementById('main-nav');
+        // 第一章：粒子系统
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
 
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.remove('translate-x-full');
-            mobileMenu.classList.add('translate-x-0');
-        });
+        let particles = [];
+        let mode = 'order'; // 默认有序模式
 
-        closeMenu.addEventListener('click', () => {
-            mobileMenu.classList.remove('translate-x-0');
-            mobileMenu.classList.add('translate-x-full');
-        });
-
-        // 点击菜单项关闭菜单
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('translate-x-0');
-                mobileMenu.classList.add('translate-x-full');
-            });
-        });
-
-        // 滚动时导航栏效果
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                mainNav.classList.add('py-2');
-                mainNav.classList.remove('py-3');
-            } else {
-                mainNav.classList.add('py-3');
-                mainNav.classList.remove('py-2');
+        class Particle {
+            constructor() {
+                this.reset();
             }
-
-            // 返回顶部按钮显示/隐藏
-            const backToTopBtn = document.getElementById('back-to-top');
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.remove('opacity-0', 'invisible');
-                backToTopBtn.classList.add('opacity-100', 'visible');
-            } else {
-                backToTopBtn.classList.remove('opacity-100', 'visible');
-                backToTopBtn.classList.add('opacity-0', 'invisible');
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = 0;
+                this.vy = 0;
+                this.size = Math.random() * 2 + 0.5;
+                this.color = `rgba(34, 34, 34, ${0.7})`;
+                this.originalX = this.x;
+                this.originalY = this.y;
             }
-        });
-
-        // 返回顶部功能
-        document.getElementById('back-to-top').addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // 平滑滚动到锚点
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                if (targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+            update() {
+                // 根据模式更新粒子行为
+                if (mode === 'order') {
+                    // 有序：趋向规则网格
+                    const gridX = Math.round(this.x / 40) * 40 + 20;
+                    const gridY = Math.round(this.y / 40) * 40 + 20;
+                    this.vx += (gridX - this.x) * 0.01;
+                    this.vy += (gridY - this.y) * 0.01;
+                } else if (mode === 'chaos') {
+                    // 混沌：随机运动
+                    this.vx += (Math.random() - 0.5) * 0.2;
+                    this.vy += (Math.random() - 0.5) * 0.2;
+                } else if (mode === 'focus') {
+                    // 专注：向中心聚集
+                    const dx = canvas.width / 2 - this.x;
+                    const dy = canvas.height / 2 - this.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    this.vx += (dx / dist) * 0.05;
+                    this.vy += (dy / dist) * 0.05;
                 }
+
+                // 应用速度并添加阻尼
+                this.vx *= 0.95;
+                this.vy *= 0.95;
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // 边界处理
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        // 初始化粒子
+        function initParticles() {
+            particles = [];
+            const particleCount = (mode === 'focus') ? 150 : 80;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // 动画循环
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制连接线（仅有序和专注模式）
+            if (mode !== 'chaos') {
+                ctx.strokeStyle = 'rgba(210, 35, 42, 0.1)';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 60) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // 更新并绘制粒子
+            particles.forEach(p => {
+                p.update();
+                p.draw();
             });
+            requestAnimationFrame(animateParticles);
+        }
+
+        // 模式控制
+        document.getElementById('btn-order').addEventListener('click', () => { mode = 'order'; initParticles(); });
+        document.getElementById('btn-chaos').addEventListener('click', () => { mode = 'chaos'; initParticles(); });
+        document.getElementById('btn-focus').addEventListener('click', () => { mode = 'focus'; initParticles(); });
+
+        // 窗口调整
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            initParticles();
         });
+
+        // 启动粒子系统
+        initParticles();
+        animateParticles();
+
+        // 第三章：知行平衡器
+        const knowledgeSlider = document.getElementById('knowledgeSlider');
+        const actionSlider = document.getElementById('actionSlider');
+        const knowledgeValue = document.getElementById('knowledgeValue');
+        const actionValue = document.getElementById('actionValue');
+        const balanceBeam = document.getElementById('balanceBeam');
+        const weightKnow = document.getElementById('weightKnow');
+        const weightAction = document.getElementById('weightAction');
+        const balanceState = document.getElementById('balanceState');
+
+        function updateBalance() {
+            const know = parseInt(knowledgeSlider.value);
+            const action = parseInt(actionSlider.value);
+
+            knowledgeValue.textContent = know;
+            actionValue.textContent = action;
+
+            // 计算天平倾斜角度（简单模拟）
+            const diff = action - know;
+            const angle = diff * 0.3; // 缩放因子
+            balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
+
+            // 根据差值更新状态文本
+            const absDiff = Math.abs(diff);
+            if (absDiff < 10) {
+                balanceState.textContent = "状态：知行合一 (理想平衡)";
+                balanceState.style.color = "#2a7bd2";
+            } else if (diff > 0) {
+                balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
+                balanceState.style.color = "#d2232a";
+            } else {
+                balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
+                balanceState.style.color = "#222";
+            }
+        }
+
+        knowledgeSlider.addEventListener('input', updateBalance);
+        actionSlider.addEventListener('input', updateBalance);
+        updateBalance(); // 初始化
     </script>
 </body>
-
 </html>
