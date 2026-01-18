@@ -219,6 +219,46 @@
             cursor: pointer;
         }
 
+        /* 页脚链接模块样式 */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .footer-link {
+            color: #444;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .footer-link:hover {
+            color: #d2232a;
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+        }
+        .footer-link:first-child {
+            color: #d2232a;
+            border: 1px solid rgba(210, 35, 42, 0.3);
+            font-weight: 600;
+        }
+        .footer-link:first-child:hover {
+            background: rgba(210, 35, 42, 0.1);
+        }
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+        }
+
         /* 页脚 */
         footer {
             text-align: center;
@@ -238,6 +278,7 @@
             }
             .slider-container { flex-direction: column; gap: 1.5rem; }
             .slider-wrapper { max-width: 100%; }
+            .footer-links { gap: 1rem; padding: 1rem; }
         }
     </style>
 </head>
@@ -319,6 +360,15 @@
 
     <!-- 页脚 -->
     <footer>
+        <!-- 新增的链接模块 -->
+        <div class="footer-links">
+            <a href="/html" class="footer-link" title="进入起始目录">_START</a>
+            <span class="link-divider">|</span>
+            <a href="#particle-section" class="footer-link" title="回到思维粒子">理会</a>
+            <span class="link-divider">|</span>
+            <a href="#balanceState" class="footer-link" title="查看知行平衡">践行</a>
+        </div>
+        
         <p>理无专在，而学无止境也。然则问可少耶？</p>
         <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 Davi iHome Studio - 理会 · 践行 | 本页采用原生HTML/CSS/JS构建</p>
     </footer>
