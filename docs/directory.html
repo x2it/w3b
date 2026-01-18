@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="知行实验室内容目录 - Davi iHome Studio 的知识索引中心，系统化整理所有项目、文章和资源">
-    <title>知行实验室目录 - Davi iHome Studio 内容索引中心</title>
+    <meta name="description" content="践行 · 我的实践工具箱 - 记录正在使用和探索的方法、工具与资源">
+    <title>践行 · 我的实践工具箱 - 方法、工具与资源收集</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         :root {
@@ -58,89 +58,146 @@
             }
         }
         
-        header {
+        /* 头部样式 */
+        .page-header {
             text-align: center;
-            padding: 3rem 1rem 2.5rem;
-            border-bottom: 1px solid var(--gray-border);
+            padding: 3rem 1rem 2rem;
             margin-bottom: 2rem;
             background: white;
             border-radius: 12px;
             box-shadow: var(--card-shadow);
-            margin-top: 1rem;
+            border: 1px solid var(--gray-border);
         }
         
         @media (max-width: 768px) {
-            header { 
+            .page-header { 
                 padding: 2rem 1rem 1.5rem; 
                 margin-bottom: 1.5rem;
             }
         }
         
-        .lab-title {
+        .page-title {
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 300;
             letter-spacing: -0.02em;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             color: var(--dark-color);
             line-height: 1.2;
         }
         
-        .lab-subtitle {
+        .page-subtitle {
             font-size: 1.1rem;
             font-weight: 400;
             color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
             line-height: 1.5;
         }
         
-        .lab-description {
-            color: var(--text-secondary);
-            max-width: 800px;
+        /* 优化后的分类导航 - 单行显示 */
+        .category-nav {
+            max-width: 900px;
             margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+        
+        .nav-tab {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 480px) {
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+        }
+        
+        .nav-tab:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .nav-tab.active {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.1);
+            border-color: rgba(210, 35, 42, 0.3);
+        }
+        
+        /* 内容容器 */
+        .content-container {
+            padding: 1rem 0 3rem;
+        }
+        
+        .intro-note {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-secondary);
             font-size: 0.95rem;
             line-height: 1.6;
             padding: 0 1rem;
         }
         
-        .directory-container {
-            padding: 1rem 0 4rem;
-        }
-        
-        .directory-intro {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 2.5rem;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
-            padding: 0 1rem;
-        }
-        
         @media (max-width: 768px) {
-            .directory-intro { 
+            .intro-note { 
                 margin-bottom: 2rem; 
             }
         }
         
-        .categories-grid {
+        /* 工具卡片网格 */
+        .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 1.5rem;
             max-width: 1200px;
             margin: 0 auto;
         }
         
         @media (max-width: 768px) {
-            .categories-grid {
+            .tools-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
         }
         
-        .category-card {
+        .tool-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
@@ -150,137 +207,124 @@
             height: 100%;
         }
         
-        .category-card:hover {
-            transform: translateY(-5px);
+        .tool-card:hover {
+            transform: translateY(-3px);
             box-shadow: var(--card-hover-shadow);
             border-color: rgba(210, 35, 42, 0.2);
         }
         
-        .category-header {
-            padding: 1.8rem 1.8rem 1.2rem;
+        .tool-header {
+            padding: 1.2rem;
             border-bottom: 1px solid var(--gray-border);
             background: linear-gradient(135deg, var(--gray-light), #f0f0f0);
-            position: relative;
         }
         
-        @media (max-width: 480px) {
-            .category-header {
-                padding: 1.5rem 1.5rem 1rem;
-            }
-        }
-        
-        .category-icon {
-            width: 56px;
-            height: 56px;
+        .tool-icon {
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1.2rem;
-            font-size: 1.6rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
             color: var(--primary-color);
             box-shadow: 0 3px 8px rgba(0,0,0,0.08);
             border: 2px solid rgba(210, 35, 42, 0.1);
         }
         
         @media (max-width: 480px) {
-            .category-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.4rem;
-                margin-bottom: 1rem;
+            .tool-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                margin-bottom: 0.6rem;
             }
         }
         
-        .category-title {
-            font-size: 1.3rem;
+        .tool-title {
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             color: var(--dark-color);
             line-height: 1.3;
         }
         
-        .category-count {
+        .tool-count {
             display: inline-block;
             background: rgba(210, 35, 42, 0.1);
             color: var(--primary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
             font-weight: 500;
         }
         
-        .category-content {
-            padding: 1.5rem 1.8rem;
+        .tool-content {
+            padding: 1.2rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
         
-        @media (max-width: 480px) {
-            .category-content {
-                padding: 1.2rem 1.5rem;
-            }
-        }
-        
-        .category-description {
+        .tool-desc {
             color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             line-height: 1.6;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             flex-grow: 1;
         }
         
-        .links-list {
+        .tool-links {
             list-style: none;
             margin: 0;
             padding: 0;
         }
         
-        .link-item {
-            margin-bottom: 0.9rem;
+        .tool-link-item {
+            margin-bottom: 0.6rem;
             position: relative;
-            padding-left: 1.2rem;
+            padding-left: 1rem;
         }
         
-        .link-item:last-child {
+        .tool-link-item:last-child {
             margin-bottom: 0;
         }
         
-        .link-item::before {
+        .tool-link-item::before {
             content: '→';
             position: absolute;
             left: 0;
             color: var(--primary-color);
             font-weight: bold;
             transition: transform 0.2s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         
-        .link-item:hover::before {
+        .tool-link-item:hover::before {
             transform: translateX(3px);
         }
         
-        .link-item a {
+        .tool-link-item a {
             color: var(--text-primary);
             text-decoration: none;
             font-weight: 500;
             display: block;
-            padding: 0.4rem 0;
+            padding: 0.3rem 0;
             border-bottom: 1px solid transparent;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             line-height: 1.4;
         }
         
-        .link-item a:hover {
+        .tool-link-item a:hover {
             color: var(--primary-color);
             border-bottom-color: rgba(210, 35, 42, 0.3);
             padding-left: 5px;
         }
         
-        .link-status {
+        .usage-tag {
             display: inline-block;
             font-size: 0.7rem;
             padding: 0.2rem 0.5rem;
@@ -289,119 +333,142 @@
             vertical-align: middle;
         }
         
-        .status-active {
+        .tag-using {
             background: rgba(42, 123, 210, 0.1);
             color: #2a7bd2;
         }
         
-        .status-new {
+        .tag-new {
             background: rgba(210, 35, 42, 0.1);
             color: var(--primary-color);
         }
         
-        .status-upcoming {
+        .tag-trying {
             background: rgba(155, 155, 155, 0.1);
             color: var(--text-light);
         }
         
-        .category-footer {
-            padding: 1.2rem 1.8rem;
+        .tool-footer {
+            padding: 1rem;
             background: var(--gray-light);
             border-top: 1px solid var(--gray-border);
             text-align: center;
         }
         
-        @media (max-width: 480px) {
-            .category-footer {
-                padding: 1rem 1.5rem;
-            }
-        }
-        
-        .view-all {
+        .explore-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             background: var(--dark-color);
             color: white;
             text-decoration: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
             font-weight: 500;
             transition: all 0.3s ease;
             width: 100%;
-            max-width: 180px;
-            min-height: 44px;
-            font-size: 0.95rem;
+            max-width: 160px;
+            min-height: 40px;
+            font-size: 0.9rem;
             touch-action: manipulation;
+            border: 2px solid var(--dark-color);
         }
         
-        .view-all:hover {
+        .explore-btn:hover {
             background: var(--primary-color);
+            border-color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.2);
         }
         
-        .quick-access {
-            max-width: 1000px;
-            margin: 3rem auto 4rem;
-            padding: 2rem;
-            background: var(--gray-light);
-            border-radius: 16px;
+        /* 快速查找区域 */
+        .quick-find {
+            max-width: 900px;
+            margin: 3rem auto 2rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
             border: 1px solid var(--gray-border);
+            box-shadow: var(--card-shadow);
         }
         
         @media (max-width: 768px) {
-            .quick-access {
-                padding: 1.5rem;
-                margin: 2.5rem auto 3rem;
+            .quick-find {
+                padding: 1.2rem;
+                margin: 2.5rem auto 1.5rem;
             }
         }
         
-        .quick-access h3 {
+        .quick-find h3 {
             text-align: center;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
             color: var(--dark-color);
         }
         
-        .access-tags {
+        .find-tags {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.8rem;
+            gap: 0.6rem;
         }
         
         @media (max-width: 480px) {
-            .access-tags {
-                gap: 0.6rem;
+            .find-tags {
+                gap: 0.5rem;
             }
         }
         
-        .access-tag {
-            background: white;
-            padding: 0.6rem 1.2rem;
-            border-radius: 30px;
+        .find-tag {
+            background: var(--gray-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             text-decoration: none;
             color: var(--text-primary);
             font-weight: 500;
             border: 1px solid var(--gray-border);
             transition: all 0.3s ease;
-            font-size: 0.9rem;
-            min-height: 40px;
+            font-size: 0.85rem;
+            min-height: 36px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             touch-action: manipulation;
         }
         
-        .access-tag:hover {
+        .find-tag:hover {
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.15);
+            box-shadow: 0 3px 6px rgba(210, 35, 42, 0.15);
         }
         
+        /* 个人推荐区域 */
+        .personal-recommend {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(210, 35, 42, 0.03), rgba(34, 34, 34, 0.03));
+            border-radius: 10px;
+            border: 1px solid var(--gray-border);
+            text-align: center;
+        }
+        
+        .recommend-title {
+            font-size: 1.1rem;
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+        }
+        
+        .recommend-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* 底部导航 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -430,7 +497,6 @@
             padding: 0.6rem 1.2rem;
             border-radius: 8px;
             transition: all 0.3s ease;
-            position: relative;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -438,6 +504,8 @@
             min-width: 100px;
             text-align: center;
             touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
         }
         
         @media (max-width: 480px) {
@@ -445,6 +513,7 @@
                 font-size: 0.95rem;
                 padding: 0.5rem 1rem;
                 min-width: 90px;
+                flex: 1;
             }
         }
         
@@ -452,6 +521,8 @@
             color: var(--primary-color);
             background: rgba(210, 35, 42, 0.05);
             transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
         }
         
         .footer-link:active {
@@ -472,12 +543,13 @@
         
         footer {
             text-align: center;
-            padding: 2.5rem 1rem;
+            padding: 2rem 1rem;
             color: var(--text-light);
             font-size: 0.9rem;
             background: white;
             border-radius: 12px;
             margin-top: 2rem;
+            border: 1px solid var(--gray-border);
         }
         
         footer p {
@@ -493,275 +565,295 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1 class="lab-title">知行实验室</h1>
-        <p class="lab-subtitle">内容目录 · 知识索引 · 资源导航</p>
-        <div class="lab-description">
-            这里汇集了所有项目、思考和资源的系统化索引。每个分类代表一个探索方向，每个链接都是一扇通往深度内容的大门。设计遵循"理会"与"践行"的循环哲学。
+    <header class="page-header">
+        <h1 class="page-title">我的实践工具箱</h1>
+        <p class="page-subtitle">记录我正在使用和探索的方法、工具与资源</p>
+        
+        <div class="category-nav">
+            <div class="nav-tabs">
+                <a href="#thinking-tools" class="nav-tab active">思考工具</a>
+                <a href="#creation-tools" class="nav-tab">创作工具</a>
+                <a href="#productivity" class="nav-tab">效率方法</a>
+                <a href="#learning" class="nav-tab">学习资源</a>
+                <a href="#project-kits" class="nav-tab">项目套件</a>
+            </div>
         </div>
     </header>
 
-    <div class="directory-container">
-        <div class="directory-intro">
-            <p>本目录采用网格化分类设计，共包含 <strong>6个核心分类</strong>，<strong>24个主要内容链接</strong>，以及多个专题索引。所有内容持续更新中，点击分类卡片可查看详细内容。</p>
+    <div class="content-container">
+        <div class="intro-note">
+            <p>这里整理的是我个人在用的工具和方法，不是什么权威推荐，只是我的实践记录。工具在变，方法在调，但核心是找到适合自己的工作方式。</p>
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">标注说明：<span style="color: #2a7bd2;">在用</span> · <span style="color: #d2232a;">新试</span> · <span style="color: #888;">尝试</span></p>
         </div>
 
-        <div class="categories-grid">
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🧠</div>
-                    <h3 class="category-title">核心思想</h3>
-                    <span class="category-count">8个条目</span>
+        <div class="tools-grid">
+            <!-- 思考工具 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🧠</div>
+                    <h3 class="tool-title">思考工具</h3>
+                    <span class="tool-count">6个方法</span>
                 </div>
-                <div class="category-content">
-                    <p class="category-description">关于"理会"与"践行"的哲学基础、理论框架和核心概念的系统阐述。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
+                <div class="tool-content">
+                    <p class="tool-desc">帮助理清思路、深度思考的方法和习惯</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
                             <a href="#">
-                                理会·践行的起源与演变
-                                <span class="link-status status-active">已发布</span>
+                                晨间日记法
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                从朱熹到王阳明：知行观
-                                <span class="link-status status-active">已发布</span>
+                                卡片笔记实践
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                现代语境下的知行合一
-                                <span class="link-status status-new">新内容</span>
+                                AI辅助思考
+                                <span class="usage-tag tag-new">新试</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                思维方法论专题
-                                <span class="link-status status-active">已发布</span>
+                                思维散步法
+                                <span class="usage-tag tag-trying">尝试</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部思想资源</a>
+                <div class="tool-footer">
+                    <a href="#thinking-tools" class="explore-btn">探索方法</a>
                 </div>
             </div>
 
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">⚙️</div>
-                    <h3 class="category-title">技术实现</h3>
-                    <span class="category-count">6个条目</span>
+            <!-- 创作工具 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">✍️</div>
+                    <h3 class="tool-title">创作工具</h3>
+                    <span class="tool-count">8个工具</span>
                 </div>
-                <div class="category-content">
-                    <p class="category-description">前端技术、交互设计和实现细节，展示"技术含量内蕴"的设计哲学。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
+                <div class="tool-content">
+                    <p class="tool-desc">从构思到发布，内容创作的全流程工具</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
                             <a href="#">
-                                Canvas粒子系统详解
-                                <span class="link-status status-active">已发布</span>
+                                写作工作流
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                原生JS交互设计模式
-                                <span class="link-status status-active">已发布</span>
+                                AI写作助手
+                                <span class="usage-tag tag-new">新试</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                响应式时间线实现
-                                <span class="link-status status-active">已发布</span>
+                                内容规划表
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                性能优化与最佳实践
-                                <span class="link-status status-upcoming">筹备中</span>
+                                发布检查清单
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部技术文档</a>
+                <div class="tool-footer">
+                    <a href="#creation-tools" class="explore-btn">查看工具</a>
                 </div>
             </div>
 
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🚀</div>
-                    <h3 class="category-title">项目展示</h3>
-                    <span class="category-count">5个条目</span>
+            <!-- 效率方法 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">⚡️</div>
+                    <h3 class="tool-title">效率方法</h3>
+                    <span class="tool-count">5个系统</span>
                 </div>
-                <div class="category-content">
-                    <p class="category-description">完整的项目案例，从概念到实现，体现"理会"与"践行"的完整循环。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="index.html">
-                                知行可视化系统
-                                <span class="link-status status-active">已上线</span>
+                <div class="tool-content">
+                    <p class="tool-desc">管理时间、任务和注意力的个人实践</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
+                            <a href="#">
+                                时间块工作法
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                iHome Studio知识库
-                                <span class="link-status status-upcoming">开发中</span>
+                                数字断舍离
+                                <span class="usage-tag tag-new">新试</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                交互式哲学实验
-                                <span class="link-status status-new">新项目</span>
+                                专注力训练
+                                <span class="usage-tag tag-trying">尝试</span>
                             </a>
                         </li>
-                        <li class="link-item">
+                        <li class="tool-link-item">
                             <a href="#">
-                                开源组件库
-                                <span class="link-status status-upcoming">计划中</span>
+                                周回顾模板
+                                <span class="usage-tag tag-using">在用</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部项目</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="categories-grid" style="margin-top: 2rem;">
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">📝</div>
-                    <h3 class="category-title">文章随笔</h3>
-                    <span class="category-count">12+篇</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">技术思考、哲学笔记和创作心得，记录思考过程和实践体会。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                朴素界面的技术深度
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计中的留白哲学
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                从概念到实现：完整流程
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                数字时代的知行关系
-                                <span class="link-status status-new">新文章</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部文章</a>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🔧</div>
-                    <h3 class="category-title">资源工具</h3>
-                    <span class="category-count">15+项</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">实用工具、资源推荐和学习材料，支持持续学习和实践。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                前端开发工具链
-                                <span class="link-status status-active">已整理</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计资源精选
-                                <span class="link-status status-active">已整理</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                哲学原著电子版
-                                <span class="link-status status-upcoming">整理中</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                学习路径建议
-                                <span class="link-status status-new">新内容</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">查看全部资源</a>
-                </div>
-            </div>
-
-            <div class="category-card">
-                <div class="category-header">
-                    <div class="category-icon">🏛️</div>
-                    <h3 class="category-title">关于实验室</h3>
-                    <span class="category-count">4个条目</span>
-                </div>
-                <div class="category-content">
-                    <p class="category-description">实验室的起源、理念、更新日志和未来计划，了解背后的故事。</p>
-                    <ul class="links-list">
-                        <li class="link-item">
-                            <a href="#">
-                                实验室理念与使命
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                版本更新日志
-                                <span class="link-status status-active">持续更新</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                设计规范与原则
-                                <span class="link-status status-active">已发布</span>
-                            </a>
-                        </li>
-                        <li class="link-item">
-                            <a href="#">
-                                未来路线图
-                                <span class="link-status status-new">2026计划</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="category-footer">
-                    <a href="#" class="view-all">关于我们</a>
+                <div class="tool-footer">
+                    <a href="#productivity" class="explore-btn">学习方法</a>
                 </div>
             </div>
         </div>
 
-        <div class="quick-access">
-            <h3>快速索引</h3>
-            <div class="access-tags">
-                <a href="#核心思想" class="access-tag">核心思想</a>
-                <a href="#技术实现" class="access-tag">技术实现</a>
-                <a href="#项目展示" class="access-tag">项目展示</a>
-                <a href="#文章随笔" class="access-tag">文章随笔</a>
-                <a href="#资源工具" class="access-tag">资源工具</a>
-                <a href="#实验室" class="access-tag">实验室信息</a>
-                <a href="#最新内容" class="access-tag">最新内容</a>
-                <a href="#即将上线" class="access-tag">即将上线</a>
+        <div class="tools-grid" style="margin-top: 1.5rem;">
+            <!-- 学习资源 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">📚</div>
+                    <h3 class="tool-title">学习资源</h3>
+                    <span class="tool-count">10+资源</span>
+                </div>
+                <div class="tool-content">
+                    <p class="tool-desc">个人学习路径和值得推荐的资源</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
+                            <a href="#">
+                                AI学习路线
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                优质Newsletter
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                深度播客推荐
+                                <span class="usage-tag tag-new">新试</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                书单与笔记
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tool-footer">
+                    <a href="#learning" class="explore-btn">查看资源</a>
+                </div>
             </div>
+
+            <!-- 项目套件 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🛠️</div>
+                    <h3 class="tool-title">项目套件</h3>
+                    <span class="tool-count">4个模板</span>
+                </div>
+                <div class="tool-content">
+                    <p class="tool-desc">启动和管理个人项目的工具包</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
+                            <a href="#">
+                                项目启动清单
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                进度跟踪表
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                复盘模板
+                                <span class="usage-tag tag-new">新试</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                协作工具集
+                                <span class="usage-tag tag-trying">尝试</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tool-footer">
+                    <a href="#project-kits" class="explore-btn">使用套件</a>
+                </div>
+            </div>
+
+            <!-- 数字生活 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">🌐</div>
+                    <h3 class="tool-title">数字生活</h3>
+                    <span class="tool-count">7个实践</span>
+                </div>
+                <div class="tool-content">
+                    <p class="tool-desc">在数字时代保持平衡的生活实践</p>
+                    <ul class="tool-links">
+                        <li class="tool-link-item">
+                            <a href="#">
+                                数字排毒计划
+                                <span class="usage-tag tag-trying">尝试</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                信息摄入管理
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                社交媒体使用
+                                <span class="usage-tag tag-using">在用</span>
+                            </a>
+                        </li>
+                        <li class="tool-link-item">
+                            <a href="#">
+                                数字资产整理
+                                <span class="usage-tag tag-new">新试</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tool-footer">
+                    <a href="#digital-life" class="explore-btn">查看实践</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-find">
+            <h3>快速查找</h3>
+            <div class="find-tags">
+                <a href="#daily-tools" class="find-tag">日常工具</a>
+                <a href="#ai-assistant" class="find-tag">AI助手</a>
+                <a href="#time-management" class="find-tag">时间管理</a>
+                <a href="#note-taking" class="find-tag">笔记方法</a>
+                <a href="#content-creation" class="find-tag">内容创作</a>
+                <a href="#learning-method" class="find-tag">学习方法</a>
+                <a href="#digital-wellness" class="find-tag">数字健康</a>
+                <a href="#recent-updates" class="find-tag">最近更新</a>
+            </div>
+        </div>
+
+        <div class="personal-recommend">
+            <h3 class="recommend-title">个人体会</h3>
+            <p class="recommend-text">工具和方法不在于多，而在于真正适合自己的工作节奏和思维习惯。我经常调整和优化这些工具，最重要的是保持灵活性，不被工具所困。</p>
+            <p class="recommend-text" style="font-size: 0.9rem; color: var(--text-light);">最近在简化工具链，减少切换成本，把更多精力放在真正重要的事情上。</p>
         </div>
     </div>
 
@@ -771,41 +863,43 @@
             <span class="link-divider">|</span>
             <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
             <span class="link-divider">|</span>
-            <a href="#核心思想" class="footer-link" title="跳转到内容分类">践行</a>
+            <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
         </div>
         
-        <p>理无专在，而学无止境也。然则问可少耶？</p>
+        <p>工具是桥梁，行动是彼岸</p>
         <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.category-card');
-            
-            cards.forEach(card => {
-                let touchStartY = 0;
-                let touchEndY = 0;
-                
-                card.addEventListener('touchstart', function(e) {
-                    touchStartY = e.changedTouches[0].screenY;
-                    this.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease';
-                }, { passive: true });
-                
-                card.addEventListener('touchend', function(e) {
-                    touchEndY = e.changedTouches[0].screenY;
+            // 导航标签交互
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
                     
-                    if (Math.abs(touchEndY - touchStartY) < 10) {
-                        this.style.transform = 'translateY(-3px) scale(1.02)';
-                        
-                        setTimeout(() => {
-                            this.style.transform = 'translateY(-5px)';
-                        }, 150);
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 平滑滚动到对应区域
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
                     }
-                }, { passive: true });
-                
+                });
+            });
+            
+            // 卡片交互效果
+            const cards = document.querySelectorAll('.tool-card');
+            cards.forEach(card => {
                 card.addEventListener('mouseenter', function() {
                     if (window.matchMedia('(hover: hover)').matches) {
-                        const icon = this.querySelector('.category-icon');
+                        const icon = this.querySelector('.tool-icon');
                         if (icon) {
                             icon.style.transform = 'scale(1.1) rotate(5deg)';
                             icon.style.transition = 'transform 0.3s ease';
@@ -815,36 +909,25 @@
                 
                 card.addEventListener('mouseleave', function() {
                     if (window.matchMedia('(hover: hover)').matches) {
-                        const icon = this.querySelector('.category-icon');
+                        const icon = this.querySelector('.tool-icon');
                         if (icon) {
                             icon.style.transform = 'scale(1) rotate(0deg)';
                         }
-                        this.style.transform = 'translateY(0)';
                     }
                 });
             });
             
-            const links = document.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('touchstart', function() {
-                    this.style.opacity = '0.8';
-                }, { passive: true });
-                
-                link.addEventListener('touchend', function() {
-                    this.style.opacity = '1';
-                }, { passive: true });
-            });
-            
-            const tags = document.querySelectorAll('.access-tag');
-            tags.forEach(tag => {
+            // 快速标签交互
+            const findTags = document.querySelectorAll('.find-tag');
+            findTags.forEach(tag => {
                 tag.addEventListener('click', function(e) {
                     e.preventDefault();
                     
                     this.style.transform = 'translateY(-2px) scale(1.05)';
+                    const tagName = this.textContent;
                     
-                    const targetCategory = this.textContent.trim();
-                    
-                    console.log(`快速访问: ${targetCategory}`);
+                    // 模拟搜索功能
+                    console.log(`查找: ${tagName}`);
                     
                     setTimeout(() => {
                         this.style.transform = 'translateY(0) scale(1)';
@@ -852,16 +935,53 @@
                 });
             });
             
+            // 移动端触摸优化
             document.addEventListener('touchstart', function() {}, {passive: true});
             
+            // 防止双击缩放
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function(event) {
-                const now = (new Date()).getTime();
+                const now = Date.now();
                 if (now - lastTouchEnd <= 300) {
                     event.preventDefault();
                 }
                 lastTouchEnd = now;
             }, false);
+            
+            // 链接触摸反馈
+            const clickableElements = document.querySelectorAll('a, .nav-tab, .find-tag, .explore-btn');
+            clickableElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                }, {passive: true});
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                }, {passive: true});
+            });
+            
+            // 滚动时更新导航高亮
+            const sections = document.querySelectorAll('section');
+            window.addEventListener('scroll', function() {
+                let current = '';
+                const scrollPosition = window.scrollY + 150;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.getAttribute('href') === `#${current}`) {
+                        tab.classList.add('active');
+                    }
+                });
+            });
         });
     </script>
 </body>
