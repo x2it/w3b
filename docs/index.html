@@ -41,7 +41,6 @@
             -webkit-text-size-adjust: 100%;
         }
         
-        /* 响应式字体 */
         @media (max-width: 768px) {
             html { font-size: 15px; }
         }
@@ -51,7 +50,6 @@
             body { padding: 15px; }
         }
         
-        /* 头部 */
         header {
             text-align: center;
             padding: 3rem 1rem;
@@ -80,7 +78,6 @@
             line-height: 1.5;
         }
         
-        /* 章节 */
         section {
             padding: 4rem 1rem;
             border-bottom: 1px solid var(--gray-border);
@@ -121,7 +118,6 @@
             margin: 0.75rem auto;
         }
         
-        /* 粒子系统 */
         #particle-section {
             min-height: 60vh;
             display: flex;
@@ -197,7 +193,6 @@
             transform: translateY(0);
         }
         
-        /* 时间线 */
         .timeline {
             position: relative;
             max-width: 800px;
@@ -263,7 +258,6 @@
             line-height: 1.5;
         }
         
-        /* 平衡器 */
         .balance-container {
             max-width: 600px;
             margin: 0 auto;
@@ -376,7 +370,6 @@
             background: var(--primary-color);
         }
         
-        /* 页脚导航 - 统一样式 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -445,7 +438,6 @@
             }
         }
         
-        /* 页脚 */
         footer {
             text-align: center;
             padding: 2.5rem 1rem;
@@ -459,20 +451,18 @@
         }
         
         .copyright {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             opacity: 0.8;
             margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- 页眉 -->
     <header>
         <h1 class="site-title">理会 · 践行</h1>
         <p class="site-subtitle">知是行之始，行是知之成。一个关于认知与行动的交互探索。</p>
     </header>
 
-    <!-- 第一章：理会 -->
     <section id="particle-section">
         <h2 class="section-title">理会 · 洞察本质</h2>
         <canvas id="particle-canvas"></canvas>
@@ -486,7 +476,6 @@
         </p>
     </section>
 
-    <!-- 第二章：践行 -->
     <section>
         <h2 class="section-title">践行 · 时间之径</h2>
         <div class="timeline">
@@ -517,7 +506,6 @@
         </div>
     </section>
 
-    <!-- 第三章：合一 -->
     <section>
         <h2 class="section-title">知行合一 · 动态平衡</h2>
         <div class="balance-container">
@@ -541,7 +529,6 @@
         </div>
     </section>
 
-    <!-- 页脚 -->
     <footer>
         <div class="footer-links">
             <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
@@ -550,11 +537,10 @@
         </div>
         
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行 | 原生构建</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
     </footer>
 
     <script>
-        // 粒子系统
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         
@@ -593,19 +579,15 @@
             }
             
             update() {
-                // 根据模式更新粒子行为
                 if (mode === 'order') {
-                    // 有序：趋向规则网格
                     const gridX = Math.round(this.x / 40) * 40 + 20;
                     const gridY = Math.round(this.y / 40) * 40 + 20;
                     this.vx += (gridX - this.x) * 0.01;
                     this.vy += (gridY - this.y) * 0.01;
                 } else if (mode === 'chaos') {
-                    // 混沌：随机运动
                     this.vx += (Math.random() - 0.5) * 0.2;
                     this.vy += (Math.random() - 0.5) * 0.2;
                 } else if (mode === 'focus') {
-                    // 专注：向中心聚集
                     const dx = canvasSize.width / 2 - this.x;
                     const dy = canvasSize.height / 2 - this.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
@@ -615,13 +597,11 @@
                     }
                 }
 
-                // 应用速度并添加阻尼
                 this.vx *= 0.95;
                 this.vy *= 0.95;
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // 边界处理
                 if (this.x < -10 || this.x > canvasSize.width + 10 || 
                     this.y < -10 || this.y > canvasSize.height + 10) {
                     this.reset();
@@ -636,7 +616,6 @@
             }
         }
 
-        // 初始化粒子
         function initParticles() {
             particles = [];
             const particleCount = (mode === 'focus') ? 120 : 60;
@@ -645,11 +624,9 @@
             }
         }
 
-        // 动画循环
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 绘制连接线（仅有序和专注模式）
             if (mode !== 'chaos') {
                 ctx.strokeStyle = 'rgba(210, 35, 42, 0.1)';
                 ctx.lineWidth = 0.5;
@@ -668,7 +645,6 @@
                 }
             }
 
-            // 更新并绘制粒子
             particles.forEach(p => {
                 p.update();
                 p.draw();
@@ -677,7 +653,6 @@
             animationId = requestAnimationFrame(animateParticles);
         }
 
-        // 模式控制
         function setMode(newMode) {
             mode = newMode;
             initParticles();
@@ -687,7 +662,6 @@
         document.getElementById('btn-chaos').addEventListener('click', () => setMode('chaos'));
         document.getElementById('btn-focus').addEventListener('click', () => setMode('focus'));
 
-        // 窗口调整
         window.addEventListener('resize', () => {
             if (animationId) {
                 cancelAnimationFrame(animationId);
@@ -697,11 +671,9 @@
             animateParticles();
         });
 
-        // 启动粒子系统
         initParticles();
         animateParticles();
 
-        // 知行平衡器
         const knowledgeSlider = document.getElementById('knowledgeSlider');
         const actionSlider = document.getElementById('actionSlider');
         const knowledgeValue = document.getElementById('knowledgeValue');
@@ -716,12 +688,10 @@
             knowledgeValue.textContent = know;
             actionValue.textContent = action;
 
-            // 计算天平倾斜角度
             const diff = action - know;
             const angle = diff * 0.3;
             balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
 
-            // 根据差值更新状态文本
             const absDiff = Math.abs(diff);
             if (absDiff < 10) {
                 balanceState.textContent = "状态：知行合一 (理想平衡)";
@@ -737,9 +707,8 @@
 
         knowledgeSlider.addEventListener('input', updateBalance);
         actionSlider.addEventListener('input', updateBalance);
-        updateBalance(); // 初始化
+        updateBalance();
         
-        // 触摸设备优化
         document.addEventListener('touchstart', function() {}, {passive: true});
     </script>
 </body>
