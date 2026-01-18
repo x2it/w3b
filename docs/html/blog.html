@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Davi的个人思考空间 - 记录在AI与Web3时代的观察、实践与反思">
+    <title>理会 · Davi的思考笔记 - 在变化中寻找不变</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #d2232a;
+            --dark-color: #222;
+            --light-color: #fefefe;
+            --gray-light: #f8f9fa;
+            --gray-border: #eee;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: #888;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 8px 24px rgba(210, 35, 42, 0.1);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--light-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
+        }
+        
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            body { 
+                padding: 15px; 
+                background-image: none;
+            }
+        }
+        
+        header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid var(--gray-border);
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            header { 
+                padding: 2rem 1rem 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .blog-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+        
+        .blog-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+        }
+        
+        /* 优化后的导航栏 - 单行显示 */
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+        
+        .nav-tab {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 480px) {
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+        }
+        
+        .nav-tab:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .nav-tab.active {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.1);
+            border-color: rgba(210, 35, 42, 0.3);
+        }
+        
+        section {
+            padding: 3rem 1rem;
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        section:last-of-type { 
+            border-bottom: none; 
+        }
+        
+        @media (max-width: 768px) {
+            section { 
+                padding: 2.5rem 1rem; 
+            }
+        }
+        
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+            position: relative;
+        }
+        
+        @media (max-width: 768px) {
+            .section-title { 
+                font-size: 1.4rem; 
+                margin-bottom: 1.5rem; 
+            }
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--primary-color);
+            margin: 0.5rem auto;
+        }
+        
+        /* 个人简介样式 */
+        .about-me {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 0 auto 1.5rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            font-weight: bold;
+        }
+        
+        .intro-text {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .current-focus {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(210, 35, 42, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        /* 文章卡片 */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        
+        .article-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-border);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .article-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(210, 35, 42, 0.2);
+        }
+        
+        .article-header {
+            padding: 1.2rem;
+            border-bottom: 1px solid var(--gray-border);
+            background: linear-gradient(135deg, var(--gray-light), #f0f0f0);
+        }
+        
+        .article-category {
+            display: inline-block;
+            background: rgba(210, 35, 42, 0.1);
+            color: var(--primary-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 0.6rem;
+        }
+        
+        .article-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--dark-color);
+            line-height: 1.4;
+        }
+        
+        .article-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .article-content {
+            padding: 1.2rem;
+            color: var(--text-secondary);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .article-content p {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 0.8rem;
+            font-size: 0.9rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+        
+        .read-more:hover {
+            border-bottom-color: var(--primary-color);
+            padding-left: 5px;
+        }
+        
+        /* 个人项目展示 */
+        .projects-showcase {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .project-item {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid var(--gray-border);
+            box-shadow: var(--card-shadow);
+        }
+        
+        @media (min-width: 769px) {
+            .project-item {
+                flex-direction: row;
+                align-items: center;
+            }
+            
+            .project-item:nth-child(even) {
+                flex-direction: row-reverse;
+            }
+        }
+        
+        .project-icon {
+            flex: 0 0 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--gray-light), #e9ecef);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .project-details {
+            flex: 1;
+        }
+        
+        .project-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .project-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* 联系与支持 */
+        .contact-section {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .email-wrapper {
+            display: inline-block;
+            margin: 1.5rem 0;
+        }
+        
+        .email-link {
+            display: inline-block;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            padding: 0.7rem 1.3rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(210, 35, 42, 0.05);
+        }
+        
+        .email-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
+        }
+        
+        .support-note {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(210, 35, 42, 0.03), rgba(34, 34, 34, 0.03));
+            border-radius: 10px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        .support-note h3 {
+            color: var(--dark-color);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .support-note p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* 底部导航 */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+        }
+        
+        .footer-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 1rem;
+                min-width: 90px;
+                flex: 1;
+            }
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="blog-title">Davi的思考笔记</h1>
+        <p class="blog-subtitle">记录在AI与Web3时代的观察、实践与反思</p>
+        
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <a href="#about" class="nav-tab active">关于我</a>
+                <a href="#thinking" class="nav-tab">近期思考</a>
+                <a href="#projects" class="nav-tab">在做的事</a>
+                <a href="#contact" class="nav-tab">联系交流</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 class="section-title">关于我</h2>
+        <div class="about-me">
+            <div class="avatar">D</div>
+            <p class="intro-text">你好，我是Davi。一个对技术和人文交叉地带感兴趣的观察者和实践者。</p>
+            <p class="intro-text">相信在快速变化的技术环境中，一些基本的东西——比如深度思考、本真表达、人与人的连接——反而变得更加重要。</p>
+            <p class="intro-text">这里记录的是我在探索过程中的一些观察、尝试和困惑，不是什么指导手册，只是一些个人笔记。</p>
+            <div class="current-focus">
+                📍 近期关注：AI如何真正帮助创作，而不是替代创作
+            </div>
+        </div>
+    </section>
+
+    <section id="thinking">
+        <h2 class="section-title">近期思考</h2>
+        <div class="articles-grid">
+            <article class="article-card">
+                <div class="article-header">
+                    <span class="article-category">工具观</span>
+                    <h3 class="article-title">AI工具热中的冷思考</h3>
+                    <div class="article-date">2024.3.20</div>
+                </div>
+                <div class="article-content">
+                    <p>最近试用了十几个AI工具，从文本生成到图像创作。兴奋之后开始思考：这些工具真的让我变得更好，还是只是让我看起来更忙？</p>
+                    <a href="#article1" class="read-more">继续阅读 →</a>
+                </div>
+            </article>
+            <article class="article-card">
+                <div class="article-header">
+                    <span class="article-category">创作观</span>
+                    <h3 class="article-title">当AI也能"创作"时</h3>
+                    <div class="article-date">2024.3.15</div>
+                </div>
+                <div class="article-content">
+                    <p>ChatGPT能写文章，Midjourney能画画，Suno能作曲。当AI什么都能做时，人类创作者的价值到底在哪里？</p>
+                    <a href="#article2" class="read-more">继续阅读 →</a>
+                </div>
+            </article>
+            <article class="article-card">
+                <div class="article-header">
+                    <span class="article-category">生活观</span>
+                    <h3 class="article-title">数字时代的注意力管理</h3>
+                    <div class="article-date">2024.3.10</div>
+                </div>
+                <div class="article-content">
+                    <p>手机平均每天亮屏5小时，真正有深度的思考时间有多少？尝试了一些方法找回注意力主权，有些有用，有些没用。</p>
+                    <a href="#article3" class="read-more">继续阅读 →</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">在做的事</h2>
+        <div class="projects-showcase">
+            <div class="project-item">
+                <div class="project-icon">✍️</div>
+                <div class="project-details">
+                    <h3 class="project-title">个人知识管理实验</h3>
+                    <p class="project-desc">尝试用不同方法组织自己的学习和思考笔记，从传统的笔记软件到新的AI工具，寻找最适合自己的方式。</p>
+                </div>
+            </div>
+            <div class="project-item">
+                <div class="project-icon">🔄</div>
+                <div class="project-details">
+                    <h3 class="project-title">数字创作工作流优化</h3>
+                    <p class="project-desc">探索如何把AI工具真正融入到创作过程中，不是替代，而是增强。从选题、构思到修改、发布的全流程。</p>
+                </div>
+            </div>
+            <div class="project-item">
+                <div class="project-icon">🌱</div>
+                <div class="project-details">
+                    <h3 class="project-title">线上社区观察</h3>
+                    <p class="project-desc">参与几个AI和Web3相关的社群，观察不同背景的人如何看待这些技术，记录一些有趣的对话和观点。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">联系交流</h2>
+        <div class="contact-section">
+            <p style="color: var(--text-secondary); line-height: 1.6;">
+                如果你对这些话题也有兴趣，或者有自己的观察和思考，欢迎交流
+            </p>
+            
+            <div class="email-wrapper">
+                <a href="mailto:x.dw@qq.com" class="email-link">
+                    x.dw@qq.com
+                </a>
+            </div>
+            
+            <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 1rem;">
+                一般会在1-2天内回复邮件
+            </p>
+            
+            <div class="support-note">
+                <h3>关于支持</h3>
+                <p>如果你觉得这些思考有价值，可以通过邮件告诉我。你的反馈就是最好的支持。</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">如果这些内容对你有帮助，也欢迎分享给可能感兴趣的朋友。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="index.html" class="footer-link" title="返回主站">返回</a>
+            <span class="link-divider">|</span>
+            <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+            <span class="link-divider">|</span>
+            <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
+        </div>
+        
+        <p>在变化中寻找不变，在繁杂中保持简单</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 导航标签交互
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    if (this.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        
+                        if (targetElement) {
+                            navTabs.forEach(t => t.classList.remove('active'));
+                            this.classList.add('active');
+                            
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // 滚动时高亮当前标签
+            const sections = document.querySelectorAll('section');
+            window.addEventListener('scroll', function() {
+                let current = '';
+                const scrollPosition = window.scrollY + 100;
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navTabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.getAttribute('href') === `#${current}`) {
+                        tab.classList.add('active');
+                    }
+                });
+            });
+            
+            // 移动端触摸优化
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // 防止双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // 触摸反馈
+            const clickableElements = document.querySelectorAll('a, .nav-tab, .email-link');
+            clickableElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                }, {passive: true});
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                }, {passive: true});
+            });
+            
+            // 邮箱复制功能
+            const emailLink = document.querySelector('.email-link');
+            if (emailLink) {
+                emailLink.addEventListener('click', function(e) {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        e.preventDefault();
+                        navigator.clipboard.writeText('x.dw@qq.com').then(() => {
+                            const originalText = this.textContent;
+                            this.textContent = '已复制邮箱';
+                            this.style.background = 'rgba(46, 204, 113, 0.1)';
+                            this.style.borderColor = '#2ecc71';
+                            
+                            setTimeout(() => {
+                                this.textContent = originalText;
+                                this.style.background = '';
+                                this.style.borderColor = '';
+                            }, 1500);
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
