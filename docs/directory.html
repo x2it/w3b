@@ -58,7 +58,6 @@
             }
         }
         
-        /* 头部 */
         header {
             text-align: center;
             padding: 3rem 1rem 2.5rem;
@@ -104,7 +103,6 @@
             padding: 0 1rem;
         }
         
-        /* 目录容器 */
         .directory-container {
             padding: 1rem 0 4rem;
         }
@@ -125,7 +123,6 @@
             }
         }
         
-        /* 分类网格 */
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -344,7 +341,6 @@
             box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
         }
         
-        /* 快速访问 */
         .quick-access {
             max-width: 1000px;
             margin: 3rem auto 4rem;
@@ -406,7 +402,6 @@
             box-shadow: 0 4px 8px rgba(210, 35, 42, 0.15);
         }
         
-        /* 页脚导航 - 统一样式 */
         .footer-links {
             display: flex;
             justify-content: center;
@@ -475,7 +470,6 @@
             }
         }
         
-        /* 页脚 */
         footer {
             text-align: center;
             padding: 2.5rem 1rem;
@@ -492,14 +486,13 @@
         }
         
         .copyright {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             opacity: 0.8;
             margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- 页眉 -->
     <header>
         <h1 class="lab-title">知行实验室</h1>
         <p class="lab-subtitle">内容目录 · 知识索引 · 资源导航</p>
@@ -508,15 +501,12 @@
         </div>
     </header>
 
-    <!-- 目录主体 -->
     <div class="directory-container">
         <div class="directory-intro">
             <p>本目录采用网格化分类设计，共包含 <strong>6个核心分类</strong>，<strong>24个主要内容链接</strong>，以及多个专题索引。所有内容持续更新中，点击分类卡片可查看详细内容。</p>
         </div>
 
-        <!-- 第一行分类 -->
         <div class="categories-grid">
-            <!-- 核心思想 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">🧠</div>
@@ -557,7 +547,6 @@
                 </div>
             </div>
 
-            <!-- 技术实现 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">⚙️</div>
@@ -598,7 +587,6 @@
                 </div>
             </div>
 
-            <!-- 项目展示 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">🚀</div>
@@ -640,9 +628,7 @@
             </div>
         </div>
 
-        <!-- 第二行分类 -->
         <div class="categories-grid" style="margin-top: 2rem;">
-            <!-- 文章随笔 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">📝</div>
@@ -683,7 +669,6 @@
                 </div>
             </div>
 
-            <!-- 资源工具 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">🔧</div>
@@ -724,7 +709,6 @@
                 </div>
             </div>
 
-            <!-- 关于实验室 -->
             <div class="category-card">
                 <div class="category-header">
                     <div class="category-icon">🏛️</div>
@@ -766,7 +750,6 @@
             </div>
         </div>
 
-        <!-- 快速访问 -->
         <div class="quick-access">
             <h3>快速索引</h3>
             <div class="access-tags">
@@ -782,25 +765,24 @@
         </div>
     </div>
 
-    <!-- 页脚 -->
     <footer>
         <div class="footer-links">
-            <a href="index.html" class="footer-link" title="返回主站核心理念">理会·践行</a>
+            <a href="index.html" class="footer-link" title="返回主站">返回</a>
             <span class="link-divider">|</span>
             <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+            <span class="link-divider">|</span>
+            <a href="#核心思想" class="footer-link" title="跳转到内容分类">践行</a>
         </div>
         
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行 | 原生构建</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 卡片交互效果
             const cards = document.querySelectorAll('.category-card');
             
             cards.forEach(card => {
-                // 触摸设备优化
                 let touchStartY = 0;
                 let touchEndY = 0;
                 
@@ -812,7 +794,6 @@
                 card.addEventListener('touchend', function(e) {
                     touchEndY = e.changedTouches[0].screenY;
                     
-                    // 如果是轻触（不是滚动），则添加点击效果
                     if (Math.abs(touchEndY - touchStartY) < 10) {
                         this.style.transform = 'translateY(-3px) scale(1.02)';
                         
@@ -822,7 +803,6 @@
                     }
                 }, { passive: true });
                 
-                // 桌面端悬停效果
                 card.addEventListener('mouseenter', function() {
                     if (window.matchMedia('(hover: hover)').matches) {
                         const icon = this.querySelector('.category-icon');
@@ -844,7 +824,6 @@
                 });
             });
             
-            // 链接触摸优化
             const links = document.querySelectorAll('a');
             links.forEach(link => {
                 link.addEventListener('touchstart', function() {
@@ -856,32 +835,25 @@
                 }, { passive: true });
             });
             
-            // 快速访问标签点击效果
             const tags = document.querySelectorAll('.access-tag');
             tags.forEach(tag => {
                 tag.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // 视觉反馈
                     this.style.transform = 'translateY(-2px) scale(1.05)';
                     
-                    // 获取目标分类
                     const targetCategory = this.textContent.trim();
                     
-                    // 模拟搜索或跳转效果
                     console.log(`快速访问: ${targetCategory}`);
                     
-                    // 重置效果
                     setTimeout(() => {
                         this.style.transform = 'translateY(0) scale(1)';
                     }, 200);
                 });
             });
             
-            // 触摸设备优化
             document.addEventListener('touchstart', function() {}, {passive: true});
             
-            // 防止双击缩放
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function(event) {
                 const now = (new Date()).getTime();
