@@ -2,514 +2,787 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Cyber-Wanderer | Matrix Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知行实验室 - 内容目录</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Courier New', Courier, monospace;
-            user-select: none;
-            -webkit-user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        /* 基础与重置 - 保持完全一致 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
         body {
-            background: #000;
-            overflow: hidden;
-            color: #00ff41;
-            touch-action: manipulation;
-            cursor: crosshair;
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fefefe;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
         }
 
-        /* 层级结构：代码雨底 → 爆炸层 → 粒子层 → 内容层 */
-        #matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            opacity: 0.6;
-        }
-
-        #explosion-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        #particle-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .container {
-            position: relative;
-            z-index: 4;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* 头像呼吸光效 */
-        .avatar {
-            width: 80px;
-            height: 80px;
-            border: 2px solid #00ff41;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 1.2rem;
-            box-shadow: 0 0 20px #00ff41, inset 0 0 10px #00ff41;
-            animation: pulse 2.5s infinite alternate;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .avatar:hover {
-            transform: scale(1.1);
-        }
-
-        .avatar-icon {
-            font-size: 2.8rem;
-            color: #00ff41;
-        }
-
-        /* 简介卡片 - 点击触发爆炸 */
-        .profile-card {
-            max-width: 500px;
-            width: 100%;
-            border: 1px solid #00ff41;
-            padding: 1.8rem 1.2rem;
-            background: rgba(0, 0, 0, 0.9);
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.35);
-            border-radius: 12px;
-            position: relative;
-            overflow: hidden;
+        /* 头部 */
+        header {
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            padding: 4rem 1rem 3rem;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            margin-bottom: 2rem;
         }
-
-        .profile-card:hover {
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
-            transform: translateY(-5px);
+        .lab-title {
+            font-size: clamp(2.2rem, 6vw, 3.8rem);
+            font-weight: 300;
+            letter-spacing: -0.05em;
+            margin-bottom: 0.8rem;
+            color: #222;
+            position: relative;
+            display: inline-block;
         }
-
-        .profile-card::before,
-        .profile-card::after {
+        .lab-title::after {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #00ff41, transparent);
-            animation: lineFlow 3s linear infinite;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d2232a, transparent);
         }
-
-        .profile-card::before { top: 0; }
-        .profile-card::after { 
-            bottom: 0; 
-            animation-direction: reverse;
-        }
-
-        /* 文案样式 */
-        .profile-text {
+        .lab-subtitle {
             font-size: 1.2rem;
-            line-height: 2;
-            letter-spacing: 2px;
-            text-shadow: 0 0 8px #00ff41;
-            opacity: 0;
-            animation: fadeIn 1.2s ease-in-out 0.8s forwards;
+            font-weight: 400;
+            color: #666;
+            max-width: 700px;
+            margin: 1.5rem auto;
+        }
+        .lab-description {
+            color: #777;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1rem;
+            line-height: 1.7;
         }
 
-        .profile-text .cyber-text {
-            color: #00ffff;
-            font-size: 1.3rem;
+        /* 目录网格系统 */
+        .directory-container {
+            padding: 2rem 1rem 5rem;
         }
-
-        /* 手写体 Davi 动效 */
-        .davi-handwrite {
-            display: inline-block;
-            font-size: 1.8rem;
-            font-family: 'Brush Script MT', cursive;
-            color: #00ff41;
-            text-shadow: 0 0 12px #00ff41, 0 0 20px rgba(0, 255, 65, 0.6);
-            animation: handwriting 2s ease-in-out 2s forwards, neonGlow 3s infinite alternate;
-            width: 0;
+        .directory-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            color: #555;
+            font-size: 1.05rem;
+            padding: 0 1rem;
+        }
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .category-card {
+            background: white;
+            border-radius: 12px;
             overflow: hidden;
-            white-space: nowrap;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            border: 1px solid #f0f0f0;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(210, 35, 42, 0.12);
+            border-color: rgba(210, 35, 42, 0.2);
+        }
+        .category-header {
+            padding: 2rem 2rem 1.5rem;
+            border-bottom: 1px solid #f5f5f5;
+            background: linear-gradient(135deg, #fafafa, #f0f0f0);
+            position: relative;
+        }
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+            font-size: 1.8rem;
+            color: #d2232a;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 2px solid rgba(210, 35, 42, 0.1);
+        }
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #222;
+        }
+        .category-count {
+            display: inline-block;
+            background: rgba(210, 35, 42, 0.1);
+            color: #d2232a;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .category-content {
+            padding: 1.8rem 2rem 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .category-description {
+            color: #555;
+            margin-bottom: 1.8rem;
+            line-height: 1.7;
+            flex-grow: 1;
+        }
+        .links-list {
+            list-style: none;
+            margin-top: auto;
+        }
+        .link-item {
+            margin-bottom: 0.9rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .link-item::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #d2232a;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .link-item:hover::before {
+            transform: translateX(5px);
+        }
+        .link-item a {
+            color: #444;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .link-item a:hover {
+            color: #d2232a;
+            border-bottom-color: rgba(210, 35, 42, 0.3);
+            padding-left: 5px;
+        }
+        .link-status {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        .status-active {
+            background: rgba(42, 123, 210, 0.1);
+            color: #2a7bd2;
+        }
+        .status-new {
+            background: rgba(210, 35, 42, 0.1);
+            color: #d2232a;
+        }
+        .status-upcoming {
+            background: rgba(155, 155, 155, 0.1);
+            color: #777;
+        }
+        .category-footer {
+            padding: 1.5rem 2rem;
+            background: #f9f9f9;
+            border-top: 1px solid #f0f0f0;
+            text-align: center;
+        }
+        .view-all {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 200px;
+        }
+        .view-all:hover {
+            background: #d2232a;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(210, 35, 42, 0.2);
         }
 
-        /* 音效开关 */
-        .audio-toggle {
-            position: fixed;
-            top: 1.2rem;
-            right: 1.2rem;
-            z-index: 5;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            border: 2px solid #00ff41;
-            background: rgba(0, 0, 0, 0.95);
-            color: #00ff41;
-            cursor: pointer;
+        /* 视觉分隔 */
+        .section-divider {
+            text-align: center;
+            margin: 4rem auto;
+            position: relative;
+            max-width: 800px;
+        }
+        .section-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            z-index: 1;
+        }
+        .divider-text {
+            display: inline-block;
+            background: white;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            color: #777;
+            font-weight: 500;
+        }
+
+        /* 索引快速访问 */
+        .quick-access {
+            max-width: 1000px;
+            margin: 3rem auto 5rem;
+            padding: 2.5rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border: 1px solid #eee;
+        }
+        .quick-access h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: #222;
+        }
+        .access-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .access-tag {
+            background: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        .access-tag:hover {
+            background: #d2232a;
+            color: white;
+            border-color: #d2232a;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(210, 35, 42, 0.15);
+        }
+
+        /* 页脚链接模块样式 - 保持完全一致 */
+        .footer-links {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.4rem;
-            box-shadow: 0 0 15px #00ff41;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.2rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .footer-link {
+            color: #444;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+        .footer-link:hover {
+            color: #d2232a;
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+        }
+        .footer-link:first-child {
+            color: #d2232a;
+            border: 1px solid rgba(210, 35, 42, 0.3);
+            font-weight: 600;
+        }
+        .footer-link:first-child:hover {
+            background: rgba(210, 35, 42, 0.1);
+        }
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
         }
 
-        .audio-toggle:hover {
-            box-shadow: 0 0 25px #00ff41;
-            transform: scale(1.05);
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+            font-size: 0.9rem;
         }
 
-        /* 动画定义 */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 15px #00ff41, inset 0 0 8px #00ff41; }
-            100% { box-shadow: 0 0 25px #00ff41, inset 0 0 15px #00ff41; }
-        }
-
-        @keyframes lineFlow {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes handwriting {
-            0% { width: 0; }
-            100% { width: 90px; }
-        }
-
-        @keyframes neonGlow {
-            0% { text-shadow: 0 0 10px #00ff41, 0 0 20px rgba(0, 255, 65, 0.5); }
-            100% { text-shadow: 0 0 20px #00ff41, 0 0 30px rgba(0, 255, 65, 0.8); }
-        }
-
-        /* 响应式适配 */
-        @media (min-width: 480px) {
-            .avatar { width: 90px; height: 90px; margin-bottom: 1.5rem; }
-            .avatar-icon { font-size: 3.2rem; }
-            .profile-card { padding: 2rem 1.5rem; }
-            .profile-text { font-size: 1.3rem; }
-            .profile-text .cyber-text { font-size: 1.4rem; }
-            .davi-handwrite { font-size: 2rem; }
-            @keyframes handwriting { 100% { width: 100px; } }
-            .audio-toggle { width: 60px; height: 60px; font-size: 1.5rem; }
-        }
-
-        @media (min-width: 768px) {
-            .avatar { width: 100px; height: 100px; margin-bottom: 1.8rem; }
-            .avatar-icon { font-size: 3.5rem; }
-            .profile-card { padding: 2.2rem; max-width: 550px; }
-            .profile-text { font-size: 1.4rem; letter-spacing: 3px; }
-            .profile-text .cyber-text { font-size: 1.5rem; }
-            .davi-handwrite { font-size: 2.2rem; }
-            @keyframes handwriting { 100% { width: 110px; } }
-        }
-
-        @media (min-width: 1024px) {
-            .profile-card { max-width: 600px; }
-            .profile-text { font-size: 1.5rem; }
-            .davi-handwrite { font-size: 2.5rem; }
-            @keyframes handwriting { 100% { width: 120px; } }
-        }
-
-        @media (max-width: 360px) {
-            .profile-text { font-size: 1.1rem; line-height: 1.8; }
-            .profile-text .cyber-text { font-size: 1.2rem; }
-            .davi-handwrite { font-size: 1.6rem; }
-            @keyframes handwriting { 100% { width: 80px; } }
-            .audio-toggle { width: 50px; height: 50px; font-size: 1.2rem; }
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .category-header, .category-content, .category-footer {
+                padding: 1.5rem;
+            }
+            .quick-access {
+                padding: 1.5rem;
+                margin: 2rem auto 3rem;
+            }
+            .access-tags {
+                gap: 0.7rem;
+            }
+            .access-tag {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            .footer-links {
+                gap: 1rem;
+                padding: 1rem;
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
 <body>
-    <canvas id="matrix-bg"></canvas>
-    <canvas id="explosion-bg"></canvas>
-    <canvas id="particle-bg"></canvas>
-    <div class="audio-toggle" id="audioToggle">🔊</div>
-    <div class="container">
-        <div class="avatar" id="triggerExplosion">
-            <span class="avatar-icon">⚡</span>
+    <!-- 页眉 -->
+    <header>
+        <h1 class="lab-title">知行实验室</h1>
+        <p class="lab-subtitle">内容目录 · 知识索引 · 资源导航</p>
+        <div class="lab-description">
+            这里汇集了所有项目、思考和资源的系统化索引。每个分类代表一个探索方向，每个链接都是一扇通往深度内容的大门。设计遵循"理会"与"践行"的循环哲学。
         </div>
-        <div class="profile-card" id="triggerExplosionCard">
-            <p class="profile-text">
-                <span class="cyber-text">〓</span> 网海寻踪 创意作舟 <span class="cyber-text">〓</span><br>
-                <span class="cyber-text">►</span> Cyber Trailblazer <span class="cyber-text">◄</span><br>
-                <span class="cyber-text">〓</span> <span class="davi-handwrite">Davi</span> <span class="cyber-text">〓</span>
-            </p>
+    </header>
+
+    <!-- 目录主体 -->
+    <div class="directory-container">
+        <div class="directory-intro">
+            <p>本目录采用网格化分类设计，共包含 <strong>6个核心分类</strong>，<strong>24个主要内容链接</strong>，以及多个专题索引。所有内容持续更新中，点击分类卡片可查看详细内容。</p>
+        </div>
+
+        <!-- 第一行分类 -->
+        <div class="categories-grid">
+            <!-- 核心思想 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">🧠</div>
+                    <h3 class="category-title">核心思想</h3>
+                    <span class="category-count">8个条目</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">关于"理会"与"践行"的哲学基础、理论框架和核心概念的系统阐述。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="#">
+                                理会·践行的起源与演变
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                从朱熹到王阳明：知行观
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                现代语境下的知行合一
+                                <span class="link-status status-new">新内容</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                思维方法论专题
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">查看全部思想资源</a>
+                </div>
+            </div>
+
+            <!-- 技术实现 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">⚙️</div>
+                    <h3 class="category-title">技术实现</h3>
+                    <span class="category-count">6个条目</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">前端技术、交互设计和实现细节，展示"技术含量内蕴"的设计哲学。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="#">
+                                Canvas粒子系统详解
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                原生JS交互设计模式
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                响应式时间线实现
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                性能优化与最佳实践
+                                <span class="link-status status-upcoming">筹备中</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">查看全部技术文档</a>
+                </div>
+            </div>
+
+            <!-- 项目展示 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">🚀</div>
+                    <h3 class="category-title">项目展示</h3>
+                    <span class="category-count">5个条目</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">完整的项目案例，从概念到实现，体现"理会"与"践行"的完整循环。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="/index.html">
+                                知行可视化系统
+                                <span class="link-status status-active">已上线</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                iHome Studio知识库
+                                <span class="link-status status-upcoming">开发中</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                交互式哲学实验
+                                <span class="link-status status-new">新项目</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                开源组件库
+                                <span class="link-status status-upcoming">计划中</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">查看全部项目</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二行分类 -->
+        <div class="categories-grid" style="margin-top: 2rem;">
+            <!-- 文章随笔 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">📝</div>
+                    <h3 class="category-title">文章随笔</h3>
+                    <span class="category-count">12+篇</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">技术思考、哲学笔记和创作心得，记录思考过程和实践体会。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="#">
+                                朴素界面的技术深度
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                设计中的留白哲学
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                从概念到实现：完整流程
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                数字时代的知行关系
+                                <span class="link-status status-new">新文章</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">查看全部文章</a>
+                </div>
+            </div>
+
+            <!-- 资源工具 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">🔧</div>
+                    <h3 class="category-title">资源工具</h3>
+                    <span class="category-count">15+项</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">实用工具、资源推荐和学习材料，支持持续学习和实践。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="#">
+                                前端开发工具链
+                                <span class="link-status status-active">已整理</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                设计资源精选
+                                <span class="link-status status-active">已整理</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                哲学原著电子版
+                                <span class="link-status status-upcoming">整理中</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                学习路径建议
+                                <span class="link-status status-new">新内容</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">查看全部资源</a>
+                </div>
+            </div>
+
+            <!-- 关于实验室 -->
+            <div class="category-card">
+                <div class="category-header">
+                    <div class="category-icon">🏛️</div>
+                    <h3 class="category-title">关于实验室</h3>
+                    <span class="category-count">4个条目</span>
+                </div>
+                <div class="category-content">
+                    <p class="category-description">实验室的起源、理念、更新日志和未来计划，了解背后的故事。</p>
+                    <ul class="links-list">
+                        <li class="link-item">
+                            <a href="#">
+                                实验室理念与使命
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                版本更新日志
+                                <span class="link-status status-active">持续更新</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                设计规范与原则
+                                <span class="link-status status-active">已发布</span>
+                            </a>
+                        </li>
+                        <li class="link-item">
+                            <a href="#">
+                                未来路线图
+                                <span class="link-status status-new">2026计划</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="category-footer">
+                    <a href="#" class="view-all">关于我们</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速访问 -->
+        <div class="quick-access">
+            <h3>快速索引</h3>
+            <div class="access-tags">
+                <a href="#核心思想" class="access-tag">核心思想</a>
+                <a href="#技术实现" class="access-tag">技术实现</a>
+                <a href="#项目展示" class="access-tag">项目展示</a>
+                <a href="#文章随笔" class="access-tag">文章随笔</a>
+                <a href="#资源工具" class="access-tag">资源工具</a>
+                <a href="#实验室" class="access-tag">实验室信息</a>
+                <a href="#最新内容" class="access-tag">最新内容</a>
+                <a href="#即将上线" class="access-tag">即将上线</a>
+            </div>
         </div>
     </div>
 
+    <!-- 页脚 -->
+    <footer>
+        <!-- 链接模块 -->
+        <div class="footer-links">
+            <a href="/index.html" class="footer-link" title="返回主站点">主站·理会践行</a>
+            <span class="link-divider">|</span>
+            <a href="/blog.html" class="footer-link" title="访问博客">博客</a>
+            <span class="link-divider">|</span>
+            <a href="/lab" class="footer-link" title="实验室主页">实验室</a>
+        </div>
+        
+        <p>理无专在，而学无止境也。然则问可少耶？</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">© 2026 Davi iHome Studio - 理会 · 践行 | 本页采用原生HTML/CSS/JS构建</p>
+    </footer>
+
     <script>
-        // ========== 1. 代码雨特效 ==========
-        class MatrixCode {
-            constructor(canvas) {
-                this.canvas = canvas;
-                this.ctx = canvas.getContext('2d');
-                this.resizeCanvas();
-                this.columns = Math.floor(this.canvas.width / (window.innerWidth < 768 ? 15 : 20));
-                this.drops = Array(this.columns).fill(1);
-                this.chars = '01アイウエオカキクケコサシス';
-                this.animationId = null;
-                this.startAnimation();
-                window.addEventListener('resize', () => this.resizeCanvas());
-            }
-
-            resizeCanvas() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-                this.columns = Math.floor(this.canvas.width / (window.innerWidth < 768 ? 15 : 20));
-                this.drops = Array(this.columns).fill(1);
-            }
-
-            draw() {
-                this.ctx.fillStyle = window.innerWidth < 768 ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.05)';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.fillStyle = '#00ff41';
-                this.ctx.font = `${window.innerWidth < 768 ? 12 : 15}px Courier New`;
-                for (let i = 0; i < this.drops.length; i++) {
-                    const text = this.chars[Math.floor(Math.random() * this.chars.length)];
-                    this.ctx.fillText(text, i * (window.innerWidth < 768 ? 15 : 20), this.drops[i] * (window.innerWidth < 768 ? 15 : 20));
-                    if (this.drops[i] * (window.innerWidth < 768 ? 15 : 20) > this.canvas.height && Math.random() > 0.97) {
-                        this.drops[i] = 0;
+        // 卡片交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.category-card');
+            
+            cards.forEach(card => {
+                // 鼠标进入时的动画
+                card.addEventListener('mouseenter', function() {
+                    const icon = this.querySelector('.category-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1.1) rotate(5deg)';
+                        icon.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1)';
                     }
-                    this.drops[i]++;
-                }
-            }
-
-            startAnimation() {
-                const animate = () => {
-                    this.draw();
-                    this.animationId = requestAnimationFrame(animate);
-                };
-                animate();
-            }
-        }
-
-        // ========== 2. 霓虹粒子跟随特效 ==========
-        class NeonParticle {
-            constructor(canvas) {
-                this.canvas = canvas;
-                this.ctx = canvas.getContext('2d');
-                this.particles = [];
-                this.maxParticles = window.innerWidth < 768 ? 30 : 50;
-                this.resizeCanvas();
-                this.bindEvents();
-                this.animate();
-                window.addEventListener('resize', () => this.resizeCanvas());
-            }
-
-            resizeCanvas() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-            }
-
-            createParticle(x, y) {
-                if (this.particles.length >= this.maxParticles) return;
-                this.particles.push({
-                    x, y,
-                    size: Math.random() * 3 + 1,
-                    speedX: (Math.random() - 0.5) * 0.5,
-                    speedY: (Math.random() - 0.5) * 0.5,
-                    color: Math.random() > 0.5 ? '#00ff41' : '#00ffff',
-                    alpha: 1,
-                    decay: Math.random() * 0.01 + 0.005
+                    
+                    // 轻微背景色变化
+                    this.style.background = 'linear-gradient(to bottom, #ffffff, #fcfcfc)';
                 });
-            }
-
-            bindEvents() {
-                document.addEventListener('mousemove', (e) => {
-                    this.createParticle(e.clientX, e.clientY);
-                });
-                document.addEventListener('touchmove', (e) => {
-                    e.preventDefault();
-                    const touch = e.touches[0];
-                    this.createParticle(touch.clientX, touch.clientY);
-                }, { passive: false });
-            }
-
-            updateParticles() {
-                this.particles.forEach((p, index) => {
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    p.alpha -= p.decay;
-                    if (p.alpha <= 0) this.particles.splice(index, 1);
-                });
-            }
-
-            drawParticles() {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.particles.forEach(p => {
-                    this.ctx.beginPath();
-                    this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    this.ctx.fillStyle = `${p.color}${Math.floor(p.alpha * 255).toString(16).padStart(2, '0')}`;
-                    this.ctx.fill();
-                });
-            }
-
-            animate() {
-                this.updateParticles();
-                this.drawParticles();
-                requestAnimationFrame(() => this.animate());
-            }
-        }
-
-        // ========== 3. 全屏代码爆炸特效 ==========
-        class CodeExplosion {
-            constructor(canvas) {
-                this.canvas = canvas;
-                this.ctx = canvas.getContext('2d');
-                this.explosionChars = [];
-                this.isExploding = false;
-                this.resizeCanvas();
-                window.addEventListener('resize', () => this.resizeCanvas());
-            }
-
-            resizeCanvas() {
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
-            }
-
-            // 生成爆炸字符
-            createExplosion(x, y) {
-                if (this.isExploding) return;
-                this.isExploding = true;
-                this.explosionChars = [];
-                const count = window.innerWidth < 768 ? 80 : 150;
-                const chars = '01ABCDEFァィゥェォカキクケコ';
                 
-                for (let i = 0; i < count; i++) {
-                    this.explosionChars.push({
-                        x, y,
-                        char: chars[Math.floor(Math.random() * chars.length)],
-                        size: Math.random() * 12 + 8,
-                        speedX: (Math.random() - 0.5) * 8,
-                        speedY: (Math.random() - 0.5) * 8,
-                        color: Math.random() > 0.3 ? '#00ff41' : '#00ffff',
-                        alpha: 1,
-                        decay: Math.random() * 0.02 + 0.01
-                    });
-                }
-                this.animateExplosion();
-            }
-
-            animateExplosion() {
-                const animate = () => {
-                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                    let alive = false;
-
-                    this.explosionChars.forEach(char => {
-                        if (char.alpha > 0) {
-                            char.x += char.speedX;
-                            char.y += char.speedY;
-                            char.alpha -= char.decay;
-                            char.speedY += 0.2; // 重力效果
-
-                            this.ctx.fillStyle = `${char.color}${Math.floor(char.alpha * 255).toString(16).padStart(2, '0')}`;
-                            this.ctx.font = `${char.size}px Courier New`;
-                            this.ctx.fillText(char.char, char.x, char.y);
-                            alive = true;
-                        }
-                    });
-
-                    if (alive) {
-                        requestAnimationFrame(animate);
-                    } else {
-                        this.isExploding = false;
+                // 鼠标离开时的动画
+                card.addEventListener('mouseleave', function() {
+                    const icon = this.querySelector('.category-icon');
+                    if (icon) {
+                        icon.style.transform = 'scale(1) rotate(0deg)';
                     }
-                };
-                animate();
-            }
-        }
-
-        // ========== 4. 音效控制 ==========
-        let audio = null;
-        let isAudioPlay = false;
-        const audioToggle = document.getElementById('audioToggle');
-        const explosionAudio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-explosion-1699.mp3');
-
-        function initAudio() {
-            audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-hacker-typing-on-keyboard-2545.mp3');
-            audio.loop = true;
-            audio.volume = 0.3;
-        }
-
-        audioToggle.addEventListener('click', () => {
-            if (!audio) initAudio();
-            if (isAudioPlay) {
-                audio.pause();
-                audioToggle.textContent = '🔊';
-            } else {
-                audio.play();
-                audioToggle.textContent = '🔇';
-            }
-            isAudioPlay = !isAudioPlay;
-        });
-
-        // ========== 页面初始化 & 事件绑定 ==========
-        window.addEventListener('load', () => {
-            // 初始化各特效
-            const matrixCanvas = document.getElementById('matrix-bg');
-            new MatrixCode(matrixCanvas);
-
-            const particleCanvas = document.getElementById('particle-bg');
-            new NeonParticle(particleCanvas);
-
-            const explosionCanvas = document.getElementById('explosion-bg');
-            const codeExplosion = new CodeExplosion(explosionCanvas);
-
-            // 绑定爆炸触发事件（头像+卡片点击）
-            const trigger1 = document.getElementById('triggerExplosion');
-            const trigger2 = document.getElementById('triggerExplosionCard');
-            const centerX = window.innerWidth / 2;
-            const centerY = window.innerHeight / 2;
-
-            trigger1.addEventListener('click', () => {
-                codeExplosion.createExplosion(centerX, centerY);
-                explosionAudio.play();
+                    
+                    this.style.background = 'white';
+                });
+                
+                // 点击效果
+                card.addEventListener('click', function(e) {
+                    // 如果不是链接元素，则添加点击反馈
+                    if (!e.target.closest('a')) {
+                        this.style.transform = 'translateY(-5px) scale(1.02)';
+                        setTimeout(() => {
+                            this.style.transform = 'translateY(-10px)';
+                        }, 150);
+                    }
+                });
             });
-
-            trigger2.addEventListener('click', () => {
-                codeExplosion.createExplosion(centerX, centerY);
-                explosionAudio.play();
+            
+            // 链接状态指示器
+            const links = document.querySelectorAll('.links-list a');
+            links.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    const status = this.querySelector('.link-status');
+                    if (status) {
+                        status.style.transform = 'translateX(3px)';
+                        status.style.transition = 'transform 0.2s ease';
+                    }
+                });
+                
+                link.addEventListener('mouseleave', function() {
+                    const status = this.querySelector('.link-status');
+                    if (status) {
+                        status.style.transform = 'translateX(0)';
+                    }
+                });
             });
-
-            // 移动端触摸唤醒音效
-            document.addEventListener('touchstart', () => {
-                if (!audio) initAudio();
-            }, { once: true });
+            
+            // 快速访问标签点击效果
+            const tags = document.querySelectorAll('.access-tag');
+            tags.forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 视觉反馈
+                    this.style.transform = 'translateY(-5px) scale(1.05)';
+                    
+                    // 获取目标分类
+                    const targetCategory = this.textContent.trim();
+                    
+                    // 模拟搜索或跳转效果
+                    console.log(`快速访问: ${targetCategory}`);
+                    
+                    // 重置效果
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-3px)';
+                    }, 200);
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(0)';
+                    }, 400);
+                });
+            });
+            
+            // 页面加载动画
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+                document.body.style.transition = 'opacity 0.5s ease';
+            }, 100);
+            
+            // 初始化透明度
+            document.body.style.opacity = '0';
         });
-
-        // 禁用右键
-        document.addEventListener('contextmenu', (e) => e.preventDefault());
+        
+        // 简单的滚动动画
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.category-card');
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            cards.forEach((card, index) => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < windowHeight - 100) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                }
+            });
+        });
+        
+        // 触发初始动画
+        setTimeout(() => {
+            window.dispatchEvent(new Event('scroll'));
+        }, 300);
     </script>
 </body>
 </html>
