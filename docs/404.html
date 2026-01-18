@@ -1,1 +1,591 @@
-404
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="404 页面未找到 - 理会·践行">
+    <title>404 · 页面未找到 - 理会·践行</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #d2232a;
+            --dark-color: #222;
+            --light-color: #fefefe;
+            --gray-light: #f8f9fa;
+            --gray-border: #eee;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: #888;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 8px 24px rgba(210, 35, 42, 0.1);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--light-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
+        }
+        
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            body { 
+                padding: 15px; 
+                background-image: none;
+            }
+        }
+        
+        /* 主容器 */
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* 404内容区域 */
+        .error-content {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .error-content { 
+                padding: 2.5rem 1.5rem; 
+                margin-bottom: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .error-content { 
+                padding: 2rem 1.2rem; 
+                margin-bottom: 2rem;
+            }
+        }
+        
+        /* 404数字样式 */
+        .error-number {
+            font-size: clamp(5rem, 15vw, 8rem);
+            font-weight: 300;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .error-number::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            opacity: 0.3;
+        }
+        
+        /* 标题和描述 */
+        .error-title {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-weight: 400;
+            margin: 1.5rem 0 1rem;
+            color: var(--dark-color);
+            line-height: 1.3;
+        }
+        
+        .error-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .error-description { 
+                font-size: 0.95rem; 
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        /* 搜索框 */
+        .search-container {
+            max-width: 400px;
+            margin: 0 auto 2.5rem;
+            width: 100%;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        @media (max-width: 480px) {
+            .search-form {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--gray-border);
+            border-radius: 30px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: var(--gray-light);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(210, 35, 42, 0.1);
+            background: white;
+        }
+        
+        .search-btn {
+            background: var(--dark-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            min-width: 100px;
+            touch-action: manipulation;
+            border: 2px solid var(--dark-color);
+        }
+        
+        @media (max-width: 480px) {
+            .search-btn {
+                width: 100%;
+            }
+        }
+        
+        .search-btn:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
+        }
+        
+        /* 快速导航卡片 */
+        .quick-nav {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .quick-nav h3 {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .nav-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        @media (max-width: 480px) {
+            .nav-cards {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+        }
+        
+        .nav-card {
+            background: white;
+            padding: 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            text-align: center;
+            border: 1px solid var(--gray-border);
+            transition: all 0.3s ease;
+            box-shadow: var(--card-shadow);
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            touch-action: manipulation;
+        }
+        
+        .nav-card:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-3px);
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(210, 35, 42, 0.2);
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        /* 哲理引用 */
+        .philosophy-quote {
+            max-width: 600px;
+            margin: 3rem auto 0;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(210, 35, 42, 0.03), rgba(34, 34, 34, 0.03));
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .philosophy-quote { 
+                margin: 2.5rem auto 0; 
+                padding: 1.2rem;
+            }
+        }
+        
+        .quote-text {
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .quote-author {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        /* 与网站完全一致的底部导航 */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+        }
+        
+        .footer-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 1rem;
+                min-width: 90px;
+                flex: 1;
+            }
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            margin-top: 2rem;
+            border: 1px solid var(--gray-border);
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="error-content">
+            <div class="error-number">404</div>
+            <h1 class="error-title">页面未找到</h1>
+            <p class="error-description">
+                您寻找的页面可能已经移动、更名或暂时不可用。
+                或许可以尝试搜索，或通过下面的链接返回。
+            </p>
+            
+            <div class="search-container">
+                <form class="search-form" id="searchForm">
+                    <input type="text" class="search-input" placeholder="搜索内容..." id="searchInput">
+                    <button type="submit" class="search-btn">搜索</button>
+                </form>
+            </div>
+            
+            <div class="quick-nav">
+                <h3>快速导航</h3>
+                <div class="nav-cards">
+                    <a href="index.html" class="nav-card">
+                        <div class="nav-icon">🏠</div>
+                        返回主站
+                    </a>
+                    <a href="blog.html" class="nav-card">
+                        <div class="nav-icon">🧠</div>
+                        理会 · 博客
+                    </a>
+                    <a href="directory.html" class="nav-card">
+                        <div class="nav-icon">📁</div>
+                        践行 · 目录
+                    </a>
+                </div>
+            </div>
+            
+            <div class="philosophy-quote">
+                <p class="quote-text">"行路难，不在水，不在山，只在人情反覆间。"</p>
+                <p class="quote-author">—— 白居易</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 与网站完全一致的底部导航 -->
+    <div class="footer-links">
+        <a href="index.html" class="footer-link" title="返回主站">返回</a>
+        <span class="link-divider">|</span>
+        <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+        <span class="link-divider">|</span>
+        <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
+    </div>
+    
+    <footer>
+        <p>知难行易，行难知易，知行相长</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 搜索表单处理
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const query = searchInput.value.trim();
+                    if (query) {
+                        // 在实际使用中，这里应该跳转到搜索页面
+                        // 这里我们简单地在控制台记录并清空输入框
+                        console.log('搜索关键词:', query);
+                        
+                        // 显示搜索反馈
+                        const originalText = searchForm.querySelector('.search-btn').textContent;
+                        searchForm.querySelector('.search-btn').textContent = '搜索中...';
+                        searchForm.querySelector('.search-btn').style.background = '#2ecc71';
+                        
+                        setTimeout(() => {
+                            searchForm.querySelector('.search-btn').textContent = originalText;
+                            searchForm.querySelector('.search-btn').style.background = '';
+                            searchInput.value = '';
+                            
+                            // 显示提示
+                            alert('在实际网站中，这里会跳转到搜索结果页面。\n您搜索的关键词是: ' + query);
+                        }, 800);
+                    } else {
+                        searchInput.focus();
+                        searchInput.style.boxShadow = '0 0 0 3px rgba(210, 35, 42, 0.2)';
+                        setTimeout(() => {
+                            searchInput.style.boxShadow = '';
+                        }, 1000);
+                    }
+                });
+            }
+            
+            // 移动端触摸优化
+            document.addEventListener('touchstart', function() {}, {passive: true});
+            
+            // 防止双击缩放
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            
+            // 触摸反馈
+            const clickableElements = document.querySelectorAll('a, button, .nav-card, .footer-link');
+            clickableElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                }, {passive: true});
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                }, {passive: true});
+            });
+            
+            // 导航卡片交互效果
+            const navCards = document.querySelectorAll('.nav-card');
+            navCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    if (window.matchMedia('(hover: hover)').matches) {
+                        const icon = this.querySelector('.nav-icon');
+                        if (icon) {
+                            icon.style.transform = 'scale(1.1)';
+                            icon.style.transition = 'transform 0.3s ease';
+                        }
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    if (window.matchMedia('(hover: hover)').matches) {
+                        const icon = this.querySelector('.nav-icon');
+                        if (icon) {
+                            icon.style.transform = 'scale(1)';
+                        }
+                    }
+                });
+            });
+            
+            // 404数字动画
+            const errorNumber = document.querySelector('.error-number');
+            if (errorNumber) {
+                // 添加微妙的数字动画
+                setTimeout(() => {
+                    errorNumber.style.transform = 'scale(1.05)';
+                    errorNumber.style.transition = 'transform 0.5s ease';
+                    
+                    setTimeout(() => {
+                        errorNumber.style.transform = 'scale(1)';
+                    }, 500);
+                }, 300);
+            }
+            
+            // 自动聚焦到搜索框
+            if (searchInput) {
+                setTimeout(() => {
+                    searchInput.focus();
+                }, 1000);
+            }
+            
+            // 页面加载动画
+            const errorContent = document.querySelector('.error-content');
+            if (errorContent) {
+                errorContent.style.opacity = '0';
+                errorContent.style.transform = 'translateY(20px)';
+                errorContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                
+                setTimeout(() => {
+                    errorContent.style.opacity = '1';
+                    errorContent.style.transform = 'translateY(0)';
+                }, 300);
+            }
+        });
+    </script>
+</body>
+</html>
