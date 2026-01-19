@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章详情 - Davi的思考笔记</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --primary-color: #d2232a;
+            --dark-color: #222;
+            --light-color: #fefefe;
+            --gray-light: #f8f9fa;
+            --gray-border: #eee;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: #888;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 8px 24px rgba(210, 35, 42, 0.1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--light-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            -webkit-text-size-adjust: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                            radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
+        }
+        
+        @media (max-width: 768px) { html { font-size: 15px; } }
+        @media (max-width: 480px) { html { font-size: 14px; } body { padding: 15px; background-image: none; } }
+        
+        /* ================================ */
+        /* 与index.html一致的头部样式 START */
+        /* ================================ */
+        .site-header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid var(--gray-border);
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-top: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .site-header { 
+                padding: 2rem 1rem 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+        }
+        
+        /* 与blog.html一致的导航标签样式 */
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+        
+        .nav-tab {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        
+        @media (max-width: 480px) {
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+        }
+        
+        .nav-tab:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .nav-tab.active {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.1);
+            border-color: rgba(210, 35, 42, 0.3);
+        }
+        /* ================================ */
+        /* 与index.html一致的头部样式 END */
+        /* ================================ */
+        
+        /* 文章主容器 */
+        .article-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .article-wrapper {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        /* 文章内容区 */
+        .article-main {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 768px) {
+            .article-main { padding: 1.5rem; }
+        }
+        
+        /* ================================ */
+        /* 只需粘贴Markdown的区域 START */
+        /* ================================ */
+        #markdown-content {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+        
+        #markdown-content h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            margin: 1.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        #markdown-content h2 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin: 1.5rem 0 1rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        #markdown-content h3 {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin: 1.2rem 0 0.8rem;
+        }
+        
+        #markdown-content p {
+            margin-bottom: 1.2rem;
+        }
+        
+        #markdown-content a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+        
+        #markdown-content a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+        
+        #markdown-content ul, #markdown-content ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        #markdown-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        #markdown-content blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(210, 35, 42, 0.03);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        #markdown-content code {
+            background: var(--gray-light);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        #markdown-content pre {
+            background: #f6f8fa;
+            padding: 1.2rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--gray-border);
+        }
+        
+        #markdown-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        #markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        #markdown-content hr {
+            border: none;
+            height: 1px;
+            background: var(--gray-border);
+            margin: 2rem 0;
+        }
+        /* ================================ */
+        /* 只需粘贴Markdown的区域 END */
+        /* ================================ */
+        
+        /* 侧边栏 */
+        .article-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .article-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            .sidebar-box {
+                flex: 1;
+                min-width: 250px;
+            }
+        }
+        
+        .sidebar-box {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+        }
+        
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 自动生成的目录 */
+        #auto-toc {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        #auto-toc li {
+            margin-bottom: 0.6rem;
+        }
+        
+        #auto-toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.3rem 0.8rem;
+            display: block;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        #auto-toc a:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            border-left-color: var(--primary-color);
+        }
+        
+        /* 文章信息 */
+        .article-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .info-item {
+            padding: 0.5rem;
+            background: var(--gray-light);
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        /* 操作按钮 */
+        .article-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+        
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background: var(--dark-color);
+            color: white;
+            border: 2px solid var(--dark-color);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.2);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--text-primary);
+            border: 1px solid var(--gray-border);
+        }
+        
+        .btn-secondary:hover {
+            color: var(--primary-color);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 与网站完全一致的底部导航 */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 3rem 0 2rem;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+        }
+        
+        .footer-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 1rem;
+                min-width: 90px;
+                flex: 1;
+            }
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+        
+        /* 简单帮助提示 */
+        .help-tip {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .help-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .help-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* 面包屑导航 */
+        .breadcrumb {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+        
+        .breadcrumb span {
+            margin: 0 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- ================================ -->
+    <!-- 与index.html一致的页面头部 START -->
+    <!-- ================================ -->
+    <header class="site-header">
+        <h1 class="page-title">文章详情</h1>
+        <p class="page-subtitle" id="dynamic-subtitle">粘贴Markdown，自动生成完整文章</p>
+        
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <a href="index.html">主站</a> 
+            <span>›</span>
+            <a href="blog.html">博客</a>
+            <span>›</span>
+            <span id="article-category">文章详情</span>
+        </div>
+        
+        <!-- 与blog.html一致的导航标签 -->
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <a href="#content" class="nav-tab active" onclick="scrollToContent()">📖 阅读文章</a>
+                <a href="#toc" class="nav-tab" onclick="scrollToTOC()">📑 文章目录</a>
+                <a href="#info" class="nav-tab" onclick="scrollToInfo()">📊 文章信息</a>
+                <a href="blog.html" class="nav-tab">← 返回列表</a>
+            </div>
+        </div>
+    </header>
+    <!-- ================================ -->
+    <!-- 与index.html一致的页面头部 END -->
+    <!-- ================================ -->
+    
+    <div class="article-wrapper">
+        <main class="article-main" id="content">
+            <!-- ==================================== -->
+            <!-- 🔥 只需粘贴Markdown的区域 START -->
+            <!-- ==================================== -->
+            <div id="markdown-content">
+                <!-- 
+                =============================================
+                🎯 使用方法（超级简单）：
+                1. 复制您的Markdown文章内容
+                2. 粘贴到这里（替换这些文字）
+                3. 保存文件，完成！
+                =============================================
+                
+                示例格式：
+                # 文章标题
+                
+                > 文章引言或摘要
+                
+                ## 第一部分
+                这里是内容...
+                
+                ## 第二部分
+                更多内容...
+                
+                ##### 系统会自动：
+                1. ✅ 提取标题显示在上方
+                2. ✅ 生成右侧目录导航
+                3. ✅ 计算字数阅读时间
+                4. ✅ 自动格式化样式
+                -->
+                
+                <!-- 默认示例内容，粘贴后会替换 -->
+                <h1>AI工具热中的冷思考</h1>
+                
+                <blockquote>
+                    最近试用了十几个AI工具，从文本生成到图像创作。兴奋之后开始思考：这些工具真的让我变得更好，还是只是让我看起来更忙？
+                </blockquote>
+                
+                <h2>工具泛滥的现象</h2>
+                
+                <p>每天早上打开电脑，总能看到几个新的AI工具推荐。从写作助手到设计工具，从代码生成到视频制作，似乎每一个创意环节都有了AI的影子。</p>
+                
+                <p>我试着统计了一下过去一个月尝试的工具：</p>
+                
+                <ul>
+                    <li>文本生成类：5个</li>
+                    <li>图像创作类：3个</li>
+                    <li>代码辅助类：2个</li>
+                    <li>效率工具类：4个</li>
+                </ul>
+                
+                <h2>效率还是幻觉？</h2>
+                
+                <p>使用AI工具时，最让我困惑的是：我是在提高效率，还是在制造更多的工作？</p>
+                
+                <p>比如写作工具，它能快速生成草稿，但我花在修改和调整上的时间，往往比从头写还要多。</p>
+                
+                <pre><code>// 有时候，简单的方法反而更高效
+function traditionalWriting() {
+    return "花时间思考，然后直接写";
+}
+
+function aiAssistedWriting() {
+    const draft = generateDraft();  // AI生成
+    const revised = reviseDraft(draft);  // 人工修改
+    const polished = polishText(revised);  // 再次润色
+    return polished;
+}</code></pre>
+                
+                <h3>保持人的判断力</h3>
+                
+                <p>最宝贵的可能不是工具本身，而是我们使用工具时的判断力。知道什么时候用AI，什么时候相信自己的直觉。</p>
+                
+                <p>毕竟，工具再好，也只是工具。真正创造价值的，还是使用工具的人。</p>
+                
+            </div>
+            <!-- ==================================== -->
+            <!-- 🔥 只需粘贴Markdown的区域 END -->
+            <!-- ==================================== -->
+            
+            <div class="article-actions">
+                <a href="blog.html" class="action-btn btn-primary">📚 返回博客列表</a>
+                <button onclick="saveArticle()" class="action-btn btn-secondary">💾 保存这篇文章</button>
+            </div>
+        </main>
+        
+        <aside class="article-sidebar">
+            <!-- 自动生成的目录 -->
+            <div class="sidebar-box" id="toc">
+                <div class="sidebar-title">📑 文章目录</div>
+                <div id="toc-container">
+                    <ul id="auto-toc">
+                        <li><a href="#" onclick="scrollToContent()">等待生成目录...</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 自动生成的文章信息 -->
+            <div class="sidebar-box" id="info">
+                <div class="sidebar-title">📊 文章信息</div>
+                <div class="article-info" id="auto-info">
+                    <div class="info-item" id="word-count">字数：计算中</div>
+                    <div class="info-item" id="read-time">阅读：计算中</div>
+                    <div class="info-item" id="section-count">章节：0</div>
+                    <div class="info-item" id="update-date">日期：自动识别</div>
+                </div>
+            </div>
+            
+            <!-- 快速操作 -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">⚡ 快速操作</div>
+                <div class="article-actions">
+                    <button onclick="copyArticle()" class="action-btn btn-secondary">📋 复制文章内容</button>
+                    <button onclick="printArticle()" class="action-btn btn-secondary">🖨️ 打印这篇文章</button>
+                </div>
+            </div>
+            
+            <!-- 使用提示 -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">💡 使用提示</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                    <p>✅ 直接粘贴Markdown内容即可</p>
+                    <p>✅ 系统自动提取标题和目录</p>
+                    <p>✅ 保存为HTML文件分享</p>
+                    <p>✅ 兼容所有Markdown语法</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- 帮助按钮 -->
+    <div class="help-tip">
+        <button class="help-btn" onclick="showHelp()">?</button>
+    </div>
+    
+    <!-- 与网站完全一致的底部导航 -->
+    <div class="footer-links">
+        <a href="index.html" class="footer-link" title="返回主站">返回</a>
+        <span class="link-divider">|</span>
+        <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+        <span class="link-divider">|</span>
+        <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
+    </div>
+    
+    <footer>
+        <p>知为行之始，行为知之成</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+    </footer>
+
+    <script>
+        // ==============================================
+        // 🎯 核心功能：自动处理Markdown内容
+        // ==============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            processMarkdownContent();
+            setupMobileOptimization();
+            setupEventListeners();
+            
+            // 显示控制台使用说明
+            showConsoleGuide();
+        });
+        
+        function processMarkdownContent() {
+            const markdownElement = document.getElementById('markdown-content');
+            const markdownHTML = markdownElement.innerHTML;
+            
+            // 1. 自动提取标题和更新页面
+            extractAndSetTitle(markdownHTML);
+            
+            // 2. 自动生成目录
+            generateTableOfContents(markdownHTML);
+            
+            // 3. 计算文章信息
+            calculateArticleInfo(markdownHTML);
+            
+            // 4. 添加动画效果
+            addContentAnimations();
+        }
+        
+        function extractAndSetTitle(markdownHTML) {
+            // 从Markdown中提取h1标题
+            const h1Match = markdownHTML.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+            
+            if (h1Match) {
+                const title = h1Match[1].trim();
+                
+                // 更新页面标题
+                document.title = title + ' - Davi的思考笔记';
+                
+                // 更新面包屑导航
+                document.getElementById('article-category').textContent = title.substring(0, 20) + (title.length > 20 ? '...' : '');
+                
+                // 更新副标题
+                document.getElementById('dynamic-subtitle').textContent = title;
+                
+                // 尝试从内容中提取分类
+                extractCategoryFromContent(markdownHTML);
+            }
+        }
+        
+        function extractCategoryFromContent(markdownHTML) {
+            // 简单的内容分析，尝试提取关键词作为分类
+            const commonCategories = ['AI', 'Web3', '思考', '技术', '创作', '生活', '工具', '方法论'];
+            const contentText = markdownHTML.replace(/<[^>]+>/g, ' ').toLowerCase();
+            
+            for (const category of commonCategories) {
+                if (contentText.includes(category.toLowerCase())) {
+                    // 可以在这里添加分类标签显示
+                    break;
+                }
+            }
+        }
+        
+        function generateTableOfContents(markdownHTML) {
+            const tocContainer = document.getElementById('auto-toc');
+            
+            // 找出所有的h2和h3标题
+            const headingRegex = /<h([23])[^>]*>([^<]+)<\/h\1>/gi;
+            const headings = [];
+            let match;
+            
+            while ((match = headingRegex.exec(markdownHTML)) !== null) {
+                headings.push({
+                    level: parseInt(match[1]),
+                    text: match[2].trim()
+                });
+            }
+            
+            if (headings.length === 0) {
+                tocContainer.innerHTML = '<li><a href="#content">文章暂无章节标题</a></li>';
+                return;
+            }
+            
+            // 生成目录HTML
+            let tocHTML = '';
+            headings.forEach((heading, index) => {
+                const slug = 'section-' + index;
+                const indent = heading.level === 3 ? 'style="margin-left: 1rem;"' : '';
+                const icon = heading.level === 2 ? '📌' : '📝';
+                
+                tocHTML += `
+                    <li ${indent}>
+                        <a href="#${slug}" onclick="scrollToHeading(${index})">
+                            ${icon} ${heading.text}
+                        </a>
+                    </li>
+                `;
+                
+                // 为标题添加ID
+                const headingsInDOM = document.querySelectorAll('#markdown-content h2, #markdown-content h3');
+                if (headingsInDOM[index]) {
+                    headingsInDOM[index].id = slug;
+                }
+            });
+            
+            tocContainer.innerHTML = tocHTML;
+            
+            // 更新章节数
+            document.getElementById('section-count').textContent = `章节：${headings.length}`;
+        }
+        
+        function calculateArticleInfo(markdownHTML) {
+            // 移除HTML标签，获取纯文本
+            const plainText = markdownHTML.replace(/<[^>]+>/g, ' ');
+            
+            // 计算字数
+            const wordCount = plainText.trim().split(/\s+/).length;
+            document.getElementById('word-count').textContent = `字数：${wordCount.toLocaleString()}`;
+            
+            // 计算阅读时间（假设每分钟250字）
+            const readTime = Math.ceil(wordCount / 250);
+            document.getElementById('read-time').textContent = `阅读：${readTime}分钟`;
+            
+            // 尝试从内容中提取日期
+            const dateMatch = plainText.match(/(20\d{2})[年.-](\d{1,2})[月.-](\d{1,2})/);
+            if (dateMatch) {
+                const dateStr = `${dateMatch[1]}年${dateMatch[2]}月${dateMatch[3]}日`;
+                document.getElementById('update-date').textContent = `日期：${dateStr}`;
+            }
+        }
+        
+        function addContentAnimations() {
+            // 为文章内容添加淡入效果
+            const articleMain = document.querySelector('.article-main');
+            articleMain.style.opacity = '0';
+            articleMain.style.transform = 'translateY(20px)';
+            articleMain.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            setTimeout(() => {
+                articleMain.style.opacity = '1';
+                articleMain.style.transform = 'translateY(0)';
+            }, 300);
+            
+            // 为侧边栏项目添加延迟动画
+            const sidebarItems = document.querySelectorAll('.sidebar-box');
+            sidebarItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                item.style.transition = `opacity 0.4s ease ${index * 0.1}s, transform 0.4s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 500 + index * 100);
+            });
+        }
+        
+        // ==============================================
+        // 🎯 用户交互功能
+        // ==============================================
+        
+        function scrollToHeading(index) {
+            const headings = document.querySelectorAll('#markdown-content h2, #markdown-content h3');
+            if (headings[index]) {
+                headings[index].scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // 添加高亮效果
+                headings[index].style.backgroundColor = 'rgba(210, 35, 42, 0.1)';
+                headings[index].style.transition = 'background-color 0.3s ease';
+                
+                setTimeout(() => {
+                    headings[index].style.backgroundColor = '';
+                }, 2000);
+            }
+        }
+        
+        function scrollToContent() {
+            document.getElementById('content').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function scrollToTOC() {
+            document.getElementById('toc').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function scrollToInfo() {
+            document.getElementById('info').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function copyArticle() {
+            const markdownElement = document.getElementById('markdown-content');
+            const textToCopy = markdownElement.textContent || markdownElement.innerText;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('✅ 文章内容已复制到剪贴板！');
+            }).catch(err => {
+                alert('❌ 复制失败，请手动选择复制');
+            });
+        }
+        
+        function saveArticle() {
+            // 获取文章标题作为文件名
+            const h1Element = document.querySelector('#markdown-content h1');
+            const title = h1Element ? h1Element.textContent.trim() : 'article';
+            
+            // 清理文件名
+            const cleanTitle = title
+                .replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s]/g, '')
+                .replace(/\s+/g, '-')
+                .toLowerCase();
+            
+            // 创建下载
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${cleanTitle || 'article'}.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert(`💾 文章已保存为：${cleanTitle}.html\n\n保存位置：浏览器默认下载文件夹`);
+        }
+        
+        function printArticle() {
+            window.print();
+        }
+        
+        function showHelp() {
+            const helpMessage = `
+🎯 使用说明（三步完成）：
+
+1️⃣ 【复制】
+   在您的Markdown编辑器中复制整篇文章
+
+2️⃣ 【粘贴】
+   在这个页面找到"粘贴Markdown的区域"
+   删除示例内容，粘贴您的文章
+
+3️⃣ 【保存】
+   点击"保存这篇文章"按钮
+   或按 Ctrl+S 保存为HTML文件
+
+✨ 自动功能：
+   ✅ 自动提取文章标题
+   ✅ 自动生成目录导航
+   ✅ 自动计算字数时间
+   ✅ 自动识别文章日期
+
+📁 文件命名建议：
+   article-ai-tools.html
+   article-web3-thoughts.html
+   article-creativity.html
+
+💡 小贴士：
+   • 确保文章以 # 标题 开头
+   • 使用 ## 创建主要章节
+   • 保存后可在blog.html中添加链接
+            `;
+            
+            alert(helpMessage);
+        }
+        
+        // ==============================================
+        // 🎯 辅助功能
+        // ==============================================
+        
+        function setupMobileOptimization() {
+            // 触摸反馈
+            const touchElements = document.querySelectorAll('a, button, .nav-tab, .action-btn, .footer-link');
+            touchElements.forEach(el => {
+                el.addEventListener('touchstart', function() {
+                    this.style.opacity = '0.8';
+                }, { passive: true });
+                
+                el.addEventListener('touchend', function() {
+                    this.style.opacity = '1';
+                }, { passive: true });
+            });
+            
+            // 防止双击缩放
+            let lastTouchTime = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = Date.now();
+                if (now - lastTouchTime <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchTime = now;
+            }, false);
+        }
+        
+        function setupEventListeners() {
+            // 监听内容区域的变化（如果用户直接编辑）
+            const markdownElement = document.getElementById('markdown-content');
+            markdownElement.addEventListener('input', function() {
+                setTimeout(processMarkdownContent, 300);
+            });
+            
+            // 导航标签点击效果
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+        
+        function showConsoleGuide() {
+            console.log(`
+🎨 ============================================
+🎨 智能Markdown博客详情页
+🎨 使用说明
+🎨 ============================================
+
+📋 使用方法（只需三步）：
+   1. 复制您的Markdown文章
+   2. 粘贴到页面指定区域
+   3. 保存为HTML文件
+
+✨ 自动功能：
+   • 标题自动提取
+   • 目录自动生成  
+   • 信息自动计算
+   • 样式自动应用
+
+💡 高级技巧：
+   • 文章第一行应为 # 标题
+   • 用 ## 创建章节，会自动生成目录
+   • 保存后文件名会自动基于标题生成
+   • 侧边栏有完整操作按钮
+
+🎯 保存建议：
+   • 保存为：article-主题.html
+   • 上传到网站服务器
+   • 在blog.html中添加链接
+
+🚀 快速开始：
+   现在就粘贴您的第一篇文章试试！
+============================================
+            `);
+        }
+        
+        // 初始化完成提示
+        setTimeout(() => {
+            console.log('✅ 页面初始化完成，可以粘贴您的Markdown文章了！');
+        }, 1000);
+    </script>
+</body>
+</html>
