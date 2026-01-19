@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="博客文章详情 - 理会·践行">
+    <title>文章标题 - Davi的思考笔记</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <!-- Markdown样式库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown-light.min.css">
+    <style>
+        :root {
+            --primary-color: #d2232a;
+            --dark-color: #222;
+            --light-color: #fefefe;
+            --gray-light: #f8f9fa;
+            --gray-border: #eee;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --text-light: #888;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --card-hover-shadow: 0 8px 24px rgba(210, 35, 42, 0.1);
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--light-color);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(210, 35, 42, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 34, 34, 0.03) 0%, transparent 20%);
+        }
+        
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+        }
+        
+        @media (max-width: 480px) {
+            html { font-size: 14px; }
+            body { 
+                padding: 15px; 
+                background-image: none;
+            }
+        }
+        
+        /* 页面头部 */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .back-nav {
+            margin-bottom: 1.5rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+        
+        .back-link::before {
+            content: '←';
+            margin-right: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .back-link:hover::before {
+            transform: translateX(-3px);
+        }
+        
+        /* 文章头部信息 */
+        .article-header {
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .article-header { 
+                padding: 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .article-category {
+            display: inline-block;
+            background: rgba(210, 35, 42, 0.1);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .article-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            line-height: 1.3;
+        }
+        
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--gray-border);
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* 文章内容区域 */
+        .article-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .article-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        /* 主文章内容 */
+        .article-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 768px) {
+            .article-content { 
+                padding: 1.5rem; 
+            }
+        }
+        
+        /* ===================== */
+        /* MARKDOWN内容区域开始 */
+        /* ===================== */
+        
+        /* 自定义Markdown样式，与网站风格统一 */
+        .markdown-body {
+            font-family: 'Noto Sans SC', sans-serif;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+        
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3,
+        .markdown-body h4 {
+            color: var(--dark-color);
+            font-weight: 500;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .markdown-body h1 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .markdown-body h2 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        .markdown-body h3 {
+            font-size: 1.3rem;
+        }
+        
+        .markdown-body h4 {
+            font-size: 1.1rem;
+        }
+        
+        .markdown-body p {
+            margin-bottom: 1.2rem;
+            color: var(--text-secondary);
+        }
+        
+        .markdown-body a {
+            color: var(--primary-color);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .markdown-body a:hover {
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .markdown-body blockquote {
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: rgba(210, 35, 42, 0.03);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .markdown-body code {
+            background: var(--gray-light);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d2232a;
+        }
+        
+        .markdown-body pre {
+            background: #f6f8fa;
+            padding: 1.2rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border: 1px solid var(--gray-border);
+        }
+        
+        .markdown-body pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .markdown-body ul,
+        .markdown-body ol {
+            margin: 1rem 0;
+            padding-left: 1.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .markdown-body th {
+            background: var(--gray-light);
+            font-weight: 600;
+            text-align: left;
+            padding: 0.8rem;
+            border: 1px solid var(--gray-border);
+        }
+        
+        .markdown-body td {
+            padding: 0.8rem;
+            border: 1px solid var(--gray-border);
+            color: var(--text-secondary);
+        }
+        
+        .markdown-body hr {
+            border: none;
+            height: 1px;
+            background: var(--gray-border);
+            margin: 2rem 0;
+        }
+        
+        /* ===================== */
+        /* MARKDOWN内容区域结束 */
+        /* ===================== */
+        
+        /* 侧边栏 */
+        .article-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .article-sidebar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 1.5rem;
+            }
+            
+            .sidebar-section {
+                flex: 1;
+                min-width: 250px;
+            }
+        }
+        
+        .sidebar-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+        }
+        
+        .sidebar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        /* 目录导航 */
+        .toc-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .toc-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.3rem 0;
+            display: block;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 0.8rem;
+        }
+        
+        .toc-link:hover {
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+            padding-left: 1rem;
+        }
+        
+        .toc-link.level-2 {
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .toc-link.level-3 {
+            padding-left: 2.2rem;
+            font-size: 0.85rem;
+        }
+        
+        /* 标签 */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: var(--gray-light);
+            color: var(--text-secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .tag:hover {
+            background: rgba(210, 35, 42, 0.1);
+            color: var(--primary-color);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* 相关文章 */
+        .related-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .related-item {
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        .related-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .related-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .related-link:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+        
+        /* 文章操作栏 */
+        .article-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid var(--gray-border);
+            border-bottom: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 768px) {
+            .article-actions {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+        }
+        
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+        
+        .btn-prev {
+            color: var(--text-secondary);
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+        }
+        
+        .btn-prev:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            border-color: rgba(210, 35, 42, 0.2);
+            transform: translateX(-3px);
+        }
+        
+        .btn-next {
+            color: white;
+            background: var(--dark-color);
+            border: 2px solid var(--dark-color);
+        }
+        
+        .btn-next:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(210, 35, 42, 0.2);
+        }
+        
+        /* 评论区域（可选） */
+        .comments-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--gray-border);
+        }
+        
+        .comments-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        .comment-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-style: italic;
+            background: var(--gray-light);
+            border-radius: 8px;
+            border: 1px dashed var(--gray-border);
+        }
+        
+        /* 底部导航 */
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 3rem 0 2rem;
+            padding: 1.5rem;
+            background: var(--gray-light);
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-links {
+                gap: 1rem;
+                padding: 1.2rem;
+            }
+        }
+        
+        .footer-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
+            background: white;
+            border: 1px solid var(--gray-border);
+        }
+        
+        @media (max-width: 480px) {
+            .footer-link {
+                font-size: 0.95rem;
+                padding: 0.5rem 1rem;
+                min-width: 90px;
+                flex: 1;
+            }
+        }
+        
+        .footer-link:hover {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
+            transform: translateY(-2px);
+            border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
+        }
+        
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+        }
+        
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <div class="back-nav">
+            <a href="blog.html" class="back-link">返回博客列表</a>
+        </div>
+    </div>
+
+    <article>
+        <!-- 文章头部信息 -->
+        <header class="article-header">
+            <span class="article-category">思考笔记</span>
+            <h1 class="article-title">文章标题：这里替换为您的文章标题</h1>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <span>📅</span>
+                    <span>发布时间：2024年3月20日</span>
+                </div>
+                <div class="meta-item">
+                    <span>⏱️</span>
+                    <span>阅读时间：约8分钟</span>
+                </div>
+                <div class="meta-item">
+                    <span>🏷️</span>
+                    <span>标签：思考, 实践, 技术</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="article-container">
+            <!-- 主文章内容 -->
+            <main class="article-content">
+                <!-- ============================================ -->
+                <!-- MARKDOWN文章内容插入位置开始 -->
+                <!-- ============================================ -->
+                <!-- 
+                    将您的Markdown文章内容粘贴在这里
+                    这个区域支持完整的Markdown语法：
+                    
+                    1. 标题 (#, ##, ###)
+                    2. 段落和换行
+                    3. 粗体、斜体、删除线
+                    4. 列表（有序和无序）
+                    5. 链接和图片
+                    6. 引用块
+                    7. 代码块（支持语法高亮）
+                    8. 表格
+                    9. 分隔线
+                    
+                    注意：保持Markdown的原始格式，系统会自动渲染
+                -->
+                
+                <div class="markdown-body">
+                    <!-- 这里粘贴您的Markdown内容 -->
+                    <h1>这里是文章主标题</h1>
+                    
+                    <p>这是文章的引言段落。您可以在这里简要介绍文章的主题和主要内容。</p>
+                    
+                    <h2>第一部分：主要观点</h2>
+                    
+                    <p>这是正文内容。您可以在这里详细阐述您的观点和思考。</p>
+                    
+                    <p>Markdown支持各种格式，比如<strong>粗体</strong>、<em>斜体</em>，还有<code>行内代码</code>。</p>
+                    
+                    <h3>子标题</h3>
+                    
+                    <p>列表也很容易使用：</p>
+                    
+                    <ul>
+                        <li>无序列表项一</li>
+                        <li>无序列表项二</li>
+                        <li>无序列表项三</li>
+                    </ul>
+                    
+                    <ol>
+                        <li>有序列表项一</li>
+                        <li>有序列表项二</li>
+                        <li>有序列表项三</li>
+                    </ol>
+                    
+                    <blockquote>
+                        这是引用块。可以用来突出重要的观点或他人的话语。
+                    </blockquote>
+                    
+                    <p>代码块的展示：</p>
+                    
+<pre><code>// 示例代码
+function helloWorld() {
+    console.log("Hello, Markdown!");
+    return true;
+}</code></pre>
+                    
+                    <h2>第二部分：深入探讨</h2>
+                    
+                    <p>您可以在文章中添加图片：</p>
+                    
+                    <p>![图片描述](https://via.placeholder.com/600x300)</p>
+                    
+                    <p>或者插入表格：</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>描述</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>思考</td>
+                                <td>深度思考的过程</td>
+                                <td>进行中</td>
+                            </tr>
+                            <tr>
+                                <td>实践</td>
+                                <td>将思考转化为行动</td>
+                                <td>已完成</td>
+                            </tr>
+                            <tr>
+                                <td>反思</td>
+                                <td>对实践的回顾</td>
+                                <td>计划中</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <hr>
+                    
+                    <h2>结论</h2>
+                    
+                    <p>最后是文章的总结部分，概括主要观点和收获。</p>
+                    
+                    <p>希望这个模板对您有帮助！</p>
+                    <!-- Markdown内容结束 -->
+                </div>
+                
+                <!-- ============================================ -->
+                <!-- MARKDOWN文章内容插入位置结束 -->
+                <!-- ============================================ -->
+                
+                <!-- 文章操作栏 -->
+                <div class="article-actions">
+                    <a href="#" class="action-btn btn-prev">
+                        <span>← 上一篇</span>
+                    </a>
+                    <a href="blog.html" class="action-btn">返回列表</a>
+                    <a href="#" class="action-btn btn-next">
+                        <span>下一篇 →</span>
+                    </a>
+                </div>
+                
+                <!-- 评论区域（可选） -->
+                <div class="comments-section">
+                    <h3>思考交流</h3>
+                    <div class="comment-placeholder">
+                        <p>如果您对这篇文章有任何想法或问题，欢迎通过邮件交流。</p>
+                        <p style="margin-top: 0.5rem;">邮箱：x.dw@qq.com</p>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 侧边栏 -->
+            <aside class="article-sidebar">
+                <!-- 目录导航 -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">文章目录</h3>
+                    <nav class="toc-list" id="tableOfContents">
+                        <!-- JavaScript会自动生成目录 -->
+                        <div class="toc-placeholder">
+                            <p style="color: var(--text-light); font-size: 0.9rem;">目录正在生成中...</p>
+                        </div>
+                    </nav>
+                </div>
+
+                <!-- 文章标签 -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">文章标签</h3>
+                    <div class="tags-container">
+                        <a href="#" class="tag">思考</a>
+                        <a href="#" class="tag">实践</a>
+                        <a href="#" class="tag">技术</a>
+                        <a href="#" class="tag">AI</a>
+                        <a href="#" class="tag">创作</a>
+                        <a href="#" class="tag">方法论</a>
+                    </div>
+                </div>
+
+                <!-- 相关文章 -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">相关阅读</h3>
+                    <ul class="related-list">
+                        <li class="related-item">
+                            <a href="#" class="related-link">AI工具热中的冷思考</a>
+                        </li>
+                        <li class="related-item">
+                            <a href="#" class="related-link">当AI也能"创作"时</a>
+                        </li>
+                        <li class="related-item">
+                            <a href="#" class="related-link">数字时代的注意力管理</a>
+                        </li>
+                        <li class="related-item">
+                            <a href="#" class="related-link">个人知识管理实验</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 文章信息 -->
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">文章信息</h3>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                        <p><strong>字数统计：</strong>约2,500字</p>
+                        <p><strong>阅读时间：</strong>8-10分钟</p>
+                        <p><strong>最后更新：</strong>2024年3月20日</p>
+                        <p><strong>写作状态：</strong>已完成</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </article>
+
+    <!-- 底部导航 -->
+    <div class="footer-links">
+        <a href="index.html" class="footer-link" title="返回主站">返回</a>
+        <span class="link-divider">|</span>
+        <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+        <span class="link-divider">|</span>
+        <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
+    </div>
+    
+    <footer>
+        <p>知为行之始，行为知之成</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ============================================
+            // 自动生成文章目录
+            // ============================================
+            function generateTableOfContents() {
+                const headings = document.querySelectorAll('.markdown-body h1, .markdown-body h2, .markdown-body h3');
+                const tocContainer = document.getElementById('tableOfContents');
+                
+                if (headings.length === 0) {
+                    tocContainer.innerHTML = '<p style="color: var(--text-light); font-size: 0.9rem;">暂无目录</p>';
+                    return;
+                }
+                
+                let tocHTML = '';
+                headings.forEach((heading, index) => {
+                    // 为标题添加ID（用于锚点链接）
+                    const headingId = `heading-${index}`;
+                    heading.id = headingId;
+                    
+                    // 确定标题级别
+                    const level = parseInt(heading.tagName.charAt(1));
+                    const levelClass = `level-${level}`;
+                    
+                    // 生成目录项
+                    tocHTML += `
+                        <li class="toc-item">
+                            <a href="#${headingId}" class="toc-link ${levelClass}">
+                                ${heading.textContent}
+                            </a>
+                        </li>
+                    `;
+                });
+                
+                tocContainer.innerHTML = `<ul class="toc-list">${tocHTML}</ul>`;
+            }
+            
+            // ============================================
+            // 阅读时间估算
+            // ============================================
+            function estimateReadingTime() {
+                const articleText = document.querySelector('.markdown-body').textContent;
+                const wordCount = articleText.split(/\s+/).length;
+                const readingTime = Math.ceil(wordCount / 250); // 假设每分钟阅读250字
+                
+                // 更新文章元信息中的阅读时间
+                const readingTimeElement = document.querySelector('.article-meta .meta-item:nth-child(2) span:last-child');
+                if (readingTimeElement && readingTime > 0) {
+                    readingTimeElement.textContent = `阅读时间：约${readingTime}分钟`;
+                }
+                
+                // 更新侧边栏的字数统计
+                const wordCountElement = document.querySelector('.sidebar-section:last-child p:first-child');
+                if (wordCountElement) {
+                    wordCountElement.innerHTML = `<strong>字数统计：</strong>约${wordCount.toLocaleString()}字`;
+                }
+            }
+            
+            // ============================================
+            // 代码块语法高亮（简单实现）
+            // ============================================
+            function highlightCodeBlocks() {
+                const codeBlocks = document.querySelectorAll('pre code');
+                codeBlocks.forEach(block => {
+                    // 移除Markdown中可能存在的语言标记
+                    block.innerHTML = block.innerHTML.replace(/^```[a-z]*\n/, '').replace(/\n```$/, '');
+                    
+                    // 这里可以集成更复杂的语法高亮库，如Prism.js或Highlight.js
+                    // 为了简化，这里只做基本的代码样式处理
+                    block.style.fontFamily = "'Menlo', 'Monaco', 'Courier New', monospace";
+                    block.style.fontSize = "0.9em";
+                    block.style.lineHeight = "1.5";
+                });
+            }
+            
+            // ============================================
+            // 图片懒加载
+            // ============================================
+            function lazyLoadImages() {
+                const images = document.querySelectorAll('.markdown-body img');
+                
+                const imageObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.style.opacity = '0';
+                            img.style.transition = 'opacity 0.5s ease';
+                            
+                            // 模拟加载效果
+                            setTimeout(() => {
+                                img.style.opacity = '1';
+                            }, 100);
+                            
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+                
+                images.forEach(img => imageObserver.observe(img));
+            }
+            
+            // ============================================
+            // 平滑滚动到锚点
+            // ============================================
+            function setupSmoothScroll() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+                        
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            }
+            
+            // ============================================
+            // 页面进度指示器
+            // ============================================
+            function setupReadingProgress() {
+                const progressBar = document.createElement('div');
+                progressBar.style.position = 'fixed';
+                progressBar.style.top = '0';
+                progressBar.style.left = '0';
+                progressBar.style.width = '0%';
+                progressBar.style.height = '3px';
+                progressBar.style.background = 'var(--primary-color)';
+                progressBar.style.transition = 'width 0.3s ease';
+                progressBar.style.zIndex = '1000';
+                document.body.appendChild(progressBar);
+                
+                window.addEventListener('scroll', function() {
+                    const winHeight = window.innerHeight;
+                    const docHeight = document.documentElement.scrollHeight - winHeight;
+                    const scrolled = (window.scrollY / docHeight) * 100;
+                    progressBar.style.width = scrolled + '%';
+                });
+            }
+            
+            // ============================================
+            // 初始化所有功能
+            // ============================================
+            function initializePage() {
+                generateTableOfContents();
+                estimateReadingTime();
+                highlightCodeBlocks();
+                lazyLoadImages();
+                setupSmoothScroll();
+                setupReadingProgress();
+                
+                // 移动端触摸优化
+                document.addEventListener('touchstart', function() {}, {passive: true});
+                
+                // 防止双击缩放
+                let lastTouchEnd = 0;
+                document.addEventListener('touchend', function(event) {
+                    const now = Date.now();
+                    if (now - lastTouchEnd <= 300) {
+                        event.preventDefault();
+                    }
+                    lastTouchEnd = now;
+                }, false);
+                
+                // 链接触摸反馈
+                const clickableElements = document.querySelectorAll('a, button, .action-btn, .footer-link');
+                clickableElements.forEach(el => {
+                    el.addEventListener('touchstart', function() {
+                        this.style.opacity = '0.8';
+                    }, {passive: true});
+                    
+                    el.addEventListener('touchend', function() {
+                        this.style.opacity = '1';
+                    }, {passive: true});
+                });
+                
+                // 页面加载动画
+                const articleContent = document.querySelector('.article-content');
+                if (articleContent) {
+                    articleContent.style.opacity = '0';
+                    articleContent.style.transform = 'translateY(20px)';
+                    articleContent.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                    
+                    setTimeout(() => {
+                        articleContent.style.opacity = '1';
+                        articleContent.style.transform = 'translateY(0)';
+                    }, 300);
+                }
+            }
+            
+            // 执行初始化
+            initializePage();
+            
+            // ============================================
+            // 使用说明
+            // ============================================
+            console.log(`
+============================================
+博客文章详情页使用说明
+============================================
+
+1. 文章内容插入：
+   - 找到 <!-- MARKDOWN文章内容插入位置开始 --> 注释
+   - 在 <div class="markdown-body"> 标签内粘贴您的Markdown内容
+   - 保持Markdown原始格式，系统会自动渲染
+
+2. 文章信息设置：
+   - 修改 .article-title 中的文章标题
+   - 更新 .article-meta 中的发布时间和标签
+   - 调整侧边栏的相关文章和标签
+
+3. 高级功能：
+   - 目录自动生成：基于h1-h3标题
+   - 阅读时间估算：基于字数自动计算
+   - 代码高亮：基本样式支持
+   - 图片懒加载：提升加载性能
+   - 阅读进度条：页面顶部进度指示
+
+4. 注意事项：
+   - 确保Markdown语法正确
+   - 图片链接需要有效
+   - 代码块可添加语言标记
+   - 表格需要正确的Markdown格式
+
+5. 扩展建议：
+   - 如需更强大的代码高亮，可引入Prism.js
+   - 如需评论系统，可集成第三方服务
+   - 如需SEO优化，添加合适的meta标签
+============================================
+            `);
+        });
+    </script>
+</body>
+</html>
