@@ -38,38 +38,118 @@
         @media (max-width: 768px) { html { font-size: 15px; } }
         @media (max-width: 480px) { html { font-size: 14px; } body { padding: 15px; background-image: none; } }
         
-        /* 简单头部 */
-        .simple-header {
-            margin-bottom: 2rem;
+        /* ================================ */
+        /* 与index.html一致的头部样式 START */
+        /* ================================ */
+        .site-header {
             text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid var(--gray-border);
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-top: 1rem;
         }
         
-        .back-btn {
+        @media (max-width: 768px) {
+            .site-header { 
+                padding: 2rem 1rem 1.5rem; 
+                margin-bottom: 1.5rem;
+            }
+        }
+        
+        .page-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+        
+        .page-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+        }
+        
+        /* 与blog.html一致的导航标签样式 */
+        .nav-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+        }
+        
+        .nav-tab {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+            min-height: 44px;
             display: inline-flex;
             align-items: center;
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            justify-content: center;
+            touch-action: manipulation;
             background: var(--gray-light);
             border: 1px solid var(--gray-border);
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         
-        .back-btn:hover {
+        @media (max-width: 480px) {
+            .nav-tab {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+        }
+        
+        .nav-tab:hover {
             color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.05);
             border-color: rgba(210, 35, 42, 0.2);
             transform: translateY(-2px);
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
         }
+        
+        .nav-tab.active {
+            color: var(--primary-color);
+            background: rgba(210, 35, 42, 0.1);
+            border-color: rgba(210, 35, 42, 0.3);
+        }
+        /* ================================ */
+        /* 与index.html一致的头部样式 END */
+        /* ================================ */
         
         /* 文章主容器 */
         .article-wrapper {
             display: grid;
             grid-template-columns: 1fr 280px;
             gap: 2rem;
+            margin-top: 2rem;
         }
         
         @media (max-width: 1024px) {
@@ -86,7 +166,6 @@
             padding: 2.5rem;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--gray-border);
-            min-height: 500px;
         }
         
         @media (max-width: 768px) {
@@ -233,17 +312,6 @@
             gap: 0.5rem;
         }
         
-        /* 自动生成的标题显示 */
-        #auto-title {
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: var(--dark-color);
-            margin: 0 0 1.5rem 0;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid var(--primary-color);
-            text-align: center;
-        }
-        
         /* 自动生成的目录 */
         #auto-toc {
             list-style: none;
@@ -306,6 +374,10 @@
             font-weight: 500;
             transition: all 0.3s ease;
             gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
         }
         
         .btn-primary {
@@ -318,6 +390,7 @@
             background: var(--primary-color);
             border-color: var(--primary-color);
             transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.2);
         }
         
         .btn-secondary {
@@ -332,8 +405,8 @@
             transform: translateY(-2px);
         }
         
-        /* 底部导航 */
-        .simple-footer {
+        /* 与网站完全一致的底部导航 */
+        .footer-links {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -347,7 +420,7 @@
         }
         
         @media (max-width: 480px) {
-            .simple-footer {
+            .footer-links {
                 gap: 1rem;
                 padding: 1.2rem;
             }
@@ -366,6 +439,8 @@
             justify-content: center;
             min-height: 44px;
             min-width: 100px;
+            text-align: center;
+            touch-action: manipulation;
             background: white;
             border: 1px solid var(--gray-border);
         }
@@ -384,30 +459,61 @@
             background: rgba(210, 35, 42, 0.05);
             transform: translateY(-2px);
             border-color: rgba(210, 35, 42, 0.3);
+            box-shadow: 0 4px 8px rgba(210, 35, 42, 0.1);
         }
         
-        .footer-copyright {
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .link-divider {
+            color: #ccc;
+            font-weight: 300;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 480px) {
+            .link-divider {
+                display: none;
+            }
+        }
+        
+        footer {
             text-align: center;
-            padding: 2rem 0;
+            padding: 2rem 1rem;
             color: var(--text-light);
             font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
         }
         
-        /* 使用说明浮层 */
-        .help-overlay {
+        footer p {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .copyright {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+        
+        /* 简单帮助提示 */
+        .help-tip {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 100;
         }
         
         .help-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             background: var(--primary-color);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
             cursor: pointer;
             font-size: 1.2rem;
             box-shadow: 0 4px 12px rgba(210, 35, 42, 0.3);
@@ -418,101 +524,77 @@
             transform: scale(1.1);
         }
         
-        .help-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
+        /* 面包屑导航 */
+        .breadcrumb {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
         
-        .help-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
         }
         
-        .help-close {
-            float: right;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: var(--text-light);
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+        }
+        
+        .breadcrumb span {
+            margin: 0 0.5rem;
         }
     </style>
 </head>
 <body>
-    <!-- 使用说明按钮 -->
-    <div class="help-overlay">
-        <button class="help-btn" onclick="showHelp()">?</button>
-    </div>
-    
-    <!-- 使用说明弹窗 -->
-    <div class="help-modal" id="helpModal">
-        <div class="help-content">
-            <span class="help-close" onclick="hideHelp()">×</span>
-            <h2 style="color: var(--primary-color); margin-bottom: 1rem;">📖 使用说明</h2>
-            <div style="line-height: 1.6; color: var(--text-secondary);">
-                <h3>🎯 只需三步：</h3>
-                <ol style="margin: 1rem 0 1rem 1.5rem;">
-                    <li style="margin-bottom: 0.8rem;"><strong>复制</strong> - 从您的Markdown编辑器复制文章内容</li>
-                    <li style="margin-bottom: 0.8rem;"><strong>粘贴</strong> - 在下面👇的"粘贴区域"粘贴内容</li>
-                    <li><strong>保存</strong> - 保存为HTML文件，如 article-1.html</li>
-                </ol>
-                
-                <h3>✨ 自动功能：</h3>
-                <ul style="margin: 1rem 0 1rem 1.5rem;">
-                    <li style="margin-bottom: 0.5rem;">✅ 自动提取文章标题</li>
-                    <li style="margin-bottom: 0.5rem;">✅ 自动生成目录导航</li>
-                    <li style="margin-bottom: 0.5rem;">✅ 自动计算字数阅读时间</li>
-                    <li>✅ 自动识别日期和标签</li>
-                </ul>
-                
-                <h3>📝 Markdown支持：</h3>
-                <ul style="margin: 1rem 0 1rem 1.5rem;">
-                    <li>✅ 标题 (#, ##, ###)</li>
-                    <li>✅ 列表、引用、代码块</li>
-                    <li>✅ 图片、链接、表格</li>
-                    <li>✅ 粗体、斜体、删除线</li>
-                </ul>
-                
-                <div style="background: rgba(210, 35, 42, 0.05); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid var(--primary-color);">
-                    <p style="margin: 0; font-weight: 500; color: var(--primary-color);">💡 小贴士：</p>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">您的Markdown第一行应该是 # 标题，系统会自动提取作为文章标题。</p>
-                </div>
+    <!-- ================================ -->
+    <!-- 与index.html一致的页面头部 START -->
+    <!-- ================================ -->
+    <header class="site-header">
+        <h1 class="page-title">文章详情</h1>
+        <p class="page-subtitle" id="dynamic-subtitle">粘贴Markdown，自动生成完整文章</p>
+        
+        <!-- 面包屑导航 -->
+        <div class="breadcrumb">
+            <a href="index.html">主站</a> 
+            <span>›</span>
+            <a href="blog.html">博客</a>
+            <span>›</span>
+            <span id="article-category">文章详情</span>
+        </div>
+        
+        <!-- 与blog.html一致的导航标签 -->
+        <div class="nav-container">
+            <div class="nav-tabs">
+                <a href="#content" class="nav-tab active" onclick="scrollToContent()">📖 阅读文章</a>
+                <a href="#toc" class="nav-tab" onclick="scrollToTOC()">📑 文章目录</a>
+                <a href="#info" class="nav-tab" onclick="scrollToInfo()">📊 文章信息</a>
+                <a href="blog.html" class="nav-tab">← 返回列表</a>
             </div>
         </div>
-    </div>
-    
-    <div class="simple-header">
-        <a href="blog.html" class="back-btn">← 返回博客列表</a>
-    </div>
+    </header>
+    <!-- ================================ -->
+    <!-- 与index.html一致的页面头部 END -->
+    <!-- ================================ -->
     
     <div class="article-wrapper">
-        <main class="article-main">
-            <!-- 自动生成的标题显示在这里 -->
-            <h1 id="auto-title">等待粘贴文章...</h1>
-            
+        <main class="article-main" id="content">
             <!-- ==================================== -->
             <!-- 🔥 只需粘贴Markdown的区域 START -->
             <!-- ==================================== -->
             <div id="markdown-content">
                 <!-- 
                 =============================================
-                将您的Markdown文章内容粘贴在这里！
-                只需要粘贴，什么都不用改！
+                🎯 使用方法（超级简单）：
+                1. 复制您的Markdown文章内容
+                2. 粘贴到这里（替换这些文字）
+                3. 保存文件，完成！
                 =============================================
                 
                 示例格式：
                 # 文章标题
+                
+                > 文章引言或摘要
                 
                 ## 第一部分
                 这里是内容...
@@ -520,17 +602,122 @@
                 ## 第二部分
                 更多内容...
                 
-                系统会自动：
-                1. 提取标题显示在上方
-                2. 生成右侧目录
-                3. 计算字数阅读时间
-                4. 自动格式化样式
+                ##### 系统会自动：
+                1. ✅ 提取标题显示在上方
+                2. ✅ 生成右侧目录导航
+                3. ✅ 计算字数阅读时间
+                4. ✅ 自动格式化样式
                 -->
                 
                 <!-- 默认示例内容，粘贴后会替换 -->
-                <h1>欢迎使用智能Markdown博客系统</h1>
-                <p>请将您的Markdown文章内容粘贴在上方注释下方。</p>
-                <p>系统会自动处理一切！🎉</p>
+               # “Davy遇AI·焕新为Davi”转型主题短视频策划案（Markdown版）
+
+本文为适配网站展示的Markdown格式，标题层级、排版均优化适配网页端，可直接复制粘贴至网站编辑器使用。
+
+# 一、策划总览
+
+## 1.1 核心主题
+
+以游戏主播Davy的职业迷茫为切入点，讲述其与AI相遇、协作，从“困于传统模式”到“AI赋能新生”的转型故事，最终落脚“拥抱AI，重拾热爱与力量”的核心，传递积极突破、主动求变的态度，同时强化“Davi”的新身份标签（AI赋能后的全新形象）。
+
+## 1.2 目标受众
+
+核心受众：Davy的原有粉丝（游戏爱好者、直播观众）；泛受众：职场人、内容创作者、面临转型困惑的年轻人，以及对AI赋能生活/工作感兴趣的群体。
+
+## 1.3 视频核心指标
+
+时长：30秒（适配短视频平台传播，符合即梦AI生成上限）；比例：16:9（横屏，适配抖音、B站、视频号等全平台）；风格：写实治愈风，前半段冷调压抑，后半段暖调明亮，光影对比强化情绪转折；背景音乐：陈小春《街角的晚风》（贴合迷茫→治愈→坚定的情感脉络）。
+
+## 1.4 核心目标
+
+1. 向粉丝传递转型理念，强化“Davi+AI”的新标签，提升个人IP新鲜感；
+
+2. 引发职场/创作人群情感共鸣，传递AI不是替代、而是伙伴的理念；
+
+3. 产出高质量转型短视频，适配多平台传播，提升账号曝光与互动率。
+
+# 二、创意构思
+
+## 2.1 故事脉络
+
+迷茫困顿（传统直播/创作瓶颈）→ 微光相遇（AI以科技光束形式出现）→ 协同共生（AI赋能工作，破解瓶颈）→ 焕新出发（拥抱AI，确立新身份，重拾力量），四阶段对应音乐的前奏、过渡、副歌、高潮，形成情感闭环。
+
+## 2.2 亮点设计
+
+1. 情感共鸣：聚焦“努力却碰壁”“灵感枯竭”的共性痛点，让转型故事更易代入；
+
+2. 视觉对比：冷调昏暗场景（迷茫）与暖调明亮场景（新生）强烈反差，强化AI带来的改变；
+
+3. 职业适配：融入游戏主播专属元素（《三角洲行动》画面、电竞设备、直播脚本），贴合个人IP，避免泛化；
+
+4. 音乐融合：全程搭配《街角的晚风》，用怀旧治愈的旋律中和科技感，让AI形象更有温度。
+
+# 三、分镜脚本（适配手机端即梦AI）
+
+## 基础参数
+
+模型：Seedance 1.5 Pro（兼顾画质与效率，手机端易操作）；分辨率：1080P；总时长：30秒；音频：陈小春《街角的晚风》（提前下载至手机本地）；参考图：1-2张Davy电竞风格正面照（确保AI生成人物贴合本人）。
+
+|镜号|时长|画面内容|即梦AI提示词（手机端可直接复制）|色调/特效|音频节奏|字幕/旁白（手机端可直接粘贴）|
+|---|---|---|---|---|---|---|
+|1|0-5s|昏暗的主播工作室，Davy坐在电竞椅上，面前是亮着《三角洲行动》复盘界面的电脑，手撑额头面露疲惫迷茫，桌面摆着游戏手柄、主播麦克风，电竞RGB灯仅发出微弱蓝光，背景是模糊夜色。|写实风格，16:9，昏暗的游戏主播工作室，男性主播Davy坐在黑色电竞椅上，面前是亮着《三角洲行动》复盘画面的电脑，手撑额头，面露疲惫与迷茫，桌面摆放游戏手柄、主播麦克风、机械键盘，电竞RGB灯发微弱蓝光，冷色调光影，背景是模糊的城市夜景，细节拉满，电影级质感，人物贴合参考图形象。|色调：冷色；特效：无；参考图：上传Davy电竞风正面照，勾选“参考图融合”。|《街角的晚风》前奏渐入，搭配轻微鼠标点击声、游戏背景音（渐弱）。|字幕（白色粗体，居下）：生活总在催促我们赶路，却偶尔忘了为什么出发旁白（低沉舒缓）：我是Davy，曾在熟悉的轨道里打转。|
+|2|5-10s|淡蓝色AI光束从电脑屏幕中缓缓溢出，带有游戏代码流动粒子效果，像晚风般轻柔飘向Davy，光束逐渐扩散，照亮桌面的麦克风、手柄，冷色调慢慢向暖色调过渡。|写实风格，16:9，游戏主播工作室场景延续，淡蓝色全息AI光束从显示《三角洲行动》界面的电脑屏幕中散发，光束带有流动的游戏代码粒子，呈流线型飘向男性主播Davy，照亮桌面的游戏手柄和主播麦克风，光影柔和，冷色调逐渐转为暖色调，电影级运镜，人物贴合参考图形象。|色调：冷转暖；特效：粒子效果（透明度20%）；参考图：同镜号1。|音乐过渡段，加入轻微电子嗡鸣音效（渐轻）。|字幕（白色粗体，居下）：直到AI轻轻叩门，像晚风拂过心房。|
+|3|10-20s|Davy抬头看向光束，伸手触碰，面前展开半透明AI全息界面，界面显示《三角洲行动》战术分析图、直播脚本、陪玩团队排班表，他眼神从惊讶转为兴奋，手指在虚拟界面上滑动操作，背景逐渐被暖光完全覆盖。|写实风格，16:9，男性游戏主播Davy伸手触碰蓝色AI全息光束，面前展开科技感十足的半透明AI交互界面，界面上显示《三角洲行动》战术分析图、游戏直播脚本、陪玩团队排班表，主播表情从惊讶转为兴奋，手指在界面上滑动操作，背景被暖光覆盖，细节丰富，人物动作流畅，贴合参考图形象。|色调：暖色；特效：全息界面（点击时有光点反馈）；参考图：同镜号1。|《街角的晚风》副歌渐强，弱化环境音，突出旋律。|字幕（白色粗体，居下）：原来不是我不够勇敢，是没找对并肩的伙伴旁白（温柔有力）：AI不是替代，是让灵感不再孤单。|
+|4|20-30s|画面切换至明亮落地窗旁，Davy张开双臂拥抱阳光，身后落地窗融合AI全息界面与《三角洲行动》游戏画面，界面上显示“Davi·AI赋能游戏直播”新标识，AI机器人白色虚影在他身后虚化呈现，他笑容坚定，画面定格。|写实风格，16:9，明亮的落地窗旁，男性游戏主播Davy张开双臂拥抱阳光，身后落地窗融合AI全息界面与《三角洲行动》游戏画面，界面上显示“Davi·AI赋能游戏直播”标识，背景是晴朗蓝天与白云，暖黄色调光影，AI机器人白色虚影在主播身后虚化呈现，电影级氛围感，高饱和度色彩，人物笑容坚定，贴合参考图形象。|色调：暖黄；特效：阳光金色粒子（透明度30%），AI界面渐隐；参考图：同镜号1。|《街角的晚风》高潮部分拉满，音乐激昂有力。|字幕（白色粗体，居下，最后3秒放大）：今天，我选择全面拥抱AI带着这份笃定与从容我知道，我又可以了！结尾大字：Davi·AI新生。|
+# 四、执行计划（手机端即梦AI实操版）
+
+## 4.1 前置准备（10分钟）
+
+1. 素材准备：将优化后的分镜提示词、字幕/旁白复制到手机备忘录（便于粘贴）；下载《街角的晚风》音频至手机相册/文件管理；整理1-2张清晰的Davy电竞风正面照（无遮挡、光线均匀）。
+
+2. 工具准备：打开即梦AI手机端，登录账号（绑定抖音/手机号，确保有足够生成额度）。
+
+## 4.2 分步执行（15分钟）
+
+1. 进入创作模块：打开即梦AI→底部点击【视频创作】（摄像机图标）→选择【文本生视频】→模型勾选“Seedance 1.5 Pro”→设置比例16:9、时长30秒、风格写实、分辨率1080P。
+
+2. 分镜设置：点击输入框下方【分镜模式】→依次添加4个分镜，分别填写对应时间段、粘贴提示词、上传参考图、勾选“参考图融合”，并设置对应色调。
+
+3. 音频与字幕：点击底部【音频】→【上传本地】，导入《街角的晚风》，拖动音频轴对齐分镜节奏；点击【字幕】→粘贴对应旁白，设置字体为白色粗体、位置居下，调整字幕时长与画面匹配。
+
+4. 特效添加：点击【特效】→勾选“粒子效果”“光影渐变”，调整透明度至对应参数，确认无误后点击【立即生成】。
+
+## ### 4.3 后期调整（5-10分钟）
+
+1. 预览优化：生成完成后点击【预览】，检查画面与音频匹配度、人物形象还原度、字幕清晰度，若某分镜效果不佳，单独选中该分镜点击【重新生成】，可微调提示词（如增加“电竞设备细节”“暖光更明显”）。
+
+2. 导出保存：满意后点击【导出】，保存至手机相册，同时备份原文件，便于后续二次剪辑。
+
+## 4.4 传播发布
+
+1. 平台适配：抖音/视频号可直接发布30秒原片，搭配话题#AI赋能创作 #转型新生 #Davi的AI故事；B站可添加字幕注解，补充“AI赋能直播”的小感悟，提升内容深度。
+
+2. 互动引导：文案结尾添加“你愿意和AI并肩作战吗？评论区聊聊”，激发粉丝互动。
+
+# 五、预算规划
+
+本项目为手机端AI生成，无额外拍摄成本，核心预算为即梦AI生成额度，具体如下：
+
+1. 模型额度：Seedance 1.5 Pro生成30秒1080P视频，约消耗3-4个视频生成额度（可通过即梦AI日常任务、签到获取免费额度，或购买小额额度包）。
+
+2. 备用预算：若需二次调整、重新生成，预留1-2个额度，总预算控制在5个额度内（折合人民币约10-20元，具体以即梦AI实时定价为准）。
+
+# 六、风险与应对
+
+1. 人物形象偏差：风险点为AI生成的Davy与本人差距较大；应对方案：上传2张以上清晰参考图，提示词中明确“贴合参考图人物形象”，生成后若偏差明显，微调提示词重新生成。
+
+2. 音频与画面不同步：风险点为音乐节奏与分镜衔接不畅；应对方案：提前标记音乐前奏、副歌、高潮的时间点，在手机端拖动音频轴精准对齐，预览时反复调整。
+
+3. 生成效果不佳：风险点为某分镜画面模糊、特效杂乱；应对方案：简化提示词（避免关键词过多），降低特效透明度，或切换为Seedance 1.0 Pro模型（稳定性更高，消耗额度更少）。
+
+# 七、效果评估
+
+1. 数据指标：发布后24小时内，关注播放量、点赞量、评论量、转发量，核心看互动率（评论区是否有关于“转型”“AI”的讨论，是否引发共鸣）。
+
+2. 口碑反馈：收集粉丝评论，了解对“Davi新身份”的接受度，是否认可AI赋能的理念，为后续AI相关内容创作提供参考。
+
+3. 复盘优化：若某分镜传播效果好，可复用该提示词风格；若互动率低，可调整旁白情感浓度、优化画面细节，提升下一支视频质量。
+> （注：文档部分内容可能由 AI 生成）
                 
             </div>
             <!-- ==================================== -->
@@ -538,30 +725,30 @@
             <!-- ==================================== -->
             
             <div class="article-actions">
-                <a href="blog.html" class="action-btn btn-primary">📚 查看所有文章</a>
-                <a href="index.html" class="action-btn btn-secondary">🏠 返回主站</a>
+                <a href="blog.html" class="action-btn btn-primary">📚 返回博客列表</a>
+                <button onclick="saveArticle()" class="action-btn btn-secondary">💾 保存这篇文章</button>
             </div>
         </main>
         
         <aside class="article-sidebar">
             <!-- 自动生成的目录 -->
-            <div class="sidebar-box">
+            <div class="sidebar-box" id="toc">
                 <div class="sidebar-title">📑 文章目录</div>
                 <div id="toc-container">
                     <ul id="auto-toc">
-                        <li>目录将在粘贴内容后自动生成...</li>
+                        <li><a href="#" onclick="scrollToContent()">等待生成目录...</a></li>
                     </ul>
                 </div>
             </div>
             
             <!-- 自动生成的文章信息 -->
-            <div class="sidebar-box">
+            <div class="sidebar-box" id="info">
                 <div class="sidebar-title">📊 文章信息</div>
                 <div class="article-info" id="auto-info">
-                    <div class="info-item" id="word-count">字数：等待中</div>
-                    <div class="info-item" id="read-time">阅读时间：等待中</div>
+                    <div class="info-item" id="word-count">字数：计算中</div>
+                    <div class="info-item" id="read-time">阅读：计算中</div>
+                    <div class="info-item" id="section-count">章节：0</div>
                     <div class="info-item" id="update-date">日期：自动识别</div>
-                    <div class="info-item" id="section-count">章节：自动统计</div>
                 </div>
             </div>
             
@@ -569,71 +756,109 @@
             <div class="sidebar-box">
                 <div class="sidebar-title">⚡ 快速操作</div>
                 <div class="article-actions">
-                    <button onclick="copyMarkdown()" class="action-btn btn-secondary">📋 复制内容</button>
-                    <button onclick="exportHTML()" class="action-btn btn-primary">💾 保存文章</button>
+                    <button onclick="copyArticle()" class="action-btn btn-secondary">📋 复制文章内容</button>
+                    <button onclick="printArticle()" class="action-btn btn-secondary">🖨️ 打印这篇文章</button>
+                </div>
+            </div>
+            
+            <!-- 使用提示 -->
+            <div class="sidebar-box">
+                <div class="sidebar-title">💡 使用提示</div>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                    <p>✅ 直接粘贴Markdown内容即可</p>
+                    <p>✅ 系统自动提取标题和目录</p>
+                    <p>✅ 保存为HTML文件分享</p>
+                    <p>✅ 兼容所有Markdown语法</p>
                 </div>
             </div>
         </aside>
     </div>
     
-    <div class="simple-footer">
-        <a href="index.html" class="footer-link">返回</a>
-        <a href="blog.html" class="footer-link">理会</a>
-        <a href="directory.html" class="footer-link">践行</a>
+    <!-- 帮助按钮 -->
+    <div class="help-tip">
+        <button class="help-btn" onclick="showHelp()">?</button>
     </div>
     
-    <div class="footer-copyright">
-        <p>知为行之始，行为知之成</p>
-        <p>© 2026 Davi iHome Studio - 理会 · 践行</p>
+    <!-- 与网站完全一致的底部导航 -->
+    <div class="footer-links">
+        <a href="index.html" class="footer-link" title="返回主站">返回</a>
+        <span class="link-divider">|</span>
+        <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+        <span class="link-divider">|</span>
+        <a href="directory.html" class="footer-link" title="浏览内容目录">践行</a>
     </div>
+    
+    <footer>
+        <p>知为行之始，行为知之成</p>
+        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+    </footer>
 
     <script>
         // ==============================================
         // 🎯 核心功能：自动处理Markdown内容
         // ==============================================
         
-        // 当页面加载时，自动处理现有的Markdown内容
         document.addEventListener('DOMContentLoaded', function() {
             processMarkdownContent();
-            
-            // 监听粘贴事件（如果用户直接在页面上粘贴）
-            document.getElementById('markdown-content').addEventListener('paste', function(e) {
-                setTimeout(processMarkdownContent, 100);
-            });
-            
-            // 移动端优化
             setupMobileOptimization();
+            setupEventListeners();
+            
+            // 显示控制台使用说明
+            showConsoleGuide();
         });
         
-        // 处理Markdown内容的函数
         function processMarkdownContent() {
             const markdownElement = document.getElementById('markdown-content');
-            const markdownText = markdownElement.innerHTML.trim();
+            const markdownHTML = markdownElement.innerHTML;
             
-            if (!markdownText || markdownText.includes('欢迎使用智能Markdown博客系统')) {
-                return; // 保持默认内容
-            }
+            // 1. 自动提取标题和更新页面
+            extractAndSetTitle(markdownHTML);
             
-            // 1. 提取标题（从第一个h1标签）
-            const h1Match = markdownText.match(/<h1[^>]*>([^<]+)<\/h1>/i);
-            if (h1Match) {
-                const title = h1Match[1].trim();
-                document.getElementById('auto-title').textContent = title;
-                document.title = title + ' - Davi的思考笔记';
-            }
-            
-            // 2. 生成目录（从h2和h3标签）
-            generateTableOfContents(markdownText);
+            // 2. 自动生成目录
+            generateTableOfContents(markdownHTML);
             
             // 3. 计算文章信息
-            calculateArticleInfo(markdownText);
+            calculateArticleInfo(markdownHTML);
             
-            // 4. 添加一些动画效果
-            animateContent();
+            // 4. 添加动画效果
+            addContentAnimations();
         }
         
-        // 自动生成目录
-        function generateTableOfContents(markdownText) {
+        function extractAndSetTitle(markdownHTML) {
+            // 从Markdown中提取h1标题
+            const h1Match = markdownHTML.match(/<h1[^>]*>([^<]+)<\/h1>/i);
+            
+            if (h1Match) {
+                const title = h1Match[1].trim();
+                
+                // 更新页面标题
+                document.title = title + ' - Davi的思考笔记';
+                
+                // 更新面包屑导航
+                document.getElementById('article-category').textContent = title.substring(0, 20) + (title.length > 20 ? '...' : '');
+                
+                // 更新副标题
+                document.getElementById('dynamic-subtitle').textContent = title;
+                
+                // 尝试从内容中提取分类
+                extractCategoryFromContent(markdownHTML);
+            }
+        }
+        
+        function extractCategoryFromContent(markdownHTML) {
+            // 简单的内容分析，尝试提取关键词作为分类
+            const commonCategories = ['AI', 'Web3', '思考', '技术', '创作', '生活', '工具', '方法论'];
+            const contentText = markdownHTML.replace(/<[^>]+>/g, ' ').toLowerCase();
+            
+            for (const category of commonCategories) {
+                if (contentText.includes(category.toLowerCase())) {
+                    // 可以在这里添加分类标签显示
+                    break;
+                }
+            }
+        }
+        
+        function generateTableOfContents(markdownHTML) {
             const tocContainer = document.getElementById('auto-toc');
             
             // 找出所有的h2和h3标题
@@ -641,7 +866,7 @@
             const headings = [];
             let match;
             
-            while ((match = headingRegex.exec(markdownText)) !== null) {
+            while ((match = headingRegex.exec(markdownHTML)) !== null) {
                 headings.push({
                     level: parseInt(match[1]),
                     text: match[2].trim()
@@ -649,7 +874,7 @@
             }
             
             if (headings.length === 0) {
-                tocContainer.innerHTML = '<li>暂无章节标题</li>';
+                tocContainer.innerHTML = '<li><a href="#content">文章暂无章节标题</a></li>';
                 return;
             }
             
@@ -657,22 +882,33 @@
             let tocHTML = '';
             headings.forEach((heading, index) => {
                 const slug = 'section-' + index;
+                const indent = heading.level === 3 ? 'style="margin-left: 1rem;"' : '';
+                const icon = heading.level === 2 ? '📌' : '📝';
+                
                 tocHTML += `
-                    <li>
-                        <a href="#${slug}" onclick="scrollToSection('${slug}', ${index})">
-                            ${heading.level === 2 ? '📌' : '📝'} ${heading.text}
+                    <li ${indent}>
+                        <a href="#${slug}" onclick="scrollToHeading(${index})">
+                            ${icon} ${heading.text}
                         </a>
                     </li>
                 `;
+                
+                // 为标题添加ID
+                const headingsInDOM = document.querySelectorAll('#markdown-content h2, #markdown-content h3');
+                if (headingsInDOM[index]) {
+                    headingsInDOM[index].id = slug;
+                }
             });
             
             tocContainer.innerHTML = tocHTML;
+            
+            // 更新章节数
+            document.getElementById('section-count').textContent = `章节：${headings.length}`;
         }
         
-        // 计算文章信息
-        function calculateArticleInfo(markdownText) {
+        function calculateArticleInfo(markdownHTML) {
             // 移除HTML标签，获取纯文本
-            const plainText = markdownText.replace(/<[^>]+>/g, ' ');
+            const plainText = markdownHTML.replace(/<[^>]+>/g, ' ');
             
             // 计算字数
             const wordCount = plainText.trim().split(/\s+/).length;
@@ -680,13 +916,9 @@
             
             // 计算阅读时间（假设每分钟250字）
             const readTime = Math.ceil(wordCount / 250);
-            document.getElementById('read-time').textContent = `阅读时间：约${readTime}分钟`;
+            document.getElementById('read-time').textContent = `阅读：${readTime}分钟`;
             
-            // 统计章节数（h2和h3）
-            const sectionCount = (markdownText.match(/<h[23][^>]*>/gi) || []).length;
-            document.getElementById('section-count').textContent = `章节：${sectionCount}个`;
-            
-            // 尝试从内容中提取日期（查找日期格式）
+            // 尝试从内容中提取日期
             const dateMatch = plainText.match(/(20\d{2})[年.-](\d{1,2})[月.-](\d{1,2})/);
             if (dateMatch) {
                 const dateStr = `${dateMatch[1]}年${dateMatch[2]}月${dateMatch[3]}日`;
@@ -694,8 +926,37 @@
             }
         }
         
-        // 滚动到指定章节
-        function scrollToSection(slug, index) {
+        function addContentAnimations() {
+            // 为文章内容添加淡入效果
+            const articleMain = document.querySelector('.article-main');
+            articleMain.style.opacity = '0';
+            articleMain.style.transform = 'translateY(20px)';
+            articleMain.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            
+            setTimeout(() => {
+                articleMain.style.opacity = '1';
+                articleMain.style.transform = 'translateY(0)';
+            }, 300);
+            
+            // 为侧边栏项目添加延迟动画
+            const sidebarItems = document.querySelectorAll('.sidebar-box');
+            sidebarItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(20px)';
+                item.style.transition = `opacity 0.4s ease ${index * 0.1}s, transform 0.4s ease ${index * 0.1}s`;
+                
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 500 + index * 100);
+            });
+        }
+        
+        // ==============================================
+        // 🎯 用户交互功能
+        // ==============================================
+        
+        function scrollToHeading(index) {
             const headings = document.querySelectorAll('#markdown-content h2, #markdown-content h3');
             if (headings[index]) {
                 headings[index].scrollIntoView({ 
@@ -705,14 +966,36 @@
                 
                 // 添加高亮效果
                 headings[index].style.backgroundColor = 'rgba(210, 35, 42, 0.1)';
+                headings[index].style.transition = 'background-color 0.3s ease';
+                
                 setTimeout(() => {
                     headings[index].style.backgroundColor = '';
                 }, 2000);
             }
         }
         
-        // 复制Markdown内容
-        function copyMarkdown() {
+        function scrollToContent() {
+            document.getElementById('content').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function scrollToTOC() {
+            document.getElementById('toc').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function scrollToInfo() {
+            document.getElementById('info').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        function copyArticle() {
             const markdownElement = document.getElementById('markdown-content');
             const textToCopy = markdownElement.textContent || markdownElement.innerText;
             
@@ -723,53 +1006,79 @@
             });
         }
         
-        // 保存为HTML文件
-        function exportHTML() {
+        function saveArticle() {
+            // 获取文章标题作为文件名
+            const h1Element = document.querySelector('#markdown-content h1');
+            const title = h1Element ? h1Element.textContent.trim() : 'article';
+            
+            // 清理文件名
+            const cleanTitle = title
+                .replace(/[^\u4e00-\u9fa5a-zA-Z0-9\s]/g, '')
+                .replace(/\s+/g, '-')
+                .toLowerCase();
+            
+            // 创建下载
             const htmlContent = document.documentElement.outerHTML;
             const blob = new Blob([htmlContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             
             const a = document.createElement('a');
             a.href = url;
-            a.download = `article-${Date.now()}.html`;
+            a.download = `${cleanTitle || 'article'}.html`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            alert('💾 文章已保存为HTML文件！\n建议重命名为有意义的名称，如：article-ai-tools.html');
+            alert(`💾 文章已保存为：${cleanTitle}.html\n\n保存位置：浏览器默认下载文件夹`);
         }
         
-        // 动画效果
-        function animateContent() {
-            const title = document.getElementById('auto-title');
-            title.style.transform = 'translateY(-10px)';
-            title.style.opacity = '0';
-            title.style.transition = 'all 0.5s ease';
-            
-            setTimeout(() => {
-                title.style.transform = 'translateY(0)';
-                title.style.opacity = '1';
-            }, 300);
-            
-            // 为目录项添加动画
-            const tocItems = document.querySelectorAll('#auto-toc li');
-            tocItems.forEach((item, index) => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateX(-20px)';
-                item.style.transition = `all 0.3s ease ${index * 0.1}s`;
-                
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateX(0)';
-                }, 500 + index * 100);
-            });
+        function printArticle() {
+            window.print();
         }
         
-        // 移动端优化
+        function showHelp() {
+            const helpMessage = `
+🎯 使用说明（三步完成）：
+
+1️⃣ 【复制】
+   在您的Markdown编辑器中复制整篇文章
+
+2️⃣ 【粘贴】
+   在这个页面找到"粘贴Markdown的区域"
+   删除示例内容，粘贴您的文章
+
+3️⃣ 【保存】
+   点击"保存这篇文章"按钮
+   或按 Ctrl+S 保存为HTML文件
+
+✨ 自动功能：
+   ✅ 自动提取文章标题
+   ✅ 自动生成目录导航
+   ✅ 自动计算字数时间
+   ✅ 自动识别文章日期
+
+📁 文件命名建议：
+   article-ai-tools.html
+   article-web3-thoughts.html
+   article-creativity.html
+
+💡 小贴士：
+   • 确保文章以 # 标题 开头
+   • 使用 ## 创建主要章节
+   • 保存后可在blog.html中添加链接
+            `;
+            
+            alert(helpMessage);
+        }
+        
+        // ==============================================
+        // 🎯 辅助功能
+        // ==============================================
+        
         function setupMobileOptimization() {
             // 触摸反馈
-            const touchElements = document.querySelectorAll('a, button, .action-btn, .footer-link');
+            const touchElements = document.querySelectorAll('a, button, .nav-tab, .action-btn, .footer-link');
             touchElements.forEach(el => {
                 el.addEventListener('touchstart', function() {
                     this.style.opacity = '0.8';
@@ -791,49 +1100,62 @@
             }, false);
         }
         
-        // 使用说明弹窗
-        function showHelp() {
-            document.getElementById('helpModal').style.display = 'flex';
+        function setupEventListeners() {
+            // 监听内容区域的变化（如果用户直接编辑）
+            const markdownElement = document.getElementById('markdown-content');
+            markdownElement.addEventListener('input', function() {
+                setTimeout(processMarkdownContent, 300);
+            });
+            
+            // 导航标签点击效果
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
         }
         
-        function hideHelp() {
-            document.getElementById('helpModal').style.display = 'none';
+        function showConsoleGuide() {
+            console.log(`
+🎨 ============================================
+🎨 智能Markdown博客详情页
+🎨 使用说明
+🎨 ============================================
+
+📋 使用方法（只需三步）：
+   1. 复制您的Markdown文章
+   2. 粘贴到页面指定区域
+   3. 保存为HTML文件
+
+✨ 自动功能：
+   • 标题自动提取
+   • 目录自动生成  
+   • 信息自动计算
+   • 样式自动应用
+
+💡 高级技巧：
+   • 文章第一行应为 # 标题
+   • 用 ## 创建章节，会自动生成目录
+   • 保存后文件名会自动基于标题生成
+   • 侧边栏有完整操作按钮
+
+🎯 保存建议：
+   • 保存为：article-主题.html
+   • 上传到网站服务器
+   • 在blog.html中添加链接
+
+🚀 快速开始：
+   现在就粘贴您的第一篇文章试试！
+============================================
+            `);
         }
         
-        // 点击弹窗外关闭
-        document.getElementById('helpModal').addEventListener('click', function(e) {
-            if (e.target === this) hideHelp();
-        });
-        
-        // ==============================================
-        // 📢 使用说明（显示在控制台）
-        // ==============================================
-        console.log(`
-🌈 ============================================
-🌈 智能Markdown博客系统使用说明
-🌈 ============================================
-🌈
-🌈 🎯 使用方法（最简单）：
-🌈 1. 打开您写好的Markdown文件
-🌈 2. 全选复制（Ctrl+A, Ctrl+C）
-🌈 3. 打开这个HTML文件
-🌈 4. 在"粘贴区域"粘贴（Ctrl+V）
-🌈 5. 保存为新的HTML文件
-🌈
-🌈 ✨ 自动功能：
-🌈 ✅ 自动提取文章标题
-🌈 ✅ 自动生成目录导航
-🌈 ✅ 自动计算字数时间
-🌈 ✅ 自动识别日期标签
-🌈
-🌈 💡 小贴士：
-🌈 • 第一行应该是 # 文章标题
-🌈 • 用 ## 和 ### 创建章节
-🌈 • 保存时给文件起个好名字
-🌈 • 侧边栏有复制和保存按钮
-🌈
-🌈 ============================================
-        `);
+        // 初始化完成提示
+        setTimeout(() => {
+            console.log('✅ 页面初始化完成，可以粘贴您的Markdown文章了！');
+        }, 1000);
     </script>
 </body>
 </html>
