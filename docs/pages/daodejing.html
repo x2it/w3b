@@ -3,1355 +3,1408 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>《道德经》帛书本研读平台 - Davi的思考笔记</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>帛书本《道德经》沉浸式研读</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap">
     <style>
-        :root {
-            --primary-color: #8B4513;
-            --secondary-color: #D2691E;
-            --dark-color: #2C1810;
-            --light-color: #FDF6E3;
-            --text-primary: #3E2723;
-            --text-secondary: #5D4037;
-            --text-light: #795548;
-            --border-color: #D7CCC8;
-            --highlight-bg: #FFF8E1;
-            --note-bg: #F3E5F5;
-            --reading-bg: #FAF0E6;
-            --shadow-light: 0 4px 12px rgba(139, 69, 19, 0.08);
-            --shadow-medium: 0 8px 24px rgba(139, 69, 19, 0.12);
-        }
-        
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        html { 
-            scroll-behavior: smooth; 
-            font-size: 16px; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
         body {
             font-family: 'Noto Serif SC', serif;
             line-height: 1.8;
-            color: var(--text-primary);
-            background-color: var(--reading-bg);
+            color: #333;
+            background-color: #f8f4e9;
+            transition: all 0.3s ease;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0;
-            position: relative;
+            padding: 20px;
+        }
+        
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e6e1d6;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 5% 10%, rgba(139, 69, 19, 0.03) 0%, transparent 20%),
-                radial-gradient(circle at 95% 90%, rgba(44, 24, 16, 0.03) 0%, transparent 20%);
+            gap: 20px;
         }
         
-        /* ================================ */
-        /* 顶部研读工具栏 */
-        /* ================================ */
-        .reading-toolbar {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(253, 246, 227, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-light);
+        header {
+            text-align: center;
+            padding: 25px 0;
+            border-bottom: 2px solid #c9a87a;
+            margin-bottom: 20px;
         }
         
-        .toolbar-left, .toolbar-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        
-        .site-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        .tool-btn {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.6rem 1.2rem;
-            font-family: 'Noto Serif SC', serif;
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .tool-btn:hover {
-            background: var(--highlight-bg);
-            border-color: var(--secondary-color);
-            color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-light);
-        }
-        
-        .font-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .font-btn {
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s ease;
-        }
-        
-        .font-btn:hover {
-            background: var(--highlight-bg);
-            border-color: var(--secondary-color);
-        }
-        
-        /* ================================ */
-        /* 主研读区域 */
-        /* ================================ */
-        .reading-container {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 2rem;
-            padding: 2rem;
-            min-height: calc(100vh - 80px);
-        }
-        
-        @media (max-width: 1100px) {
-            .reading-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* 经典内容区 */
-        .classic-content {
-            background: white;
-            border-radius: 16px;
-            padding: 3rem;
-            box-shadow: var(--shadow-medium);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .classic-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-        
-        /* 章节导航头 */
-        .chapter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-        }
-        
-        .chapter-title {
-            font-size: 2.2rem;
-            color: var(--dark-color);
-            font-weight: 600;
+        h1 {
+            font-size: 2.8rem;
+            color: #8b4513;
+            margin-bottom: 10px;
             letter-spacing: 1px;
         }
         
-        .chapter-nav-btns {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .nav-btn {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            transform: scale(1.1);
-        }
-        
-        /* 原文展示区 */
-        .original-text-container {
-            position: relative;
-            margin-bottom: 2.5rem;
-        }
-        
-        .original-text {
-            font-size: 1.4rem;
-            line-height: 2.2;
-            color: var(--text-primary);
-            text-align: justify;
-            padding: 2rem;
-            background: var(--light-color);
-            border-radius: 12px;
-            border-left: 5px solid var(--primary-color);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        /* 注音功能 */
-        .phonetic-hover {
-            position: relative;
-            cursor: help;
-            border-bottom: 1px dotted var(--text-light);
-        }
-        
-        .phonetic-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark-color);
-            color: white;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            z-index: 10;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            pointer-events: none;
-        }
-        
-        .phonetic-hover:hover .phonetic-tooltip {
-            opacity: 1;
-            visibility: visible;
-            bottom: calc(100% + 8px);
-        }
-        
-        /* 释义与研读区 */
-        .study-section {
-            margin-top: 3rem;
-            border-top: 1px solid var(--border-color);
-            padding-top: 2rem;
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        
-        .section-title i {
+        .subtitle {
             font-size: 1.3rem;
+            color: #a67c52;
+            font-style: italic;
         }
         
-        /* 释义网格 */
-        .meaning-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+        body.dark-mode h1 {
+            color: #d4a76a;
         }
         
-        .meaning-card {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+        body.dark-mode .subtitle {
+            color: #c9a87a;
         }
         
-        .meaning-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-medium);
-            border-color: var(--secondary-color);
-        }
-        
-        .meaning-title {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            margin-bottom: 0.8rem;
-            font-weight: 600;
-        }
-        
-        /* 朗读节奏 */
-        .rhythm-box {
-            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #FFD54F;
-        }
-        
-        .rhythm-text {
-            font-size: 1.2rem;
-            line-height: 2;
-            color: var(--text-secondary);
-            white-space: pre-wrap;
-            font-family: 'Noto Serif SC', monospace;
-        }
-        
-        .rhythm-mark {
-            color: var(--primary-color);
-            font-weight: bold;
-            margin: 0 0.2rem;
-        }
-        
-        /* 研读笔记区 */
-        .notes-section {
-            background: var(--note-bg);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
-            border: 1px solid #E1BEE7;
-        }
-        
-        .notes-header {
+        .main-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            flex: 1;
+            gap: 30px;
         }
         
-        .notes-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 1.2rem;
-            border: 1px solid #CE93D8;
-            border-radius: 8px;
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background-color: #f1ebe0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+        
+        body.dark-mode .sidebar {
+            background-color: #2a2a2a;
+        }
+        
+        .text-content {
+            flex: 1;
+            padding: 35px;
+            background-color: #fffef9;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+        
+        body.dark-mode .text-content {
+            background-color: #252525;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background-color: #f1ebe0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        body.dark-mode .controls {
+            background-color: #2a2a2a;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button, select {
+            padding: 10px 18px;
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             font-family: 'Noto Serif SC', serif;
             font-size: 1rem;
-            line-height: 1.6;
-            resize: vertical;
-            background: white;
-            transition: border-color 0.3s;
+            transition: all 0.2s;
         }
         
-        .notes-textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        button:hover {
+            background-color: #a65a29;
+            transform: translateY(-2px);
         }
         
-        /* ================================ */
-        /* 侧边研读辅助区 */
-        /* ================================ */
-        .study-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+        select {
+            background-color: #a67c52;
         }
         
-        .sidebar-card {
-            background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: var(--shadow-light);
-            border: 1px solid var(--border-color);
+        .chapter-list {
+            list-style: none;
+            margin-top: 15px;
         }
         
-        .sidebar-title {
-            font-size: 1.3rem;
-            color: var(--dark-color);
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid var(--border-color);
-            font-weight: 600;
-        }
-        
-        /* 章节导航 */
-        .chapters-list {
-            max-height: 500px;
-            overflow-y: auto;
-            padding-right: 0.5rem;
-        }
-        
-        .chapters-list::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .chapters-list::-webkit-scrollbar-track {
-            background: #F5F5F5;
-            border-radius: 4px;
-        }
-        
-        .chapters-list::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
-        }
-        
-        .chapter-item {
-            padding: 1rem;
-            margin-bottom: 0.8rem;
-            border-radius: 10px;
+        .chapter-list li {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
             border-left: 4px solid transparent;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
         }
         
-        .chapter-item:hover {
-            background: var(--highlight-bg);
-            border-left-color: var(--secondary-color);
-            transform: translateX(5px);
+        .chapter-list li:hover {
+            background-color: #e2d9c9;
+            border-left-color: #c9a87a;
         }
         
-        .chapter-item.active {
-            background: linear-gradient(90deg, rgba(139, 69, 19, 0.1), rgba(210, 105, 30, 0.05));
-            border-left-color: var(--primary-color);
-            font-weight: 600;
-            color: var(--primary-color);
+        body.dark-mode .chapter-list li:hover {
+            background-color: #3a3a3a;
+            border-left-color: #8b6d46;
         }
         
-        .chapter-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background: var(--light-color);
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .active .chapter-number {
-            background: var(--primary-color);
+        .chapter-list li.active {
+            background-color: #c9a87a;
+            font-weight: bold;
             color: white;
+            border-left-color: #8b4513;
         }
         
-        /* 研读工具 */
-        .study-tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+        body.dark-mode .chapter-list li.active {
+            background-color: #8b6d46;
+            border-left-color: #d4a76a;
         }
         
-        .tool-card {
-            background: var(--light-color);
-            border-radius: 10px;
-            padding: 1.2rem;
+        .chapter-title {
+            font-size: 2rem;
+            color: #8b4513;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2d9c9;
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
         }
         
-        .tool-card:hover {
-            background: white;
-            border-color: var(--secondary-color);
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-light);
+        body.dark-mode .chapter-title {
+            color: #d4a76a;
+            border-bottom-color: #444;
         }
         
-        .tool-icon {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 0.8rem;
+        .chapter-content {
+            font-size: 1.25rem;
+            line-height: 2;
         }
         
-        .tool-name {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            font-weight: 500;
+        .verse {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f7f1;
+            transition: all 0.3s;
+            position: relative;
         }
         
-        /* 版本信息 */
-        .version-info {
-            font-size: 0.9rem;
-            color: var(--text-light);
+        body.dark-mode .verse {
+            background-color: #2f2f2f;
+        }
+        
+        .verse:hover {
+            background-color: #f2efe4;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-mode .verse:hover {
+            background-color: #3a3a3a;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .verse-number {
+            display: inline-block;
+            background-color: #c9a87a;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 36px;
+            margin-right: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        .verse-text {
+            display: inline;
+            font-size: 1.3rem;
+        }
+        
+        .note-section {
+            margin-top: 50px;
+            padding: 25px;
+            background-color: #f5f1e7;
+            border-radius: 10px;
+        }
+        
+        body.dark-mode .note-section {
+            background-color: #2a2a2a;
+        }
+        
+        .note-title {
+            font-size: 1.4rem;
+            color: #8b4513;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        body.dark-mode .note-title {
+            color: #d4a76a;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 20px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            resize: vertical;
             line-height: 1.6;
         }
         
-        .version-info p {
-            margin-bottom: 0.8rem;
+        body.dark-mode textarea {
+            background-color: #333;
+            color: #e6e1d6;
+            border-color: #555;
         }
         
-        .source-badge {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* ================================ */
-        /* 底部导航 */
-        /* ================================ */
-        .study-footer {
+        footer {
             text-align: center;
-            padding: 2.5rem 2rem;
-            color: var(--text-light);
-            background: linear-gradient(to bottom, white, var(--light-color));
-            border-top: 1px solid var(--border-color);
-            margin-top: 3rem;
+            padding: 25px;
+            color: #a67c52;
+            font-size: 0.95rem;
+            border-top: 1px solid #e2d9c9;
+            margin-top: 20px;
+            line-height: 1.6;
         }
         
-        .footer-quote {
-            font-size: 1.1rem;
-            font-style: italic;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
+        body.dark-mode footer {
+            color: #c9a87a;
+            border-top-color: #444;
         }
         
-        .footer-nav {
+        .bookmark-btn {
+            float: right;
+            background: none;
+            color: #a67c52;
+            font-size: 1.8rem;
+            padding: 0;
+            width: 40px;
+            height: 40px;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
+            transition: all 0.3s;
         }
         
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+        .bookmark-btn:hover {
+            transform: scale(1.2);
         }
         
-        .footer-link:hover {
-            color: var(--primary-color);
-            background: rgba(139, 69, 19, 0.05);
+        .bookmark-btn.bookmarked {
+            color: #d4a76a;
         }
         
-        .copyright {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 1.5rem;
+        .search-box {
+            margin-bottom: 25px;
         }
         
-        /* ================================ */
-        /* 响应式调整 */
-        /* ================================ */
-        @media (max-width: 768px) {
-            .reading-toolbar {
-                padding: 1rem;
+        .search-box input {
+            width: 100%;
+            padding: 12px 18px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.1rem;
+        }
+        
+        body.dark-mode .search-box input {
+            background-color: #333;
+            color: #e6e1d6;
+            border-color: #555;
+        }
+        
+        @media (max-width: 1000px) {
+            .main-content {
                 flex-direction: column;
-                gap: 1rem;
             }
             
-            .toolbar-left, .toolbar-right {
+            .sidebar {
                 width: 100%;
-                justify-content: space-between;
+                max-height: 350px;
             }
             
-            .reading-container {
-                padding: 1rem;
+            .text-content {
+                max-height: none;
             }
             
-            .classic-content {
-                padding: 2rem 1.5rem;
+            h1 {
+                font-size: 2.2rem;
             }
             
-            .chapter-header {
+            .controls {
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            .controls {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 1.5rem;
+                align-items: stretch;
             }
             
-            .chapter-title {
+            .control-group {
+                justify-content: center;
+            }
+            
+            h1 {
                 font-size: 1.8rem;
             }
             
-            .original-text {
-                font-size: 1.2rem;
-                line-height: 2;
-                padding: 1.5rem;
-            }
-            
-            .meaning-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .study-tools-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-nav {
-                gap: 1rem;
+            .subtitle {
+                font-size: 1.1rem;
             }
         }
         
-        /* ================================ */
-        /* 阅读模式切换 */
-        /* ================================ */
-        .reading-mode-classic {
-            font-family: 'Noto Serif SC', serif;
-            background: var(--reading-bg);
-        }
-        
-        .reading-mode-modern {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f8f9fa;
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-        }
-        
-        .reading-mode-night {
-            background: #1a1a2e;
-            color: #e6e6e6;
-            --text-primary: #e6e6e6;
-            --text-secondary: #b3b3cc;
-            --light-color: #16213e;
-            --border-color: #2d3748;
-        }
-        
-        /* ================================ */
-        /* 字体大小控制 */
-        /* ================================ */
-        .font-size-small .original-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        .font-size-medium .original-text {
-            font-size: 1.4rem;
-            line-height: 2.2;
-        }
-        
-        .font-size-large .original-text {
-            font-size: 1.8rem;
-            line-height: 2.5;
-        }
-        
-        /* ================================ */
-        /* 动画效果 */
-        /* ================================ */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .fade-in {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-        
-        /* 高亮标记 */
         .highlight {
-            background-color: rgba(255, 235, 59, 0.3);
-            padding: 0 0.2rem;
+            background-color: rgba(255, 235, 59, 0.5);
+            padding: 2px 4px;
             border-radius: 3px;
-            transition: background-color 0.3s;
         }
         
-        /* 聚焦效果 */
-        .focus-mode .original-text {
-            background: linear-gradient(90deg, #FFFDE7, #FFF8E1);
-            box-shadow: 0 0 30px rgba(139, 69, 19, 0.1);
+        body.dark-mode .highlight {
+            background-color: rgba(255, 193, 7, 0.5);
+            color: #333;
+        }
+        
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .font-size-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        body.dark-mode .stats {
+            color: #aaa;
+        }
+        
+        .bookmarks-panel {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        body.dark-mode .bookmarks-panel {
+            border-top-color: #555;
+        }
+        
+        #bookmarks-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .bookmark-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f0ede4;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        body.dark-mode .bookmark-item {
+            background-color: #333;
+        }
+        
+        .bookmark-item:hover {
+            background-color: #e6e1d3;
+        }
+        
+        body.dark-mode .bookmark-item:hover {
+            background-color: #3a3a3a;
+        }
+        
+        .bookmark-chapter {
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        body.dark-mode .bookmark-chapter {
+            color: #d4a76a;
+        }
+        
+        .bookmark-verse {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        body.dark-mode .bookmark-verse {
+            color: #aaa;
+        }
+        
+        .clear-btn {
+            background-color: #a52a2a;
+            margin-left: 10px;
+        }
+        
+        .clear-btn:hover {
+            background-color: #c33;
+        }
+        
+        .bookmark-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #777;
+        }
+        
+        body.dark-mode .loading {
+            color: #aaa;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+        
+        body.dark-mode .empty-state {
+            color: #777;
+        }
+        
+        .chapter-count {
+            display: inline-block;
+            background-color: #e6e1d3;
+            color: #8b4513;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+        
+        body.dark-mode .chapter-count {
+            background-color: #3a3a3a;
+            color: #d4a76a;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e6e1d3;
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        body.dark-mode .progress-bar {
+            background-color: #3a3a3a;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #c9a87a;
+            width: 0%;
+            transition: width 0.5s;
         }
     </style>
 </head>
-<body class="reading-mode-classic font-size-medium">
-    <!-- 顶部研读工具栏 -->
-    <div class="reading-toolbar">
-        <div class="toolbar-left">
-            <a href="index.html" class="site-brand">
-                <i class="fas fa-book-open"></i>
-                <span>《道德经》研读平台</span>
-            </a>
-            
-            <div class="font-controls">
-                <button class="font-btn" onclick="changeFontSize('small')" title="小字号">A</button>
-                <button class="font-btn" onclick="changeFontSize('medium')" title="中字号">A</button>
-                <button class="font-btn" onclick="changeFontSize('large')" title="大字号">A</button>
+<body>
+    <div class="container">
+        <header>
+            <h1>帛书本《道德经》沉浸式研读</h1>
+            <div class="subtitle">德经在前 · 道经在后 · 西汉马王堆帛书乙本原始顺序</div>
+        </header>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="chapter-select">跳转章节：</label>
+                <select id="chapter-select">
+                    <option value="0">选择章节...</option>
+                </select>
             </div>
             
-            <button class="tool-btn" onclick="togglePhonetic()">
-                <i class="fas fa-language"></i>
-                <span>注音显示</span>
-            </button>
+            <div class="control-group font-size-control">
+                <button id="decrease-font" class="font-size-btn" title="减小字体">A-</button>
+                <span>字体大小</span>
+                <button id="increase-font" class="font-size-btn" title="增大字体">A+</button>
+            </div>
             
-            <button class="tool-btn" onclick="toggleFocusMode()">
-                <i class="fas fa-eye"></i>
-                <span>专注模式</span>
-            </button>
+            <div class="control-group">
+                <button id="dark-mode-toggle" title="切换夜间模式">🌙 夜间模式</button>
+            </div>
+            
+            <div class="control-group">
+                <button id="bookmarks-toggle" title="显示/隐藏书签">⭐ 书签管理</button>
+            </div>
+            
+            <div class="control-group">
+                <button id="print-btn" title="打印当前章节">🖨️ 打印本章</button>
+            </div>
+            
+            <div class="control-group">
+                <button id="clear-data" class="clear-btn" title="清除所有本地数据">清除数据</button>
+            </div>
         </div>
         
-        <div class="toolbar-right">
-            <button class="tool-btn" onclick="changeReadingMode('classic')">
-                <i class="fas fa-scroll"></i>
-                <span>古典模式</span>
-            </button>
+        <div class="main-content">
+            <aside class="sidebar">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="搜索经文内容...">
+                    <div class="stats">
+                        <span id="search-results">共81章</span>
+                        <span id="bookmark-count">书签: 0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="reading-progress"></div>
+                    </div>
+                </div>
+                
+                <h3>《道德经》目录 <span class="chapter-count">81章</span></h3>
+                <ul class="chapter-list" id="chapter-list">
+                    <!-- 章节列表将由JavaScript生成 -->
+                    <div class="loading">加载中...</div>
+                </ul>
+                
+                <div class="bookmarks-panel" id="bookmarks-panel" style="display:none;">
+                    <h3>我的书签 <span class="chapter-count" id="bookmarks-total">0</span></h3>
+                    <div id="bookmarks-container">
+                        <div class="empty-state">暂无书签</div>
+                    </div>
+                    <div class="bookmark-actions">
+                        <button id="clear-bookmarks" class="clear-btn">清除所有书签</button>
+                        <button id="export-data">导出数据</button>
+                    </div>
+                </div>
+            </aside>
             
-            <button class="tool-btn" onclick="changeReadingMode('modern')">
-                <i class="fas fa-desktop"></i>
-                <span>现代模式</span>
-            </button>
-            
-            <button class="tool-btn" onclick="changeReadingMode('night')">
-                <i class="fas fa-moon"></i>
-                <span>夜间模式</span>
-            </button>
-            
-            <button class="tool-btn" onclick="printPage()">
-                <i class="fas fa-print"></i>
-                <span>打印本章</span>
-            </button>
+            <main class="text-content">
+                <h2 class="chapter-title" id="current-chapter-title">德经第一章 (第38章)</h2>
+                <div class="chapter-content" id="chapter-content">
+                    <!-- 章节内容将由JavaScript生成 -->
+                    <div class="loading">加载经文内容...</div>
+                </div>
+                
+                <div class="note-section">
+                    <h3 class="note-title">📝 研读笔记</h3>
+                    <textarea id="study-notes" placeholder="在此记录您的研读心得、注解和思考..."></textarea>
+                    <div style="text-align: right; margin-top: 15px;">
+                        <button id="save-notes">💾 保存笔记</button>
+                        <button id="clear-notes" class="clear-btn" style="margin-left: 10px;">🗑️ 清除笔记</button>
+                    </div>
+                </div>
+            </main>
         </div>
+        
+        <footer>
+            <p>本页面依据西汉马王堆帛书乙本《老子》整理，严格遵循「德经在前，道经在后」的原始顺序。</p>
+            <p>提示：书签、笔记、阅读进度等所有数据均保存在您的浏览器本地，清除浏览器缓存会丢失这些数据。</p>
+            <p>设计制作：帛书研读工坊 · 仅供学习研究使用</p>
+        </footer>
     </div>
-    
-    <!-- 主研读区域 -->
-    <div class="reading-container">
-        <!-- 经典内容区 -->
-        <main class="classic-content fade-in">
-            <!-- 章节导航头 -->
-            <div class="chapter-header">
-                <h1 class="chapter-title" id="chapter-title">德经·第一章</h1>
-                
-                <div class="chapter-nav-btns">
-                    <button class="nav-btn" onclick="prevChapter()" title="上一章">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="nav-btn" onclick="nextChapter()" title="下一章">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 原文展示区 -->
-            <div class="original-text-container">
-                <div class="original-text" id="original-text">
-                    上德|不德，是以|有德。下德|不失德，是以|无德。上德|无为|而无以为也。上仁|为之|而无以为也。上义|为之|而有以为也。上礼|为之|而莫之应也，则|攘臂而扔之。故|失道。失道矣|而后德，失德|而后仁，失仁|而后义，失义|而后礼。夫礼者，忠信之薄也，而|乱之首也。前识者，道之华也，而|愚之首也。是以|大丈夫|居其厚|而不居其薄，居其实|不居其华。故|去彼取此。
-                </div>
-            </div>
-            
-            <!-- 释义与研读区 -->
-            <div class="study-section">
-                <h2 class="section-title">
-                    <i class="fas fa-lightbulb"></i>
-                    本章核心释义
-                </h2>
-                
-                <div class="meaning-grid" id="meaning-content">
-                    <!-- 动态生成释义内容 -->
-                </div>
-                
-                <h2 class="section-title">
-                    <i class="fas fa-music"></i>
-                    朗读节奏指导
-                </h2>
-                
-                <div class="rhythm-box">
-                    <div class="rhythm-text" id="rhythm-text">
-                        上德|不德，<span class="rhythm-mark">/</span>是以|有德。<span class="rhythm-mark">//</span>
-                        下德|不失德，<span class="rhythm-mark">/</span>是以|无德。<span class="rhythm-mark">//</span>
-                        上德|无为|而无以为也。<span class="rhythm-mark">//</span>
-                        上仁|为之|而无以为也。<span class="rhythm-mark">//</span>
-                        上义|为之|而有以为也。<span class="rhythm-mark">//</span>
-                        上礼|为之|而莫之应也，<span class="rhythm-mark">/</span>则|攘臂而扔之。<span class="rhythm-mark">//</span>
-                        故|失道。<span class="rhythm-mark">//</span>
-                        失道矣|而后德，<span class="rhythm-mark">/</span>失德|而后仁，<span class="rhythm-mark">/</span>失仁|而后义，<span class="rhythm-mark">/</span>失义|而后礼。<span class="rhythm-mark">//</span>
-                        夫礼者，<span class="rhythm-mark">/</span>忠信之薄也，<span class="rhythm-mark">/</span>而|乱之首也。<span class="rhythm-mark">//</span>
-                        前识者，<span class="rhythm-mark">/</span>道之华也，<span class="rhythm-mark">/</span>而|愚之首也。<span class="rhythm-mark">//</span>
-                        是以|大丈夫|居其厚|而不居其薄，<span class="rhythm-mark">/</span>居其实|不居其华。<span class="rhythm-mark">//</span>
-                        故|去彼取此。
-                    </div>
-                </div>
-                
-                <h2 class="section-title">
-                    <i class="fas fa-edit"></i>
-                    研读笔记
-                </h2>
-                
-                <div class="notes-section">
-                    <div class="notes-header">
-                        <h3>本章个人感悟</h3>
-                        <button class="tool-btn" onclick="saveNotes()">
-                            <i class="fas fa-save"></i>
-                            保存笔记
-                        </button>
-                    </div>
-                    
-                    <textarea class="notes-textarea" id="notes-textarea" placeholder="记录您对本章的理解、感悟或疑问..."></textarea>
-                    
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-light);">
-                        <i class="fas fa-info-circle"></i> 笔记将自动保存到本地浏览器中
-                    </div>
-                </div>
-            </div>
-        </main>
-        
-        <!-- 侧边研读辅助区 -->
-        <aside class="study-sidebar">
-            <!-- 章节导航 -->
-            <div class="sidebar-card">
-                <h2 class="sidebar-title">
-                    <i class="fas fa-list-ol"></i>
-                    章节导航
-                </h2>
-                
-                <div class="chapters-list" id="chapters-list">
-                    <!-- 动态生成章节列表 -->
-                </div>
-                
-                <div style="margin-top: 1.5rem; text-align: center;">
-                    <button class="tool-btn" onclick="randomChapter()" style="width: 100%;">
-                        <i class="fas fa-random"></i>
-                        随机阅读一章
-                    </button>
-                </div>
-            </div>
-            
-            <!-- 研读工具 -->
-            <div class="sidebar-card">
-                <h2 class="sidebar-title">
-                    <i class="fas fa-tools"></i>
-                    研读工具
-                </h2>
-                
-                <div class="study-tools-grid">
-                    <div class="tool-card" onclick="highlightText()">
-                        <div class="tool-icon">
-                            <i class="fas fa-highlighter"></i>
-                        </div>
-                        <div class="tool-name">高亮标记</div>
-                    </div>
-                    
-                    <div class="tool-card" onclick="copyChapter()">
-                        <div class="tool-icon">
-                            <i class="fas fa-copy"></i>
-                        </div>
-                        <div class="tool-name">复制本章</div>
-                    </div>
-                    
-                    <div class="tool-card" onclick="shareChapter()">
-                        <div class="tool-icon">
-                            <i class="fas fa-share-alt"></i>
-                        </div>
-                        <div class="tool-name">分享本章</div>
-                    </div>
-                    
-                    <div class="tool-card" onclick="compareVersions()">
-                        <div class="tool-icon">
-                            <i class="fas fa-columns"></i>
-                        </div>
-                        <div class="tool-name">版本对比</div>
-                    </div>
-                    
-                    <div class="tool-card" onclick="showGlossary()">
-                        <div class="tool-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <div class="tool-name">难词词典</div>
-                    </div>
-                    
-                    <div class="tool-card" onclick="toggleAudio()">
-                        <div class="tool-icon">
-                            <i class="fas fa-volume-up"></i>
-                        </div>
-                        <div class="tool-name">朗读音频</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 版本信息 -->
-            <div class="sidebar-card">
-                <h2 class="sidebar-title">
-                    <i class="fas fa-info-circle"></i>
-                    版本信息
-                </h2>
-                
-                <div class="version-info">
-                    <p><strong>底本来源：</strong>马王堆汉墓帛书《老子》甲、乙本</p>
-                    <p><strong>校勘参考：</strong>高明《帛书老子校注》、陈鼓应《老子注译及评介》</p>
-                    <p><strong>注音标准：</strong>《汉语大字典》《古代汉语词典》</p>
-                    <p><strong>更新日期：</strong>2026年1月</p>
-                    
-                    <div class="source-badge">帛书本 · 权威校勘</div>
-                    
-                    <p style="margin-top: 1.5rem; font-size: 0.85rem;">
-                        <i class="fas fa-exclamation-circle"></i> 帛书本与通行本部分字句存在差异，本平台严格依据帛书本整理，并提供详细校勘说明。
-                    </p>
-                </div>
-            </div>
-        </aside>
-    </div>
-    
-    <!-- 底部导航 -->
-    <footer class="study-footer">
-        <div class="footer-quote">
-            "上德不德，是以有德；下德不失德，是以无德。"
-        </div>
-        
-        <div class="footer-nav">
-            <a href="index.html" class="footer-link">返回主站</a>
-            <a href="blog.html" class="footer-link">博客文章</a>
-            <a href="javascript:void(0)" class="footer-link" onclick="showAbout()">关于本平台</a>
-            <a href="javascript:void(0)" class="footer-link" onclick="showFeedback()">反馈建议</a>
-        </div>
-        
-        <div class="copyright">
-            © 2026 Davi iHome Studio · 《道德经》帛书本研读平台 · 理会 · 践行
-        </div>
-    </footer>
 
     <script>
-        // ==============================================
-        // 🎯 道德经帛书本完整数据 (德经35章 + 道经37章)
-        // ==============================================
+        // ==================== 帛书本《道德经》完整数据 ====================
+        // 严格遵循德经在前（第38-81章），道经在后（第1-37章）的帛书原始顺序
+        const daodejing = [
+            // ==================== 德 经 (第38-81章) ====================
+            { chapter: 38, title: "德经第一章", content: `上德不德，是以有德；下德不失德，是以无德。上德无为而无以为也；上仁为之而无以为也；上义为之而有以为也；上礼为之而莫之应也，则攘臂而扔之。故失道而后德，失德而后仁，失仁而后义，失义而后礼。夫礼者，忠信之薄也，而乱之首也。前识者，道之华也，而愚之首也。是以大丈夫居其厚而不居其薄，居其实而不居其华。故去彼取此。` },
+            { chapter: 39, title: "德经第二章", content: `昔之得一者：天得一以清，地得一以宁，神得一以灵，谷得一以盈，万物得一以生，侯王得一以为天下正。其致之也，谓天毋已清将恐裂，地毋已宁将恐发，神毋已灵将恐歇，谷毋已盈将恐竭，万物毋已生将恐灭，侯王毋已贵以高将恐蹶。故必贵而以贱为本，必高矣而以下为基。夫是以侯王自谓孤、寡、不穀，此其贱之本与？非也？故致数与无与。是故不欲琭琭若玉，硌硌若石。` },
+            { chapter: 40, title: "德经第三章", content: `反也者，道之动也；弱也者，道之用也。天下之物生于有，有生于无。` },
+            { chapter: 41, title: "德经第四章", content: `上士闻道，勤能行之；中士闻道，若存若亡；下士闻道，大笑之。弗笑，不足以为道。是以建言有之曰：明道如费，进道如退，夷道如类；上德如谷，大白如辱，广德如不足，建德如偷，质真如渝，大方无隅，大器免成，大音希声，大象无形。道隐无名。夫唯道，善始且善成。` },
+            { chapter: 42, title: "德经第五章", content: `道生一，一生二，二生三，三生万物。万物负阴而抱阳，冲气以为和。人之所恶，唯孤、寡、不穀，而王公以自名也。物或损之而益，或益之而损。人之所教，亦议而教人。强梁者不得其死，吾将以为教父。` },
+            { chapter: 43, title: "德经第六章", content: `天下之至柔，驰骋于天下之至坚。无有入于无间，吾是以知无为之有益也。不言之教，无为之益，天下希能及之矣。` },
+            { chapter: 44, title: "德经第七章", content: `名与身孰亲？身与货孰多？得与亡孰病？甚爱必大费，多藏必厚亡。故知足不辱，知止不殆，可以长久。` },
+            { chapter: 45, title: "德经第八章", content: `大成若缺，其用不弊。大盈若冲，其用不穷。大直若屈，大巧若拙，大辩若讷。躁胜寒，静胜热，清静可以为天下正。` },
+            { chapter: 46, title: "德经第九章", content: `天下有道，却走马以粪；天下无道，戎马生于郊。罪莫大于可欲，祸莫大于不知足，咎莫憯于欲得。故知足之足，恒足矣。` },
+            { chapter: 47, title: "德经第十章", content: `不出于户，以知天下；不窥于牖，以知天道。其出弥远，其知弥少。是以圣人不行而知，不见而明，弗为而成。` },
+            { chapter: 48, title: "德经第十一章", content: `为学者日益，闻道者日损。损之又损，以至于无为，无为而无不为。将欲取天下也，恒无事；及其有事也，又不足以取天下矣。` },
+            { chapter: 49, title: "德经第十二章", content: `圣人恒无心，以百姓之心为心。善者善之，不善者亦善之，德善也。信者信之，不信者亦信之，德信也。圣人之在天下也，歙歙焉，为天下浑心；百姓皆注其耳目焉，圣人皆孩之。` },
+            { chapter: 50, title: "德经第十三章", content: `出生入死。生之徒十有三，死之徒十有三，而民生生，动皆之死地之十有三。夫何故也？以其生生之厚也。盖闻善摄生者，陵行不遇兕虎，入军不被甲兵；兕无所投其角，虎无所措其爪，兵无所容其刃。夫何故也？以其无死地焉。` },
+            { chapter: 51, title: "德经第十四章", content: `道生之，德畜之，物形之，器成之。是以万物莫不尊道而贵德。道之尊，德之贵也，夫莫之爵而恒自然也。故道生之，德畜之，长之育之，亭之毒之，养之覆之。生而弗有，为而弗恃，长而弗宰，是谓玄德。` },
+            { chapter: 52, title: "德经第十五章", content: `天下有始，以为天下母。既得其母，以知其子；既知其子，复守其母，没身不殆。塞其兑，闭其门，终身不勤。启其兑，济其事，终身不救。见小曰明，守柔曰强。用其光，复归其明，无遗身殃，是为袭常。` },
+            { chapter: 53, title: "德经第十六章", content: `使我介然有知，行于大道，唯施是畏。大道甚夷，而民好径。朝甚除，田甚芜，仓甚虚；服文采，带利剑，厌饮食，财货有余；是谓盗夸。盗夸，非道也哉！` },
+            { chapter: 54, title: "德经第十七章", content: `善建者不拔，善抱者不脱，子孙以祭祀不绝。修之身，其德乃真；修之家，其德乃余；修之乡，其德乃长；修之国，其德乃丰；修之天下，其德乃博。以身观身，以家观家，以乡观乡，以国观国，以天下观天下。吾何以知天下然哉？以此。` },
+            { chapter: 55, title: "德经第十八章", content: `含德之厚者，比于赤子。蜂虿虺蛇弗螫，攫鸟猛兽弗搏。骨弱筋柔而握固。未知牝牡之合而脧作，精之至也。终日号而不嗄，和之至也。知和曰常，知常曰明，益生曰祥，心使气曰强。物壮则老，谓之不道，不道早已。` },
+            { chapter: 56, title: "德经第十九章", content: `知者弗言，言者弗知。塞其兑，闭其门，挫其锐，解其纷，和其光，同其尘，是谓玄同。故不可得而亲，亦不可得而疏；不可得而利，亦不可得而害；不可得而贵，亦不可得而贱；故为天下贵。` },
+            { chapter: 57, title: "德经第二十章", content: `以正治邦，以奇用兵，以无事取天下。吾何以知其然也哉？夫天下多忌讳，而民弥贫；民多利器，而邦家滋昏；人多智巧，而奇物滋起；法令滋彰，而盗贼多有。是以圣人之言曰：我无为而民自化，我好静而民自正，我无事而民自富，我无欲而民自朴。` },
+            { chapter: 58, title: "德经第二十一章", content: `其政闷闷，其民淳淳；其政察察，其民缺缺。祸兮，福之所倚；福兮，祸之所伏。孰知其极？其无正也。正复为奇，善复为妖。人之迷也，其日固久矣。是以圣人方而不割，廉而不刿，直而不肆，光而不耀。` },
+            { chapter: 59, title: "德经第二十二章", content: `治人事天，莫若啬。夫唯啬，是以早服；早服是谓重积德；重积德则无不克；无不克则莫知其极；莫知其极，可以有国；有国之母，可以长久。是谓深根固柢，长生久视之道也。` },
+            { chapter: 60, title: "德经第二十三章", content: `治大国，若烹小鲜。以道莅天下，其鬼不神；非其鬼不神，其神不伤人；非其神不伤人，圣人亦不伤人。夫两不相伤，故德交归焉。` },
+            { chapter: 61, title: "德经第二十四章", content: `大国者，下流也，天下之牝也。天下之交也，牝恒以静胜牡。为其静也，故宜为下也。故大国以下小国，则取小国；小国以下大国，则取于大国。故或下以取，或下而取。大国不过欲兼畜人，小国不过欲入事人。夫两者各得其所欲，则大者宜为下。` },
+            { chapter: 62, title: "德经第二十五章", content: `道者，万物之奥也，善人之宝也，不善人之所保也。美言可以市尊，美行可以加人。人之不善，何弃之有？故立天子，置三公，虽有拱璧以先驷马，不如坐进此道。古之所以贵此道者何？不曰：以求得，有罪以免邪？故为天下贵。` },
+            { chapter: 63, title: "德经第二十六章", content: `为无为，事无事，味无味。大小多少，报怨以德。图难于其易，为大于其细；天下难事必作于易，天下大事必作于细。是以圣人终不为大，故能成其大。夫轻诺必寡信，多易必多难。是以圣人犹难之，故终无难矣。` },
+            { chapter: 64, title: "德经第二十七章", content: `其安易持，其未兆易谋；其脆易泮，其微易散。为之于未有，治之于未乱。合抱之木，生于毫末；九层之台，起于累土；千里之行，始于足下。为者败之，执者失之。是以圣人无为故无败，无执故无失。民之从事，常于几成而败之。慎终如始，则无败事。是以圣人欲不欲，不贵难得之货；学不学，复众人之所过。以辅万物之自然，而不敢为。` },
+            { chapter: 65, title: "德经第二十八章", content: `古之善为道者，非以明民，将以愚之。民之难治，以其智多。故以智治邦，邦之贼；不以智治邦，邦之福。知此两者，亦稽式。恒知稽式，是谓玄德。玄德深矣，远矣，与物反矣，然后乃至大顺。` },
+            { chapter: 66, title: "德经第二十九章", content: `江海所以能为百谷王者，以其善下之，故能为百谷王。是以圣人欲上民，必以言下之；欲先民，必以身后之。是以圣人处上而民不重，处前而民不害。是以天下乐推而不厌。以其不争，故天下莫能与之争。` },
+            { chapter: 67, title: "德经第三十章", content: `天下皆谓我大，大而不肖。夫唯不肖，故能大。若肖，久矣其细也夫。我恒有三宝，持而保之：一曰慈，二曰俭，三曰不敢为天下先。夫慈，故能勇；俭，故能广；不敢为天下先，故能为成事长。今舍其慈且勇，舍其俭且广，舍其后且先，则死矣。夫慈，以战则胜，以守则固。天将建之，如以慈垣之。` },
+            { chapter: 68, title: "德经第三十一章", content: `善为士者不武，善战者不怒，善胜敌者弗与，善用人者为之下。是谓不争之德，是谓用人之力，是谓配天，古之极也。` },
+            { chapter: 69, title: "德经第三十二章", content: `用兵有言曰：吾不敢为主而为客，不敢进寸而退尺。是谓行无行，攘无臂，执无兵，乃无敌矣。祸莫大于无敌，无敌近亡吾宝矣。故抗兵相若，则哀者胜矣。` },
+            { chapter: 70, title: "德经第三十三章", content: `吾言甚易知也，甚易行也；而人莫之能知也，莫之能行也。言有宗，事有君。夫唯无知也，是以不我知。知我者希，则我贵矣。是以圣人被褐而怀玉。` },
+            { chapter: 71, title: "德经第三十四章", content: `知不知，尚矣；不知知，病矣。是以圣人之不病也，以其病病也，是以不病。` },
+            { chapter: 72, title: "德经第三十五章", content: `民不畏威，则大威至矣。毋狎其所居，毋厌其所生。夫唯弗厌，是以不厌。是以圣人自知而不自见也，自爱而不自贵也。故去彼取此。` },
+            { chapter: 73, title: "德经第三十六章", content: `勇于敢者则杀，勇于不敢者则活。此两者或利或害，天之所恶，孰知其故？天之道，不战而善胜，不言而善应，不召而自来，繟然而善谋。天网恢恢，疏而不失。` },
+            { chapter: 74, title: "德经第三十七章", content: `若民恒且不畏死，奈何以杀惧之也？若民恒且畏死，而为奇者吾得而杀之，夫孰敢矣？若民恒且必畏死，则恒有司杀者。夫代司杀者杀，是代大匠斫也。夫代大匠斫者，则希不伤其手矣。` },
+            { chapter: 75, title: "德经第三十八章", content: `人之饥也，以其取食税之多也，是以饥。百姓之不治也，以其上之有以为也，是以不治。民之轻死也，以其求生之厚也，是以轻死。夫唯无以生为者，是贤于贵生。` },
+            { chapter: 76, title: "德经第三十九章", content: `人之生也柔弱，其死也坚强。草木之生也柔脆，其死也枯槁。故曰：坚强者死之徒也，柔弱者生之徒也。是以兵强则不胜，木强则烘。强大居下，柔弱居上。` },
+            { chapter: 77, title: "德经第四十章", content: `天之道，犹张弓者也，高者抑之，下者举之；有余者损之，不足者补之。故天之道，损有余而益不足；人之道则不然，损不足而奉有余。孰能有余而有以奉于天者？唯有道者乎？是以圣人为而弗有，成功而弗居也。若此，其不欲见贤也。` },
+            { chapter: 78, title: "德经第四十一章", content: `天下莫柔弱于水，而攻坚强者莫之能先也，以其无以易之也。柔之胜刚也，弱之胜强也，天下莫弗知也，而莫能行也。故圣人之言云曰：受邦之诟，是谓社稷之主；受邦之不祥，是谓天下之王。正言若反。` },
+            { chapter: 79, title: "德经第四十二章", content: `和大怨，必有余怨，焉可以为善？是以圣人执左契而不以责于人。故有德司契，无德司彻。夫天道无亲，恒与善人。` },
+            { chapter: 80, title: "德经第四十三章", content: `小邦寡民，使有什伯之器而不用，使民重死而不远徙。虽有舟舆，无所乘之；虽有甲兵，无所陈之；使民复结绳而用之。甘其食，美其服，乐其俗，安其居。邻邦相望，鸡犬之声相闻，民至老死，不相往来。` },
+            { chapter: 81, title: "德经第四十四章", content: `信言不美，美言不信。知者不博，博者不知。善者不多，多者不善。圣人无积，既以为人己愈有，既以与人己愈多。故天之道，利而不害；人之道，为而弗争。` },
+
+            // ==================== 道 经 (第1-37章) ====================
+            { chapter: 1, title: "道经第一章", content: `道可道也，非恒道也。名可名也，非恒名也。无，名天地之始也；有，名万物之母也。故恒无欲也，以观其眇；恒有欲也，以观其所徼。两者同出，异名同谓。玄之又玄，众眇之门。` },
+            { chapter: 2, title: "道经第二章", content: `天下皆知美之为美，恶已；皆知善之为善，斯不善矣。有无之相生也，难易之相成也，长短之相刑也，高下相盈也，音声之相和也，先后之相随，恒也。是以圣人居无为之事，行不言之教。万物作而弗始也，为而弗恃也，成功而弗居也。夫唯弗居，是以弗去。` },
+            { chapter: 3, title: "道经第三章", content: `不上贤，使民不争；不贵难得之货，使民不为盗；不见可欲，使民不乱。是以圣人之治也，虚其心，实其腹，弱其志，强其骨。恒使民无知无欲也，使夫知不敢，弗为而已，则无不治矣。` },
+            { chapter: 4, title: "道经第四章", content: `道冲，而用之有弗盈也。渊兮，似万物之宗。挫其锐，解其纷，和其光，同其尘。湛兮，似或存。吾不知谁之子，象帝之先。` },
+            { chapter: 5, title: "道经第五章", content: `天地不仁，以万物为刍狗；圣人不仁，以百姓为刍狗。天地之间，其犹橐龠乎？虚而不屈，动而愈出。多闻数穷，不如守于中。` },
+            { chapter: 6, title: "道经第六章", content: `谷神不死，是谓玄牝。玄牝之门，是谓天地根。绵绵若存，用之不勤。` },
+            { chapter: 7, title: "道经第七章", content: `天长，地久。天地所以能长且久者，以其不自生也，故能长生。是以圣人后其身而身先，外其身而身存。不以其无私邪？故能成其私。` },
+            { chapter: 8, title: "道经第八章", content: `上善若水。水善，利万物而有静，居众人之所恶，故几于道矣。居善地，心善渊，予善天，言善信，政善治，事善能，动善时。夫唯不争，故无尤。` },
+            { chapter: 9, title: "道经第九章", content: `持而盈之，不如其已；揣而锐之，不可长葆也；金玉盈室，莫之能守也；富贵而骄，自遗咎也。功遂身退，天之道也。` },
+            { chapter: 10, title: "道经第十章", content: `戴营魄抱一，能毋离乎？槫气致柔，能婴儿乎？修除玄监，能无疵乎？爱民活国，能毋以知乎？天门启阖，能为雌乎？明白四达，能毋以知乎？生之，畜之，生而弗有，长而弗宰，是谓玄德。` },
+            { chapter: 11, title: "道经第十一章", content: `卅辐同一毂，当其无，有车之用也。埏埴而为器，当其无，埴器之用也。凿户牖，当其无，有室之用也。故有之以为利，无之以为用。` },
+            { chapter: 12, title: "道经第十二章", content: `五色使人之目盲，五音使人之耳聋，五味使人之口爽，驰骋畋猎使人心发狂，难得之货使人之行方。是以圣人之治也，为腹而不为目，故去彼而取此。` },
+            { chapter: 13, title: "道经第十三章", content: `宠辱若惊，贵大患若身。何谓宠辱若惊？宠之为下也，得之若惊，失之若惊，是谓宠辱若惊。何谓贵大患若身？吾所以有大患者，为吾有身，及吾无身，有何患？故贵为身以为天下，若可托天下；爱己身以为天下，女何以寄天下。` },
+            { chapter: 14, title: "道经第十四章", content: `视之而弗见，名之曰微。听之而弗闻，名之曰希。捪之而弗得，名之曰夷。三者不可致诘，故混而为一。一者，其上不谬，其下不惚，寻寻呵，不可名也，复归于无物，是谓无状之状，无物之象，是谓沕望。随而不见其后，迎而不见其首。执今之道，以御今之有，以知古始，是谓道纪。` },
+            { chapter: 15, title: "道经第十五章", content: `古之善为道者，微眇玄达，深不可志。夫唯不可志，故强为之容，曰：与呵，其若冬涉水；犹呵，其若畏四邻；俨呵，其若客；涣呵，其若冰泽；沌呵，其若朴；湷呵，其若浊；旷呵，其若谷。浊而静之徐清，安以动之，徐生。保此道者不欲盈，夫唯不欲盈，故能蔽而不成。` },
+            { chapter: 16, title: "道经第十六章", content: `致虚，极也；守静，督也。万物旁作，吾以观其复也。天物芸芸，各复归于其根，曰静。静，是谓复命。复命，常也；知常，明也。不知常，妄；妄作，凶。知常，容；容乃公，公乃王，王乃天，天乃道，道乃久，殁身不殆。` },
+            { chapter: 17, title: "道经第十七章", content: `太上，下知有之；其次，亲誉之；其次，畏之；其下，侮之。信不足，案有不信。猷呵，其贵言也。功成事遂，而百姓皆谓我自然。` },
+            { chapter: 18, title: "道经第十八章", content: `故大道废，案有仁义；知慧出，案有大伪；六亲不和，案有孝慈；邦家昏乱，案有贞臣。` },
+            { chapter: 19, title: "道经第十九章", content: `绝圣弃知，民利百倍；绝仁弃义，民复孝慈；绝巧弃利，盗贼无有。此三言也，以为文未足，故令之有所属：见素抱朴，少思寡欲，绝学无忧。` },
+            { chapter: 20, title: "道经第二十章", content: `唯与诃，其相去几何？美与恶，其相去何若？人之所畏，亦不可以不畏人。望呵，其未央才。众人熙熙，若享于太牢而春登台。我泊焉未佻，若婴儿之未孩。累呵，如无所归。众人皆有余，我独遗。我愚人之心也，蠢蠢呵。鬻人察察，我独闵闵呵。忽呵，其若海；望呵，其若无所止。众人皆有以，我独顽以鄙。吾欲独异于人，而贵食母。` },
+            { chapter: 21, title: "道经第二十一章", content: `孔德之容，唯道是从。道之物，唯望唯惚。惚呵，望呵，中有象呵；望呵，惚呵，中有物呵；幽呵，冥呵，中有请呵。其请甚真，其中有信。自今及古，其名不去，以顺众父。吾何以知众父之然？以此。` },
+            { chapter: 22, title: "道经第二十二章", content: `炊者不立，自视者不彰，自见者不明，自伐者无功，自矜者不长。其在道也，曰：余食赘行，物或恶之，故有欲者弗居。` },
+            { chapter: 23, title: "道经第二十三章", content: `曲则全，枉则直，洼则盈，敝则新，少则得，多则惑。是以圣人执一以为天下式。不自视故彰，不自见故明，不自伐故有功，弗矜故能长。夫唯不争，故莫能与之争。古之所谓曲则全者，几虚语哉，诚全归之。` },
+            { chapter: 24, title: "道经第二十四章", content: `希言自然。飘风不终朝，暴雨不终日。孰为此？天地而弗能久，而况于人乎？故从事于道者同于道，德者同于德，失者同于失。同于德者，道亦德之；同于失者，道亦失之。` },
+            { chapter: 25, title: "道经第二十五章", content: `有物混成，先天地生。渊呵寥呵，独立而不改，可以为天地母。吾未知其名，字之曰道，强为之名曰大。大曰逝，逝曰远，远曰反。道大，天大，地大，王亦大。国中有四大，而王居一焉。人法地，地法天，天法道，道法自然。` },
+            { chapter: 26, title: "道经第二十六章", content: `重为轻根，静为躁君。是以君子终日行不离其辎重。虽有阛馆，燕处则昭若。若何万乘之主而以身轻天下？轻则失本，躁则失君。` },
+            { chapter: 27, title: "道经第二十七章", content: `善行者无辙迹，善言者无瑕谪，善数者不以筹策。善闭者无关楗而不可启也，善结者无绳约而不可解也。是以圣人恒善救人而无弃人，物无弃财，是谓袭明。故：善人，善人之师；不善人，善人之资也。不贵其师，不爱其资，虽知乎，大迷也，是谓眇要。` },
+            { chapter: 28, title: "道经第二十八章", content: `知其雄，守其雌，为天下溪；为天下溪，恒德不离；恒德不离，复归于婴儿。知其荣，守其辱，为天下谷；为天下谷，恒德乃足；恒德乃足，复归于朴。知其白守其黑，为天下式；为天下式，恒德不忒；恒德不忒，复归于无极。朴散则为器，圣人用之则为官长，夫大制无割。` },
+            { chapter: 29, title: "道经第二十九章", content: `将欲取天下而为之，吾见其弗得已。夫天下神器也，非可为者也。为者败之，执者失之。物或行或随，或嘘或吹，或强或羸，或培或隳。是以圣人去甚、去大、去奢。` },
+            { chapter: 30, title: "道经第三十章", content: `以道佐人主，不以兵强于天下，其事好还。师之所居，楚棘生之。善者果而已矣，毋以取强焉。果而勿骄，果而勿矜，果而勿伐，果而不得已居，是谓果而不强。物壮则老，谓之不道，不道早已。` },
+            { chapter: 31, title: "道经第三十一章", content: `夫兵者，不祥之器也，物或恶之，故有欲者弗居。君子居则贵左，用兵则贵右。故兵者非君子之器也，兵者不祥之器也，不得已而用之。铦袭为上，勿美也。若美之，是乐杀人也。夫乐杀人，不可以得志于天下矣。是以吉事尚左，丧事尚右。是以偏将军居左，上将军居右，言以丧礼居之也。杀人众，以悲哀泣之；战胜，以丧礼处之。` },
+            { chapter: 32, title: "道经第三十二章", content: `道恒无名，朴虽小，而天下弗敢臣。侯王若能守之，万物将自宾。天地相合，以雨甘露，民莫之令而自均。始制有名，名亦既有，夫亦将知止，知止所以不殆。譬道之在天下也，犹川谷之于江海也。` },
+            { chapter: 33, title: "道经第三十三章", content: `知人者智也，自知者明也；胜人者有力也，自胜者强也；知足者富也，强行者有志也；不失其所者久也，死而不亡者寿也。` },
+            { chapter: 34, title: "道经第三十四章", content: `道汎呵，其可左右也。成功遂事而弗名有也。万物归焉而弗为主，则恒无欲也，可名于小；万物归焉而弗为主，可名于大。是以圣人之能成大也，以其不为大也，故能成大。` },
+            { chapter: 35, title: "道经第三十五章", content: `执大象，天下往。往而不害，安平泰。乐与饵，过客止。故道之出言也，曰淡呵其无味也。视之不足见也，听之不足闻也，用之不可既也。` },
+            { chapter: 36, title: "道经第三十六章", content: `将欲歙之，必固张之；将欲弱之，必固强之；将欲去之，必固举之；将欲夺之，必固予之。是谓微明。柔弱胜刚强。鱼不可脱于渊，邦之利器不可以示人。` },
+            { chapter: 37, title: "道经第三十七章", content: `道恒无名，侯王若能守之，万物将自化。化而欲作，吾将镇之以无名之朴。镇之以无名之朴，夫将不欲。不欲以静，天地将自正。` }
+        ];
+
+        // ==================== 应用状态 ====================
+        let currentChapter = 0;
+        let fontSize = 1.25;
+        let darkMode = false;
+        let bookmarks = JSON.parse(localStorage.getItem('daodejing_bookmarks')) || [];
+        let notes = JSON.parse(localStorage.getItem('daodejing_notes')) || {};
+        let readChapters = JSON.parse(localStorage.getItem('daodejing_read')) || [];
+
+        // ==================== DOM元素 ====================
+        const chapterSelect = document.getElementById('chapter-select');
+        const chapterList = document.getElementById('chapter-list');
+        const chapterTitle = document.getElementById('current-chapter-title');
+        const chapterContent = document.getElementById('chapter-content');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const decreaseFontBtn = document.getElementById('decrease-font');
+        const increaseFontBtn = document.getElementById('increase-font');
+        const bookmarksToggle = document.getElementById('bookmarks-toggle');
+        const bookmarksContainer = document.getElementById('bookmarks-container');
+        const bookmarksPanel = document.getElementById('bookmarks-panel');
+        const searchInput = document.getElementById('search-input');
+        const studyNotes = document.getElementById('study-notes');
+        const saveNotesBtn = document.getElementById('save-notes');
+        const printBtn = document.getElementById('print-btn');
+        const clearNotesBtn = document.getElementById('clear-notes');
+        const clearBookmarksBtn = document.getElementById('clear-bookmarks');
+        const clearDataBtn = document.getElementById('clear-data');
+        const exportDataBtn = document.getElementById('export-data');
+        const searchResults = document.getElementById('search-results');
+        const bookmarkCount = document.getElementById('bookmark-count');
+        const bookmarksTotal = document.getElementById('bookmarks-total');
+        const readingProgress = document.getElementById('reading-progress');
+
+        // ==================== 初始化 ====================
+        function init() {
+            populateChapterList();
+            populateChapterSelect();
+            loadChapter(currentChapter);
+            updateBookmarksList();
+            updateBookmarkStats();
+            updateReadingProgress();
+            loadNotes();
+            setupEventListeners();
+            updateFontSize();
+            
+            // 检查是否保存了暗黑模式设置
+            const savedDarkMode = localStorage.getItem('daodejing_darkmode');
+            if (savedDarkMode === 'true') {
+                darkMode = true;
+                document.body.classList.add('dark-mode');
+                darkModeToggle.textContent = '☀️ 日间模式';
+            }
+            
+            // 加载保存的字体大小
+            const savedFontSize = localStorage.getItem('daodejing_fontsize');
+            if (savedFontSize) {
+                fontSize = parseFloat(savedFontSize);
+                updateFontSize();
+            }
+            
+            // 标记当前章节为已读
+            markChapterAsRead(currentChapter);
+        }
+
+        // ==================== 填充章节列表 ====================
+        function populateChapterList() {
+            chapterList.innerHTML = '';
+            
+            daodejing.forEach((chapter, index) => {
+                const li = document.createElement('li');
+                li.textContent = `第${chapter.chapter}章 ${chapter.title}`;
+                li.dataset.index = index;
+                li.dataset.chapter = chapter.chapter;
+                
+                // 检查是否为书签章节
+                const hasBookmark = bookmarks.some(b => {
+                    const [chapterNum, verseNum] = b.split('-').map(Number);
+                    return chapterNum === chapter.chapter;
+                });
+                
+                // 检查是否已读
+                const isRead = readChapters.includes(chapter.chapter);
+                
+                if (hasBookmark) {
+                    li.innerHTML = `<span style="color:#d4a76a; margin-right:8px;">★</span> ${li.textContent}`;
+                }
+                
+                if (isRead) {
+                    li.style.opacity = '0.8';
+                    li.style.fontStyle = 'italic';
+                }
+                
+                li.addEventListener('click', () => {
+                    currentChapter = index;
+                    loadChapter(index);
+                    updateActiveChapter();
+                    markChapterAsRead(chapter.chapter);
+                });
+                
+                chapterList.appendChild(li);
+            });
+            
+            updateActiveChapter();
+        }
+
+        // ==================== 填充章节选择下拉框 ====================
+        function populateChapterSelect() {
+            chapterSelect.innerHTML = '<option value="0">选择章节...</option>';
+            
+            daodejing.forEach((chapter, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `第${chapter.chapter}章 ${chapter.title}`;
+                chapterSelect.appendChild(option);
+            });
+            
+            chapterSelect.addEventListener('change', (e) => {
+                const index = parseInt(e.target.value);
+                if (!isNaN(index) && index >= 0 && index < daodejing.length) {
+                    currentChapter = index;
+                    loadChapter(index);
+                    updateActiveChapter();
+                    const chapterNum = daodejing[index].chapter;
+                    markChapterAsRead(chapterNum);
+                }
+            });
+        }
+
+        // ==================== 加载指定章节 ====================
+        function loadChapter(index) {
+            const chapter = daodejing[index];
+            chapterTitle.textContent = `第${chapter.chapter}章 ${chapter.title}`;
+            
+            // 将经文内容分割成句
+            const verses = chapter.content.split('。').filter(v => v.trim() !== '');
+            
+            let contentHTML = '';
+            verses.forEach((verse, i) => {
+                const verseText = verse.trim() + '。';
+                const verseId = `${chapter.chapter}-${i+1}`;
+                const isBookmarked = bookmarks.includes(verseId);
+                
+                contentHTML += `
+                    <div class="verse" data-chapter="${chapter.chapter}" data-verse="${i+1}" id="verse-${verseId}">
+                        <span class="verse-number">${i+1}</span>
+                        <button class="bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" 
+                                data-chapter="${chapter.chapter}" 
+                                data-verse="${i+1}"
+                                title="${isBookmarked ? '移除书签' : '添加书签'}">
+                            ${isBookmarked ? '★' : '☆'}
+                        </button>
+                        <div class="verse-text">${verseText}</div>
+                    </div>
+                `;
+            });
+            
+            chapterContent.innerHTML = contentHTML;
+            
+            // 更新当前章节的笔记
+            studyNotes.value = notes[chapter.chapter] || '';
+            
+            // 添加书签按钮事件
+            document.querySelectorAll('.bookmark-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const chapterNum = parseInt(this.dataset.chapter);
+                    const verseNum = parseInt(this.dataset.verse);
+                    toggleBookmark(chapterNum, verseNum, this);
+                });
+            });
+            
+            // 更新选择框
+            chapterSelect.value = index;
+            
+            // 滚动到顶部
+            chapterContent.scrollTop = 0;
+            
+            // 更新阅读进度
+            updateReadingProgress();
+        }
+
+        // ==================== 更新活动章节 ====================
+        function updateActiveChapter() {
+            document.querySelectorAll('.chapter-list li').forEach((li, index) => {
+                if (index === currentChapter) {
+                    li.classList.add('active');
+                } else {
+                    li.classList.remove('active');
+                }
+            });
+        }
+
+        // ==================== 标记章节为已读 ====================
+        function markChapterAsRead(chapterNum) {
+            if (!readChapters.includes(chapterNum)) {
+                readChapters.push(chapterNum);
+                localStorage.setItem('daodejing_read', JSON.stringify(readChapters));
+                
+                // 更新列表中的视觉提示
+                const listItem = document.querySelector(`.chapter-list li[data-chapter="${chapterNum}"]`);
+                if (listItem) {
+                    listItem.style.opacity = '0.8';
+                    listItem.style.fontStyle = 'italic';
+                }
+                
+                updateReadingProgress();
+            }
+        }
+
+        // ==================== 更新阅读进度 ====================
+        function updateReadingProgress() {
+            const progress = (readChapters.length / daodejing.length) * 100;
+            readingProgress.style.width = `${progress}%`;
+            
+            // 更新统计信息
+            searchResults.textContent = `已读 ${readChapters.length}/81 章`;
+        }
+
+        // ==================== 切换暗黑模式 ====================
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode');
+            
+            if (darkMode) {
+                darkModeToggle.textContent = '☀️ 日间模式';
+            } else {
+                darkModeToggle.textContent = '🌙 夜间模式';
+            }
+            
+            localStorage.setItem('daodejing_darkmode', darkMode);
+        }
+
+        // ==================== 更改字体大小 ====================
+        function changeFontSize(delta) {
+            fontSize += delta;
+            fontSize = Math.max(1.0, Math.min(2.0, fontSize)); // 限制在1.0-2.0之间
+            updateFontSize();
+        }
+
+        // ==================== 更新字体大小 ====================
+        function updateFontSize() {
+            document.querySelector('.chapter-content').style.fontSize = `${fontSize}rem`;
+            localStorage.setItem('daodejing_fontsize', fontSize);
+        }
+
+        // ==================== 切换书签显示 ====================
+        function toggleBookmarksList() {
+            const isVisible = bookmarksPanel.style.display === 'block';
+            bookmarksPanel.style.display = isVisible ? 'none' : 'block';
+            bookmarksToggle.textContent = isVisible ? '⭐ 书签管理' : '📖 隐藏书签';
+            
+            if (!isVisible) {
+                updateBookmarksList();
+            }
+        }
+
+        // ==================== 切换书签 ====================
+        function toggleBookmark(chapterNum, verseNum, button) {
+            const bookmarkKey = `${chapterNum}-${verseNum}`;
+            const index = bookmarks.indexOf(bookmarkKey);
+            
+            if (index === -1) {
+                // 添加书签
+                bookmarks.push(bookmarkKey);
+                button.textContent = '★';
+                button.classList.add('bookmarked');
+                button.title = '移除书签';
+            } else {
+                // 移除书签
+                bookmarks.splice(index, 1);
+                button.textContent = '☆';
+                button.classList.remove('bookmarked');
+                button.title = '添加书签';
+            }
+            
+            // 更新列表中的书签标记
+            updateBookmarksInList();
+            
+            // 保存到本地存储
+            localStorage.setItem('daodejing_bookmarks', JSON.stringify(bookmarks));
+            
+            // 更新书签列表和统计
+            updateBookmarksList();
+            updateBookmarkStats();
+        }
+
+        // ==================== 更新章节列表中的书签标记 ====================
+        function updateBookmarksInList() {
+            document.querySelectorAll('.chapter-list li').forEach(li => {
+                const chapterNum = parseInt(li.dataset.chapter);
+                
+                // 检查此章节是否有书签
+                const hasBookmark = bookmarks.some(b => {
+                    const [bChapterNum, bVerseNum] = b.split('-').map(Number);
+                    return bChapterNum === chapterNum;
+                });
+                
+                if (hasBookmark) {
+                    if (!li.innerHTML.includes('★')) {
+                        li.innerHTML = `<span style="color:#d4a76a; margin-right:8px;">★</span> ${li.textContent}`;
+                    }
+                } else {
+                    li.innerHTML = li.innerHTML.replace(/<span[^>]*>★<\/span>\s*/, '');
+                }
+            });
+        }
+
+        // ==================== 更新书签列表 ====================
+        function updateBookmarksList() {
+            bookmarksContainer.innerHTML = '';
+            
+            if (bookmarks.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.textContent = '暂无书签，点击经文句末的☆添加书签';
+                bookmarksContainer.appendChild(emptyState);
+                return;
+            }
+            
+            // 按章节和句号排序书签
+            const sortedBookmarks = [...bookmarks].sort((a, b) => {
+                const [chapA, verseA] = a.split('-').map(Number);
+                const [chapB, verseB] = b.split('-').map(Number);
+                
+                if (chapA !== chapB) return chapA - chapB;
+                return verseA - verseB;
+            });
+            
+            // 按章节分组书签
+            const bookmarksByChapter = {};
+            sortedBookmarks.forEach(bookmark => {
+                const [chapterNum, verseNum] = bookmark.split('-').map(Number);
+                
+                if (!bookmarksByChapter[chapterNum]) {
+                    bookmarksByChapter[chapterNum] = [];
+                }
+                
+                bookmarksByChapter[chapterNum].push(verseNum);
+            });
+            
+            // 创建书签列表项
+            Object.keys(bookmarksByChapter).forEach(chapterNum => {
+                const chapter = daodejing.find(c => c.chapter === parseInt(chapterNum));
+                if (!chapter) return;
+                
+                const verses = bookmarksByChapter[chapterNum].sort((a, b) => a - b);
+                
+                // 获取书签句子的内容预览
+                let versePreviews = [];
+                verses.forEach(verseNum => {
+                    const chapterContent = chapter.content.split('。').filter(v => v.trim() !== '');
+                    if (chapterContent[verseNum - 1]) {
+                        const preview = chapterContent[verseNum - 1].trim().substring(0, 30) + '...';
+                        versePreviews.push(`第${verseNum}句: ${preview}`);
+                    }
+                });
+                
+                const bookmarkItem = document.createElement('div');
+                bookmarkItem.className = 'bookmark-item';
+                bookmarkItem.dataset.chapter = chapterNum;
+                bookmarkItem.dataset.index = daodejing.findIndex(c => c.chapter === parseInt(chapterNum));
+                
+                bookmarkItem.innerHTML = `
+                    <div class="bookmark-chapter">第${chapterNum}章 ${chapter.title}</div>
+                    <div class="bookmark-verse">${versePreviews.slice(0, 2).join('<br>')}</div>
+                `;
+                
+                if (versePreviews.length > 2) {
+                    const moreCount = versePreviews.length - 2;
+                    bookmarkItem.querySelector('.bookmark-verse').innerHTML += `<br>... 等${moreCount}个书签`;
+                }
+                
+                bookmarkItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const chapterIndex = parseInt(bookmarkItem.dataset.index);
+                    if (chapterIndex !== -1) {
+                        currentChapter = chapterIndex;
+                        loadChapter(chapterIndex);
+                        updateActiveChapter();
+                        
+                        // 滚动到第一个书签位置
+                        setTimeout(() => {
+                            const firstVerseId = `verse-${chapterNum}-${verses[0]}`;
+                            const verseElement = document.getElementById(firstVerseId);
+                            if (verseElement) {
+                                verseElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                verseElement.style.backgroundColor = darkMode ? '#4a3a2a' : '#fff8e1';
+                                setTimeout(() => {
+                                    verseElement.style.backgroundColor = '';
+                                }, 2000);
+                            }
+                        }, 300);
+                    }
+                });
+                
+                bookmarksContainer.appendChild(bookmarkItem);
+            });
+            
+            // 更新书签总数
+            bookmarksTotal.textContent = bookmarks.length;
+        }
+
+        // ==================== 更新书签统计 ====================
+        function updateBookmarkStats() {
+            bookmarkCount.textContent = `书签: ${bookmarks.length}`;
+        }
+
+        // ==================== 搜索内容 ====================
+        function searchContent() {
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            
+            if (searchTerm === '') {
+                // 清除高亮
+                document.querySelectorAll('.verse').forEach(verse => {
+                    const textElement = verse.querySelector('.verse-text');
+                    textElement.innerHTML = textElement.textContent;
+                });
+                return;
+            }
+            
+            let foundInChapters = [];
+            
+            // 在所有章节中搜索
+            daodejing.forEach((chapter, index) => {
+                const verses = chapter.content.split('。').filter(v => v.trim() !== '');
+                
+                verses.forEach((verse, i) => {
+                    const verseText = verse.trim() + '。';
+                    const verseElement = document.querySelector(`.verse[data-chapter="${chapter.chapter}"][data-verse="${i+1}"]`);
+                    
+                    if (verseElement) {
+                        const textElement = verseElement.querySelector('.verse-text');
+                        
+                        if (verseText.toLowerCase().includes(searchTerm)) {
+                            // 高亮匹配的文本
+                            const regex = new RegExp(`(${escapeRegExp(searchTerm)})`, 'gi');
+                            const highlightedText = verseText.replace(regex, '<span class="highlight">$1</span>');
+                            textElement.innerHTML = highlightedText;
+                            
+                            if (!foundInChapters.includes(index)) {
+                                foundInChapters.push(index);
+                            }
+                            
+                            // 如果当前不是这一章，跳转到这一章
+                            if (index !== currentChapter) {
+                                currentChapter = index;
+                                loadChapter(index);
+                                updateActiveChapter();
+                                return; // 只跳转到第一个匹配的章节
+                            }
+                        } else {
+                            textElement.innerHTML = verseText;
+                        }
+                    }
+                });
+            });
+            
+            // 更新搜索结果统计
+            searchResults.textContent = `找到 ${foundInChapters.length} 章包含"${searchTerm}"`;
+        }
         
-        const daodejingChapters = [
-            // ========== 德经部分 (35章) ==========
-            {
-                chapter: 1,
-                category: "德经",
-                title: "德经·第一章",
-                original: "上德不德，是以有德。下德不失德，是以无德。上德无为而无以为也。上仁为之而无以为也。上义为之而有以为也。上礼为之而莫之应也，则攘臂而扔之。故失道。失道矣而后德，失德而后仁，失仁而后义，失义而后礼。夫礼者，忠信之薄也，而乱之首也。前识者，道之华也，而愚之首也。是以大丈夫居其厚而不居其薄，居其实不居其华。故去彼取此。",
-                phonetic: [
-                    { char: "薄", pinyin: "bó", meaning: "浅薄，薄弱" },
-                    { char: "华", pinyin: "huá", meaning: "浮华，表面" }
-                ],
-                rhythm: "上德|不德，/是以|有德。//下德|不失德，/是以|无德。//上德|无为|而无以为也。//上仁|为之|而无以为也。//上义|为之|而有以为也。//上礼|为之|而莫之应也，/则|攘臂而扔之。//故|失道。//失道矣|而后德，/失德|而后仁，/失仁|而后义，/失义|而后礼。//夫礼者，/忠信之薄也，/而|乱之首也。//前识者，/道之华也，/而|愚之首也。//是以|大丈夫|居其厚|而不居其薄，/居其实|不居其华。//故|去彼取此。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "本章阐述德的层次：上德是自然无为，不刻意彰显德；下德刻意求德，反而失去真德。道失而后有德，德失而后有仁，仁失而后有义，义失而后有礼，礼是忠信浅薄的表现，是祸乱的开端。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "上德：最高的德，自然之德；下德：人为的德；无以为：无所作为，不刻意；有以为：有所作为，刻意为之；薄：浅薄；华：浮华。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的德行是自然而然的，不是刻意表现出来的。做人做事要注重本质而非形式，坚守根本而非追求表面的浮华。"
-                    }
-                ]
-            },
-            {
-                chapter: 2,
-                category: "德经",
-                title: "德经·第二章",
-                original: "昔之得一者，天得一以清，地得一以宁，神得一以灵，谷得一以盈，侯王得一而以为正。其致之也，谓天毋已清将恐裂，谓地毋已宁将恐发，谓神毋已灵将恐歇，谓谷毋已盈将恐竭，谓侯王毋已贵以高将恐蹶。故必贵而以贱为本，必高矣而以下为基。夫是以侯王自谓曰孤寡不谷，此其贱之本与，非也？故致数誉无誉。是故不欲禄禄若玉，硌硌若石。",
-                phonetic: [
-                    { char: "毋", pinyin: "wú", meaning: "通“无”，不要" },
-                    { char: "蹶", pinyin: "jué", meaning: "跌倒，颠覆" },
-                    { char: "硌硌", pinyin: "luò luò", meaning: "坚硬的样子" }
-                ],
-                rhythm: "昔之|得一者，/天得一|以清，/地得一|以宁，/神得一|以灵，/谷得一|以盈，/侯王得一|而以为正。//其致之也，/谓|天毋已清|将恐裂，/谓|地毋已宁|将恐发，/谓|神毋已灵|将恐歇，/谓|谷毋已盈|将恐竭，/谓|侯王毋已贵以高|将恐蹶。//故|必贵|而以贱为本，/必高矣|而以下为基。//夫是以|侯王自谓曰|孤寡不谷，/此其|贱之本与，/非也？//故|致数誉|无誉。//是故|不欲|禄禄若玉，/硌硌若石。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "本章强调“一”（道）的重要性：天、地、神、谷、侯王都因得一而各得其所。事物达到极致就会走向反面，所以贵以贱为本，高以下为基，侯王自称孤寡不谷，正是以贱为本的体现。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "一：道的统一体；正：安定，正道；致：推究，极致；蹶：颠覆；孤寡不谷：古代王侯谦称；禄禄：华丽的样子；硌硌：坚硬质朴的样子。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "任何事物都要保持适度，不可走向极端。成功的人要保持谦虚，以低姿态做人，以基础为本，不追求虚名，保持质朴的本质。"
-                    }
-                ]
-            },
-            {
-                chapter: 3,
-                category: "德经",
-                title: "德经·第三章",
-                original: "上士闻道，勤而行之。中士闻道，若存若亡。下士闻道，大笑之。弗笑，不足以为道。是以建言有之曰：明道如费，进道如退，夷道如类。上德如谷，大白如辱，广德如不足。建德如偷，质真如渝，大方无隅。大器晚成，大音希声，大象无形，道褒无名。夫唯道，善始且善成。",
-                phonetic: [
-                    { char: "渝", pinyin: "yú", meaning: "改变，变易" },
-                    { char: "隅", pinyin: "yú", meaning: "角落，棱角" },
-                    { char: "褒", pinyin: "bāo", meaning: "广大，包容" }
-                ],
-                rhythm: "上士|闻道，/勤|而行之。//中士|闻道，/若存|若亡。//下士|闻道，/大笑之。//弗笑，/不足|以为道。//是以|建言有之曰：/明道|如费，/进道|如退，/夷道|如类。//上德|如谷，/大白|如辱，/广德|如不足。//建德|如偷，/质真|如渝，/大方|无隅。//大器|晚成，/大音|希声，/大象|无形，/道褒|无名。//夫唯道，/善始|且善成。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "不同的人对道有不同的态度：上士勤奋践行，中士半信半疑，下士大加嘲笑。道的表现形式是反常规的：明道似暗，进道似退，上德似谷，大白似辱。最伟大的东西往往表现为平凡、质朴、无形。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "上士：上等士人；中士：中等士人；下士：下等士人；费：耗费，隐晦；夷：平坦；类：崎岖；辱：污浊；偷：苟且，不张扬；希声：无声；褒：广大。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的智慧和真理往往不被常人理解，甚至会受到嘲笑。做人要保持谦逊，大智若愚，大巧若拙，不张扬，不显露，默默积累，厚积薄发。"
-                    }
-                ]
-            },
-            {
-                chapter: 4,
-                category: "德经",
-                title: "德经·第四章",
-                original: "反也者，道之动也。弱也者，道之用也。天下之物生于有，有生于无。道生一，一生二，二生三，三生万物。万物负阴而抱阳，中气以为和。天下之所恶，唯孤寡不谷，而王公以自名也。物或损之而益，益之而损。故人之所教，亦议而教人。故强梁者不得死，我将以为学父。",
-                phonetic: [
-                    { char: "中气", pinyin: "zhōng qì", meaning: "中和之气" }
-                ],
-                rhythm: "反也者，|道之动也。//弱也者，|道之用也。//天下之物|生于有，/有|生于无。//道生一，/一生二，/二生三，/三生|万物。//万物|负阴|而抱阳，/中气|以为和。//天下之所恶，/唯|孤寡不谷，/而|王公以自名也。//物或|损之而益，/益之|而损。//故人之所教，/亦|议而教人。//故|强梁者|不得死，/我将|以为学父。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "本章揭示道的运行规律：相反相成是道的运动，柔弱是道的作用。万物生于有，有生于无。道生万物，万物都包含阴阳二气，相互调和达到平衡。事物往往减损它反而增益，增益它反而减损。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "反：返回，相反；弱：柔弱；负阴抱阳：背阴向阳；和：和谐，平衡；强梁：强横，强暴；学父：学习的开端，借鉴。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "认识到事物的对立统一规律，懂得以柔克刚的智慧。做人做事不要过于刚强，保持适度的柔弱和谦逊，反而能获得更大的成就。"
-                    }
-                ]
-            },
-            {
-                chapter: 5,
-                category: "德经",
-                title: "德经·第五章",
-                original: "天下之至柔，驰骋于天下之至坚。无有入于无间。吾是以知无为之有益也。不言之教，无为之益，天下希能及之矣。",
-                phonetic: [],
-                rhythm: "天下之|至柔，/驰骋于|天下之至坚。//无有|入于无间。//吾是以知|无为之有益也。//不言之教，/无为之益，/天下|希能及之矣。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "天下最柔弱的东西，可以在最坚硬的东西中穿行。无形的力量可以进入没有间隙的地方。由此可知无为的益处：不言的教化，无为的益处，天下很少有人能做到。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "至柔：最柔弱的东西；驰骋：自由穿行；无有：无形的力量；无间：没有间隙；无为：顺其自然，不妄为；不言之教：不用言语的教化。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "柔弱胜刚强是永恒的真理。真正的影响力不是靠强制和说教，而是靠以身作则的示范和顺其自然的引导。"
-                    }
-                ]
-            },
-            {
-                chapter: 6,
-                category: "德经",
-                title: "德经·第六章",
-                original: "名与身孰亲？身与货孰多？得与亡孰病？甚爱必大费，多藏必厚亡。故知足不辱，知止不殆，可以长久。",
-                phonetic: [],
-                rhythm: "名与身|孰亲？/身与货|孰多？/得与亡|孰病？//甚爱|必大费，/多藏|必厚亡。//故|知足|不辱，/知止|不殆，/可以|长久。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "本章探讨名、身、货的关系：名声和身体哪个更亲近？身体和财物哪个更重要？得到和失去哪个更有害？过分爱惜会有大耗费，过多收藏会有大损失。知足就不会受辱，知止就不会危险，这样才能长久。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "孰：哪个；多：重要；病：有害；甚爱：过分爱惜；厚亡：重大损失；辱：屈辱；殆：危险；长久：长久平安。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "人生最重要的是身心健康，而非虚名和财物。懂得知足和适可而止，是避免祸患、保持长久幸福的关键。"
-                    }
-                ]
-            },
-            {
-                chapter: 7,
-                category: "德经",
-                title: "德经·第七章",
-                original: "大成若缺，其用不敝。大盈若冲，其用不穷。大直如诎，大巧如拙，大赢如绌。躁胜寒，静胜热。清静，可以为天下正。",
-                phonetic: [
-                    { char: "诎", pinyin: "qū", meaning: "通“屈”，弯曲" },
-                    { char: "绌", pinyin: "chù", meaning: "不足，欠缺" },
-                    { char: "清静", pinyin: "qīng jìng", meaning: "清净宁静" }
-                ],
-                rhythm: "大成|若缺，/其用|不敝。//大盈|若冲，/其用|不穷。//大直|如诎，/大巧|如拙，/大赢|如绌。//躁胜寒，/静胜热。//清静，/可以为|天下正。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "最完满的东西看似有缺陷，但其作用不会衰竭；最充实的东西看似空虚，但其作用不会穷尽。最直的东西看似弯曲，最巧的东西看似笨拙，最赢的东西看似不足。躁动可以战胜寒冷，宁静可以战胜炎热。清净宁静，可以成为天下的准则。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "大成：最大的成就；缺：缺陷；敝：衰竭；冲：空虚；诎：弯曲；拙：笨拙；绌：不足；正：准则，主宰。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的完美不是表面的无缺，而是内在的充实和可持续。做人做事要保持内心的清净和宁静，这是应对一切纷扰的根本。"
-                    }
-                ]
-            },
-            {
-                chapter: 8,
-                category: "德经",
-                title: "德经·第八章",
-                original: "天下有道，却走马以粪。天下无道，戎马生于郊。罪莫大于可欲，祸莫大于不知足，咎莫憯于欲得。故知足之足，恒足矣。",
-                phonetic: [
-                    { char: "憯", pinyin: "cǎn", meaning: "惨痛，悲哀" },
-                    { char: "恒", pinyin: "héng", meaning: "永恒，长久" }
-                ],
-                rhythm: "天下有道，/却|走马以粪。//天下无道，/戎马|生于郊。//罪莫大于|可欲，/祸莫大于|不知足，/咎莫憯于|欲得。//故|知足之足，/恒足矣。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "天下有道时，战马用来耕田；天下无道时，战马生在郊外（战乱频繁）。最大的罪恶是放纵欲望，最大的祸患是不知满足，最大的悲哀是贪得无厌。所以知道满足的满足，才是永恒的满足。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "却：退回；粪：耕种；戎马：战马；可欲：可以引起欲望的东西；咎：灾祸；憯：惨痛；恒：永恒。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "社会的安定与个人的幸福都源于节制欲望。知足常乐不是消极的态度，而是保持内心平衡、避免祸患的智慧。"
-                    }
-                ]
-            },
-            {
-                chapter: 9,
-                category: "德经",
-                title: "德经·第九章",
-                original: "不出于户，以知天下。不窥于牖，以知天道。其出也弥远，其知弥少。是以圣人不行而知，不见而名，弗为而成。",
-                phonetic: [
-                    { char: "牖", pinyin: "yǒu", meaning: "窗户" }
-                ],
-                rhythm: "不出于|户，/以知|天下。//不窥于|牖，/以知|天道。//其出也|弥远，/其知|弥少。//是以|圣人|不行而知，/不见|而名，/弗为|而成。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "不出门就能知晓天下事，不望窗外就能知晓自然规律。走得越远，知道的反而越少。所以圣人不用出行就知道，不用看见就明了，不用作为就成功。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "牖：窗户；弥：越，更加；不行而知：不用行动就知道；不见而名：不用看见就命名；弗为而成：不用作为就成功。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的智慧来自内心的洞察和对规律的把握，而非外在的奔波和见闻。培养内在的觉知能力，比盲目向外探求更重要。"
-                    }
-                ]
-            },
-            {
-                chapter: 10,
-                category: "德经",
-                title: "德经·第十章",
-                original: "为学者日益，闻道者日损。损之又损，以至于无为，无为而无不为。将欲取天下也，恒无事，及其有事也，又不足以取天下矣。",
-                phonetic: [],
-                rhythm: "为学者|日益，/闻道者|日损。//损之又损，/以至于|无为，/无为|而无不为。//将欲取|天下也，/恒无事，/及其|有事也，/又不足以|取天下矣。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "追求学问的人知识日益增加，追求道的人欲望日益减少。减少再减少，直到达到无为的境界，无为反而能无所不为。想要治理天下，就要保持清静无事，如果繁苛多事，就不足以治理天下。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "日益：日益增加；日损：日益减少；损：减少；无为：顺其自然；无不为：无所不能为；恒：常常；有事：繁苛多事。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "学习知识要做加法，修养心性要做减法。减少不必要的欲望和干扰，保持内心的清净和简单，反而能更好地应对各种挑战。"
-                    }
-                ]
-            },
-            {
-                chapter: 11,
-                category: "德经",
-                title: "德经·第十一章",
-                original: "圣人恒无心，以百姓之心为心。善者善之，不善者亦善之，得善也。信者信之，不信者亦信之，得信也。圣人之在天下，歙歙焉，为天下浑心，百姓皆属耳目焉，圣人皆咳之。",
-                phonetic: [
-                    { char: "歙歙", pinyin: "xī xī", meaning: "收敛的样子" }
-                ],
-                rhythm: "圣人|恒无心，/以|百姓之心|为心。//善者|善之，/不善者|亦善之，/得善也。//信者|信之，/不信者|亦信之，/得信也。//圣人之|在天下，/歙歙焉，/为|天下浑心，/百姓|皆属耳目焉，/圣人|皆咳之。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "圣人没有固定的心意，以百姓的心意作为自己的心意。对善良的人善待，对不善良的人也善待，这样就能得到善；对守信的人信任，对不守信的人也信任，这样就能得到信。圣人在天下，收敛自己的意志，使天下人心归于淳朴。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "恒无心：永远没有私心；歙歙：收敛的样子；浑心：使心归于淳朴；属：专注；咳：安抚，包容。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的领导者要以大众的利益为出发点，包容不同的人和事，用善意和信任对待他人，才能赢得人心，实现和谐。"
-                    }
-                ]
-            },
-            {
-                chapter: 12,
-                category: "德经",
-                title: "德经·第十二章",
-                original: "出生，入死。生之徒十有三，死之徒十有三，而民生生，动皆之死地之十有三。夫何故也？以其生生也。盖闻善执生者，陵行不避兕虎，入军不被甲兵。兕无所投其角，虎无所措其爪，兵无所容其刃，夫何故也？以其无死地焉。",
-                phonetic: [
-                    { char: "陵", pinyin: "líng", meaning: "通“凌”，行走" },
-                    { char: "兕", pinyin: "sì", meaning: "犀牛一类的野兽" },
-                    { char: "被", pinyin: "bèi", meaning: "遭受" }
-                ],
-                rhythm: "出生，|入死。//生之徒|十有三，/死之徒|十有三，/而民|生生，/动皆之|死地之十有三。//夫|何故也？/以其|生生也。//盖闻|善执生者，/陵行|不避兕虎，/入军|不被甲兵。//兕|无所投其角，/虎|无所措其爪，/兵|无所容其刃，/夫|何故也？/以其|无死地焉。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "人从出生到死亡，属于长寿的占十分之三，属于短命的占十分之三，本来可以长寿却自己走向死亡的也占十分之三，原因是过分追求生。善于养生的人，行走不避猛兽，入军不被兵器伤害，因为他们没有进入死亡的境地。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "徒：类；生生：过分追求生；执生：持守生命；陵行：行走；兕：犀牛；被：遭受；死地：死亡的境地。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "养生的关键不是刻意追求长生，而是顺其自然，不过分执着于生命。保持内心的平静和自然，反而能获得真正的健康和长寿。"
-                    }
-                ]
-            },
-            {
-                chapter: 13,
-                category: "德经",
-                title: "德经·第十三章",
-                original: "道生之而德畜之，物形之而器成之。是以万物尊道而贵德。道之尊，德之贵也，夫莫之爵而恒自然也。道生之，畜之，长之，遂之，亭之，毒之，养之、覆之。生而弗有也，为而弗恃也，长而弗宰也，此之谓玄德。",
-                phonetic: [
-                    { char: "玄德", pinyin: "xuán dé", meaning: "深奥玄妙的德" }
-                ],
-                rhythm: "道生之|而德畜之，/物形之|而器成之。//是以|万物尊道|而贵德。//道之尊，/德之贵也，/夫|莫之爵|而恒自然也。//道生之，/畜之，/长之，/遂之，/亭之，/毒之，/养之、覆之。//生而|弗有也，/为而|弗恃也，/长而|弗宰也，/此之谓|玄德。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "道生成万物，德养育万物，万物形成各自的形态，器具成就各自的功用。所以万物尊崇道而贵重德。道的尊贵，德的贵重，不是人为封爵的，而是自然如此。道生成、养育、成长、发育、成熟、结果、养护、覆盖万物，生而不占有，为而不恃功，长而不主宰，这就是玄德。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "畜：养育；形：形成；器：器具；爵：封爵；遂：发育；亭：成熟；毒：结果；覆：覆盖；玄德：深奥玄妙的德。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "真正的成就不是占有和控制，而是无私的奉献和培育。帮助他人成长而不居功，成就事业而不主宰，这是最高境界的品德。"
-                    }
-                ]
-            },
-            {
-                chapter: 14,
-                category: "德经",
-                title: "德经·第十四章",
-                original: "天下有始，以为天下母。既得其母，以知其子，复守其母，没身不殆。塞其兑，闭其门，终身不勤。启其兑，济其事，终身不救。见小曰明，守柔曰强。用其光，复归其明。毋遗身殃，是谓袭常。",
-                phonetic: [
-                    { char: "兑", pinyin: "duì", meaning: "口，指感官" }
-                ],
-                rhythm: "天下|有始，/以为|天下母。//既得|其母，/以知|其子，/复守|其母，/没身|不殆。//塞其|兑，/闭其|门，/终身|不勤。//启其|兑，/济其|事，/终身|不救。//见小|曰明，/守柔|曰强。//用其|光，/复归|其明。//毋遗|身殃，/是谓|袭常。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "天下万物有本源，这个本源是天下万物的母亲。认识了母亲，就能认识子女；守住母亲，终身没有危险。堵塞感官，关闭欲门，终身不劳累；开启感官，追求事务，终身不可救药。能看到细微的叫明，能守住柔弱的叫强。运用光芒，回归明察，不给自己带来灾祸，这就是承袭常道。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "始：本源；母：根源；没身：终身；殆：危险；兑：口，感官；勤：劳累；济：成就；明：明察；强：强大；袭常：承袭常道。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "保持内心的清净，减少对外界的欲望和干扰，守住根本，才能保持清醒和强大，避免灾祸。关注细节，保持柔弱，是智慧的表现。"
-                    }
-                ]
-            },
-            {
-                chapter: 15,
-                category: "德经",
-                title: "德经·第十五章",
-                original: "使我挈有知也，行于大道，唯施是畏。大道甚夷，民甚好解。朝甚除，田甚芜，仓甚虚，服文采，带利剑，厌饮食，货财有余，是谓盗夸。盗夸，非道也。",
-                phonetic: [
-                    { char: "挈", pinyin: "qiè", meaning: "假设，如果" }
-                ],
-                rhythm: "使我|挈有知也，/行于|大道，/唯施|是畏。//大道|甚夷，/民|甚好解。//朝|甚除，/田|甚芜，/仓|甚虚，/服|文采，/带|利剑，/厌|饮食，/货财|有余，/是谓|盗夸。//盗夸，/非道也。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "假如我有智慧，行走在大道上，只怕走入歧途。大道很平坦，但人们却喜欢走捷径。朝廷很整洁，田地却很荒芜，仓库很空虚，却穿着华丽的衣服，带着锋利的剑，吃厌了美食，财物有余，这就是强盗头子，不符合道的原则。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "挈：假设；施：邪路；夷：平坦；解：捷径；除：整洁；芜：荒芜；厌：满足；盗夸：强盗头子。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "做人做事要走正道，不要贪图捷径。领导者要关注民生根本，而不是追求个人的奢华享受，否则就是本末倒置，违背天道。"
-                    }
-                ]
-            },
-            {
-                chapter: 16,
-                category: "德经",
-                title: "德经·第十六章",
-                original: "善建者不拔，善抱者不脱，子孙以祭祀不绝。修之身，其德乃真。修之家，其德乃有余。修之乡，其德乃长。修之邦，其德乃丰。修之天下，其德乃溥。以身观身，以家观家，以乡观乡，以邦观邦，以天下观天下。吾何以知天下之然哉？以此。",
-                phonetic: [
-                    { char: "溥", pinyin: "pǔ", meaning: "普遍，广泛" }
-                ],
-                rhythm: "善建者|不拔，/善抱者|不脱，/子孙|以祭祀|不绝。//修之|身，/其德|乃真。//修之|家，/其德|乃有余。//修之|乡，/其德|乃长。//修之|邦，/其德|乃丰。//修之|天下，/其德|乃溥。//以身|观身，/以家|观家，/以乡|观乡，/以邦|观邦，/以天下|观天下。//吾何以知|天下之然哉？/以此。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "善于建立的不会被拔除，善于抱持的不会脱落，子孙因此祭祀不断。修养自身，德就纯真；修养家庭，德就有余；修养乡里，德就长久；修养邦国，德就丰盛；修养天下，德就普及。以自身观察他人，以自家观察他家，以此类推就能知晓天下。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "建：建立；拔：拔除；抱：抱持；脱：脱落；修：修养；溥：普遍；观：观察，认知。"
-                    },
-                    {
-                        title: "现代启示",
-                        content: "修身是一切的根本，从自身做起，推己及人，由内而外，才能真正实现个人、家庭、社会的和谐发展。"
-                    }
-                ]
-            },
-            {
-                chapter: 17,
-                category: "德经",
-                title: "德经·第十七章",
-                original: "含德之厚者，比于赤子。蜂虿虺蛇弗螫，攫鸟猛兽弗搏。骨弱筋柔而握固。未知牝牡之会而朘怒，精之至也。终日号而不嗄，和之至也。和曰常，知常曰明，益生曰祥，心使气曰强。物壮即老，谓之不道，不道早已。",
-                phonetic: [
-                    { char: "虿", pinyin: "chài", meaning: "蝎子一类的毒虫" },
-                    { char: "虺", pinyin: "huǐ", meaning: "毒蛇" },
-                    { char: "螫", pinyin: "shì", meaning: "蜇，刺" },
-                    { char: "攫", pinyin: "jué", meaning: "抓取" },
-                    { char: "牝牡", pinyin: "pìn mǔ", meaning: "雌雄" },
-                    { char: "朘", pinyin: "juān", meaning: "男孩的生殖器" },
-                    { char: "嗄", pinyin: "shà", meaning: "声音嘶哑" }
-                ],
-                rhythm: "含德之|厚者，/比于|赤子。//蜂虿虺蛇|弗螫，/攫鸟猛兽|弗搏。//骨弱|筋柔|而握固。//未知|牝牡之会|而朘怒，/精之至也。//终日|号而不嗄，/和之至也。//和|曰常，/知常|曰明，/益生|曰祥，/心使气|曰强。//物壮|即老，/谓之|不道，/不道|早已。",
-                meanings: [
-                    {
-                        title: "核心要义",
-                        content: "含德深厚的人，如同婴儿：毒虫不蜇，猛兽不扑，凶鸟不抓。筋骨柔弱但拳头紧握，不知男女交合但生殖器勃起，是精气充足的表现；整天哭叫但声音不嘶哑，是和气充足的表现。和气就是常道，知道常道就是明，贪生纵欲就是灾祥，以心使气就是逞强。事物过于强壮就会衰老，这不符合道，不符合道就会早亡。"
-                    },
-                    {
-                        title: "关键字解",
-                        content: "赤子：婴儿；螫：蜇；攫：抓取；牝牡：雌雄；朘：
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // ==================== 保存笔记 ====================
+        function saveNotes() {
+            const currentChapterNum = daodejing[currentChapter].chapter;
+            notes[currentChapterNum] = studyNotes.value;
+            localStorage.setItem('daodejing_notes', JSON.stringify(notes));
+            
+            // 显示保存成功提示
+            const originalText = saveNotesBtn.textContent;
+            saveNotesBtn.textContent = '✅ 已保存';
+            saveNotesBtn.style.backgroundColor = '#5a8f5a';
+            
+            setTimeout(() => {
+                saveNotesBtn.textContent = originalText;
+                saveNotesBtn.style.backgroundColor = '';
+            }, 1500);
+        }
+
+        // ==================== 清除笔记 ====================
+        function clearNotes() {
+            if (confirm('确定要清除当前章节的笔记吗？')) {
+                const currentChapterNum = daodejing[currentChapter].chapter;
+                delete notes[currentChapterNum];
+                localStorage.setItem('daodejing_notes', JSON.stringify(notes));
+                studyNotes.value = '';
+            }
+        }
+
+        // ==================== 清除书签 ====================
+        function clearBookmarks() {
+            if (confirm('确定要清除所有书签吗？此操作不可撤销。')) {
+                bookmarks = [];
+                localStorage.setItem('daodejing_bookmarks', JSON.stringify(bookmarks));
+                updateBookmarksList();
+                updateBookmarkStats();
+                updateBookmarksInList();
+                
+                // 重新加载当前章节以更新书签按钮状态
+                loadChapter(currentChapter);
+            }
+        }
+
+        // ==================== 清除所有数据 ====================
+        function clearAllData() {
+            if (confirm('确定要清除所有本地数据吗？包括书签、笔记、阅读进度和设置。此操作不可撤销。')) {
+                localStorage.removeItem('daodejing_bookmarks');
+                localStorage.removeItem('daodejing_notes');
+                localStorage.removeItem('daodejing_read');
+                localStorage.removeItem('daodejing_darkmode');
+                localStorage.removeItem('daodejing_fontsize');
+                
+                // 重置状态
+                bookmarks = [];
+                notes = {};
+                readChapters = [];
+                darkMode = false;
+                fontSize = 1.25;
+                
+                // 重新初始化
+                document.body.classList.remove('dark-mode');
+                darkModeToggle.textContent = '🌙 夜间模式';
+                init();
+            }
+        }
+
+        // ==================== 导出数据 ====================
+        function exportData() {
+            const data = {
+                bookmarks: bookmarks,
+                notes: notes,
+                readChapters: readChapters,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `daodejing_data_${new Date().toISOString().slice(0,10)}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        // ==================== 打印当前章节 ====================
+        function printChapter() {
+            const chapter = daodejing[currentChapter];
+            const verses = chapter.content.split('。').filter(v => v.trim() !== '');
+            
+            let printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>帛书本《道德经》第${chapter.chapter}章</title>
+                    <style>
+                        body { font-family: 'Noto Serif SC', serif; line-height: 1.8; padding: 30px; max-width: 800px; margin: 0 auto; }
+                        h1 { color: #333; text-align: center; margin-bottom: 10px; }
+                        .chapter-info { text-align: center; margin-bottom: 30px; color: #666; }
+                        .verse { margin-bottom: 20px; padding-left: 10px; border-left: 3px solid #c9a87a; }
+                        .verse-number { font-weight: bold; color: #8b4513; margin-right: 10px; }
+                        .notes { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ccc; }
+                        .print-footer { margin-top: 40px; text-align: center; font-size: 0.9em; color: #777; }
+                        @media print {
+                            body { font-size: 12pt; }
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>帛书本《道德经》（德经在前）</h1>
+                    <div class="chapter-info">
+                        <h2>第${chapter.chapter}章 ${chapter.title}</h2>
+                        <p>打印时间：${new Date().toLocaleString()}</p>
+                    </div>
+                    <div class="content">
+            `;
+            
+            verses.forEach((verse, i) => {
+                const verseText = verse.trim() + '。';
+                printContent += `
+                    <div class="verse">
+                        <span class="verse-number">${i+1}</span>${verseText}
+                    </div>
+                `;
+            });
+            
+            printContent += `
+                    </div>
+                    <div class="notes">
+                        <h3>研读笔记</h3>
+                        <p>${studyNotes.value || '（无笔记）'}</p>
+                    </div>
+                    <div class="print-footer">
+                        <p>打印自：帛书本《道德经》沉浸式研读网页</p>
+                        <p>https://example.com/daodejing</p>
+                    </div>
+                </body>
+                </html>
+            `;
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            printWindow.focus();
+            
+            setTimeout(() => {
+                printWindow.print();
+                printWindow.close();
+            }, 500);
+        }
+
+        // ==================== 设置事件监听器 ====================
+        function setupEventListeners() {
+            darkModeToggle.addEventListener('click', toggleDarkMode);
+            decreaseFontBtn.addEventListener('click', () => changeFontSize(-0.1));
+            increaseFontBtn.addEventListener('click', () => changeFontSize(0.1));
+            bookmarksToggle.addEventListener('click', toggleBookmarksList);
+            searchInput.addEventListener('input', searchContent);
+            saveNotesBtn.addEventListener('click', saveNotes);
+            clearNotesBtn.addEventListener('click', clearNotes);
+            clearBookmarksBtn.addEventListener('click', clearBookmarks);
+            clearDataBtn.addEventListener('click', clearAllData);
+            exportDataBtn.addEventListener('click', exportData);
+            printBtn.addEventListener('click', printChapter);
+            
+            // 添加键盘快捷键
+            document.addEventListener('keydown', (e) => {
+                // 避免在输入框中触发快捷键
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        if (currentChapter > 0) {
+                            currentChapter--;
+                            loadChapter(currentChapter);
+                            updateActiveChapter();
+                        }
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        if (currentChapter < daodejing.length - 1) {
+                            currentChapter++;
+                            loadChapter(currentChapter);
+                            updateActiveChapter();
+                        }
+                        break;
+                    case 'd':
+                    case 'D':
+                        if (e.ctrlKey) {
+                            e.preventDefault();
+                            toggleDarkMode();
+                        }
+                        break;
+                    case 'f':
+                    case 'F':
+                        if (e.ctrlKey) {
+                            e.preventDefault();
+                            searchInput.focus();
+                        }
+                        break;
+                }
+            });
+        }
+
+        // ==================== 页面加载完成后初始化 ====================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
