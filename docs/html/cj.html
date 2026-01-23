@@ -1,0 +1,388 @@
+### 网页用户链接采集工具
+
+根据您的需求，我设计了一个网页用户链接采集工具，它可以帮助您从网页中筛选并提取符合条件的用户链接，最终导出为Excel文件。这个工具包含链接采集、条件筛选和数据导出三个核心功能，界面简洁直观，操作简单方便。
+
+下面是完整的实现代码：
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网页用户链接采集工具</title>
+  <!-- 引入Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 引入SheetJS用于Excel导出 -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- Tailwind配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36CFC9',
+            accent: '#722ED1',
+            neutral: '#86909C',
+            'neutral-light': '#F2F3F5',
+            'neutral-dark': '#4E5969',
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义样式 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .card-shadow {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      }
+      .transition-custom {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+    }
+  </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen flex flex-col">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-3">
+        <i class="fa fa-link text-primary text-2xl"></i>
+        <h1 class="text-xl font-bold text-gray-800">网页用户链接采集工具</h1>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button id="helpBtn" class="text-neutral hover:text-primary transition-custom flex items-center">
+          <i class="fa fa-question-circle mr-1"></i> 帮助
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="flex-grow container mx-auto px-4 py-8">
+    <!-- 步骤指示器 -->
+    <div class="mb-10">
+      <div class="flex items-center justify-between max-w-3xl mx-auto">
+        <div class="flex flex-col items-center">
+          <div id="step1Indicator" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold mb-2">1</div>
+          <span class="text-sm font-medium text-primary">输入URL</span>
+        </div>
+        <div class="flex-1 h-1 mx-2 bg-gray-200">
+          <div id="progress1" class="h-full bg-primary transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div id="step2Indicator" class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold mb-2">2</div>
+          <span class="text-sm font-medium text-gray-500">筛选链接</span>
+        </div>
+        <div class="flex-1 h-1 mx-2 bg-gray-200">
+          <div id="progress2" class="h-full bg-primary transition-all duration-500" style="width: 0%"></div>
+        </div>
+        <div class="flex flex-col items-center">
+          <div id="step3Indicator" class="w-10 h-10 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold mb-2">3</div>
+          <span class="text-sm font-medium text-gray-500">导出结果</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 步骤内容 -->
+    <div class="max-w-5xl mx-auto">
+      <!-- 步骤1: 输入URL -->
+      <section id="step1" class="block">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+          <h2 class="text-lg font-semibold text-gray-800 mb-4">输入目标网页URL</h2>
+          <p class="text-neutral mb-6">请输入您想要采集用户链接的网页地址</p>
+          
+          <div class="flex flex-col md:flex-row gap-4 mb-6">
+            <div class="flex-grow relative">
+              <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral">
+                <i class="fa fa-globe"></i>
+              </span>
+              <input 
+                type="url" 
+                id="targetUrl" 
+                placeholder="https://example.com/users" 
+                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-custom"
+                required
+              >
+            </div>
+            <button id="fetchBtn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-custom flex items-center justify-center">
+              <i class="fa fa-search mr-2"></i> 采集链接
+            </button>
+          </div>
+          
+          <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-4">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fa fa-info-circle text-blue-500 mt-0.5"></i>
+              </div>
+              <div class="ml-3">
+                <h3 class="text-sm font-medium text-blue-800">提示</h3>
+                <div class="mt-2 text-sm text-blue-700">
+                  <p>• 确保网页包含用户链接（通常包含"/user/", "/profile/", "/member/"等关键词）</p>
+                  <p>• 部分网站可能有反爬机制，可能需要多次尝试</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 加载状态 -->
+        <div id="loadingSection" class="hidden mt-6 bg-white rounded-xl p-8 card-shadow text-center">
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
+          <h3 class="text-gray-800 font-medium mb-2">正在采集链接...</h3>
+          <p id="loadingText" class="text-neutral">请稍候，我们正在分析网页内容</p>
+        </div>
+        
+        <!-- 错误信息 -->
+        <div id="errorSection" class="hidden mt-6 bg-red-50 border border-red-100 rounded-xl p-6 card-shadow">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <i class="fa fa-exclamation-circle text-red-500 text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-sm font-medium text-red-800">采集失败</h3>
+              <div class="mt-2 text-sm text-red-700">
+                <p id="errorMessage">无法连接到目标网站，请检查URL是否正确或稍后重试</p>
+              </div>
+              <div class="mt-4">
+                <button id="retryBtn" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-custom">
+                  重试
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 步骤2: 筛选链接 -->
+      <section id="step2" class="hidden">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-semibold text-gray-800">筛选用户链接</h2>
+            <div class="text-sm text-neutral">
+              共找到 <span id="totalLinksCount" class="font-medium text-primary">0</span> 个链接
+            </div>
+          </div>
+          
+          <div class="mb-6">
+            <h3 class="text-sm font-medium text-gray-700 mb-2">筛选条件</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">包含关键词</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral">
+                    <i class="fa fa-filter"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="keywordFilter" 
+                    placeholder="user, profile, member" 
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-custom"
+                    value="user,profile,member"
+                  >
+                </div>
+                <p class="text-xs text-neutral mt-1">用逗号分隔多个关键词</p>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">排除关键词</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral">
+                    <i class="fa fa-ban"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    id="excludeFilter" 
+                    placeholder="admin, edit, logout" 
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-custom"
+                    value="admin,edit,logout,login,register"
+                  >
+                </div>
+                <p class="text-xs text-neutral mt-1">用逗号分隔多个关键词</p>
+              </div>
+            </div>
+            
+            <div class="mt-4 flex justify-end">
+              <button id="applyFilterBtn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-custom flex items-center">
+                <i class="fa fa-check mr-1"></i> 应用筛选
+              </button>
+            </div>
+          </div>
+          
+          <!-- 链接列表 -->
+          <div class="mt-6">
+            <h3 class="text-sm font-medium text-gray-700 mb-3">筛选结果 (<span id="filteredCount">0</span>)</h3>
+            <div class="border border-gray-200 rounded-lg overflow-hidden">
+              <div class="max-h-[400px] overflow-y-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                  <thead class="bg-gray-50 sticky top-0 z-10">
+                    <tr>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-10">
+                        <input type="checkbox" id="selectAll" class="rounded text-primary focus:ring-primary/30">
+                      </th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">链接文本</th>
+                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL</th>
+                    </tr>
+                  </thead>
+                  <tbody id="linksTableBody" class="bg-white divide-y divide-gray-200">
+                    <!-- 链接数据将通过JS动态填充 -->
+                    <tr>
+                      <td colspan="3" class="px-6 py-10 text-center text-neutral">
+                        <i class="fa fa-search text-2xl mb-2 block"></i>
+                        应用筛选条件后显示结果
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="flex justify-between items-center mt-4">
+              <div class="text-sm text-neutral">
+                <label class="inline-flex items-center">
+                  <input type="checkbox" id="selectFiltered" class="rounded text-primary focus:ring-primary/30">
+                  <span class="ml-1">全选筛选结果</span>
+                </label>
+              </div>
+              <button id="nextToExportBtn" class="bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-custom flex items-center">
+                导出选中链接 <i class="fa fa-arrow-right ml-2"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 步骤3: 导出结果 -->
+      <section id="step3" class="hidden">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+          <h2 class="text-lg font-semibold text-gray-800 mb-4">导出用户链接</h2>
+          <p class="text-neutral mb-6">您已选择 <span id="selectedCount" class="font-medium text-primary">0</span> 个用户链接，准备导出为Excel文件</p>
+          
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">导出文件名</label>
+            <input 
+              type="text" 
+              id="exportFileName" 
+              value="user_links" 
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-custom"
+            >
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">导出字段</label>
+            <div class="space-y-2">
+              <label class="flex items-center">
+                <input type="checkbox" id="exportText" checked class="rounded text-primary focus:ring-primary/30">
+                <span class="ml-2 text-sm text-gray-700">链接文本</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="exportUrl" checked class="rounded text-primary focus:ring-primary/30">
+                <span class="ml-2 text-sm text-gray-700">链接URL</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="exportDate" checked class="rounded text-primary focus:ring-primary/30">
+                <span class="ml-2 text-sm text-gray-700">采集日期</span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button id="exportBtn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-custom flex items-center justify-center">
+              <i class="fa fa-download mr-2"></i> 导出为Excel
+            </button>
+            <button id="backToFilterBtn" class="border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-3 px-6 rounded-lg transition-custom flex items-center justify-center">
+              <i class="fa fa-arrow-left mr-2"></i> 返回筛选
+            </button>
+          </div>
+        </div>
+        
+        <!-- 导出成功提示 -->
+        <div id="exportSuccess" class="hidden mt-6 bg-green-50 border border-green-100 rounded-lg p-4">
+          <div class="flex">
+            <div class="flex-shrink-0">
+              <i class="fa fa-check-circle text-green-500 mt-0.5"></i>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-green-800">导出成功</h3>
+              <div class="mt-2 text-sm text-green-700">
+                <p>用户链接已成功导出为Excel文件</p>
+              </div>
+              <div class="mt-4">
+                <button id="newTaskBtn" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-custom">
+                  <i class="fa fa-plus mr-1"></i> 开始新任务
+                </button>
+                <button id="backToFilterBtn2" class="ml-3 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-custom">
+                  返回筛选
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- 帮助模态框 -->
+  <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto m-4">
+      <div class="p-6 border-b border-gray-200">
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold text-gray-800">使用帮助</h3>
+          <button id="closeHelpBtn" class="text-neutral hover:text-gray-800">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="space-y-4">
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">如何使用本工具？</h4>
+            <ol class="list-decimal pl-5 text-neutral space-y-2">
+              <li>在第一步输入包含用户链接的网页URL</li>
+              <li>点击"采集链接"按钮获取页面上的所有链接</li>
+              <li>使用筛选条件过滤出用户链接（通常包含"user"、"profile"等关键词）</li>
+              <li>选择要导出的链接</li>
+              <li>设置导出选项并下载Excel文件</li>
+            </ol>
+          </div>
+          
+          <div>
+            <h4 class="font-medium text-gray-800 mb-2">常见问题</h4>
+            <div class="space-y-3">
+              <div>
+                <p class="font-medium text-gray-700">Q: 为什么采集不到任何链接？</p>
+                <p class="text-neutral pl-4">A: 可能目标网页使用了JavaScript动态加载内容，或有反爬机制，或确实没有可采集的链接。</p>
+              </div>
+              <div>
+                <p class="font-medium text-gray-700">Q: 如何提高用户链接识别准确率？</p>
+                <p class="text-neutral pl-4">A: 使用更具体的关键词筛选，例如网站特有的用户链接格式（如"/u/"、"/memberid/"等）。</p>
+              </div>
+              <div>
+                <p class="font-medium text-gray-700">Q: 导出的Excel文件包含哪些信息？</p>
+                <p class="text-neutral pl-4">A: 默认包含链接文本、URL和采集日期，您可以在导出前选择要包含的字段。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="bg-white border-t border-gray-200 py-6">
+    <div class="container mx-auto px-4 text-center text-neutral text-sm">
+      <p>网页用户链接采集工具 &copy; 2023 | 安全提示：仅用于合法合规的数据采集</p>
+    </div>
+  </footer
