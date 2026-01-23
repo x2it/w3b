@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级分页网页爬虫工具</title>
+    <title>高级分页网页爬虫工具 - 修复版</title>
     <style>
         :root {
             --primary: #4361ee;
@@ -108,16 +108,6 @@
             align-items: center;
             gap: 10px;
             font-size: 1.6em;
-        }
-        
-        h2 i {
-            font-size: 1.2em;
-        }
-        
-        h3 {
-            color: var(--secondary);
-            margin: 20px 0 15px;
-            font-size: 1.3em;
         }
         
         .form-group {
@@ -558,6 +548,36 @@
             font-size: 0.9em;
             color: var(--gray);
         }
+        
+        .proxy-selector {
+            margin-top: 10px;
+        }
+        
+        .proxy-status {
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        .proxy-status.active {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+        }
+        
+        .proxy-status.inactive {
+            background: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+        }
+        
+        .demo-mode {
+            background: rgba(255, 193, 7, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -580,7 +600,7 @@
                 <div id="basic-tab" class="tab-content active">
                     <div class="form-group">
                         <label for="base-url">基础URL <span class="label-hint">(支持分页占位符 {page})</span></label>
-                        <input type="url" id="base-url" placeholder="例如: https://example.com/users?page={page}" value="https://github.com/search?q=python&type=users&p={page}">
+                        <input type="url" id="base-url" placeholder="例如: https://example.com/users?page={page}" value="https://www.example.com/users?page={page}">
                     </div>
                     
                     <div class="form-group">
@@ -627,6 +647,16 @@
                         <input type="number" id="max-results" value="50" min="1" max="500">
                     </div>
                     
+                    <div class="form-group">
+                        <label for="proxy-mode">代理模式</label>
+                        <select id="proxy-mode">
+                            <option value="demo">演示模式（无网络请求）</option>
+                            <option value="direct">直接请求（仅同源或CORS允许）</option>
+                            <option value="cors">CORS代理</option>
+                        </select>
+                        <div id="proxy-status" class="proxy-status active">当前：演示模式</div>
+                    </div>
+                    
                     <div class="advanced-toggle" onclick="toggleAdvanced()">
                         <span><i class="fas fa-filter"></i> 高级筛选选项</span>
                         <i class="fas fa-chevron-down" id="advanced-chevron"></i>
@@ -669,13 +699,18 @@
                         <h3><i class="fas fa-link"></i> URL模式筛选</h3>
                         <div class="form-group">
                             <label for="url-pattern">URL必须包含</label>
-                            <input type="text" id="url-pattern" placeholder="例如: github.com/user">
+                            <input type="text" id="url-pattern" placeholder="例如: /user/, profile">
                         </div>
                         
                         <div class="form-group">
                             <label for="exclude-pattern">URL排除包含</label>
                             <input type="text" id="exclude-pattern" placeholder="例如: logout, admin, login">
                         </div>
+                    </div>
+                    
+                    <div class="demo-mode" id="demo-mode-info">
+                        <i class="fas fa-info-circle"></i> <strong>演示模式已启用</strong><br>
+                        在此模式下，爬虫不会进行实际网络请求，而是使用内置的示例数据进行演示。要测试实际爬取功能，请切换到"CORS代理"或"直接请求"模式（注意：直接请求需要目标网站支持CORS）。
                     </div>
                     
                     <div class="progress-container">
@@ -812,6 +847,7 @@
         let startTime = 0;
         let isCrawling = false;
         let currentPage = 1;
+        let proxyMode = 'demo';
         
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -823,8 +859,12 @@
                 radio.addEventListener('change', updatePageControls);
             });
             
+            // 绑定代理模式切换事件
+            document.getElementById('proxy-mode').addEventListener('change', updateProxyMode);
+            
             // 初始化页面控制显示
             updatePageControls();
+            updateProxyMode();
             
             // 显示示例数据
             showDemoData();
@@ -853,6 +893,37 @@
             content.classList.toggle('expanded');
             chevron.classList.toggle('fa-chevron-down');
             chevron.classList.toggle('fa-chevron-up');
+        }
+        
+        // 更新代理模式
+        function updateProxyMode() {
+            proxyMode = document.getElementById('proxy-mode').value;
+            const proxyStatus = document.getElementById('proxy-status');
+            const demoModeInfo = document.getElementById('demo-mode-info');
+            
+            let statusText = '';
+            let statusClass = '';
+            
+            switch(proxyMode) {
+                case 'demo':
+                    statusText = '当前：演示模式（无网络请求）';
+                    statusClass = 'active';
+                    demoModeInfo.style.display = 'block';
+                    break;
+                case 'direct':
+                    statusText = '当前：直接请求（仅同源或CORS允许）';
+                    statusClass = 'warning';
+                    demoModeInfo.style.display = 'none';
+                    break;
+                case 'cors':
+                    statusText = '当前：CORS代理（使用代理服务）';
+                    statusClass = 'active';
+                    demoModeInfo.style.display = 'none';
+                    break;
+            }
+            
+            proxyStatus.textContent = statusText;
+            proxyStatus.className = `proxy-status ${statusClass}`;
         }
         
         // 更新页面控制显示
@@ -925,7 +996,7 @@
         
         // 重置表单
         function resetForm() {
-            document.getElementById('base-url').value = 'https://github.com/search?q=python&type=users&p={page}';
+            document.getElementById('base-url').value = 'https://www.example.com/users?page={page}';
             document.getElementById('start-page').value = '1';
             document.getElementById('end-page').value = '5';
             document.getElementById('single-page').value = '1';
@@ -938,6 +1009,7 @@
             document.getElementById('link-selector').value = '';
             document.getElementById('export-filename').value = 'user_links_导出';
             document.getElementById('export-sheetname').value = '用户链接';
+            document.getElementById('proxy-mode').value = 'demo';
             
             // 重置复选框
             document.querySelectorAll('.checkbox-item input[type="checkbox"]').forEach(cb => {
@@ -950,6 +1022,7 @@
             document.getElementById('page-all').checked = true;
             
             updatePageControls();
+            updateProxyMode();
             updateProgress(0, '准备开始');
             showNotification('表单已重置为默认值');
         }
@@ -987,6 +1060,7 @@
                 linkSelector: document.getElementById('link-selector').value,
                 exportFilename: document.getElementById('export-filename').value,
                 exportSheetname: document.getElementById('export-sheetname').value,
+                proxyMode: document.getElementById('proxy-mode').value,
                 
                 // 复选框状态
                 filters: {
@@ -1025,6 +1099,7 @@
                 document.getElementById('link-selector').value = settings.linkSelector || '';
                 document.getElementById('export-filename').value = settings.exportFilename || 'user_links_导出';
                 document.getElementById('export-sheetname').value = settings.exportSheetname || '用户链接';
+                document.getElementById('proxy-mode').value = settings.proxyMode || 'demo';
                 
                 // 设置分页模式
                 const pageMode = settings.pageMode || 'all';
@@ -1041,6 +1116,7 @@
                 }
                 
                 updatePageControls();
+                updateProxyMode();
                 
             } catch (e) {
                 console.error('加载设置失败:', e);
@@ -1132,40 +1208,21 @@
             startTime = Date.now();
             updateStats();
             
-            // 开始爬取
+            // 根据代理模式执行爬取
             try {
-                for (let page = startPage; page <= endPage && isCrawling; page++) {
-                    currentPage = page;
-                    const url = baseUrl.replace('{page}', page);
-                    
-                    // 更新进度和状态
-                    const progressPercent = ((page - startPage) / totalPagesToCrawl) * 100;
-                    updateProgress(progressPercent, `正在爬取第 ${page} 页...`);
-                    document.getElementById('page-status').innerHTML = 
-                        `<div style="margin-top: 10px; font-size: 0.9em;">当前页面: ${url}</div>`;
-                    
-                    // 爬取当前页面
-                    await crawlPage(url, {
+                if (proxyMode === 'demo') {
+                    // 演示模式：使用模拟数据
+                    await simulateCrawling(startPage, endPage, maxResults, filters);
+                } else {
+                    // 实际爬取模式
+                    await realCrawling(baseUrl, startPage, endPage, {
                         filters,
                         maxResults,
                         urlPattern,
                         excludePattern,
                         linkSelector,
-                        page
+                        delay
                     });
-                    
-                    crawledPages++;
-                    updateStats();
-                    
-                    // 显示分页信息
-                    document.getElementById('pagination-info').style.display = 'block';
-                    document.getElementById('page-range-display').textContent = `页面: ${startPage}~${endPage}`;
-                    document.getElementById('current-page-display').textContent = `当前: ${page}/${endPage}`;
-                    
-                    // 延迟（避免请求过快）
-                    if (page < endPage && delay > 0) {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
                 }
                 
                 updateProgress(100, '爬取完成！');
@@ -1196,97 +1253,289 @@
             }
         }
         
-        // 爬取单个页面
-        async function crawlPage(url, options) {
+        // 模拟爬取（演示模式）
+        async function simulateCrawling(startPage, endPage, maxResults, filters) {
+            for (let page = startPage; page <= endPage && isCrawling; page++) {
+                currentPage = page;
+                
+                // 更新进度和状态
+                const progressPercent = ((page - startPage) / (endPage - startPage + 1)) * 100;
+                updateProgress(progressPercent, `演示模式：正在模拟爬取第 ${page} 页...`);
+                document.getElementById('page-status').innerHTML = 
+                    `<div style="margin-top: 10px; font-size: 0.9em;">演示模式 - 生成示例数据</div>`;
+                
+                // 生成模拟数据
+                await generateDemoData(page, filters, maxResults);
+                
+                crawledPages++;
+                updateStats();
+                
+                // 显示分页信息
+                document.getElementById('pagination-info').style.display = 'block';
+                document.getElementById('page-range-display').textContent = `页面: ${startPage}~${endPage}`;
+                document.getElementById('current-page-display').textContent = `当前: ${page}/${endPage}`;
+                
+                // 模拟延迟
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+        }
+        
+        // 实际爬取
+        async function realCrawling(baseUrl, startPage, endPage, options) {
+            for (let page = startPage; page <= endPage && isCrawling; page++) {
+                currentPage = page;
+                const url = baseUrl.replace('{page}', page);
+                
+                // 更新进度和状态
+                const progressPercent = ((page - startPage) / (endPage - startPage + 1)) * 100;
+                updateProgress(progressPercent, `正在爬取第 ${page} 页...`);
+                document.getElementById('page-status').innerHTML = 
+                    `<div style="margin-top: 10px; font-size: 0.9em;">当前页面: ${url}</div>`;
+                
+                // 根据代理模式爬取页面
+                if (proxyMode === 'direct') {
+                    // 直接请求（需要目标网站支持CORS）
+                    await crawlPageDirect(url, options, page);
+                } else if (proxyMode === 'cors') {
+                    // 使用CORS代理（修复版）
+                    await crawlPageWithProxy(url, options, page);
+                }
+                
+                crawledPages++;
+                updateStats();
+                
+                // 显示分页信息
+                document.getElementById('pagination-info').style.display = 'block';
+                document.getElementById('page-range-display').textContent = `页面: ${startPage}~${endPage}`;
+                document.getElementById('current-page-display').textContent = `当前: ${page}/${endPage}`;
+                
+                // 延迟（避免请求过快）
+                if (page < endPage && options.delay > 0) {
+                    await new Promise(resolve => setTimeout(resolve, options.delay));
+                }
+            }
+        }
+        
+        // 直接爬取页面（需要CORS支持）
+        async function crawlPageDirect(url, options, pageNum) {
             try {
-                // 使用代理绕过CORS限制（实际使用时可能需要自己的代理服务器）
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&callback=?`;
-                
-                const response = await fetch(proxyUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP错误: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // 解析HTML
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data.contents, 'text/html');
-                
-                // 选择链接
-                let links;
-                if (options.linkSelector) {
-                    links = doc.querySelectorAll(options.linkSelector);
-                } else {
-                    links = doc.querySelectorAll('a[href]');
-                }
-                
-                // 处理链接
-                links.forEach(link => {
-                    const href = link.getAttribute('href');
-                    const text = link.textContent || link.innerText || '';
-                    
-                    // 检查链接是否符合筛选条件
-                    const hrefLower = href.toLowerCase();
-                    const textLower = text.toLowerCase();
-                    
-                    // 检查筛选关键词
-                    const matchesFilter = options.filters.some(filter => 
-                        hrefLower.includes(filter) || textLower.includes(filter)
-                    );
-                    
-                    if (!matchesFilter) return;
-                    
-                    // 检查URL模式
-                    if (options.urlPattern) {
-                        const patterns = options.urlPattern.split(',').map(p => p.trim());
-                        const matchesPattern = patterns.some(pattern => 
-                            hrefLower.includes(pattern.toLowerCase())
-                        );
-                        if (!matchesPattern) return;
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
                     }
-                    
-                    // 检查排除模式
-                    if (options.excludePattern) {
-                        const excludePatterns = options.excludePattern.split(',').map(p => p.trim());
-                        const shouldExclude = excludePatterns.some(pattern => 
-                            hrefLower.includes(pattern.toLowerCase())
-                        );
-                        if (shouldExclude) return;
-                    }
-                    
-                    // 构建完整URL
-                    let fullUrl;
-                    if (href.startsWith('http')) {
-                        fullUrl = href;
-                    } else if (href.startsWith('//')) {
-                        fullUrl = 'https:' + href;
-                    } else if (href.startsWith('/')) {
-                        // 从原始URL提取域名
-                        const urlObj = new URL(url);
-                        fullUrl = urlObj.origin + href;
-                    } else {
-                        fullUrl = new URL(href, url).href;
-                    }
-                    
-                    // 添加到结果
-                    collectedLinks.push({
-                        url: fullUrl,
-                        text: text.trim() || '无文本',
-                        page: options.page,
-                        source: url,
-                        timestamp: new Date().toLocaleString()
-                    });
                 });
                 
-                // 限制结果数量
-                if (collectedLinks.length > options.maxResults) {
-                    collectedLinks = collectedLinks.slice(0, options.maxResults);
+                if (!response.ok) {
+                    throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+                }
+                
+                const html = await response.text();
+                processPageContent(html, url, options, pageNum);
+                
+            } catch (error) {
+                console.error(`直接爬取失败 ${url}:`, error);
+                // 尝试降级到演示模式
+                showNotification(`直接爬取失败，切换到演示模式: ${error.message}`, 'warning');
+                await generateDemoData(pageNum, options.filters, options.maxResults);
+            }
+        }
+        
+        // 使用代理爬取页面（修复版）
+        async function crawlPageWithProxy(url, options, pageNum) {
+            try {
+                // 使用多个备用代理，提高成功率
+                const proxies = [
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+                    `https://cors-anywhere.herokuapp.com/${url}`,
+                    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+                ];
+                
+                let success = false;
+                let lastError = null;
+                
+                for (let i = 0; i < proxies.length && !success; i++) {
+                    try {
+                        const proxyUrl = proxies[i];
+                        console.log(`尝试代理 ${i+1}: ${proxyUrl}`);
+                        
+                        const response = await fetch(proxyUrl, {
+                            method: 'GET',
+                            headers: {
+                                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                                'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                            }
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`代理请求失败: ${response.status} ${response.statusText}`);
+                        }
+                        
+                        const contentType = response.headers.get('content-type');
+                        let html;
+                        
+                        // 根据内容类型处理响应
+                        if (contentType && contentType.includes('application/json')) {
+                            // 处理JSON响应
+                            const json = await response.json();
+                            // 尝试从JSON中提取HTML内容
+                            if (json.contents) {
+                                html = json.contents;
+                            } else if (json.data) {
+                                html = json.data;
+                            } else {
+                                // 如果JSON中没有HTML内容，则使用整个JSON作为文本
+                                html = JSON.stringify(json);
+                            }
+                        } else {
+                            // 处理HTML响应
+                            html = await response.text();
+                        }
+                        
+                        if (html) {
+                            processPageContent(html, url, options, pageNum);
+                            success = true;
+                            console.log(`代理 ${i+1} 成功`);
+                        }
+                        
+                    } catch (err) {
+                        console.warn(`代理 ${i+1} 失败:`, err);
+                        lastError = err;
+                        // 继续尝试下一个代理
+                    }
+                }
+                
+                if (!success) {
+                    throw lastError || new Error('所有代理都尝试失败');
                 }
                 
             } catch (error) {
-                console.error(`爬取页面失败 ${url}:`, error);
-                throw error;
+                console.error(`代理爬取失败 ${url}:`, error);
+                // 尝试降级到演示模式
+                showNotification(`代理爬取失败，切换到演示模式: ${error.message}`, 'warning');
+                await generateDemoData(pageNum, options.filters, options.maxResults);
+            }
+        }
+        
+        // 处理页面内容
+        function processPageContent(html, url, options, pageNum) {
+            // 解析HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // 选择链接
+            let links;
+            if (options.linkSelector) {
+                links = doc.querySelectorAll(options.linkSelector);
+            } else {
+                links = doc.querySelectorAll('a[href]');
+            }
+            
+            // 处理链接
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                const text = link.textContent || link.innerText || '';
+                
+                // 检查链接是否符合筛选条件
+                const hrefLower = href ? href.toLowerCase() : '';
+                const textLower = text.toLowerCase();
+                
+                // 检查筛选关键词
+                const matchesFilter = options.filters.some(filter => 
+                    hrefLower.includes(filter) || textLower.includes(filter)
+                );
+                
+                if (!matchesFilter) return;
+                
+                // 检查URL模式
+                if (options.urlPattern) {
+                    const patterns = options.urlPattern.split(',').map(p => p.trim());
+                    const matchesPattern = patterns.some(pattern => 
+                        hrefLower.includes(pattern.toLowerCase())
+                    );
+                    if (!matchesPattern) return;
+                }
+                
+                // 检查排除模式
+                if (options.excludePattern) {
+                    const excludePatterns = options.excludePattern.split(',').map(p => p.trim());
+                    const shouldExclude = excludePatterns.some(pattern => 
+                        hrefLower.includes(pattern.toLowerCase())
+                    );
+                    if (shouldExclude) return;
+                }
+                
+                // 构建完整URL
+                let fullUrl;
+                if (href.startsWith('http')) {
+                    fullUrl = href;
+                } else if (href.startsWith('//')) {
+                    fullUrl = 'https:' + href;
+                } else if (href.startsWith('/')) {
+                    // 从原始URL提取域名
+                    const urlObj = new URL(url);
+                    fullUrl = urlObj.origin + href;
+                } else {
+                    try {
+                        fullUrl = new URL(href, url).href;
+                    } catch (e) {
+                        // 如果URL无效，跳过
+                        console.warn('无效的URL:', href);
+                        return;
+                    }
+                }
+                
+                // 添加到结果
+                collectedLinks.push({
+                    url: fullUrl,
+                    text: text.trim() || '无文本',
+                    page: pageNum,
+                    source: url,
+                    timestamp: new Date().toLocaleString()
+                });
+            });
+            
+            // 限制结果数量
+            if (collectedLinks.length > options.maxResults) {
+                collectedLinks = collectedLinks.slice(0, options.maxResults);
+            }
+        }
+        
+        // 生成演示数据
+        async function generateDemoData(pageNum, filters, maxResults) {
+            // 生成与筛选条件匹配的演示数据
+            const demoLinks = [];
+            const domains = [
+                'https://github.com',
+                'https://stackoverflow.com',
+                'https://linkedin.com',
+                'https://twitter.com',
+                'https://example.com'
+            ];
+            
+            const filterKeywords = filters.length > 0 ? filters : ['user', 'profile'];
+            
+            for (let i = 1; i <= 15 && demoLinks.length < maxResults; i++) {
+                const domain = domains[Math.floor(Math.random() * domains.length)];
+                const keyword = filterKeywords[Math.floor(Math.random() * filterKeywords.length)];
+                const username = `user${pageNum}_${i}`;
+                
+                demoLinks.push({
+                    url: `${domain}/${keyword}/${username}`,
+                    text: `${username} - ${keyword} (页面 ${pageNum})`,
+                    page: pageNum,
+                    source: `https://example.com/${keyword}s?page=${pageNum}`,
+                    timestamp: new Date().toLocaleString()
+                });
+            }
+            
+            // 添加到总结果
+            collectedLinks.push(...demoLinks);
+            
+            // 限制总结果数量
+            if (collectedLinks.length > maxResults * 3) { // 允许最多3页的数据
+                collectedLinks = collectedLinks.slice(0, maxResults * 3);
             }
         }
         
@@ -1318,8 +1567,12 @@
                 }
             });
             
+            // 限制显示数量，避免页面卡顿
+            const displayLimit = 100;
+            const linksToDisplay = uniqueLinks.slice(0, displayLimit);
+            
             // 生成结果HTML
-            container.innerHTML = uniqueLinks.map((link, index) => `
+            container.innerHTML = linksToDisplay.map((link, index) => `
                 <div class="result-item">
                     <div class="result-info">
                         <div class="result-url">${link.url}</div>
@@ -1333,33 +1586,58 @@
                         <a href="${link.url}" target="_blank" class="action-btn" title="打开链接">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
-                        <button class="action-btn" onclick="copyToClipboard('${link.url}')" title="复制链接">
+                        <button class="action-btn" onclick="copyToClipboard('${link.url.replace(/'/g, "\\'")}')" title="复制链接">
                             <i class="fas fa-copy"></i>
                         </button>
                     </div>
                 </div>
             `).join('');
+            
+            // 如果有限制显示，添加提示
+            if (uniqueLinks.length > displayLimit) {
+                container.innerHTML += `
+                    <div class="result-item" style="text-align: center; color: var(--gray);">
+                        <i class="fas fa-info-circle"></i>
+                        已显示前 ${displayLimit} 个结果，共有 ${uniqueLinks.length} 个唯一链接
+                    </div>
+                `;
+            }
         }
         
         // 复制到剪贴板
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
                 showNotification('链接已复制到剪贴板');
+            }).catch(err => {
+                // 备用方法
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification('链接已复制到剪贴板');
             });
         }
         
         // 显示演示数据
         function showDemoData() {
+            // 生成更丰富的演示数据
             const demoLinks = [];
-            const baseUrl = "https://github.com/search?q=python&type=users";
+            const baseUrl = "https://example.com/users";
             
             for (let page = 1; page <= 3; page++) {
-                for (let i = 1; i <= 10; i++) {
+                for (let i = 1; i <= 20; i++) {
+                    const domains = ['https://github.com', 'https://linkedin.com', 'https://example.com'];
+                    const domain = domains[Math.floor(Math.random() * domains.length)];
+                    const keywords = ['user', 'profile', 'account'];
+                    const keyword = keywords[Math.floor(Math.random() * keywords.length)];
+                    
                     demoLinks.push({
-                        url: `https://github.com/user${i}_page${page}`,
-                        text: `用户${i} - Python开发者 (页面${page})`,
+                        url: `${domain}/${keyword}/person${i}_page${page}`,
+                        text: `用户 ${i} - 测试账户 (页面 ${page})`,
                         page: page,
-                        source: `${baseUrl}&p=${page}`,
+                        source: `${baseUrl}?page=${page}`,
                         timestamp: new Date().toLocaleString()
                     });
                 }
@@ -1425,7 +1703,7 @@
                 
                 // 生成文件名
                 const filenamePrefix = document.getElementById('export-filename').value || 'user_links_导出';
-                const timestamp = new Date().getTime();
+                const timestamp = new Date().toLocaleDateString().replace(/\//g, '-');
                 const filename = `${filenamePrefix}_${timestamp}.xlsx`;
                 
                 // 导出文件
