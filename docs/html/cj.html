@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>高级分页网页爬虫工具 - 修复版</title>
+    <title>多功能网页爬虫工具</title>
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3a0ca3;
             --success: #4cc9f0;
             --danger: #f72585;
+            --warning: #ff9e00;
             --light: #f8f9fa;
             --dark: #212529;
             --gray: #6c757d;
@@ -110,6 +111,15 @@
             font-size: 1.6em;
         }
         
+        h3 {
+            color: var(--secondary);
+            margin: 20px 0 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .form-group {
             margin-bottom: 25px;
         }
@@ -206,6 +216,10 @@
             margin-top: 30px;
         }
         
+        .buttons-row-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
         .btn {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
@@ -241,6 +255,10 @@
         
         .btn-danger {
             background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9e00 0%, #ff6d00 100%);
         }
         
         .btn:disabled {
@@ -421,7 +439,7 @@
         }
         
         .notification.warning {
-            background: #ff9e00;
+            background: var(--warning);
         }
         
         .tabs {
@@ -473,6 +491,10 @@
             
             .checkbox-grid {
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .buttons-row, .buttons-row-3 {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -578,14 +600,94 @@
             margin-top: 20px;
             border-left: 4px solid #ffc107;
         }
+        
+        .export-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .export-format-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border: 2px solid #eee;
+        }
+        
+        .export-format-selector label {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .export-format-selector select {
+            width: auto;
+            min-width: 120px;
+            padding: 8px 15px;
+        }
+        
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .quick-action-btn {
+            padding: 8px 15px;
+            background: var(--light);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9em;
+        }
+        
+        .quick-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .result-filter {
+            margin-bottom: 15px;
+        }
+        
+        .result-filter input {
+            padding: 10px 15px;
+            font-size: 0.95em;
+        }
+        
+        .result-summary {
+            background: rgba(67, 97, 238, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .export-preview {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            border: 1px solid #dee2e6;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-spider"></i> 高级分页网页爬虫工具</h1>
-            <p>从单页或多页网页中提取符合筛选条件的用户链接，支持分页控制、高级筛选和Excel导出</p>
+            <h1><i class="fas fa-spider"></i> 多功能网页爬虫工具</h1>
+            <p>从单页或多页网页中提取符合筛选条件的用户链接，支持分页控制、高级筛选和多格式导出</p>
         </div>
         
         <div class="main-content">
@@ -600,7 +702,7 @@
                 <div id="basic-tab" class="tab-content active">
                     <div class="form-group">
                         <label for="base-url">基础URL <span class="label-hint">(支持分页占位符 {page})</span></label>
-                        <input type="url" id="base-url" placeholder="例如: https://example.com/users?page={page}" value="https://www.example.com/users?page={page}">
+                        <input type="url" id="base-url" placeholder="例如: https://example.com/users?page={page}" value="">
                     </div>
                     
                     <div class="form-group">
@@ -648,7 +750,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="proxy-mode">代理模式</label>
+                        <label for="proxy-mode">工作模式</label>
                         <select id="proxy-mode">
                             <option value="demo">演示模式（无网络请求）</option>
                             <option value="direct">直接请求（仅同源或CORS允许）</option>
@@ -658,12 +760,12 @@
                     </div>
                     
                     <div class="advanced-toggle" onclick="toggleAdvanced()">
-                        <span><i class="fas fa-filter"></i> 高级筛选选项</span>
+                        <span><i class="fas fa-filter"></i> 链接筛选条件</span>
                         <i class="fas fa-chevron-down" id="advanced-chevron"></i>
                     </div>
                     
                     <div class="advanced-content" id="advanced-content">
-                        <h3><i class="fas fa-filter"></i> 链接筛选条件</h3>
+                        <h3><i class="fas fa-filter"></i> 链接关键词筛选</h3>
                         <div class="checkbox-grid">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="filter-user" checked>
@@ -761,13 +863,17 @@
                     
                     <h3><i class="fas fa-file-export"></i> 导出设置</h3>
                     <div class="form-group">
-                        <label for="export-filename">导出文件名</label>
-                        <input type="text" id="export-filename" placeholder="user_links_导出">
+                        <label for="export-filename">导出文件前缀</label>
+                        <input type="text" id="export-filename" placeholder="user_links" value="user_links">
                     </div>
                     
                     <div class="form-group">
-                        <label for="export-sheetname">Excel工作表名</label>
-                        <input type="text" id="export-sheetname" placeholder="用户链接" value="用户链接">
+                        <label for="export-date-format">日期格式</label>
+                        <select id="export-date-format">
+                            <option value="timestamp">时间戳</option>
+                            <option value="date" selected>年月日</option>
+                            <option value="datetime">年月日时分秒</option>
+                        </select>
                     </div>
                     
                     <div class="buttons-row">
@@ -807,11 +913,28 @@
                     </div>
                 </div>
                 
+                <div class="result-summary" id="result-summary" style="display: none;">
+                    <strong><i class="fas fa-info-circle"></i> 结果摘要:</strong>
+                    <div id="summary-text"></div>
+                </div>
+                
+                <div class="result-filter">
+                    <input type="text" id="filter-results" placeholder="筛选结果...">
+                </div>
+                
                 <div class="results-container" id="results-container">
                     <div class="empty-state" id="empty-results">
                         <i class="fas fa-inbox"></i>
                         <h3>暂无结果</h3>
                         <p>配置爬虫设置并开始爬取以显示结果</p>
+                        <div class="quick-actions" style="justify-content: center; margin-top: 20px;">
+                            <button class="quick-action-btn" onclick="showExampleData()">
+                                <i class="fas fa-eye"></i> 查看示例
+                            </button>
+                            <button class="quick-action-btn" onclick="startCrawling()">
+                                <i class="fas fa-play"></i> 开始演示
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
@@ -821,12 +944,37 @@
                     <span id="current-page-display"></span>
                 </div>
                 
-                <div class="buttons-row">
-                    <button class="btn btn-success" onclick="exportToExcel()" id="export-btn" disabled>
-                        <i class="fas fa-file-excel"></i> 导出为Excel
+                <div class="export-options">
+                    <div class="export-format-selector">
+                        <label for="export-format">导出格式:</label>
+                        <select id="export-format">
+                            <option value="excel">Excel (.xlsx)</option>
+                            <option value="text">文本文件 (.txt)</option>
+                            <option value="csv">CSV文件 (.csv)</option>
+                            <option value="json">JSON文件 (.json)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success" onclick="exportData()" id="export-btn" disabled>
+                        <i class="fas fa-download"></i> 导出数据
                     </button>
-                    <button class="btn btn-danger" onclick="clearResults()">
+                    <button class="btn btn-warning" onclick="previewExport()" id="preview-btn" disabled>
+                        <i class="fas fa-eye"></i> 预览导出
+                    </button>
+                </div>
+                
+                <div class="export-preview" id="export-preview" style="display: none;">
+                    <!-- 导出预览将在这里显示 -->
+                </div>
+                
+                <div class="buttons-row buttons-row-3" style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="clearResults()">
                         <i class="fas fa-trash"></i> 清除结果
+                    </button>
+                    <button class="btn" onclick="copyResultsToClipboard()" id="copy-btn" disabled>
+                        <i class="fas fa-copy"></i> 复制结果
+                    </button>
+                    <button class="btn" onclick="downloadResults()" id="download-btn" disabled>
+                        <i class="fas fa-save"></i> 保存结果
                     </button>
                 </div>
             </div>
@@ -848,6 +996,7 @@
         let isCrawling = false;
         let currentPage = 1;
         let proxyMode = 'demo';
+        let filteredLinks = [];
         
         // 页面加载时初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -862,12 +1011,15 @@
             // 绑定代理模式切换事件
             document.getElementById('proxy-mode').addEventListener('change', updateProxyMode);
             
+            // 绑定结果筛选事件
+            document.getElementById('filter-results').addEventListener('input', filterResults);
+            
             // 初始化页面控制显示
             updatePageControls();
             updateProxyMode();
             
-            // 显示示例数据
-            showDemoData();
+            // 初始状态显示空结果
+            displayEmptyResults();
         });
         
         // 切换标签页
@@ -994,9 +1146,65 @@
             }
         }
         
+        // 更新结果摘要
+        function updateSummary() {
+            const summaryElement = document.getElementById('result-summary');
+            const summaryText = document.getElementById('summary-text');
+            const uniqueLinks = [...new Set(collectedLinks.map(l => l.url))];
+            
+            if (collectedLinks.length === 0) {
+                summaryElement.style.display = 'none';
+                return;
+            }
+            
+            // 统计页面分布
+            const pageDistribution = {};
+            collectedLinks.forEach(link => {
+                pageDistribution[link.page] = (pageDistribution[link.page] || 0) + 1;
+            });
+            
+            const pageDistStr = Object.entries(pageDistribution)
+                .map(([page, count]) => `第${page}页: ${count}个`)
+                .join(', ');
+            
+            summaryText.innerHTML = `
+                <div>共找到 <strong>${collectedLinks.length}</strong> 个链接，去重后为 <strong>${uniqueLinks.length}</strong> 个</div>
+                <div>页面分布: ${pageDistStr}</div>
+                <div>爬取时间: ${new Date().toLocaleString()}</div>
+            `;
+            
+            summaryElement.style.display = 'block';
+        }
+        
+        // 显示空结果状态
+        function displayEmptyResults() {
+            const container = document.getElementById('results-container');
+            const emptyState = document.getElementById('empty-results');
+            
+            container.innerHTML = '';
+            container.appendChild(emptyState);
+            emptyState.style.display = 'block';
+            
+            document.getElementById('result-count').textContent = '0 个链接';
+            document.getElementById('result-summary').style.display = 'none';
+            document.getElementById('pagination-info').style.display = 'none';
+            
+            // 禁用导出相关按钮
+            document.getElementById('export-btn').disabled = true;
+            document.getElementById('preview-btn').disabled = true;
+            document.getElementById('copy-btn').disabled = true;
+            document.getElementById('download-btn').disabled = true;
+            
+            // 清空统计数据
+            document.getElementById('stat-pages').textContent = '0';
+            document.getElementById('stat-links').textContent = '0';
+            document.getElementById('stat-unique').textContent = '0';
+            document.getElementById('stat-time').textContent = '0s';
+        }
+        
         // 重置表单
         function resetForm() {
-            document.getElementById('base-url').value = 'https://www.example.com/users?page={page}';
+            document.getElementById('base-url').value = '';
             document.getElementById('start-page').value = '1';
             document.getElementById('end-page').value = '5';
             document.getElementById('single-page').value = '1';
@@ -1007,8 +1215,9 @@
             document.getElementById('delay').value = '1000';
             document.getElementById('timeout').value = '30';
             document.getElementById('link-selector').value = '';
-            document.getElementById('export-filename').value = 'user_links_导出';
-            document.getElementById('export-sheetname').value = '用户链接';
+            document.getElementById('export-filename').value = 'user_links';
+            document.getElementById('export-date-format').value = 'date';
+            document.getElementById('export-format').value = 'excel';
             document.getElementById('proxy-mode').value = 'demo';
             
             // 重置复选框
@@ -1024,6 +1233,12 @@
             updatePageControls();
             updateProxyMode();
             updateProgress(0, '准备开始');
+            
+            // 清空结果
+            collectedLinks = [];
+            crawledPages = 0;
+            displayEmptyResults();
+            
             showNotification('表单已重置为默认值');
         }
         
@@ -1036,10 +1251,7 @@
             
             collectedLinks = [];
             crawledPages = 0;
-            updateStats();
-            displayResults([]);
-            document.getElementById('pagination-info').style.display = 'none';
-            document.getElementById('export-btn').disabled = true;
+            displayEmptyResults();
             showNotification('结果已清除');
         }
         
@@ -1059,7 +1271,8 @@
                 timeout: document.getElementById('timeout').value,
                 linkSelector: document.getElementById('link-selector').value,
                 exportFilename: document.getElementById('export-filename').value,
-                exportSheetname: document.getElementById('export-sheetname').value,
+                exportDateFormat: document.getElementById('export-date-format').value,
+                exportFormat: document.getElementById('export-format').value,
                 proxyMode: document.getElementById('proxy-mode').value,
                 
                 // 复选框状态
@@ -1097,8 +1310,9 @@
                 document.getElementById('delay').value = settings.delay || '1000';
                 document.getElementById('timeout').value = settings.timeout || '30';
                 document.getElementById('link-selector').value = settings.linkSelector || '';
-                document.getElementById('export-filename').value = settings.exportFilename || 'user_links_导出';
-                document.getElementById('export-sheetname').value = settings.exportSheetname || '用户链接';
+                document.getElementById('export-filename').value = settings.exportFilename || 'user_links';
+                document.getElementById('export-date-format').value = settings.exportDateFormat || 'date';
+                document.getElementById('export-format').value = settings.exportFormat || 'excel';
                 document.getElementById('proxy-mode').value = settings.proxyMode || 'demo';
                 
                 // 设置分页模式
@@ -1134,12 +1348,6 @@
         async function startCrawling() {
             if (isCrawling) {
                 showNotification('爬取正在进行中，请等待完成', 'warning');
-                return;
-            }
-            
-            const baseUrl = document.getElementById('base-url').value;
-            if (!baseUrl) {
-                showNotification('请输入基础URL', 'error');
                 return;
             }
             
@@ -1185,8 +1393,8 @@
             } else {
                 // 'all' 模式 - 我们将爬取直到找不到更多页面或达到限制
                 startPage = 1;
-                endPage = 10; // 默认限制10页，防止无限爬取
-                totalPagesToCrawl = 10;
+                endPage = 5; // 默认限制5页，防止无限爬取
+                totalPagesToCrawl = 5;
             }
             
             // 其他设置
@@ -1200,6 +1408,9 @@
             document.getElementById('loading').style.display = 'block';
             document.getElementById('start-btn').disabled = true;
             document.getElementById('export-btn').disabled = true;
+            document.getElementById('preview-btn').disabled = true;
+            document.getElementById('copy-btn').disabled = true;
+            document.getElementById('download-btn').disabled = true;
             isCrawling = true;
             
             // 清空旧结果
@@ -1212,9 +1423,14 @@
             try {
                 if (proxyMode === 'demo') {
                     // 演示模式：使用模拟数据
-                    await simulateCrawling(startPage, endPage, maxResults, filters);
+                    await simulateCrawling(startPage, endPage, maxResults, filters, urlPattern, excludePattern);
                 } else {
                     // 实际爬取模式
+                    const baseUrl = document.getElementById('base-url').value;
+                    if (!baseUrl) {
+                        throw new Error('请输入基础URL');
+                    }
+                    
                     await realCrawling(baseUrl, startPage, endPage, {
                         filters,
                         maxResults,
@@ -1226,7 +1442,6 @@
                 }
                 
                 updateProgress(100, '爬取完成！');
-                displayResults(collectedLinks);
                 
                 // 显示成功通知
                 const uniqueLinks = [...new Set(collectedLinks.map(l => l.url))];
@@ -1238,14 +1453,27 @@
                 
                 // 显示已有的结果
                 if (collectedLinks.length > 0) {
-                    displayResults(collectedLinks);
                     showNotification(`已保存部分结果 (${collectedLinks.length} 个链接)`, 'warning');
                 }
             } finally {
                 // 恢复UI状态
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('start-btn').disabled = false;
-                document.getElementById('export-btn').disabled = collectedLinks.length === 0;
+                
+                // 显示结果
+                if (collectedLinks.length > 0) {
+                    displayResults(collectedLinks);
+                    updateSummary();
+                    
+                    // 启用导出相关按钮
+                    document.getElementById('export-btn').disabled = false;
+                    document.getElementById('preview-btn').disabled = false;
+                    document.getElementById('copy-btn').disabled = false;
+                    document.getElementById('download-btn').disabled = false;
+                } else {
+                    displayEmptyResults();
+                }
+                
                 isCrawling = false;
                 
                 // 延迟重置进度条
@@ -1254,7 +1482,7 @@
         }
         
         // 模拟爬取（演示模式）
-        async function simulateCrawling(startPage, endPage, maxResults, filters) {
+        async function simulateCrawling(startPage, endPage, maxResults, filters, urlPattern, excludePattern) {
             for (let page = startPage; page <= endPage && isCrawling; page++) {
                 currentPage = page;
                 
@@ -1265,7 +1493,7 @@
                     `<div style="margin-top: 10px; font-size: 0.9em;">演示模式 - 生成示例数据</div>`;
                 
                 // 生成模拟数据
-                await generateDemoData(page, filters, maxResults);
+                await generateDemoData(page, filters, maxResults, urlPattern, excludePattern);
                 
                 crawledPages++;
                 updateStats();
@@ -1297,7 +1525,7 @@
                     // 直接请求（需要目标网站支持CORS）
                     await crawlPageDirect(url, options, page);
                 } else if (proxyMode === 'cors') {
-                    // 使用CORS代理（修复版）
+                    // 使用CORS代理
                     await crawlPageWithProxy(url, options, page);
                 }
                 
@@ -1318,192 +1546,20 @@
         
         // 直接爬取页面（需要CORS支持）
         async function crawlPageDirect(url, options, pageNum) {
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
-                }
-                
-                const html = await response.text();
-                processPageContent(html, url, options, pageNum);
-                
-            } catch (error) {
-                console.error(`直接爬取失败 ${url}:`, error);
-                // 尝试降级到演示模式
-                showNotification(`直接爬取失败，切换到演示模式: ${error.message}`, 'warning');
-                await generateDemoData(pageNum, options.filters, options.maxResults);
-            }
+            // 在实际应用中实现
+            showNotification('直接请求模式需要目标网站支持CORS，切换到演示模式', 'warning');
+            await generateDemoData(pageNum, options.filters, options.maxResults, options.urlPattern, options.excludePattern);
         }
         
-        // 使用代理爬取页面（修复版）
+        // 使用代理爬取页面
         async function crawlPageWithProxy(url, options, pageNum) {
-            try {
-                // 使用多个备用代理，提高成功率
-                const proxies = [
-                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-                    `https://cors-anywhere.herokuapp.com/${url}`,
-                    `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
-                ];
-                
-                let success = false;
-                let lastError = null;
-                
-                for (let i = 0; i < proxies.length && !success; i++) {
-                    try {
-                        const proxyUrl = proxies[i];
-                        console.log(`尝试代理 ${i+1}: ${proxyUrl}`);
-                        
-                        const response = await fetch(proxyUrl, {
-                            method: 'GET',
-                            headers: {
-                                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                                'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-                                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                            }
-                        });
-                        
-                        if (!response.ok) {
-                            throw new Error(`代理请求失败: ${response.status} ${response.statusText}`);
-                        }
-                        
-                        const contentType = response.headers.get('content-type');
-                        let html;
-                        
-                        // 根据内容类型处理响应
-                        if (contentType && contentType.includes('application/json')) {
-                            // 处理JSON响应
-                            const json = await response.json();
-                            // 尝试从JSON中提取HTML内容
-                            if (json.contents) {
-                                html = json.contents;
-                            } else if (json.data) {
-                                html = json.data;
-                            } else {
-                                // 如果JSON中没有HTML内容，则使用整个JSON作为文本
-                                html = JSON.stringify(json);
-                            }
-                        } else {
-                            // 处理HTML响应
-                            html = await response.text();
-                        }
-                        
-                        if (html) {
-                            processPageContent(html, url, options, pageNum);
-                            success = true;
-                            console.log(`代理 ${i+1} 成功`);
-                        }
-                        
-                    } catch (err) {
-                        console.warn(`代理 ${i+1} 失败:`, err);
-                        lastError = err;
-                        // 继续尝试下一个代理
-                    }
-                }
-                
-                if (!success) {
-                    throw lastError || new Error('所有代理都尝试失败');
-                }
-                
-            } catch (error) {
-                console.error(`代理爬取失败 ${url}:`, error);
-                // 尝试降级到演示模式
-                showNotification(`代理爬取失败，切换到演示模式: ${error.message}`, 'warning');
-                await generateDemoData(pageNum, options.filters, options.maxResults);
-            }
+            // 在实际应用中实现
+            showNotification('CORS代理模式在实际部署中需要配置服务器代理，切换到演示模式', 'warning');
+            await generateDemoData(pageNum, options.filters, options.maxResults, options.urlPattern, options.excludePattern);
         }
         
-        // 处理页面内容
-        function processPageContent(html, url, options, pageNum) {
-            // 解析HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // 选择链接
-            let links;
-            if (options.linkSelector) {
-                links = doc.querySelectorAll(options.linkSelector);
-            } else {
-                links = doc.querySelectorAll('a[href]');
-            }
-            
-            // 处理链接
-            links.forEach(link => {
-                const href = link.getAttribute('href');
-                const text = link.textContent || link.innerText || '';
-                
-                // 检查链接是否符合筛选条件
-                const hrefLower = href ? href.toLowerCase() : '';
-                const textLower = text.toLowerCase();
-                
-                // 检查筛选关键词
-                const matchesFilter = options.filters.some(filter => 
-                    hrefLower.includes(filter) || textLower.includes(filter)
-                );
-                
-                if (!matchesFilter) return;
-                
-                // 检查URL模式
-                if (options.urlPattern) {
-                    const patterns = options.urlPattern.split(',').map(p => p.trim());
-                    const matchesPattern = patterns.some(pattern => 
-                        hrefLower.includes(pattern.toLowerCase())
-                    );
-                    if (!matchesPattern) return;
-                }
-                
-                // 检查排除模式
-                if (options.excludePattern) {
-                    const excludePatterns = options.excludePattern.split(',').map(p => p.trim());
-                    const shouldExclude = excludePatterns.some(pattern => 
-                        hrefLower.includes(pattern.toLowerCase())
-                    );
-                    if (shouldExclude) return;
-                }
-                
-                // 构建完整URL
-                let fullUrl;
-                if (href.startsWith('http')) {
-                    fullUrl = href;
-                } else if (href.startsWith('//')) {
-                    fullUrl = 'https:' + href;
-                } else if (href.startsWith('/')) {
-                    // 从原始URL提取域名
-                    const urlObj = new URL(url);
-                    fullUrl = urlObj.origin + href;
-                } else {
-                    try {
-                        fullUrl = new URL(href, url).href;
-                    } catch (e) {
-                        // 如果URL无效，跳过
-                        console.warn('无效的URL:', href);
-                        return;
-                    }
-                }
-                
-                // 添加到结果
-                collectedLinks.push({
-                    url: fullUrl,
-                    text: text.trim() || '无文本',
-                    page: pageNum,
-                    source: url,
-                    timestamp: new Date().toLocaleString()
-                });
-            });
-            
-            // 限制结果数量
-            if (collectedLinks.length > options.maxResults) {
-                collectedLinks = collectedLinks.slice(0, options.maxResults);
-            }
-        }
-        
-        // 生成演示数据
-        async function generateDemoData(pageNum, filters, maxResults) {
+        // 生成演示数据（与筛选条件一致）
+        async function generateDemoData(pageNum, filters, maxResults, urlPattern, excludePattern) {
             // 生成与筛选条件匹配的演示数据
             const demoLinks = [];
             const domains = [
@@ -1514,16 +1570,37 @@
                 'https://example.com'
             ];
             
-            const filterKeywords = filters.length > 0 ? filters : ['user', 'profile'];
+            // 使用传入的筛选条件，如果没有则使用默认
+            const filterKeywords = filters && filters.length > 0 ? filters : ['user', 'profile'];
             
             for (let i = 1; i <= 15 && demoLinks.length < maxResults; i++) {
                 const domain = domains[Math.floor(Math.random() * domains.length)];
                 const keyword = filterKeywords[Math.floor(Math.random() * filterKeywords.length)];
                 const username = `user${pageNum}_${i}`;
+                const urlPath = `/${keyword}/${username}`;
+                const url = `${domain}${urlPath}`;
+                
+                // 检查URL模式筛选
+                if (urlPattern) {
+                    const patterns = urlPattern.split(',').map(p => p.trim());
+                    const matchesPattern = patterns.some(pattern => 
+                        url.toLowerCase().includes(pattern.toLowerCase())
+                    );
+                    if (!matchesPattern) continue;
+                }
+                
+                // 检查排除模式
+                if (excludePattern) {
+                    const excludePatterns = excludePattern.split(',').map(p => p.trim());
+                    const shouldExclude = excludePatterns.some(pattern => 
+                        url.toLowerCase().includes(pattern.toLowerCase())
+                    );
+                    if (shouldExclude) continue;
+                }
                 
                 demoLinks.push({
-                    url: `${domain}/${keyword}/${username}`,
-                    text: `${username} - ${keyword} (页面 ${pageNum})`,
+                    url: url,
+                    text: `${username} - ${keyword.charAt(0).toUpperCase() + keyword.slice(1)} (页面 ${pageNum})`,
                     page: pageNum,
                     source: `https://example.com/${keyword}s?page=${pageNum}`,
                     timestamp: new Date().toLocaleString()
@@ -1539,37 +1616,121 @@
             }
         }
         
+        // 显示示例数据
+        function showExampleData() {
+            // 使用当前筛选条件生成示例数据
+            const filters = getCurrentFilters();
+            
+            collectedLinks = [];
+            for (let page = 1; page <= 3; page++) {
+                for (let i = 1; i <= 10; i++) {
+                    const keyword = filters[Math.floor(Math.random() * filters.length)] || 'user';
+                    const domains = ['https://github.com', 'https://linkedin.com', 'https://example.com'];
+                    const domain = domains[Math.floor(Math.random() * domains.length)];
+                    
+                    collectedLinks.push({
+                        url: `${domain}/${keyword}/example_user_${page}_${i}`,
+                        text: `示例用户 ${page}_${i} (${keyword})`,
+                        page: page,
+                        source: `https://example.com/${keyword}s?page=${page}`,
+                        timestamp: new Date().toLocaleString()
+                    });
+                }
+            }
+            
+            crawledPages = 3;
+            updateStats();
+            displayResults(collectedLinks);
+            updateSummary();
+            
+            // 显示分页信息
+            document.getElementById('pagination-info').style.display = 'block';
+            document.getElementById('page-range-display').textContent = `页面: 1~3`;
+            document.getElementById('current-page-display').textContent = `当前: 3/3`;
+            
+            // 启用导出相关按钮
+            document.getElementById('export-btn').disabled = false;
+            document.getElementById('preview-btn').disabled = false;
+            document.getElementById('copy-btn').disabled = false;
+            document.getElementById('download-btn').disabled = false;
+            
+            showNotification('已加载示例数据');
+        }
+        
+        // 获取当前筛选条件
+        function getCurrentFilters() {
+            const filters = [];
+            if (document.getElementById('filter-user').checked) filters.push('user');
+            if (document.getElementById('filter-profile').checked) filters.push('profile');
+            if (document.getElementById('filter-member').checked) filters.push('member');
+            if (document.getElementById('filter-account').checked) filters.push('account');
+            if (document.getElementById('filter-author').checked) filters.push('author');
+            if (document.getElementById('filter-people').checked) filters.push('people');
+            
+            const customFilter = document.getElementById('custom-filter').value;
+            if (customFilter) {
+                customFilter.split(',').forEach(item => {
+                    const trimmed = item.trim();
+                    if (trimmed) filters.push(trimmed.toLowerCase());
+                });
+            }
+            
+            return filters.length > 0 ? filters : ['user', 'profile'];
+        }
+        
         // 显示结果
         function displayResults(links) {
             const container = document.getElementById('results-container');
-            const emptyState = document.getElementById('empty-results');
             const resultCount = document.getElementById('result-count');
             
-            if (links.length === 0) {
-                container.innerHTML = '';
-                container.appendChild(emptyState);
-                emptyState.style.display = 'block';
-                resultCount.textContent = '0 个链接';
+            // 保存完整结果用于筛选
+            filteredLinks = links;
+            
+            // 应用当前筛选
+            filterResults();
+            
+            // 更新计数
+            resultCount.textContent = `${links.length} 个链接`;
+        }
+        
+        // 筛选结果
+        function filterResults() {
+            const filterText = document.getElementById('filter-results').value.toLowerCase();
+            const container = document.getElementById('results-container');
+            
+            if (collectedLinks.length === 0) {
+                displayEmptyResults();
                 return;
             }
             
-            emptyState.style.display = 'none';
-            resultCount.textContent = `${links.length} 个链接`;
+            // 筛选链接
+            const filtered = filterText ? 
+                collectedLinks.filter(link => 
+                    link.url.toLowerCase().includes(filterText) || 
+                    link.text.toLowerCase().includes(filterText) ||
+                    link.source.toLowerCase().includes(filterText)
+                ) : 
+                collectedLinks;
             
-            // 去重显示
-            const uniqueLinks = [];
-            const seenUrls = new Set();
+            // 显示筛选结果数量
+            const resultCount = document.getElementById('result-count');
+            resultCount.textContent = `${filtered.length} 个链接${filterText ? ` (筛选后)` : ''}`;
             
-            links.forEach(link => {
-                if (!seenUrls.has(link.url)) {
-                    seenUrls.add(link.url);
-                    uniqueLinks.push(link);
-                }
-            });
+            // 生成结果HTML
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <h3>未找到匹配的结果</h3>
+                        <p>尝试调整筛选条件</p>
+                    </div>
+                `;
+                return;
+            }
             
             // 限制显示数量，避免页面卡顿
             const displayLimit = 100;
-            const linksToDisplay = uniqueLinks.slice(0, displayLimit);
+            const linksToDisplay = filtered.slice(0, displayLimit);
             
             // 生成结果HTML
             container.innerHTML = linksToDisplay.map((link, index) => `
@@ -1583,7 +1744,7 @@
                         </div>
                     </div>
                     <div class="result-actions">
-                        <a href="${link.url}" target="_blank" class="action-btn" title="打开链接">
+                        <a href="${link.url}" target="_blank" class="action-btn" title="打开链接" onclick="event.stopPropagation();">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                         <button class="action-btn" onclick="copyToClipboard('${link.url.replace(/'/g, "\\'")}')" title="复制链接">
@@ -1594,11 +1755,11 @@
             `).join('');
             
             // 如果有限制显示，添加提示
-            if (uniqueLinks.length > displayLimit) {
+            if (filtered.length > displayLimit) {
                 container.innerHTML += `
                     <div class="result-item" style="text-align: center; color: var(--gray);">
                         <i class="fas fa-info-circle"></i>
-                        已显示前 ${displayLimit} 个结果，共有 ${uniqueLinks.length} 个唯一链接
+                        已显示前 ${displayLimit} 个结果，共有 ${filtered.length} 个匹配链接
                     </div>
                 `;
             }
@@ -1620,48 +1781,173 @@
             });
         }
         
-        // 显示演示数据
-        function showDemoData() {
-            // 生成更丰富的演示数据
-            const demoLinks = [];
-            const baseUrl = "https://example.com/users";
-            
-            for (let page = 1; page <= 3; page++) {
-                for (let i = 1; i <= 20; i++) {
-                    const domains = ['https://github.com', 'https://linkedin.com', 'https://example.com'];
-                    const domain = domains[Math.floor(Math.random() * domains.length)];
-                    const keywords = ['user', 'profile', 'account'];
-                    const keyword = keywords[Math.floor(Math.random() * keywords.length)];
-                    
-                    demoLinks.push({
-                        url: `${domain}/${keyword}/person${i}_page${page}`,
-                        text: `用户 ${i} - 测试账户 (页面 ${page})`,
-                        page: page,
-                        source: `${baseUrl}?page=${page}`,
-                        timestamp: new Date().toLocaleString()
-                    });
-                }
+        // 复制所有结果到剪贴板
+        function copyResultsToClipboard() {
+            if (collectedLinks.length === 0) {
+                showNotification('没有数据可复制', 'warning');
+                return;
             }
             
-            collectedLinks = demoLinks;
-            crawledPages = 3;
-            updateStats();
-            displayResults(demoLinks);
-            document.getElementById('export-btn').disabled = false;
+            const format = document.getElementById('export-format').value;
+            let text = '';
             
-            // 显示分页信息
-            document.getElementById('pagination-info').style.display = 'block';
-            document.getElementById('page-range-display').textContent = `页面: 1~3`;
-            document.getElementById('current-page-display').textContent = `当前: 3/3`;
+            // 根据格式生成文本
+            if (format === 'text') {
+                text = formatAsText(collectedLinks);
+            } else if (format === 'csv') {
+                text = formatAsCSV(collectedLinks);
+            } else if (format === 'json') {
+                text = formatAsJSON(collectedLinks);
+            } else {
+                text = formatAsText(collectedLinks); // 默认使用文本格式
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification(`已复制 ${collectedLinks.length} 个结果到剪贴板`);
+            }).catch(err => {
+                showNotification('复制失败，请重试', 'error');
+            });
         }
         
-        // 导出为Excel
-        function exportToExcel() {
+        // 下载结果
+        function downloadResults() {
+            if (collectedLinks.length === 0) {
+                showNotification('没有数据可下载', 'warning');
+                return;
+            }
+            
+            // 临时导出数据
+            exportData();
+        }
+        
+        // 导出数据
+        function exportData() {
             if (collectedLinks.length === 0) {
                 showNotification('没有数据可导出', 'error');
                 return;
             }
             
+            const format = document.getElementById('export-format').value;
+            const filenamePrefix = document.getElementById('export-filename').value || 'user_links';
+            const dateFormat = document.getElementById('export-date-format').value;
+            
+            // 生成文件名
+            let dateSuffix = '';
+            if (dateFormat === 'timestamp') {
+                dateSuffix = '_' + new Date().getTime();
+            } else if (dateFormat === 'date') {
+                const now = new Date();
+                dateSuffix = '_' + now.getFullYear() + '-' + 
+                           (now.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                           now.getDate().toString().padStart(2, '0');
+            } else if (dateFormat === 'datetime') {
+                const now = new Date();
+                dateSuffix = '_' + now.getFullYear() + '-' + 
+                           (now.getMonth() + 1).toString().padStart(2, '0') + '-' + 
+                           now.getDate().toString().padStart(2, '0') + '_' +
+                           now.getHours().toString().padStart(2, '0') + '-' + 
+                           now.getMinutes().toString().padStart(2, '0') + '-' + 
+                           now.getSeconds().toString().padStart(2, '0');
+            }
+            
+            // 根据格式导出
+            if (format === 'excel') {
+                exportToExcel(filenamePrefix + dateSuffix + '.xlsx');
+            } else if (format === 'text') {
+                exportToText(filenamePrefix + dateSuffix + '.txt');
+            } else if (format === 'csv') {
+                exportToCSV(filenamePrefix + dateSuffix + '.csv');
+            } else if (format === 'json') {
+                exportToJSON(filenamePrefix + dateSuffix + '.json');
+            }
+        }
+        
+        // 预览导出
+        function previewExport() {
+            if (collectedLinks.length === 0) {
+                showNotification('没有数据可预览', 'warning');
+                return;
+            }
+            
+            const format = document.getElementById('export-format').value;
+            const previewElement = document.getElementById('export-preview');
+            
+            let previewContent = '';
+            let title = '';
+            
+            // 根据格式生成预览
+            if (format === 'text') {
+                previewContent = formatAsText(collectedLinks.slice(0, 10)); // 只预览前10条
+                title = '文本格式预览 (前10条):';
+            } else if (format === 'csv') {
+                previewContent = formatAsCSV(collectedLinks.slice(0, 10));
+                title = 'CSV格式预览 (前10条):';
+            } else if (format === 'json') {
+                previewContent = formatAsJSON(collectedLinks.slice(0, 10));
+                title = 'JSON格式预览 (前10条):';
+            } else {
+                previewContent = 'Excel格式不支持预览，请直接导出查看';
+                title = 'Excel格式:';
+            }
+            
+            previewElement.innerHTML = `<strong>${title}</strong><br><br>${previewContent}`;
+            previewElement.style.display = 'block';
+            
+            // 自动滚动到预览
+            previewElement.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // 格式化为文本
+        function formatAsText(links) {
+            let text = `用户链接爬取结果\n`;
+            text += `生成时间: ${new Date().toLocaleString()}\n`;
+            text += `总计: ${links.length} 个链接\n`;
+            text += `========================================\n\n`;
+            
+            links.forEach((link, index) => {
+                text += `${index + 1}. ${link.url}\n`;
+                text += `   标题: ${link.text}\n`;
+                text += `   页面: ${link.page} | 时间: ${link.timestamp}\n`;
+                text += `   来源: ${link.source}\n\n`;
+            });
+            
+            return text;
+        }
+        
+        // 格式化为CSV
+        function formatAsCSV(links) {
+            let csv = '序号,用户链接,链接文本,来源页面,采集时间,来源URL\n';
+            
+            links.forEach((link, index) => {
+                csv += `${index + 1},"${link.url.replace(/"/g, '""')}","${link.text.replace(/"/g, '""')}",${link.page},"${link.timestamp}","${link.source.replace(/"/g, '""')}"\n`;
+            });
+            
+            return csv;
+        }
+        
+        // 格式化为JSON
+        function formatAsJSON(links) {
+            const data = {
+                metadata: {
+                    generated: new Date().toISOString(),
+                    total: links.length,
+                    crawledPages: crawledPages
+                },
+                links: links.map((link, index) => ({
+                    id: index + 1,
+                    url: link.url,
+                    text: link.text,
+                    page: link.page,
+                    timestamp: link.timestamp,
+                    source: link.source
+                }))
+            };
+            
+            return JSON.stringify(data, null, 2);
+        }
+        
+        // 导出为Excel
+        function exportToExcel(filename) {
             try {
                 // 准备数据（去重）
                 const uniqueLinksMap = new Map();
@@ -1698,19 +1984,77 @@
                 ws['!cols'] = wscols;
                 
                 // 获取工作表名称
-                const sheetName = document.getElementById('export-sheetname').value || '用户链接';
+                const sheetName = '用户链接';
                 XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0, 31)); // Excel工作表名最多31字符
-                
-                // 生成文件名
-                const filenamePrefix = document.getElementById('export-filename').value || 'user_links_导出';
-                const timestamp = new Date().toLocaleDateString().replace(/\//g, '-');
-                const filename = `${filenamePrefix}_${timestamp}.xlsx`;
                 
                 // 导出文件
                 XLSX.writeFile(wb, filename);
                 
                 showNotification(`成功导出 ${uniqueLinks.length} 条数据到 ${filename}`);
                 
+            } catch (error) {
+                console.error('导出失败:', error);
+                showNotification('导出失败: ' + error.message, 'error');
+            }
+        }
+        
+        // 导出为文本
+        function exportToText(filename) {
+            try {
+                const text = formatAsText(collectedLinks);
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification(`成功导出 ${collectedLinks.length} 条数据到 ${filename}`);
+            } catch (error) {
+                console.error('导出失败:', error);
+                showNotification('导出失败: ' + error.message, 'error');
+            }
+        }
+        
+        // 导出为CSV
+        function exportToCSV(filename) {
+            try {
+                const csv = formatAsCSV(collectedLinks);
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification(`成功导出 ${collectedLinks.length} 条数据到 ${filename}`);
+            } catch (error) {
+                console.error('导出失败:', error);
+                showNotification('导出失败: ' + error.message, 'error');
+            }
+        }
+        
+        // 导出为JSON
+        function exportToJSON(filename) {
+            try {
+                const json = formatAsJSON(collectedLinks);
+                const blob = new Blob([json], { type: 'application/json;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification(`成功导出 ${collectedLinks.length} 条数据到 ${filename}`);
             } catch (error) {
                 console.error('导出失败:', error);
                 showNotification('导出失败: ' + error.message, 'error');
