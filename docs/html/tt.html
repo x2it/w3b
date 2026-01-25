@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业文本处理工具 - 2026</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1e293b;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, #1d4ed8 100%);
+            color: white;
+            padding: 24px 40px;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .version {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .textarea-container {
+            flex: 1;
+            position: relative;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 100%;
+            min-height: 350px;
+            padding: 16px;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            resize: none;
+            background: var(--light-bg);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+        
+        textarea:focus {
+            background: white;
+        }
+        
+        .char-count {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: var(--light-bg);
+            color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-1px);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #0da271;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d97706;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+        }
+        
+        .tools-panel {
+            grid-column: 1 / -1;
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 10px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tool-group {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .tool-group h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tool-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .option-row label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .range-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .range-inputs input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .modal-body {
+            margin-bottom: 24px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--light-bg);
+        }
+        
+        .copyright {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .badge {
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .processing-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .processing-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .processing-btn:hover {
+            background: var(--light-bg);
+            border-color: var(--primary-color);
+        }
+        
+        .processing-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .file-import {
+            position: relative;
+        }
+        
+        .file-import input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        /* 新增：文件列表样式 */
+        .file-list-container {
+            margin-top: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 8px;
+            background: var(--light-bg);
+        }
+        
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow: hidden;
+        }
+        
+        .file-icon {
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+        
+        .file-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .file-size {
+            color: var(--secondary-color);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        
+        .remove-file {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        
+        .remove-file:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .import-options {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .import-options h4 {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+        }
+        
+        .import-options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background: white;
+        }
+        
+        .import-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+        }
+        
+        .import-stats span {
+            padding: 2px 8px;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+        
+        /* 新增：导入进度条 */
+        .import-progress {
+            margin-top: 12px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-code"></i>
+                    <div>
+                        <h1>专业文本处理工具</h1>
+                        <div class="version">2026版 - 多文件支持</div>
+                    </div>
+                </div>
+                <div class="badge">离线安全处理</div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i class="fas fa-pencil-alt"></i>
+                        输入文本
+                    </h2>
+                    <div class="processing-options">
+                        <button class="processing-btn active" data-process="deduplicate">去重处理</button>
+                        <button class="processing-btn" data-process="merge">合并处理</button>
+                        <button class="processing-btn" data-process="clean">清理处理</button>
+                    </div>
+                </div>
+                
+                <div class="textarea-container">
+                    <textarea id="inputText" placeholder="请输入或粘贴要处理的文本内容，每行作为独立项处理...&#10;&#10;支持多文件导入，可同时选择多个文本文件进行合并处理&#10;支持格式：TXT, CSV, JSON, MD, LOG 等"></textarea>
+                    <div class="char-count" id="inputCharCount">0 字符</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" id="processBtn">
+                        <i class="fas fa-play-circle"></i>
+                        开始处理
+                    </button>
+                    
+                    <div class="file-import">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-file-import"></i>
+                            导入文件
+                            <input type="file" id="fileInput" accept=".txt,.csv,.json,.log,.md,.xml,.yaml,.yml,.html,.css,.js" multiple>
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-secondary" id="clearInputBtn">
+                        <i class="fas fa-eraser"></i>
+                        清空输入
+                    </button>
+                </div>
+                
+                <!-- 新增：文件列表 -->
+                <div class="file-list-container" id="fileListContainer" style="display: none;">
+                    <h4>已选文件：</h4>
+                    <div class="file-list" id="fileList"></div>
+                </div>
+                
+                <!-- 新增：导入选项 -->
+                <div class="import-options" id="importOptions" style="display: none;">
+                    <h4>导入选项：</h4>
+                    <div class="import-options-group">
+                        <label>
+                            <input type="checkbox" id="addSeparator" checked>
+                            文件间添加分隔符
+                        </label>
+                        <label>
+                            <input type="checkbox" id="addFilename" checked>
+                            添加文件名注释
+                        </label>
+                        <label>
+                            <input type="radio" name="importMode" value="append" checked>
+                            追加到现有内容
+                        </label>
+                        <label>
+                            <input type="radio" name="importMode" value="replace">
+                            替换现有内容
+                        </label>
+                        <select id="separatorType">
+                            <option value="line">单行分隔符</option>
+                            <option value="double">双行分隔符</option>
+                            <option value="custom">自定义分隔符</option>
+                        </select>
+                        <input type="text" id="customSeparator" placeholder="自定义分隔符" style="display: none;">
+                    </div>
+                    
+                    <!-- 导入进度条 -->
+                    <div class="import-progress" id="importProgress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text" id="progressText">准备导入...</div>
+                    </div>
+                    
+                    <!-- 导入统计 -->
+                    <div class="import-stats" id="importStats" style="display: none;">
+                        <span>总文件: <span id="totalFiles">0</span></span>
+                        <span>总大小: <span id="totalSize">0 KB</span></span>
+                        <span>已处理: <span id="processedFiles">0</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <i class="fas fa-check-circle"></i>
+                        处理结果
+                    </h2>
+                    <div class="processing-options">
+                        <button class="processing-btn" data-sort="asc">升序</button>
+                        <button class="processing-btn" data-sort="desc">降序</button>
+                        <button class="processing-btn" data-sort="random">随机</button>
+                    </div>
+                </div>
+                
+                <div class="textarea-container">
+                    <textarea id="outputText" readonly placeholder="处理后的结果将显示在这里..."></textarea>
+                    <div class="char-count" id="outputCharCount">0 字符</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-success" id="copyBtn">
+                        <i class="fas fa-copy"></i>
+                        复制结果
+                    </button>
+                    
+                    <button class="btn btn-primary" id="saveBtn">
+                        <i class="fas fa-save"></i>
+                        保存结果
+                    </button>
+                    
+                    <button class="btn btn-warning" id="applyChangesBtn">
+                        <i class="fas fa-exchange-alt"></i>
+                        应用到输入
+                    </button>
+                </div>
+            </div>
+            
+            <div class="tools-panel">
+                <div class="tools-grid">
+                    <!-- 清理选项 -->
+                    <div class="tool-group">
+                        <h3><i class="fas fa-broom"></i> 文本清理</h3>
+                        <div class="tool-options">
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="trimSpaces" checked>
+                                    去除首尾空格
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="trimLeftSpaces">
+                                    去除左侧空格（左对齐）
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="removeEmptyLines">
+                                    删除空行
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="removeDuplicateLines">
+                                    删除重复行
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 格式化选项 -->
+                    <div class="tool-group">
+                        <h3><i class="fas fa-text-height"></i> 格式转换</h3>
+                        <div class="tool-options">
+                            <div class="option-row">
+                                <label>
+                                    <input type="radio" name="caseFormat" value="original" checked>
+                                    保持原样
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="radio" name="caseFormat" value="lower">
+                                    全部小写
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="radio" name="caseFormat" value="upper">
+                                    全部大写
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="removeExtraSpaces">
+                                    删除多余空格
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 范围控制 -->
+                    <div class="tool-group">
+                        <h3><i class="fas fa-filter"></i> 范围控制</h3>
+                        <div class="tool-options">
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="enableRange">
+                                    启用行范围
+                                </label>
+                            </div>
+                            <div class="range-inputs" id="rangeInputs" style="display: none;">
+                                <div>
+                                    <input type="number" id="startLine" min="1" value="1" placeholder="起始行">
+                                </div>
+                                <span>至</span>
+                                <div>
+                                    <input type="number" id="endLine" min="1" value="10" placeholder="结束行">
+                                </div>
+                                <button class="btn btn-secondary" id="applyRangeBtn" style="padding: 6px 12px;">
+                                    应用
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 链接处理 -->
+                    <div class="tool-group">
+                        <h3><i class="fas fa-link"></i> 链接处理</h3>
+                        <div class="tool-options">
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="extractUrls">
+                                    提取URL链接
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="removeUrlParams">
+                                    去除URL参数
+                                </label>
+                            </div>
+                            <div class="option-row">
+                                <label>
+                                    <input type="checkbox" id="addHttpPrefix">
+                                    补全http前缀
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <div class="stat-value" id="inputLineCount">0</div>
+                    <div class="stat-label">输入行数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="outputLineCount">0</div>
+                    <div class="stat-label">输出行数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="duplicateCount">0</div>
+                    <div class="stat-label">重复项数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="emptyLineCount">0</div>
+                    <div class="stat-label">空行数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="processedCount">0</div>
+                    <div class="stat-label">已处理数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="reductionRate">0%</div>
+                    <div class="stat-label">精简率</div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>专业文本处理工具 - 支持多文件批量导入和合并处理</p>
+            <div class="copyright">© 2026 文本处理工具 | 离线安全 | 隐私保护</div>
+        </footer>
+    </div>
+    
+    <!-- 保存对话框 -->
+    <div class="modal" id="saveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-save"></i>
+                    保存处理结果
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="fileName">文件名称</label>
+                    <input type="text" id="fileName" value="处理结果_2026" placeholder="输入文件名">
+                </div>
+                <div class="form-group">
+                    <label for="fileFormat">保存格式</label>
+                    <select id="fileFormat" class="form-group input">
+                        <option value="txt">文本文件 (.txt)</option>
+                        <option value="csv">CSV文件 (.csv)</option>
+                        <option value="json">JSON文件 (.json)</option>
+                        <option value="md">Markdown (.md)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelSaveBtn">
+                    取消
+                </button>
+                <button class="btn btn-primary" id="confirmSaveBtn">
+                    保存文件
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 通知 -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>操作成功完成</span>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const inputText = document.getElementById('inputText');
+        const outputText = document.getElementById('outputText');
+        const processBtn = document.getElementById('processBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const clearInputBtn = document.getElementById('clearInputBtn');
+        const applyChangesBtn = document.getElementById('applyChangesBtn');
+        const fileInput = document.getElementById('fileInput');
+        const notification = document.getElementById('notification');
+        
+        // 新增DOM元素
+        const fileListContainer = document.getElementById('fileListContainer');
+        const fileList = document.getElementById('fileList');
+        const importOptions = document.getElementById('importOptions');
+        const importProgress = document.getElementById('importProgress');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const importStats = document.getElementById('importStats');
+        const totalFilesSpan = document.getElementById('totalFiles');
+        const totalSizeSpan = document.getElementById('totalSize');
+        const processedFilesSpan = document.getElementById('processedFiles');
+        
+        // 统计元素
+        const inputLineCount = document.getElementById('inputLineCount');
+        const outputLineCount = document.getElementById('outputLineCount');
+        const duplicateCount = document.getElementById('duplicateCount');
+        const emptyLineCount = document.getElementById('emptyLineCount');
+        const processedCount = document.getElementById('processedCount');
+        const reductionRate = document.getElementById('reductionRate');
+        const inputCharCount = document.getElementById('inputCharCount');
+        const outputCharCount = document.getElementById('outputCharCount');
+        
+        // 工具选项
+        const trimSpaces = document.getElementById('trimSpaces');
+        const trimLeftSpaces = document.getElementById('trimLeftSpaces');
+        const removeEmptyLines = document.getElementById('removeEmptyLines');
+        const removeDuplicateLines = document.getElementById('removeDuplicateLines');
+        const caseFormatRadios = document.querySelectorAll('input[name="caseFormat"]');
+        const removeExtraSpaces = document.getElementById('removeExtraSpaces');
+        const enableRange = document.getElementById('enableRange');
+        const rangeInputs = document.getElementById('rangeInputs');
+        const startLine = document.getElementById('startLine');
+        const endLine = document.getElementById('endLine');
+        const applyRangeBtn = document.getElementById('applyRangeBtn');
+        const extractUrls = document.getElementById('extractUrls');
+        const removeUrlParams = document.getElementById('removeUrlParams');
+        const addHttpPrefix = document.getElementById('addHttpPrefix');
+        
+        // 导入选项
+        const addSeparator = document.getElementById('addSeparator');
+        const addFilename = document.getElementById('addFilename');
+        const importModeRadios = document.querySelectorAll('input[name="importMode"]');
+        const separatorType = document.getElementById('separatorType');
+        const customSeparator = document.getElementById('customSeparator');
+        
+        // 处理模式按钮
+        const processBtns = document.querySelectorAll('[data-process]');
+        const sortBtns = document.querySelectorAll('[data-sort]');
+        
+        // 保存对话框
+        const saveModal = document.getElementById('saveModal');
+        const cancelSaveBtn = document.getElementById('cancelSaveBtn');
+        const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+        
+        // 状态变量
+        let currentProcessMode = 'deduplicate';
+        let currentSortMode = null;
+        let currentLines = [];
+        let isRangeEnabled = false;
+        let selectedFiles = [];
+        
+        // 文件图标映射
+        const fileIcons = {
+            '.txt': 'fa-file-alt',
+            '.csv': 'fa-file-csv',
+            '.json': 'fa-file-code',
+            '.log': 'fa-file-alt',
+            '.md': 'fa-markdown',
+            '.xml': 'fa-file-code',
+            '.yaml': 'fa-file-code',
+            '.yml': 'fa-file-code',
+            '.html': 'fa-file-code',
+            '.css': 'fa-file-code',
+            '.js': 'fa-file-code'
+        };
+        
+        // 获取文件图标
+        function getFileIcon(filename) {
+            const ext = filename.toLowerCase().match(/\.[^.]+$/)?.[0] || '';
+            return fileIcons[ext] || 'fa-file';
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // 更新文件列表显示
+        function updateFileList() {
+            fileList.innerHTML = '';
+            
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                
+                const fileIcon = getFileIcon(file.name);
+                const fileSize = formatFileSize(file.size);
+                
+                fileItem.innerHTML = `
+                    <div class="file-info">
+                        <i class="fas ${fileIcon} file-icon"></i>
+                        <span class="file-name" title="${file.name}">${file.name}</span>
+                        <span class="file-size">${fileSize}</span>
+                    </div>
+                    <button class="remove-file" data-index="${index}" title="移除文件">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                fileList.appendChild(fileItem);
+            });
+            
+            // 显示/隐藏文件列表容器
+            fileListContainer.style.display = selectedFiles.length > 0 ? 'block' : 'none';
+            importOptions.style.display = selectedFiles.length > 0 ? 'block' : 'none';
+            
+            // 更新统计信息
+            updateImportStats();
+        }
+        
+        // 更新导入统计信息
+        function updateImportStats() {
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            totalFilesSpan.textContent = selectedFiles.length;
+            totalSizeSpan.textContent = formatFileSize(totalSize);
+        }
+        
+        // 更新字符计数
+        function updateCharCount() {
+            const inputChars = inputText.value.length;
+            const outputChars = outputText.value.length;
+            
+            inputCharCount.textContent = `${inputChars.toLocaleString()} 字符`;
+            outputCharCount.textContent = `${outputChars.toLocaleString()} 字符`;
+        }
+        
+        // 更新统计信息
+        function updateStats(inputLines, outputLines, duplicates, empties) {
+            inputLineCount.textContent = inputLines;
+            outputLineCount.textContent = outputLines;
+            duplicateCount.textContent = duplicates;
+            emptyLineCount.textContent = empties;
+            processedCount.textContent = outputLines;
+            
+            const reduction = inputLines > 0 ? 
+                Math.round(((inputLines - outputLines) / inputLines) * 100) : 0;
+            reductionRate.textContent = `${reduction}%`;
+            
+            updateCharCount();
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            notification.querySelector('span').textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // 处理文本行的核心函数
+        function processLines(lines) {
+            let processed = [...lines];
+            let duplicates = 0;
+            let empties = 0;
+            
+            // 统计原始信息
+            const originalCount = processed.length;
+            
+            // 1. 清理空格
+            if (trimSpaces.checked) {
+                processed = processed.map(line => line.trim());
+            } else if (trimLeftSpaces.checked) {
+                processed = processed.map(line => line.replace(/^\s+/, ''));
+            }
+            
+            // 2. 删除空行
+            if (removeEmptyLines.checked) {
+                empties = processed.filter(line => line === '').length;
+                processed = processed.filter(line => line !== '');
+            }
+            
+            // 3. 大小写转换
+            const caseFormat = document.querySelector('input[name="caseFormat"]:checked').value;
+            if (caseFormat !== 'original') {
+                processed = processed.map(line => {
+                    if (caseFormat === 'lower') return line.toLowerCase();
+                    if (caseFormat === 'upper') return line.toUpperCase();
+                    return line;
+                });
+            }
+            
+            // 4. 删除多余空格
+            if (removeExtraSpaces.checked) {
+                processed = processed.map(line => line.replace(/\s+/g, ' '));
+            }
+            
+            // 5. 链接处理
+            if (extractUrls.checked) {
+                processed = processed.filter(line => {
+                    const urlPattern = /(https?:\/\/[^\s]+)|(www\.[^\s]+)/gi;
+                    return urlPattern.test(line);
+                });
+            }
+            
+            if (removeUrlParams.checked) {
+                processed = processed.map(line => {
+                    // 去除URL参数（?后面的部分）
+                    return line.replace(/\?.*$/, '');
+                });
+            }
+            
+            if (addHttpPrefix.checked) {
+                processed = processed.map(line => {
+                    // 为没有协议的URL添加http://
+                    if (line.startsWith('www.') && !line.includes('://')) {
+                        return 'http://' + line;
+                    }
+                    return line;
+                });
+            }
+            
+            // 6. 去重处理
+            if (removeDuplicateLines.checked) {
+                const uniqueSet = new Set();
+                const uniqueLines = [];
+                
+                processed.forEach(line => {
+                    if (!uniqueSet.has(line)) {
+                        uniqueSet.add(line);
+                        uniqueLines.push(line);
+                    } else {
+                        duplicates++;
+                    }
+                });
+                
+                processed = uniqueLines;
+            }
+            
+            // 7. 范围筛选
+            if (isRangeEnabled) {
+                const start = parseInt(startLine.value) || 1;
+                const end = parseInt(endLine.value) || processed.length;
+                const startIndex = Math.max(0, start - 1);
+                const endIndex = Math.min(processed.length, end);
+                
+                processed = processed.slice(startIndex, endIndex);
+            }
+            
+            // 8. 排序处理
+            if (currentSortMode) {
+                switch(currentSortMode) {
+                    case 'asc':
+                        processed.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
+                        break;
+                    case 'desc':
+                        processed.sort((a, b) => b.localeCompare(a, undefined, { sensitivity: 'base' }));
+                        break;
+                    case 'random':
+                        // Fisher-Yates洗牌算法
+                        for (let i = processed.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [processed[i], processed[j]] = [processed[j], processed[i]];
+                        }
+                        break;
+                }
+            }
+            
+            // 更新统计
+            updateStats(originalCount, processed.length, duplicates, empties);
+            
+            return processed;
+        }
+        
+        // 主要处理函数
+        function processText() {
+            const text = inputText.value;
+            if (!text.trim()) {
+                showNotification('请输入要处理的文本内容');
+                return;
+            }
+            
+            const lines = text.split('\n');
+            currentLines = processLines(lines);
+            
+            // 显示结果
+            outputText.value = currentLines.join('\n');
+            
+            // 根据处理模式显示不同通知
+            switch(currentProcessMode) {
+                case 'deduplicate':
+                    showNotification(`去重完成，共处理 ${lines.length} 行，去除 ${lines.length - currentLines.length} 个重复项`);
+                    break;
+                case 'merge':
+                    showNotification(`合并处理完成，共处理 ${lines.length} 行`);
+                    break;
+                case 'clean':
+                    showNotification(`文本清理完成，共处理 ${lines.length} 行`);
+                    break;
+            }
+        }
+        
+        // 处理文件导入
+        async function handleFileImport(event) {
+            const files = Array.from(event.target.files);
+            
+            if (files.length === 0) return;
+            
+            // 添加到已选文件列表
+            selectedFiles.push(...files);
+            updateFileList();
+            
+            // 重置文件输入
+            event.target.value = '';
+            
+            // 显示导入选项
+            showNotification(`已选择 ${files.length} 个文件，请设置导入选项`);
+        }
+        
+        // 执行文件导入
+        async function executeImport() {
+            if (selectedFiles.length === 0) {
+                showNotification('没有选择文件');
+                return;
+            }
+            
+            // 显示进度条
+            importProgress.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = '准备导入...';
+            importStats.style.display = 'flex';
+            processedFilesSpan.textContent = '0';
+            
+            const importMode = document.querySelector('input[name="importMode"]:checked').value;
+            const addSeparatorChecked = addSeparator.checked;
+            const addFilenameChecked = addFilename.checked;
+            const separatorTypeValue = separatorType.value;
+            const customSeparatorValue = customSeparator.value;
+            
+            let result = importMode === 'replace' ? '' : inputText.value;
+            
+            if (importMode === 'append' && result && addSeparatorChecked) {
+                result += '\n\n';
+            }
+            
+            // 处理每个文件
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                
+                // 更新进度
+                const progress = Math.round((i / selectedFiles.length) * 100);
+                progressFill.style.width = `${progress}%`;
+                progressText.textContent = `正在导入: ${file.name} (${i + 1}/${selectedFiles.length})`;
+                processedFilesSpan.textContent = i + 1;
+                
+                try {
+                    const content = await readFileAsync(file);
+                    
+                    if (addFilenameChecked) {
+                        result += `\n// ===== ${file.name} =====\n`;
+                    }
+                    
+                    result += content;
+                    
+                    if (addSeparatorChecked && i < selectedFiles.length - 1) {
+                        if (separatorTypeValue === 'line') {
+                            result += '\n\n';
+                        } else if (separatorTypeValue === 'double') {
+                            result += '\n\n\n';
+                        } else if (separatorTypeValue === 'custom' && customSeparatorValue) {
+                            result += '\n' + customSeparatorValue + '\n';
+                        }
+                    }
+                    
+                } catch (error) {
+                    console.error('读取文件失败:', error);
+                    showNotification(`读取文件 ${file.name} 时出错`);
+                }
+                
+                // 短暂延迟以便UI更新
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // 完成进度
+            progressFill.style.width = '100%';
+            progressText.textContent = '导入完成';
+            
+            // 更新输入框
+            inputText.value = result;
+            updateCharCount();
+            
+            // 自动处理
+            setTimeout(() => {
+                importProgress.style.display = 'none';
+                processText();
+                showNotification(`成功导入 ${selectedFiles.length} 个文件`);
+                
+                // 清空文件列表
+                selectedFiles = [];
+                updateFileList();
+            }, 500);
+        }
+        
+        // 异步读取文件
+        function readFileAsync(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = (e) => reject(e);
+                reader.readAsText(file);
+            });
+        }
+        
+        // 移除文件
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+        
+        // 复制结果
+        function copyResult() {
+            if (!outputText.value.trim()) {
+                showNotification('没有内容可复制');
+                return;
+            }
+            
+            navigator.clipboard.writeText(outputText.value)
+                .then(() => {
+                    showNotification('结果已复制到剪贴板');
+                })
+                .catch(err => {
+                    console.error('复制失败:', err);
+                    // 降级方案
+                    outputText.select();
+                    document.execCommand('copy');
+                    showNotification('结果已复制');
+                });
+        }
+        
+        // 保存结果
+        function saveResult() {
+            if (!outputText.value.trim()) {
+                showNotification('没有内容可保存');
+                return;
+            }
+            
+            saveModal.style.display = 'flex';
+        }
+        
+        // 执行保存
+        function executeSave() {
+            const fileName = document.getElementById('fileName').value || '处理结果';
+            const fileFormat = document.getElementById('fileFormat').value;
+            
+            let content = outputText.value;
+            let extension = '.txt';
+            let mimeType = 'text/plain';
+            
+            switch(fileFormat) {
+                case 'csv':
+                    extension = '.csv';
+                    mimeType = 'text/csv';
+                    // 将每行转换为CSV格式
+                    content = content.split('\n').map(line => `"${line}"`).join('\n');
+                    break;
+                case 'json':
+                    extension = '.json';
+                    mimeType = 'application/json';
+                    // 将行数组转换为JSON
+                    const lines = content.split('\n').filter(line => line.trim());
+                    content = JSON.stringify(lines, null, 2);
+                    break;
+                case 'md':
+                    extension = '.md';
+                    mimeType = 'text/markdown';
+                    break;
+            }
+            
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${fileName}${extension}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            saveModal.style.display = 'none';
+            showNotification(`文件已保存为 ${fileName}${extension}`);
+        }
+        
+        // 应用到输入
+        function applyToInput() {
+            if (!outputText.value.trim()) {
+                showNotification('没有内容可应用');
+                return;
+            }
+            
+            inputText.value = outputText.value;
+            updateCharCount();
+            showNotification('结果已应用到输入框');
+        }
+        
+        // 清空输入
+        function clearInput() {
+            inputText.value = '';
+            selectedFiles = [];
+            updateFileList();
+            updateCharCount();
+            updateStats(0, 0, 0, 0);
+            showNotification('输入已清空');
+        }
+        
+        // 设置处理模式
+        function setProcessMode(mode) {
+            currentProcessMode = mode;
+            
+            processBtns.forEach(btn => {
+                if (btn.dataset.process === mode) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 根据模式调整默认选项
+            switch(mode) {
+                case 'deduplicate':
+                    removeDuplicateLines.checked = true;
+                    break;
+                case 'merge':
+                    // 合并模式通常需要保留重复项
+                    removeDuplicateLines.checked = false;
+                    break;
+                case 'clean':
+                    trimSpaces.checked = true;
+                    removeEmptyLines.checked = true;
+                    removeExtraSpaces.checked = true;
+                    break;
+            }
+        }
+        
+        // 设置排序模式
+        function setSortMode(mode) {
+            currentSortMode = currentSortMode === mode ? null : mode;
+            
+            sortBtns.forEach(btn => {
+                if (btn.dataset.sort === mode && currentSortMode === mode) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 如果有文本，立即应用排序
+            if (currentLines.length > 0) {
+                const lines = currentLines;
+                currentLines = processLines(lines);
+                outputText.value = currentLines.join('\n');
+                showNotification(`已按${mode === 'asc' ? '升序' : mode === 'desc' ? '降序' : '随机'}排序`);
+            }
+        }
+        
+        // 事件监听器
+        inputText.addEventListener('input', updateCharCount);
+        outputText.addEventListener('input', updateCharCount);
+        processBtn.addEventListener('click', processText);
+        copyBtn.addEventListener('click', copyResult);
+        saveBtn.addEventListener('click', saveResult);
+        applyChangesBtn.addEventListener('click', applyToInput);
+        clearInputBtn.addEventListener('click', clearInput);
+        fileInput.addEventListener('change', handleFileImport);
+        
+        // 处理模式按钮
+        processBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setProcessMode(btn.dataset.process);
+            });
+        });
+        
+        // 排序按钮
+        sortBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setSortMode(btn.dataset.sort);
+            });
+        });
+        
+        // 范围控制
+        enableRange.addEventListener('change', function() {
+            isRangeEnabled = this.checked;
+            rangeInputs.style.display = this.checked ? 'flex' : 'none';
+            
+            if (this.checked && currentLines.length > 0) {
+                endLine.value = currentLines.length;
+            }
+        });
+        
+        applyRangeBtn.addEventListener('click', function() {
+            if (currentLines.length > 0) {
+                const lines = inputText.value.split('\n');
+                currentLines = processLines(lines);
+                outputText.value = currentLines.join('\n');
+                showNotification(`已应用范围筛选`);
+            }
+        });
+        
+        // 分隔符类型切换
+        separatorType.addEventListener('change', function() {
+            customSeparator.style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+        
+        // 导入按钮
+        const importBtn = document.querySelector('.file-import button');
+        importBtn.addEventListener('click', function(e) {
+            // 如果已经有文件，执行导入
+            if (selectedFiles.length > 0) {
+                e.preventDefault();
+                executeImport();
+            }
+        });
+        
+        // 文件列表点击事件委托
+        fileListContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.remove-file')) {
+                const index = parseInt(e.target.closest('.remove-file').dataset.index);
+                removeFile(index);
+            }
+        });
+        
+        // 保存对话框
+        cancelSaveBtn.addEventListener('click', () => {
+            saveModal.style.display = 'none';
+        });
+        
+        confirmSaveBtn.addEventListener('click', executeSave);
+        
+        // 点击模态框外部关闭
+        saveModal.addEventListener('click', (e) => {
+            if (e.target === saveModal) {
+                saveModal.style.display = 'none';
+            }
+        });
+        
+        // 初始化
+        updateCharCount();
+        updateStats(0, 0, 0, 0);
+        
+        // 添加示例数据
+        inputText.value = `示例链接列表：
+https://example.com/page1?ref=test
+https://example.com/page2
+https://example.com/page1?ref=test
+
+项目文件：
+项目文件-2026
+项目文件-2026
+临时数据
+
+测试数据：
+测试项1
+测试项2
+测试项3`;
+
+        // 初始处理
+        setTimeout(() => {
+            updateCharCount();
+            processText();
+        }, 100);
+    </script>
+</body>
+</html>
