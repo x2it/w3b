@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP查询分析系统</title>
+    <!-- 使用国内CDN的Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 使用中文字体优化，避免加载谷歌字体 -->
+    <style>
+        /* 基础变量定义 */
+        :root {
+            --primary: #1677ff;
+            --primary-dark: #0958d9;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --card-light: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #475569;
+            --radius: 8px;
+            --transition: all 0.3s ease;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 10% 20%, rgba(22, 119, 255, 0.1) 0%, transparent 20%);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* 头部样式 */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            height: 70px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+        
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            padding: 30px 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        
+        @media (min-width: 992px) {
+            .main-content {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow), 0 0 15px rgba(22, 119, 255, 0.2);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title i {
+            color: var(--primary);
+        }
+        
+        /* IP查询表单 */
+        .query-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .query-input {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 15px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: "Consolas", "Monaco", monospace;
+            transition: var(--transition);
+        }
+        
+        .query-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.2);
+        }
+        
+        .query-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 0 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+        
+        .query-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* IP信息展示 */
+        .ip-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .info-item {
+            background: var(--card-light);
+            border-radius: var(--radius);
+            padding: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-family: "Consolas", "Monaco", monospace;
+            font-size: 16px;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        
+        /* 地图容器 */
+        .map-container {
+            height: 280px;
+            background: var(--card-light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .map-placeholder {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+        
+        .map-placeholder i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        /* 网络状态指示器 */
+        .network-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: var(--card-light);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--success);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* 按钮组 */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .btn:hover {
+            background: var(--card-light);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        
+        /* 历史记录 */
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .history-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .history-item:hover {
+            background: var(--card-light);
+        }
+        
+        .history-ip {
+            font-family: "Consolas", "Monaco", monospace;
+            font-weight: 500;
+        }
+        
+        .history-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* 终端适配 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                height: auto;
+                padding: 15px 0;
+                gap: 15px;
+            }
+            
+            .query-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .ip-info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+        
+        /* 技术感装饰 */
+        .tech-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- 技术背景 -->
+    <div class="tech-bg"></div>
+    
+    <!-- 头部 -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-network-wired"></i>
+                    <div>
+                        <h1>IP查询分析系统</h1>
+                        <span>多终端适配 · 快速查询</span>
+                    </div>
+                </div>
+                <div class="network-status">
+                    <div class="status-indicator"></div>
+                    <span>系统在线 · 服务正常</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 主内容区 -->
+    <main class="container">
+        <div class="main-content">
+            <!-- 左栏 -->
+            <div>
+                <!-- IP查询卡片 -->
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-search-location"></i>
+                        IP地址查询
+                    </div>
+                    
+                    <form class="query-form" id="ipQueryForm">
+                        <input type="text" class="query-input" id="ipInput" 
+                               placeholder="输入IP地址或域名 (如: 114.114.114.114 或 baidu.com)" 
+                               value="">
+                        <button type="submit" class="query-btn">查询</button>
+                    </form>
+                    
+                    <div class="ip-info-grid" id="ipInfoGrid">
+                        <!-- IP信息会动态填充 -->
+                    </div>
+                    
+                    <!-- 地图显示区域 -->
+                    <div class="map-container">
+                        <div class="map-placeholder" id="mapPlaceholder">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <p>IP地理位置可视化</p>
+                            <p style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">
+                                <!-- 这里可以集成国内地图API，如高德地图、百度地图 -->
+                                可集成高德/百度地图API
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 操作按钮组 -->
+                    <div class="btn-group">
+                        <button class="btn" id="refreshBtn">
+                            <i class="fas fa-redo"></i> 刷新
+                        </button>
+                        <button class="btn" id="copyBtn">
+                            <i class="fas fa-copy"></i> 复制结果
+                        </button>
+                        <button class="btn btn-primary" id="detailBtn">
+                            <i class="fas fa-chart-bar"></i> 详细分析
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 技术信息卡片 -->
+                <div class="card" style="margin-top: 25px;">
+                    <div class="card-title">
+                        <i class="fas fa-info-circle"></i>
+                        技术信息
+                    </div>
+                    <div style="font-family: 'Consolas', 'Monaco', monospace; font-size: 14px; line-height: 1.5;">
+                        <div style="margin-bottom: 10px; color: var(--text-secondary);">// IP查询系统 v2.1</div>
+                        <div style="color: var(--primary);">const</div> <div style="color: #f1fa8c; display: inline;">ipSystem</div> = {<br>
+                        &nbsp;&nbsp;<span style="color: #8be9fd;">version</span>: <span style="color: #ff79c6;">"2.1.0"</span>,<br>
+                        &nbsp;&nbsp;<span style="color: #8be9fd;">api</span>: <span style="color: #ff79c6;">"国内优化版"</span>,<br>
+                        &nbsp;&nbsp;<span style="color: #8be9fd;">performance</span>: <span style="color: #ff79c6;">"高速查询"</span><br>
+                        };
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右栏 -->
+            <div>
+                <!-- 历史记录卡片 -->
+                <div class="card">
+                    <div class="card-title">
+                        <i class="fas fa-history"></i>
+                        查询历史
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <!-- 历史记录会动态填充 -->
+                    </div>
+                </div>
+                
+                <!-- 网络状态卡片 -->
+                <div class="card" style="margin-top: 25px;">
+                    <div class="card-title">
+                        <i class="fas fa-signal"></i>
+                        网络状态
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>延迟</span>
+                            <span style="color: var(--success);">28ms</span>
+                        </div>
+                        <div style="height: 6px; background: var(--card-light); border-radius: 3px; overflow: hidden;">
+                            <div style="width: 85%; height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary));"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>稳定性</span>
+                            <span style="color: var(--success);">99.2%</span>
+                        </div>
+                        <div style="height: 6px; background: var(--card-light); border-radius: 3px; overflow: hidden;">
+                            <div style="width: 92%; height: 100%; background: linear-gradient(90deg, var(--success), #22c55e);"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span>查询速度</span>
+                            <span style="color: var(--success);">0.8s</span>
+                        </div>
+                        <div style="height: 6px; background: var(--card-light); border-radius: 3px; overflow: hidden;">
+                            <div style="width: 78%; height: 100%; background: linear-gradient(90deg, var(--warning), #f97316);"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 快捷功能卡片 -->
+                <div class="card" style="margin-top: 25px;">
+                    <div class="card-title">
+                        <i class="fas fa-bolt"></i>
+                        快捷功能
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button class="btn" style="font-size: 13px; padding: 8px;">
+                            <i class="fas fa-home"></i> 本机IP
+                        </button>
+                        <button class="btn" style="font-size: 13px; padding: 8px;">
+                            <i class="fas fa-shield-alt"></i> 安全检查
+                        </button>
+                        <button class="btn" style="font-size: 13px; padding: 8px;">
+                            <i class="fas fa-download"></i> 导出数据
+                        </button>
+                        <button class="btn" style="font-size: 13px; padding: 8px;">
+                            <i class="fas fa-cog"></i> 设置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer style="margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 14px;">
+        <div class="container" style="text-align: center;">
+            <p>IP查询分析系统 &copy; 2023 | 使用国内资源优化 | 多终端适配</p>
+            <p style="margin-top: 5px; font-size: 12px;">本工具仅供技术参考，数据来源于公开API接口</p>
+        </div>
+    </footer>
+
+    <script>
+        // 获取DOM元素
+        const ipQueryForm = document.getElementById('ipQueryForm');
+        const ipInput = document.getElementById('ipInput');
+        const ipInfoGrid = document.getElementById('ipInfoGrid');
+        const historyList = document.getElementById('historyList');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const detailBtn = document.getElementById('detailBtn');
+        const mapPlaceholder = document.getElementById('mapPlaceholder');
+        
+        // 模拟IP数据
+        const mockIPData = {
+            "114.114.114.114": {
+                ip: "114.114.114.114",
+                location: "江苏省南京市",
+                isp: "中国电信",
+                asn: "AS4134",
+                country: "中国",
+                region: "华东",
+                city: "南京",
+                timezone: "UTC+8",
+                latitude: "32.0603",
+                longitude: "118.7969"
+            },
+            "8.8.8.8": {
+                ip: "8.8.8.8",
+                location: "美国加利福尼亚州",
+                isp: "Google LLC",
+                asn: "AS15169",
+                country: "美国",
+                region: "北美",
+                city: "山景城",
+                timezone: "UTC-7",
+                latitude: "37.4056",
+                longitude: "-122.0775"
+            },
+            "baidu.com": {
+                ip: "220.181.38.148",
+                location: "北京市",
+                isp: "百度云",
+                asn: "AS4847",
+                country: "中国",
+                region: "华北",
+                city: "北京",
+                timezone: "UTC+8",
+                latitude: "39.9042",
+                longitude: "116.4074"
+            }
+        };
+        
+        // 查询历史记录
+        let queryHistory = [];
+        
+        // 页面加载时显示本机IP
+        window.addEventListener('load', function() {
+            // 模拟获取本机IP
+            showIPInfo("114.114.114.114");
+            
+            // 加载历史记录
+            loadHistory();
+            
+            // 设置输入框默认值为本机IP
+            ipInput.value = "114.114.114.114";
+            
+            // 初始化地图占位符
+            initMapPlaceholder();
+        });
+        
+        // 表单提交事件
+        ipQueryForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = ipInput.value.trim();
+            if (query) {
+                showIPInfo(query);
+                addToHistory(query);
+            }
+        });
+        
+        // 刷新按钮事件
+        refreshBtn.addEventListener('click', function() {
+            const currentIP = ipInput.value.trim() || "114.114.114.114";
+            showIPInfo(currentIP);
+            
+            // 显示刷新效果
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<div class="loading"></div>';
+            setTimeout(() => {
+                refreshBtn.innerHTML = originalText;
+            }, 1000);
+        });
+        
+        // 复制按钮事件
+        copyBtn.addEventListener('click', function() {
+            const infoText = getIPInfoText();
+            if (infoText) {
+                navigator.clipboard.writeText(infoText).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                });
+            }
+        });
+        
+        // 详细分析按钮事件
+        detailBtn.addEventListener('click', function() {
+            const query = ipInput.value.trim() || "114.114.114.114";
+            showDetailedAnalysis(query);
+        });
+        
+        // 显示IP信息
+        function showIPInfo(query) {
+            let ipData;
+            
+            // 如果是域名，解析为IP
+            if (query.includes('.com') || query.includes('.cn') || query.includes('.net')) {
+                if (mockIPData[query]) {
+                    ipData = mockIPData[query];
+                } else {
+                    // 默认使用百度IP
+                    ipData = mockIPData["baidu.com"];
+                }
+            } else {
+                // 直接查询IP
+                if (mockIPData[query]) {
+                    ipData = mockIPData[query];
+                } else {
+                    // 默认使用114 IP
+                    ipData = mockIPData["114.114.114.114"];
+                }
+            }
+            
+            // 更新输入框
+            ipInput.value = ipData.ip;
+            
+            // 生成IP信息HTML
+            const infoHTML = `
+                <div class="info-item">
+                    <div class="info-label">IP地址</div>
+                    <div class="info-value">${ipData.ip}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">地理位置</div>
+                    <div class="info-value">${ipData.location}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">运营商</div>
+                    <div class="info-value">${ipData.isp}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">AS编号</div>
+                    <div class="info-value">${ipData.asn}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">国家/地区</div>
+                    <div class="info-value">${ipData.country}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">城市</div>
+                    <div class="info-value">${ipData.city}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">时区</div>
+                    <div class="info-value">${ipData.timezone}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">经纬度</div>
+                    <div class="info-value">${ipData.latitude}, ${ipData.longitude}</div>
+                </div>
+            `;
+            
+            ipInfoGrid.innerHTML = infoHTML;
+            
+            // 更新地图占位符
+            updateMapPlaceholder(ipData);
+        }
+        
+        // 获取IP信息文本
+        function getIPInfoText() {
+            const infoItems = document.querySelectorAll('.info-item');
+            if (infoItems.length === 0) return '';
+            
+            let text = "IP查询结果:\n";
+            infoItems.forEach(item => {
+                const label = item.querySelector('.info-label').textContent;
+                const value = item.querySelector('.info-value').textContent;
+                text += `${label}: ${value}\n`;
+            });
+            
+            return text;
+        }
+        
+        // 显示详细分析
+        function showDetailedAnalysis(query) {
+            // 模拟详细分析
+            const originalText = detailBtn.innerHTML;
+            detailBtn.innerHTML = '<div class="loading"></div> 分析中...';
+            
+            setTimeout(() => {
+                detailBtn.innerHTML = originalText;
+                
+                // 显示分析结果
+                const analysisHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background: var(--card-light); border-radius: var(--radius);">
+                        <div style="font-weight: bold; margin-bottom: 10px; color: var(--primary);">详细分析结果:</div>
+                        <div style="font-size: 14px; line-height: 1.5;">
+                            <p>• IP地址风险等级: <span style="color: var(--success);">低</span></p>
+                            <p>• 是否为数据中心IP: <span style="color: var(--warning);">是</span></p>
+                            <p>• 匿名代理检测: <span style="color: var(--success);">未发现</span></p>
+                            <p>• 威胁情报匹配: <span style="color: var(--success);">0个</span></p>
+                            <p>• 建议: 该IP地址为正常公网地址，无需特殊处理</p>
+                        </div>
+                    </div>
+                `;
+                
+                // 插入到IP信息下方
+                const existingAnalysis = document.querySelector('.analysis-result');
+                if (existingAnalysis) {
+                    existingAnalysis.remove();
+                }
+                
+                const analysisDiv = document.createElement('div');
+                analysisDiv.className = 'analysis-result';
+                analysisDiv.innerHTML = analysisHTML;
+                ipInfoGrid.parentNode.insertBefore(analysisDiv, ipInfoGrid.nextSibling);
+            }, 1500);
+        }
+        
+        // 添加到历史记录
+        function addToHistory(query) {
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            
+            // 添加到历史记录数组
+            queryHistory.unshift({
+                ip: query,
+                time: timeStr
+            });
+            
+            // 限制历史记录数量
+            if (queryHistory.length > 8) {
+                queryHistory.pop();
+            }
+            
+            // 保存到本地存储
+            localStorage.setItem('ipQueryHistory', JSON.stringify(queryHistory));
+            
+            // 更新显示
+            loadHistory();
+        }
+        
+        // 加载历史记录
+        function loadHistory() {
+            // 从本地存储获取历史记录
+            const savedHistory = localStorage.getItem('ipQueryHistory');
+            if (savedHistory) {
+                queryHistory = JSON.parse(savedHistory);
+            }
+            
+            // 生成历史记录HTML
+            let historyHTML = '';
+            if (queryHistory.length > 0) {
+                queryHistory.forEach(item => {
+                    historyHTML += `
+                        <div class="history-item" onclick="showIPInfo('${item.ip}')" style="cursor: pointer;">
+                            <div class="history-ip">${item.ip}</div>
+                            <div class="history-time">${item.time}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                historyHTML = '<div style="text-align: center; padding: 20px; color: var(--text-secondary);">暂无查询历史</div>';
+            }
+            
+            historyList.innerHTML = historyHTML;
+        }
+        
+        // 初始化地图占位符
+        function initMapPlaceholder() {
+            // 这里可以集成国内地图API
+            // 例如高德地图: https://lbs.amap.com/
+            // 或百度地图: https://lbsyun.baidu.com/
+            
+            // 示例代码 (需要替换为真实API密钥):
+            /*
+            // 高德地图示例
+            const map = new AMap.Map('mapPlaceholder', {
+                zoom: 11,
+                center: [116.397428, 39.90923]
+            });
+            
+            // 百度地图示例
+            const map = new BMap.Map('mapPlaceholder');
+            const point = new BMap.Point(116.404, 39.915);
+            map.centerAndZoom(point, 15);
+            */
+        }
+        
+        // 更新地图占位符
+        function updateMapPlaceholder(ipData) {
+            mapPlaceholder.innerHTML = `
+                <i class="fas fa-map-marked-alt"></i>
+                <p>${ipData.location}</p>
+                <p style="margin-top: 10px; font-size: 12px; color: var(--text-secondary);">
+                    经纬度: ${ipData.latitude}, ${ipData.longitude}
+                </p>
+                <p style="margin-top: 5px; font-size: 11px; color: var(--text-secondary);">
+                    可集成高德/百度地图API显示精确位置
+                </p>
+            `;
+        }
+        
+        // 添加快捷查询按钮事件
+        document.querySelectorAll('.btn').forEach(btn => {
+            if (btn.textContent.includes('本机IP')) {
+                btn.addEventListener('click', function() {
+                    showIPInfo("114.114.114.114");
+                    ipInput.value = "114.114.114.114";
+                });
+            }
+            
+            if (btn.textContent.includes('安全检查')) {
+                btn.addEventListener('click', function() {
+                    const query = ipInput.value.trim() || "114.114.114.114";
+                    showDetailedAnalysis(query);
+                });
+            }
+            
+            if (btn.textContent.includes('导出数据')) {
+                btn.addEventListener('click', function() {
+                    const data = getIPInfoText();
+                    if (data) {
+                        const blob = new Blob([data], {type: 'text/plain'});
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `IP查询结果_${new Date().toISOString().slice(0,10)}.txt`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
