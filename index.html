@@ -1,19 +1,467 @@
----
----
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Davi iHome Studio 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
-    <title>Davi iHome Studio | 理会·践行 - 知行合一的现代探索</title>
+    <meta name="description" content="知行工作室 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
+    <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        /* 主题切换 */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #4b5563;
+            --text-light: #9ca3af;
+            --dark-color: #111827;
+            --accent-color: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --text-color: #f3f4f6;
+                --text-secondary: #d1d5db;
+                --text-light: #9ca3af;
+                --dark-color: #f9fafb;
+                --accent-color: #8b5cf6;
+                --accent-secondary: #6366f1;
+                --border-color: #374151;
+                --card-bg: #1f2937;
+                --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+        }
+
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-light: #9ca3af;
+            --dark-color: #f9fafb;
+            --accent-color: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --border-color: #374151;
+            --card-bg: #1f2937;
+            --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        body.blue-mode {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --text-secondary: #334155;
+            --text-light: #64748b;
+            --dark-color: #020617;
+            --accent-color: #3b82f6;
+            --accent-secondary: #0ea5e9;
+            --border-color: #e0e7ff;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(59, 130, 246, 0.1);
+        }
+
+        body.green-mode {
+            --bg-color: #f0fdf4;
+            --text-color: #065f46;
+            --text-secondary: #166534;
+            --text-light: #15803d;
+            --dark-color: #043626;
+            --accent-color: #10b981;
+            --accent-secondary: #059669;
+            --border-color: #d1fae5;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(16, 185, 129, 0.1);
+        }
+
+        body.purple-mode {
+            --bg-color: #faf5ff;
+            --text-color: #4c1d95;
+            --text-secondary: #5b21b6;
+            --text-light: #6d28d9;
+            --dark-color: #311e88;
+            --accent-color: #8b5cf6;
+            --accent-secondary: #7c3aed;
+            --border-color: #ede9fe;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(139, 92, 246, 0.1);
+        }
+
+        body.orange-mode {
+            --bg-color: #fffbeb;
+            --text-color: #78350f;
+            --text-secondary: #92400e;
+            --text-light: #b45309;
+            --dark-color: #451a03;
+            --accent-color: #f97316;
+            --accent-secondary: #ea580c;
+            --border-color: #ffedd5;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(249, 115, 22, 0.1);
+        }
+
+        body.teal-mode {
+            --bg-color: #f0fdfa;
+            --text-color: #0f766e;
+            --text-secondary: #134e4a;
+            --text-light: #0d9488;
+            --dark-color: #064e3b;
+            --accent-color: #14b8a6;
+            --accent-secondary: #0d9488;
+            --border-color: #ccfbf1;
+            --card-bg: #ffffff;
+            --card-shadow: 0 1px 3px rgba(20, 184, 166, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.05));
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .site-title {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .site-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .section-title {
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            margin: 0.75rem auto;
+            border-radius: 2px;
+        }
+
+        #particle-section {
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.03));
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            padding: 3rem 1rem;
+        }
+
+        .timeline-section {
+            background: linear-gradient(135deg, var(--bg-color), rgba(139, 92, 246, 0.03));
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            padding: 3rem 1rem;
+        }
+
+        .balance-section {
+            background: linear-gradient(135deg, var(--bg-color), rgba(16, 185, 129, 0.03));
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            padding: 3rem 1rem;
+        }
+
+        #blog-content {
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
+        }
+
+        #thinking {
+            background: linear-gradient(135deg, var(--bg-color), rgba(59, 130, 246, 0.03));
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        #projects {
+            background: linear-gradient(135deg, var(--bg-color), rgba(139, 92, 246, 0.03));
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        #contact {
+            background: linear-gradient(135deg, var(--bg-color), rgba(20, 184, 166, 0.03));
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .iframe-container {
+            margin: 1rem auto;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .iframe-container {
+            position: relative;
+            width: 100%;
+            margin: 1rem auto;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 80vh;
+            min-height: 1000px;
+            border: none;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow-y: auto;
+            scrolling: auto;
+        }
+
+        @media (max-width: 768px) {
+            .iframe-container iframe {
+                height: 70vh;
+                min-height: 900px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .iframe-container iframe {
+                height: 60vh;
+                min-height: 800px;
+            }
+        }
+
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-menu {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 120px;
+        }
+
+        .theme-menu.show {
+            display: flex;
+        }
+
+        .theme-option {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-option:hover {
+            background: var(--border-color);
+        }
+
+        .theme-option.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .theme-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+        }
+
+
+
+        .balance-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .footer-links {
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.03));
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-color);
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.05));
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
+        }
+
+        footer p, .copyright {
+            color: var(--text-secondary);
+        }
+
+        /* 精致的滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            border: 1px solid var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        /* 为Firefox添加滚动条样式 */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) var(--bg-color);
+        }
+
+        /* 为IE添加滚动条样式 */
+        body {
+            -ms-overflow-style: -ms-autohiding-scrollbar;
+        }
+
+        .back-to-top {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .email-link {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .email-link:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
 <body>
+    <!-- 主题切换 -->
+    <div class="theme-toggle" id="themeToggle" title="切换主题">🎨</div>
+    <div class="theme-menu" id="themeMenu">
+        <div class="theme-option" data-theme="light">
+            <div class="theme-preview" style="background: #ffffff; border-color: #e5e7eb;"></div>
+            <span>浅色</span>
+        </div>
+        <div class="theme-option" data-theme="dark">
+            <div class="theme-preview" style="background: #111827; border-color: #374151;"></div>
+            <span>深色</span>
+        </div>
+        <div class="theme-option" data-theme="blue">
+            <div class="theme-preview" style="background: #f8fafc; border-color: #3b82f6;"></div>
+            <span>蓝色</span>
+        </div>
+        <div class="theme-option" data-theme="green">
+            <div class="theme-preview" style="background: #f0fdf4; border-color: #10b981;"></div>
+            <span>绿色</span>
+        </div>
+        <div class="theme-option" data-theme="purple">
+            <div class="theme-preview" style="background: #faf5ff; border-color: #8b5cf6;"></div>
+            <span>紫色</span>
+        </div>
+        <div class="theme-option" data-theme="orange">
+            <div class="theme-preview" style="background: #fffbeb; border-color: #f97316;"></div>
+            <span>橙色</span>
+        </div>
+        <div class="theme-option" data-theme="teal">
+            <div class="theme-preview" style="background: #f0fdfa; border-color: #14b8a6;"></div>
+            <span>青色</span>
+        </div>
+        <div class="theme-option" data-theme="system">
+            <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
+            <span>系统</span>
+        </div>
+    </div>
+
     <header>
-        <h1 class="site-title">理会 · 践行</h1>
-        <p class="site-subtitle">知是行之始，行是知之成。一个关于认知与行动的交互探索。</p>
+        <h1 class="site-title">知行工作室</h1>
+        <p class="site-subtitle">理会 · 践行 - 知与行的交互探索</p>
     </header>
 
     <section id="particle-section">
@@ -29,8 +477,8 @@
         </p>
     </section>
 
-    <section>
-        <h2 class="section-title">践行 · 时间之径</h2>
+    <section class="timeline-section">
+        <h2 class="section-title">践行 · 当下行动</h2>
         <div class="timeline">
             <div class="timeline-item">
                 <div class="timeline-content">
@@ -51,7 +499,7 @@
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-content" style="border-color: #2a7bd2;">
+                <div class="timeline-content" style="border-color: var(--accent-color);">
                     <h3>当下 · 你的行动</h3>
                     <p>每一个项目、每一次选择，都是古老思想在当下的实践与回响。</p>
                 </div>
@@ -59,7 +507,7 @@
         </div>
     </section>
 
-    <section>
+    <section class="balance-section">
         <h2 class="section-title">知行合一 · 动态平衡</h2>
         <div class="balance-container">
             <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">"知"与"行"并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
@@ -82,25 +530,242 @@
         </div>
     </section>
 
+    <!-- 整合内容 -->
+    <section id="blog-content">
+        <section id="thinking">
+            <h3 class="section-title">理会 · 思考笔记</h3>
+            <div class="iframe-container">
+                <iframe 
+                    src="https://fudawei.coze.site/embed?limit=10" 
+                    width="100%" 
+                    height="600" 
+                    frameborder="0" 
+                    scrolling="no"
+                    style="border: none; background: var(--card-bg);"
+                ></iframe>
+            </div>
+        </section>
+
+        <section id="projects">
+            <h3 class="section-title">践行 · 项目作品</h3>
+            <div class="iframe-container">
+                <iframe
+                    src="https://output.coze.site/embed?theme=neutral"
+                    width="100%"
+                    height="1200px"
+                    frameborder="0"
+                    scrolling="auto"
+                    style="border: none; background: var(--card-bg); border-radius: 8px;"
+                ></iframe>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h3 class="section-title">联系交流</h3>
+            <div class="contact-section">
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    在思考与实践的路上，期待与你交流碰撞，共同成长。
+                </p>
+                
+                <div class="email-wrapper">
+                    <a href="mailto:support@w3b.pub" class="email-link">
+                        support@w3b.pub
+                    </a>
+                </div>
+                
+                <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 1rem;">
+                    一般会在1-2天内回复邮件
+                </p>
+            </div>
+        </section>
+    </section>
+
     <div class="footer-links">
         <a href="#" class="footer-link" title="回到顶部">顶部</a>
         <span class="link-divider">|</span>
-        <a href="blog.html" class="footer-link" title="访问个人博客">理会</a>
+        <a href="#thinking" class="footer-link" title="访问个人博客">理会</a>
         <span class="link-divider">|</span>
-        <a href="works.html" class="footer-link" title="浏览内容目录">践行</a>
+        <a href="#projects" class="footer-link" title="浏览作品内容">践行</a>
     </div>
 
     <footer>
         <p>理无专在，而学无止境也。然则问可少耶？</p>
-        <p class="copyright">© 2026 Davi iHome Studio - 理会 · 践行</p>
+        <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
     <!-- 返回顶部按钮 -->
     <div class="back-to-top" id="backToTop" title="返回顶部">↑</div>
-    <script src="/assets/js/main.js"></script>
 
     <script>
         (function() {
+            // 主题切换
+            const themeToggle = document.getElementById('themeToggle');
+            const themeMenu = document.getElementById('themeMenu');
+            const themeOptions = document.querySelectorAll('.theme-option');
+            const body = document.body;
+
+            // 显示/隐藏主题菜单
+            themeToggle.addEventListener('click', function() {
+                themeMenu.classList.toggle('show');
+            });
+
+            // 点击其他地方关闭主题菜单
+            document.addEventListener('click', function(event) {
+                if (!themeToggle.contains(event.target) && !themeMenu.contains(event.target)) {
+                    themeMenu.classList.remove('show');
+                }
+            });
+
+            // 主题选项点击事件
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    applyTheme(theme);
+                    localStorage.setItem('theme', theme);
+                    themeMenu.classList.remove('show');
+                });
+            });
+
+            function updateScrollbarStyle() {
+                const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-color');
+                const borderColor = getComputedStyle(document.body).getPropertyValue('--border-color');
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
+
+                // 为Firefox更新滚动条颜色
+                document.documentElement.style.setProperty('--scrollbar-thumb-color', borderColor);
+                document.documentElement.style.setProperty('--scrollbar-track-color', bgColor);
+
+                // 对于WebKit浏览器，我们依赖CSS变量，但可以通过添加样式标签来强制更新
+                const styleId = 'scrollbar-style';
+                let styleElement = document.getElementById(styleId);
+                if (!styleElement) {
+                    styleElement = document.createElement('style');
+                    styleElement.id = styleId;
+                    document.head.appendChild(styleElement);
+                }
+
+                styleElement.textContent = `
+                    ::-webkit-scrollbar-track {
+                        background: ${bgColor};
+                    }
+                    ::-webkit-scrollbar-thumb {
+                        background: ${borderColor};
+                        border: 1px solid ${bgColor};
+                    }
+                    ::-webkit-scrollbar-thumb:hover {
+                        background: ${accentColor};
+                    }
+                `;
+            }
+
+            function updateBalance() {
+                if (!knowledgeSlider || !actionSlider) return;
+                const know = parseInt(knowledgeSlider.value);
+                const action = parseInt(actionSlider.value);
+                knowledgeValue.textContent = know;
+                actionValue.textContent = action;
+                const diff = action - know;
+                const angle = diff * 0.3;
+                balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
+                const absDiff = Math.abs(diff);
+                if (absDiff < 10) {
+                    balanceState.textContent = "状态：知行合一 (理想平衡)";
+                    balanceState.style.color = "var(--accent-color)";
+                } else if (diff > 0) {
+                    balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
+                    balanceState.style.color = "var(--accent-secondary)";
+                } else {
+                    balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
+                    balanceState.style.color = "var(--dark-color)";
+                }
+            }
+
+            function updateBalanceColors() {
+                // 更新平衡器权重的颜色
+                const weights = document.querySelectorAll('.weight');
+                if (weights.length === 0) return;
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
+                weights.forEach(weight => {
+                    weight.style.background = accentColor;
+                    weight.style.boxShadow = `0 4px 12px ${accentColor}40`; // 40 是 64 的十六进制，表示 25% 透明度
+                });
+
+                // 更新平衡器状态文本颜色
+                if (typeof updateBalance === 'function') {
+                    updateBalance();
+                }
+            }
+
+            function applyTheme(theme) {
+                // 移除所有主题类
+                body.classList.remove('dark-mode', 'light-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+
+                // 更新活跃状态
+                themeOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-theme') === theme) {
+                        option.classList.add('active');
+                    }
+                });
+
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                } else if (theme === 'light') {
+                    body.classList.add('light-mode');
+                } else if (theme === 'blue') {
+                    body.classList.add('blue-mode');
+                } else if (theme === 'green') {
+                    body.classList.add('green-mode');
+                } else if (theme === 'purple') {
+                    body.classList.add('purple-mode');
+                } else if (theme === 'orange') {
+                    body.classList.add('orange-mode');
+                } else if (theme === 'teal') {
+                    body.classList.add('teal-mode');
+                } else if (theme === 'system') {
+                    // 跟随系统主题
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        body.classList.add('dark-mode');
+                    }
+                }
+
+                // 更新滚动条样式
+                updateScrollbarStyle();
+                
+                // 更新平衡器颜色
+                updateBalanceColors();
+            }
+
+            // 监听系统主题变化
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                const currentTheme = localStorage.getItem('theme') || 'system';
+                if (currentTheme === 'system') {
+                    applyTheme('system');
+                } else {
+                    // 即使当前主题不是系统，也更新滚动条样式和平衡器颜色
+                    updateScrollbarStyle();
+                    if (typeof updateBalanceColors === 'function') {
+                        updateBalanceColors();
+                    }
+                }
+            });
+
+            // 初始化滚动条样式
+            updateScrollbarStyle();
+
+            // 检查本地存储中的主题偏好并应用
+            const savedTheme = localStorage.getItem('theme') || 'system';
+            applyTheme(savedTheme);
+
+            // 平衡器相关变量
+            const knowledgeSlider = document.getElementById('knowledgeSlider');
+            const actionSlider = document.getElementById('actionSlider');
+            const knowledgeValue = document.getElementById('knowledgeValue');
+            const actionValue = document.getElementById('actionValue');
+            const balanceBeam = document.getElementById('balanceBeam');
+            const balanceState = document.getElementById('balanceState');
+
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
@@ -136,7 +801,8 @@
                     this.vx = 0;
                     this.vy = 0;
                     this.size = Math.random() * 2 + 0.5;
-                    this.color = `rgba(34, 34, 34, ${0.7})`;
+                    const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+                    this.color = textColor + ', 0.7)';
                 }
                 update() {
                     if (mode === 'order') {
@@ -183,7 +849,8 @@
             function animateParticles() {
                 ctx.clearRect(0, 0, containerWidth, containerHeight);
                 if (mode !== 'chaos') {
-                    ctx.strokeStyle = 'rgba(210, 35, 42, 0.1)';
+                    const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
+                    ctx.strokeStyle = accentColor + ', 0.1)';
                     ctx.lineWidth = 0.5;
                     for (let i = 0; i < particles.length; i++) {
                         for (let j = i + 1; j < particles.length; j++) {
@@ -254,14 +921,8 @@
             
             startParticles();
             
-            const knowledgeSlider = document.getElementById('knowledgeSlider');
-            const actionSlider = document.getElementById('actionSlider');
-            const knowledgeValue = document.getElementById('knowledgeValue');
-            const actionValue = document.getElementById('actionValue');
-            const balanceBeam = document.getElementById('balanceBeam');
-            const balanceState = document.getElementById('balanceState');
-            
             function updateBalance() {
+                if (!knowledgeSlider || !actionSlider) return;
                 const know = parseInt(knowledgeSlider.value);
                 const action = parseInt(actionSlider.value);
                 knowledgeValue.textContent = know;
@@ -272,15 +933,34 @@
                 const absDiff = Math.abs(diff);
                 if (absDiff < 10) {
                     balanceState.textContent = "状态：知行合一 (理想平衡)";
-                    balanceState.style.color = "#2a7bd2";
+                    balanceState.style.color = "var(--accent-color)";
                 } else if (diff > 0) {
                     balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
-                    balanceState.style.color = "#d2232a";
+                    balanceState.style.color = "var(--accent-secondary)";
                 } else {
                     balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
-                    balanceState.style.color = "#222";
+                    balanceState.style.color = "var(--dark-color)";
                 }
             }
+
+            function updateBalanceColors() {
+                // 更新平衡器权重的颜色
+                const weights = document.querySelectorAll('.weight');
+                if (weights.length === 0) return;
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
+                weights.forEach(weight => {
+                    weight.style.background = accentColor;
+                    weight.style.boxShadow = `0 4px 12px ${accentColor}40`; // 40 是 64 的十六进制，表示 25% 透明度
+                });
+
+                // 更新平衡器状态文本颜色
+                if (typeof updateBalance === 'function') {
+                    updateBalance();
+                }
+            }
+
+            // 初始化平衡器颜色
+            setTimeout(updateBalanceColors, 100);
             
             knowledgeSlider.addEventListener('input', updateBalance);
             actionSlider.addEventListener('input', updateBalance);
@@ -301,6 +981,51 @@
                 link.addEventListener('touchstart', function() { this.style.opacity = '0.8'; }, {passive: true});
                 link.addEventListener('touchend', function() { this.style.opacity = '1'; }, {passive: true});
             });
+            
+            // 邮件复制功能
+            const emailLink = document.querySelector('.email-link');
+            if (emailLink) {
+                emailLink.addEventListener('click', function(e) {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        e.preventDefault();
+                        navigator.clipboard.writeText('support@w3b.pub').then(() => {
+                            const originalText = this.textContent;
+                            const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
+                            this.textContent = '已复制邮箱';
+                            this.style.background = accentColor;
+                            this.style.borderColor = accentColor;
+                            this.style.color = 'white';
+                            
+                            setTimeout(() => {
+                                this.textContent = originalText;
+                                this.style.background = '';
+                                this.style.borderColor = '';
+                                this.style.color = '';
+                                // 强制重绘，确保CSS变量生效
+                                this.style.display = 'none';
+                                this.offsetHeight; // 触发重排
+                                this.style.display = '';
+                            }, 1500);
+                        });
+                    }
+                });
+            }
+
+            // 返回顶部功能
+            const backToTop = document.getElementById('backToTop');
+            if (backToTop) {
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('show');
+                    } else {
+                        backToTop.classList.remove('show');
+                    }
+                });
+                backToTop.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
         })();
     </script>
 </body>
