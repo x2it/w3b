@@ -185,7 +185,7 @@ section:last-of-type { border-bottom: none; }
     gap: 0.75rem;
 }
 .control-btn {
-    background: var(--dark-color);
+    background: var(--accent-color);
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -198,14 +198,14 @@ section:last-of-type { border-bottom: none; }
     min-height: 44px;
     min-width: 120px;
     touch-action: manipulation;
-    border: 2px solid var(--dark-color);
+    border: 2px solid var(--accent-color);
 }
 @media (max-width: 480px) {
     .control-btn { min-width: 110px; padding: 0.7rem 1.2rem; font-size: 0.9rem; }
 }
 .control-btn:hover {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
