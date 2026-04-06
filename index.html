@@ -160,7 +160,11 @@
             margin: 2rem 0;
             box-shadow: var(--card-shadow);
             padding: 3rem 1rem;
+            position: relative;
+            overflow: hidden;
         }
+
+
 
         .timeline-section {
             background: linear-gradient(135deg, var(--bg-color), rgba(139, 92, 246, 0.03));
@@ -468,10 +472,10 @@
     <section id="particle-section">
         <h2 class="section-title">理会 · 洞察本质</h2>
         <canvas id="particle-canvas"></canvas>
-        <div class="particle-controls">
-            <button class="control-btn" id="btn-order">有序思维</button>
-            <button class="control-btn" id="btn-chaos">发散联想</button>
-            <button class="control-btn" id="btn-focus">专注凝聚</button>
+        <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
+            <button class="control-btn" id="btn-order" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">有序思维</button>
+            <button class="control-btn" id="btn-chaos" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">发散联想</button>
+            <button class="control-btn" id="btn-focus" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">专注凝聚</button>
         </div>
         <p style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
             思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为"理"之过程。
@@ -659,6 +663,14 @@
                 `;
             }
 
+            // 平衡器相关变量
+            const knowledgeSlider = document.getElementById('knowledgeSlider');
+            const actionSlider = document.getElementById('actionSlider');
+            const knowledgeValue = document.getElementById('knowledgeValue');
+            const actionValue = document.getElementById('actionValue');
+            const balanceBeam = document.getElementById('balanceBeam');
+            const balanceState = document.getElementById('balanceState');
+
             function updateBalance() {
                 if (!knowledgeSlider || !actionSlider) return;
                 const know = parseInt(knowledgeSlider.value);
@@ -759,18 +771,11 @@
             const savedTheme = localStorage.getItem('theme') || 'system';
             applyTheme(savedTheme);
 
-            // 平衡器相关变量
-            const knowledgeSlider = document.getElementById('knowledgeSlider');
-            const actionSlider = document.getElementById('actionSlider');
-            const knowledgeValue = document.getElementById('knowledgeValue');
-            const actionValue = document.getElementById('actionValue');
-            const balanceBeam = document.getElementById('balanceBeam');
-            const balanceState = document.getElementById('balanceState');
-
+            // 局部粒子系统（粒子区域）
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
-            let mode = 'order';
+            let mode = 'chaos';
             let animationId = null;
             let resizeTimer = null;
             const dpr = window.devicePixelRatio || 1;
@@ -797,45 +802,111 @@
                     this.reset();
                 }
                 reset() {
+                    const textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim();
+                    const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
                     this.x = Math.random() * containerWidth;
                     this.y = Math.random() * containerHeight;
-                    this.vx = 0;
-                    this.vy = 0;
-                    this.size = Math.random() * 2 + 0.5;
-                    const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
-                    this.color = textColor + ', 0.7)';
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 0.3;
+                    this.baseSize = Math.random() * 2 + 0.3;
+                    this.opacity = Math.random() * 0.7 + 0.3;
+                    this.textColor = textColor;
+                    this.accentColor = accentColor;
+                    this.pulseSpeed = Math.random() * 0.03 + 0.01;
+                    this.pulsePhase = Math.random() * Math.PI * 2;
                 }
                 update() {
+                    // 粒子脉动效果
+                    this.pulsePhase += this.pulseSpeed;
+                    this.size = this.baseSize * (1 + Math.sin(this.pulsePhase) * 0.3);
+                    
                     if (mode === 'order') {
                         const gridX = Math.round(this.x / 40) * 40 + 20;
                         const gridY = Math.round(this.y / 40) * 40 + 20;
-                        this.vx += (gridX - this.x) * 0.01;
-                        this.vy += (gridY - this.y) * 0.01;
+                        this.vx += (gridX - this.x) * 0.008;
+                        this.vy += (gridY - this.y) * 0.008;
                     } else if (mode === 'chaos') {
-                        this.vx += (Math.random() - 0.5) * 0.2;
-                        this.vy += (Math.random() - 0.5) * 0.2;
+                        this.vx += (Math.random() - 0.5) * 0.15;
+                        this.vy += (Math.random() - 0.5) * 0.15;
+                        // 添加一些随机性到脉动速度
+                        this.pulseSpeed = Math.random() * 0.05 + 0.01;
                     } else if (mode === 'focus') {
                         const dx = containerWidth / 2 - this.x;
                         const dy = containerHeight / 2 - this.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
                         if (dist > 0) {
-                            this.vx += (dx / dist) * 0.05;
-                            this.vy += (dy / dist) * 0.05;
+                            // 距离中心越近，粒子越小，透明度越高
+                            const force = Math.min(0.06, 1 / (dist * 0.01));
+                            this.vx += (dx / dist) * force;
+                            this.vy += (dy / dist) * force;
+                            this.opacity = Math.min(0.9, 0.3 + (1 - dist / Math.max(containerWidth, containerHeight)) * 0.6);
                         }
                     }
-                    this.vx *= 0.95;
-                    this.vy *= 0.95;
+                    
+                    // 添加一些摩擦力和惯性
+                    this.vx *= 0.96;
+                    this.vy *= 0.96;
+                    
+                    // 添加轻微的重力效果
+                    this.vy += 0.01;
+                    
                     this.x += this.vx;
                     this.y += this.vy;
+                    
                     if (this.x < -10 || this.x > containerWidth + 10 || this.y < -10 || this.y > containerHeight + 10) {
                         this.reset();
                     }
                 }
                 draw() {
+                    // 创建径向渐变
+                    const gradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.size
+                    );
+                    
+                    const accentColor = this.accentColor;
+                    const textColor = this.textColor;
+                    
+                    // 修复颜色格式
+                    gradient.addColorStop(0, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.8})`);
+                    gradient.addColorStop(0.5, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.4})`);
+                    gradient.addColorStop(1, `rgba(${this.hexToRgb(textColor)}, ${this.opacity * 0.1})`);
+                    
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
+                    ctx.fillStyle = gradient;
                     ctx.fill();
+                    
+                    // 添加轻微的发光效果
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                    const glowGradient = ctx.createRadialGradient(
+                        this.x, this.y, 0,
+                        this.x, this.y, this.size * 2
+                    );
+                    glowGradient.addColorStop(0, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.2})`);
+                    glowGradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = glowGradient;
+                    ctx.fill();
+                }
+                
+                // 辅助方法：将十六进制颜色转换为RGB
+                hexToRgb(hex) {
+                    // 移除#号
+                    hex = hex.replace(/^#/, '');
+                    
+                    // 处理缩写形式
+                    if (hex.length === 3) {
+                        hex = hex.split('').map(char => char + char).join('');
+                    }
+                    
+                    // 解析RGB值
+                    const r = parseInt(hex.substring(0, 2), 16);
+                    const g = parseInt(hex.substring(2, 4), 16);
+                    const b = parseInt(hex.substring(4, 6), 16);
+                    
+                    return `${r}, ${g}, ${b}`;
                 }
             }
             
@@ -851,14 +922,17 @@
                 ctx.clearRect(0, 0, containerWidth, containerHeight);
                 if (mode !== 'chaos') {
                     const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
-                    ctx.strokeStyle = accentColor + ', 0.1)';
-                    ctx.lineWidth = 0.5;
+                    ctx.lineWidth = 0.2;
                     for (let i = 0; i < particles.length; i++) {
                         for (let j = i + 1; j < particles.length; j++) {
                             const dx = particles[i].x - particles[j].x;
                             const dy = particles[i].y - particles[j].y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
-                            if (distance < 50) {
+                            if (distance < 60) {
+                                // 距离越近，线条越粗，透明度越高
+                                const opacity = (1 - distance / 60) * 0.15 * (particles[i].opacity + particles[j].opacity) / 2;
+                                ctx.strokeStyle = accentColor + ', ' + opacity + ')';
+                                ctx.lineWidth = (1 - distance / 60) * 0.5;
                                 ctx.beginPath();
                                 ctx.moveTo(particles[i].x, particles[i].y);
                                 ctx.lineTo(particles[j].x, particles[j].y);
@@ -884,6 +958,13 @@
                     setTimeout(startParticles, 100);
                     return;
                 }
+                // 确保画布样式正确
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.zIndex = '1';
                 initParticles();
                 if (animationId) cancelAnimationFrame(animationId);
                 animateParticles();
@@ -922,44 +1003,6 @@
             
             startParticles();
             
-            function updateBalance() {
-                if (!knowledgeSlider || !actionSlider) return;
-                const know = parseInt(knowledgeSlider.value);
-                const action = parseInt(actionSlider.value);
-                knowledgeValue.textContent = know;
-                actionValue.textContent = action;
-                const diff = action - know;
-                const angle = diff * 0.3;
-                balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
-                const absDiff = Math.abs(diff);
-                if (absDiff < 10) {
-                    balanceState.textContent = "状态：知行合一 (理想平衡)";
-                    balanceState.style.color = "var(--accent-color)";
-                } else if (diff > 0) {
-                    balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
-                    balanceState.style.color = "var(--accent-secondary)";
-                } else {
-                    balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
-                    balanceState.style.color = "var(--dark-color)";
-                }
-            }
-
-            function updateBalanceColors() {
-                // 更新平衡器权重的颜色
-                const weights = document.querySelectorAll('.weight');
-                if (weights.length === 0) return;
-                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
-                weights.forEach(weight => {
-                    weight.style.background = accentColor;
-                    weight.style.boxShadow = `0 4px 12px ${accentColor}40`; // 40 是 64 的十六进制，表示 25% 透明度
-                });
-
-                // 更新平衡器状态文本颜色
-                if (typeof updateBalance === 'function') {
-                    updateBalance();
-                }
-            }
-
             // 初始化平衡器颜色
             setTimeout(updateBalanceColors, 100);
             
