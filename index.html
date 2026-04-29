@@ -269,10 +269,26 @@
             cursor: pointer;
             box-shadow: var(--card-shadow);
             transition: all 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .theme-toggle:hover {
             transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
         }
 
         .theme-menu {
@@ -289,6 +305,18 @@
             flex-direction: column;
             gap: 10px;
             min-width: 120px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 480px) {
+            .theme-menu {
+                top: 70px;
+                right: 15px;
+                min-width: 110px;
+                padding: 8px;
+                gap: 8px;
+            }
         }
 
         .theme-menu.show {
@@ -296,17 +324,31 @@
         }
 
         .theme-option {
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: 8px;
+            min-height: 40px;
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 480px) {
+            .theme-option {
+                padding: 8px 10px;
+                min-height: 36px;
+                font-size: 0.9rem;
+            }
         }
 
         .theme-option:hover {
             background: var(--border-color);
+        }
+
+        .theme-option:active {
+            transform: scale(0.98);
         }
 
         .theme-option.active {
@@ -319,6 +361,13 @@
             height: 16px;
             border-radius: 50%;
             border: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 480px) {
+            .theme-preview {
+                width: 14px;
+                height: 14px;
+            }
         }
 
 
@@ -672,7 +721,7 @@
             const balanceState = document.getElementById('balanceState');
 
             function updateBalance() {
-                if (!knowledgeSlider || !actionSlider) return;
+                if (!knowledgeSlider || !actionSlider || !knowledgeValue || !actionValue || !balanceBeam || !balanceState) return;
                 const know = parseInt(knowledgeSlider.value);
                 const action = parseInt(actionSlider.value);
                 knowledgeValue.textContent = know;
@@ -931,7 +980,8 @@
                             if (distance < 60) {
                                 // 距离越近，线条越粗，透明度越高
                                 const opacity = (1 - distance / 60) * 0.15 * (particles[i].opacity + particles[j].opacity) / 2;
-                                ctx.strokeStyle = accentColor + ', ' + opacity + ')';
+                                const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : accentColor;
+                                ctx.strokeStyle = `rgba(${rgbStr}, ${opacity})`;
                                 ctx.lineWidth = (1 - distance / 60) * 0.5;
                                 ctx.beginPath();
                                 ctx.moveTo(particles[i].x, particles[i].y);
@@ -1032,24 +1082,27 @@
                 emailLink.addEventListener('click', function(e) {
                     if (navigator.clipboard && window.isSecureContext) {
                         e.preventDefault();
+                        const linkElement = this;
                         navigator.clipboard.writeText('support@w3b.pub').then(() => {
-                            const originalText = this.textContent;
+                            const originalText = linkElement.textContent;
                             const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
-                            this.textContent = '已复制邮箱';
-                            this.style.background = accentColor;
-                            this.style.borderColor = accentColor;
-                            this.style.color = 'white';
+                            linkElement.textContent = '已复制邮箱';
+                            linkElement.style.background = accentColor;
+                            linkElement.style.borderColor = accentColor;
+                            linkElement.style.color = 'white';
                             
                             setTimeout(() => {
-                                this.textContent = originalText;
-                                this.style.background = '';
-                                this.style.borderColor = '';
-                                this.style.color = '';
+                                linkElement.textContent = originalText;
+                                linkElement.style.background = '';
+                                linkElement.style.borderColor = '';
+                                linkElement.style.color = '';
                                 // 强制重绘，确保CSS变量生效
-                                this.style.display = 'none';
-                                this.offsetHeight; // 触发重排
-                                this.style.display = '';
+                                linkElement.style.display = 'none';
+                                linkElement.offsetHeight; // 触发重排
+                                linkElement.style.display = '';
                             }, 1500);
+                        }).catch(err => {
+                            console.error('复制失败:', err);
                         });
                     }
                 });
