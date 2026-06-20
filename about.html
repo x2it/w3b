@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="知行工作室项目说明书 - 理会与践行的交互探索">
+    <title>关于 · 知行工作室</title>
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260621">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #4b5563;
+            --text-light: #9ca3af;
+            --dark-color: #111827;
+            --accent-color: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --text-color: #f3f4f6;
+                --text-secondary: #d1d5db;
+                --text-light: #9ca3af;
+                --dark-color: #f9fafb;
+                --accent-color: #8b5cf6;
+                --accent-secondary: #6366f1;
+                --border-color: #374151;
+                --card-bg: #1f2937;
+                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-light: #9ca3af;
+            --dark-color: #f9fafb;
+            --accent-color: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --border-color: #374151;
+            --card-bg: #1f2937;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        body.blue-mode {
+            --bg-color: #f8fafc;
+            --text-color: #0f172a;
+            --text-secondary: #334155;
+            --text-light: #64748b;
+            --dark-color: #020617;
+            --accent-color: #3b82f6;
+            --accent-secondary: #0ea5e9;
+            --border-color: #e0e7ff;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
+            --card-shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.12);
+        }
+
+        body.green-mode {
+            --bg-color: #f0fdf4;
+            --text-color: #065f46;
+            --text-secondary: #166534;
+            --text-light: #15803d;
+            --dark-color: #043626;
+            --accent-color: #10b981;
+            --accent-secondary: #059669;
+            --border-color: #d1fae5;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(16, 185, 129, 0.06);
+            --card-shadow-hover: 0 8px 24px rgba(16, 185, 129, 0.12);
+        }
+
+        body.purple-mode {
+            --bg-color: #faf5ff;
+            --text-color: #4c1d95;
+            --text-secondary: #5b21b6;
+            --text-light: #6d28d9;
+            --dark-color: #311e88;
+            --accent-color: #8b5cf6;
+            --accent-secondary: #7c3aed;
+            --border-color: #ede9fe;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
+            --card-shadow-hover: 0 8px 24px rgba(139, 92, 246, 0.12);
+        }
+
+        body.orange-mode {
+            --bg-color: #fffbeb;
+            --text-color: #78350f;
+            --text-secondary: #92400e;
+            --text-light: #b45309;
+            --dark-color: #451a03;
+            --accent-color: #f97316;
+            --accent-secondary: #ea580c;
+            --border-color: #ffedd5;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(249, 115, 22, 0.06);
+            --card-shadow-hover: 0 8px 24px rgba(249, 115, 22, 0.12);
+        }
+
+        body.teal-mode {
+            --bg-color: #f0fdfa;
+            --text-color: #0f766e;
+            --text-secondary: #134e4a;
+            --text-light: #0d9488;
+            --dark-color: #064e3b;
+            --accent-color: #14b8a6;
+            --accent-secondary: #0d9488;
+            --border-color: #ccfbf1;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(20, 184, 166, 0.06);
+            --card-shadow-hover: 0 8px 24px rgba(20, 184, 166, 0.12);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+        }
+
+        .doc-container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        @media (max-width: 600px) {
+            .doc-container { padding: 2rem 1rem; }
+        }
+
+        .doc-cover {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-cover-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .doc-cover h1 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-cover-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .doc-cover-meta {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .doc-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-section h2 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+        }
+
+        .doc-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.25rem 0 0.5rem;
+        }
+
+        .doc-section p {
+            margin-bottom: 0.75rem;
+            line-height: 1.8;
+        }
+
+        .doc-section ul, .doc-section ol {
+            margin: 0.5rem 0 0.75rem 1.5rem;
+        }
+
+        .doc-section li {
+            margin-bottom: 0.3rem;
+            line-height: 1.7;
+        }
+
+        .doc-callout {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.25rem;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 1.25rem 0;
+            font-size: 0.9rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .doc-callout strong {
+            color: var(--accent-color);
+        }
+
+        .doc-table-wrap {
+            overflow-x: auto;
+            margin: 1.25rem 0;
+        }
+
+        .doc-table-wrap table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .doc-table-wrap th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            background: var(--card-bg);
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .doc-table-wrap td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-table-wrap tr:last-child td { border-bottom: none; }
+
+        .doc-table-wrap code {
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+            font-size: 0.8em;
+            background: var(--card-bg);
+            padding: 0.1em 0.3em;
+            border-radius: 3px;
+        }
+
+        .doc-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin: 1.25rem 0;
+        }
+
+        .doc-info-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .doc-info-card-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+
+        .doc-info-card-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .doc-philosophy {
+            text-align: center;
+            padding: 2rem 1.25rem;
+            margin: 1.5rem 0;
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        .doc-philosophy blockquote {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .doc-philosophy cite {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            font-style: normal;
+        }
+
+        .doc-footer {
+            text-align: center;
+            padding: 2.5rem 0 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .doc-divider {
+            border: none;
+            border-top: 1px solid var(--border-color);
+            margin: 2rem 0;
+        }
+
+        .doc-badge {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            background: var(--card-bg);
+            color: var(--text-light);
+            margin-right: 0.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .doc-badge.accent {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color var(--transition-fast);
+        }
+
+        .back-link:hover {
+            color: var(--accent-color);
+        }
+
+        /* Theme toggle reuse from main page */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 1000;
+            transition: all var(--transition-normal);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .theme-menu {
+            position: fixed;
+            top: 72px;
+            right: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            box-shadow: var(--card-shadow-hover);
+            padding: 0.75rem;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 1000;
+            min-width: 140px;
+        }
+
+        .theme-menu.show { display: flex; }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-color);
+            transition: background var(--transition-fast);
+        }
+
+        .theme-option:hover {
+            background: var(--bg-color);
+        }
+
+        .theme-option.active {
+            background: var(--bg-color);
+            font-weight: 600;
+        }
+
+        .theme-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">🎨</button>
+    <div class="theme-menu" id="themeMenu">
+        <div class="theme-option" data-theme="system">
+            <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
+            <span>系统</span>
+        </div>
+        <div class="theme-option" data-theme="light">
+            <div class="theme-preview" style="background: #6366f1; border-color: #6366f1;"></div>
+            <span>默认</span>
+        </div>
+        <div class="theme-option" data-theme="dark">
+            <div class="theme-preview" style="background: #111827; border-color: #374151;"></div>
+            <span>暗色</span>
+        </div>
+        <div class="theme-option" data-theme="blue">
+            <div class="theme-preview" style="background: #3b82f6; border-color: #3b82f6;"></div>
+            <span>蓝色</span>
+        </div>
+        <div class="theme-option" data-theme="green">
+            <div class="theme-preview" style="background: #10b981; border-color: #10b981;"></div>
+            <span>绿色</span>
+        </div>
+        <div class="theme-option" data-theme="purple">
+            <div class="theme-preview" style="background: #8b5cf6; border-color: #8b5cf6;"></div>
+            <span>紫色</span>
+        </div>
+        <div class="theme-option" data-theme="orange">
+            <div class="theme-preview" style="background: #f97316; border-color: #f97316;"></div>
+            <span>橙色</span>
+        </div>
+        <div class="theme-option" data-theme="teal">
+            <div class="theme-preview" style="background: #14b8a6; border-color: #14b8a6;"></div>
+            <span>青色</span>
+        </div>
+    </div>
+
+    <div class="doc-container">
+        <a href="/" class="back-link">← 返回首页</a>
+
+        <div class="doc-cover">
+            <div class="doc-cover-label">Project Documentation</div>
+            <h1>知行工作室 · 项目说明书</h1>
+            <p class="doc-cover-subtitle">理会与践行的交互探索 — 知行合一的现代实践</p>
+            <div class="doc-cover-meta">
+                版本 2.0 · 2026年6月21日 · w3b.pub
+            </div>
+        </div>
+
+        <div class="doc-philosophy">
+            <blockquote>知是行的主意，行是知的功夫。</blockquote>
+            <cite>— 王阳明《传习录》</cite>
+        </div>
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 01</div>
+            <h2>项目概览</h2>
+            <p>知行工作室（w3b.pub）是一个以"知行合一"为核心理念的个人品牌展示网站。网站通过粒子动画、时间线叙事、交互式平衡器和嵌入式内容模块，将中国传统哲学思想与现代 Web 技术相融合，呈现"理会"（思考与洞察）与"践行"（行动与创造）的动态平衡。</p>
+
+            <div class="doc-info-grid">
+                <div class="doc-info-card">
+                    <div class="doc-info-card-label">网站地址</div>
+                    <div class="doc-info-card-value">w3b.pub</div>
+                </div>
+                <div class="doc-info-card">
+                    <div class="doc-info-card-label">技术栈</div>
+                    <div class="doc-info-card-value">HTML / CSS / JavaScript</div>
+                </div>
+                <div class="doc-info-card">
+                    <div class="doc-info-card-label">部署平台</div>
+                    <div class="doc-info-card-value">GitHub Pages</div>
+                </div>
+                <div class="doc-info-card">
+                    <div class="doc-info-card-label">版本</div>
+                    <div class="doc-info-card-value">v2.0</div>
+                </div>
+            </div>
+
+            <h3>设计理念</h3>
+            <p>网站围绕三条核心线索展开：</p>
+            <ul>
+                <li><strong>理会 · 洞察本质</strong> — 通过粒子动画可视化思维的三种状态（有序、发散、专注），呼应朱熹"穷理"的思想</li>
+                <li><strong>践行 · 当下行动</strong> — 通过时间线串联从《尚书》到王阳明再到当下的知行思想脉络</li>
+                <li><strong>知行合一 · 动态平衡</strong> — 通过交互式天平让用户直观感受知与行的平衡关系</li>
+            </ul>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 02</div>
+            <h2>技术架构</h2>
+
+            <h3>文件结构</h3>
+            <div class="doc-table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>文件</th><th>职责</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>index.html</code></td><td>主页，包含主题变量、页面结构、交互逻辑</td></tr>
+                        <tr><td><code>about.html</code></td><td>项目说明书（本页）</td></tr>
+                        <tr><td><code>assets/css/style.css</code></td><td>通用样式：动画、组件、响应式断点</td></tr>
+                        <tr><td><code>404.html</code></td><td>404 错误页面</td></tr>
+                        <tr><td><code>CNAME</code></td><td>GitHub Pages 自定义域名配置</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>外部依赖</h3>
+            <div class="doc-table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>依赖</th><th>用途</th><th>来源</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Noto Sans SC</td><td>中文字体</td><td>Google Fonts CDN</td></tr>
+                        <tr><td>思考笔记 iframe</td><td>博客内容嵌入</td><td>fudawei.coze.site</td></tr>
+                        <tr><td>项目作品 iframe</td><td>作品集嵌入</td><td>output.coze.site</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 03</div>
+            <h2>页面模块</h2>
+
+            <h3>3.1 粒子动画区（理会 · 洞察本质）</h3>
+            <p>基于 Canvas 的粒子系统，支持三种思维状态切换：</p>
+            <ul>
+                <li><strong>有序思维</strong> — 粒子排列为规则网格，象征逻辑与秩序</li>
+                <li><strong>发散联想</strong> — 粒子自由运动并相互连线，象征创造性思维</li>
+                <li><strong>专注凝聚</strong> — 粒子向中心聚拢，象征深度思考与聚焦</li>
+            </ul>
+            <p>120个粒子，requestAnimationFrame 驱动，支持鼠标/触摸交互。颜色跟随主题变量动态变化。</p>
+
+            <h3>3.2 时间线（践行 · 当下行动）</h3>
+            <p>纵向时间线展示知行思想的历史脉络：</p>
+            <ul>
+                <li><strong>《尚书》</strong> — "非知之艰，行之惟艰。" 中国思想史上对知行关系最早的著名论断</li>
+                <li><strong>朱熹</strong> — "只有两件事：理会，践行。" 强调穷理与力行的先后次序</li>
+                <li><strong>王阳明</strong> — "知是行的主意，行是知的功夫。" 在心学体系中实现知与行的本体统一</li>
+                <li><strong>当下</strong> — 每一个项目、每一次选择，都是古老思想在当下的实践</li>
+            </ul>
+
+            <h3>3.3 平衡器（知行合一 · 动态平衡）</h3>
+            <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
+
+            <h3>3.4 思考笔记 & 项目作品</h3>
+            <p>通过 iframe 嵌入第三方内容，展示最新的思考文章和项目作品。</p>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 04</div>
+            <h2>主题系统</h2>
+            <p>网站支持 8 种主题（默认、暗色、蓝色、绿色、紫色、橙色、青色、系统跟随），通过 CSS 变量实现全局切换。主题偏好通过 <code>localStorage</code> 持久化保存，刷新页面后自动恢复。</p>
+
+            <div class="doc-callout">
+                <strong>主题切换触发方式：</strong>① 手动点击右上角 🎨 按钮<br>
+                ② 系统暗色模式自动适配（当选择"系统"主题时）
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 05</div>
+            <h2>响应式适配</h2>
+            <p>网站适配两个版本，采用 480px 作为唯一断点：</p>
+            <div class="doc-table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目 iframe</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 480px</td><td>1100px</td><td>2000px</td></tr>
+                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>2400px</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-section">
+            <div class="doc-section-label">Chapter 06</div>
+            <h2>部署与维护</h2>
+            <ol>
+                <li>代码推送到 GitHub 仓库 <code>x2it/w3b</code> 的 <code>main</code> 分支</li>
+                <li>GitHub Pages 自动构建并部署到 <code>w3b.pub</code></li>
+                <li>CDN 缓存约 5-10 分钟刷新，通过 <code>style.css?v=xxx</code> 参数强制刷新</li>
+            </ol>
+
+            <div class="doc-callout">
+                <strong>维护注意事项：</strong>iframe 高度需根据第三方页面内容变化定期调整；第三方 iframe 内容由外部维护，无法控制其样式；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
+            </div>
+        </div>
+
+        <hr class="doc-divider">
+
+        <div class="doc-philosophy">
+            <blockquote>理无专在，而学无止境也。然则问可少耶？</blockquote>
+            <cite>— 清代刘开《问说》</cite>
+        </div>
+
+        <div class="doc-footer">
+            <p>知行工作室 · 项目说明书 v2.0</p>
+            <p>2026年6月21日 · w3b.pub</p>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeMenu = document.getElementById('themeMenu');
+            const themeOptions = document.querySelectorAll('.theme-option');
+            const body = document.body;
+
+            themeToggle.addEventListener('click', function() {
+                themeMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!themeToggle.contains(event.target) && !themeMenu.contains(event.target)) {
+                    themeMenu.classList.remove('show');
+                }
+            });
+
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    applyTheme(theme);
+                    localStorage.setItem('theme', theme);
+                    themeMenu.classList.remove('show');
+                });
+            });
+
+            function applyTheme(theme) {
+                body.classList.remove('dark-mode', 'light-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+                themeOptions.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('data-theme') === theme) {
+                        option.classList.add('active');
+                    }
+                });
+
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                } else if (theme === 'light') {
+                    body.classList.add('light-mode');
+                } else if (theme === 'blue') {
+                    body.classList.add('blue-mode');
+                } else if (theme === 'green') {
+                    body.classList.add('green-mode');
+                } else if (theme === 'purple') {
+                    body.classList.add('purple-mode');
+                } else if (theme === 'orange') {
+                    body.classList.add('orange-mode');
+                } else if (theme === 'teal') {
+                    body.classList.add('teal-mode');
+                } else if (theme === 'system') {
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        body.classList.add('dark-mode');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                const currentTheme = localStorage.getItem('theme') || 'system';
+                if (currentTheme === 'system') {
+                    applyTheme('system');
+                }
+            });
+
+            const savedTheme = localStorage.getItem('theme') || 'system';
+            applyTheme(savedTheme);
+        })();
+    </script>
+</body>
+</html>

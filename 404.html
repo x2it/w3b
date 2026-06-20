@@ -4,8 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>页面未找到 · 知行工作室</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260621">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1f2937;
+            --text-secondary: #4b5563;
+            --text-light: #9ca3af;
+            --dark-color: #111827;
+            --accent-color: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #111827;
+                --text-color: #f3f4f6;
+                --text-secondary: #d1d5db;
+                --text-light: #9ca3af;
+                --dark-color: #f9fafb;
+                --accent-color: #8b5cf6;
+                --accent-secondary: #6366f1;
+                --border-color: #374151;
+                --card-bg: #1f2937;
+                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --text-secondary: #d1d5db;
+            --text-light: #9ca3af;
+            --dark-color: #f9fafb;
+            --accent-color: #8b5cf6;
+            --accent-secondary: #6366f1;
+            --border-color: #374151;
+            --card-bg: #1f2937;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+            font-family: 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .site-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.75rem;
+            color: var(--dark-color);
+            line-height: 1.2;
+        }
+
+        .site-subtitle {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.5;
+        }
+
+        .error-section {
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: 300;
+            color: var(--accent-color);
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.6;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .back-home {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-home:hover {
+            background: var(--accent-secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer p { margin-bottom: 0.5rem; }
+
+        .copyright { color: var(--text-light); font-size: 0.85rem; }
+    </style>
 </head>
 <body>
     <header>
@@ -13,24 +145,32 @@
         <p class="site-subtitle">理会 · 践行 - 知与行的交互探索</p>
     </header>
 
-    <section style="text-align: center; padding: 4rem 1rem;">
-        <h2 class="section-title" style="font-size: 3rem;">404</h2>
-        <p class="intro-text" style="max-width: 600px; margin: 0 auto;">
+    <section class="error-section">
+        <div class="error-code">404</div>
+        <p class="error-message">
             页面未找到<br>
             您访问的页面可能已被移除或暂时不可用
         </p>
+        <a href="/" class="back-home">返回首页</a>
     </section>
 
     <footer>
-        <div class="footer-links">
-            <a href="/" class="footer-link" title="返回首页">返回首页</a>
-            <span class="link-divider">|</span>
-            <a href="/#thinking" class="footer-link" title="访问理会">理会</a>
-            <span class="link-divider">|</span>
-            <a href="/#projects" class="footer-link" title="访问践行">践行</a>
-        </div>
         <p>理无专在，而学无止境也。然则问可少耶？</p>
         <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
+
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme && savedTheme !== 'system') {
+                document.body.classList.add(savedTheme + '-mode');
+            } else if (savedTheme === 'system' || !savedTheme) {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDark) {
+                    document.body.classList.add('dark-mode');
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
