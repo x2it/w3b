@@ -194,24 +194,9 @@
             border-radius: 2px;
         }
 
-        /* 不同模块的竖线颜色区分 */
-        #particle-section .section-title::before {
-            background: linear-gradient(180deg, #6366f1, #8b5cf6);
-        }
-        .timeline-section .section-title::before {
-            background: linear-gradient(180deg, #14b8a6, #10b981);
-        }
-        .balance-section .section-title::before {
-            background: linear-gradient(180deg, #6366f1, #14b8a6);
-        }
-        #thinking .section-title::before {
-            background: linear-gradient(180deg, #3b82f6, #6366f1);
-        }
-        #projects .section-title::before {
-            background: linear-gradient(180deg, #8b5cf6, #6366f1);
-        }
-        #contact .section-title::before {
-            background: linear-gradient(180deg, #6366f1, #14b8a6);
+        /* 竖线颜色使用主题变量，切换主题时自动变化 */
+        .section-title::before {
+            background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
         }
 
         /* ===== 模块区域：统一白色卡片，极淡色块区分 ===== */
@@ -249,12 +234,15 @@
             opacity: 0.6;
         }
 
-        #particle-section::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
-        .timeline-section::before { background: linear-gradient(90deg, #14b8a6, #10b981); }
-        .balance-section::before { background: linear-gradient(90deg, #6366f1, #14b8a6); }
-        #thinking::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
-        #projects::before { background: linear-gradient(90deg, #8b5cf6, #6366f1); }
-        #contact::before { background: linear-gradient(90deg, #6366f1, #14b8a6); }
+        /* 顶部色带统一使用主题变量 */
+        #particle-section::before,
+        .timeline-section::before,
+        .balance-section::before,
+        #thinking::before,
+        #projects::before,
+        #contact::before {
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+        }
 
         #particle-section:hover,
         .timeline-section:hover,
