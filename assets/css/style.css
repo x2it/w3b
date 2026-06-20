@@ -842,9 +842,9 @@ input[type=range]::-moz-range-thumb {
 .support-note {
     margin-top: 2rem;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(210,35,42,0.03), rgba(34,34,34,0.03));
+    background: var(--card-bg);
     border-radius: 10px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
 }
 .support-note h3 {
     color: var(--dark-color);
@@ -1079,9 +1079,9 @@ input[type=range]::-moz-range-thumb {
     max-width: 800px;
     margin: 2rem auto;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(210,35,42,0.03), rgba(34,34,34,0.03));
+    background: var(--card-bg);
     border-radius: 10px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     text-align: center;
 }
 .recommend-title { font-size: 1.1rem; color: var(--dark-color); margin-bottom: 0.8rem; }
