@@ -175,11 +175,11 @@
             transition: color var(--transition-normal);
         }
 
-        /* ===== 章节标题：左侧彩色竖线，精致柔和 ===== */
+        /* ===== 章节标题：左侧竖线点缀，极致精致 ===== */
         .section-title {
             color: var(--text-color);
             position: relative;
-            padding-left: 0.85rem;
+            padding-left: 0.75rem;
             transition: color var(--transition-normal);
         }
 
@@ -187,12 +187,12 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 0.1em;
-            bottom: 0.1em;
-            width: 3px;
-            background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
-            border-radius: 3px;
-            opacity: 0.7;
+            top: 0.15em;
+            bottom: 0.15em;
+            width: 2px;
+            background: var(--accent-color);
+            border-radius: 2px;
+            opacity: 0.45;
         }
 
         /* ===== 模块区域：统一白色卡片，极淡色块区分 ===== */
@@ -298,28 +298,28 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 使用充足高度，确保内容完整显示（无滚动条） */
-        /* "理会·思考笔记" - 博客文章列表 (9篇文章 + 头部 + 底部链接) */
+        /* 跨域 iframe 高度：PC端紧凑，手机端充足 */
+        /* PC端第三方页面为2列网格，内容高度较低 */
+        /* "理会·思考笔记" - PC端约1000px，手机端约1200px */
         #thinking .iframe-container.tall iframe {
-            height: 1400px;
-            min-height: 1400px;
+            height: 1050px;
+            min-height: 1050px;
         }
 
-        /* "践行·项目作品" - 项目卡片网格 (9个项目 + 头部 + 底部链接) */
-        /* 手机端卡片纵向排列，每个卡片约200px，9个+头部+底部≈2000px */
+        /* "践行·项目作品" - PC端约1021px，手机端约1800px */
         #projects .iframe-container.tall iframe {
-            height: 2600px;
-            min-height: 2600px;
+            height: 1100px;
+            min-height: 1100px;
         }
 
         @media (max-width: 768px) {
             #thinking .iframe-container.tall iframe {
-                height: 1300px;
-                min-height: 1300px;
+                height: 1200px;
+                min-height: 1200px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2400px;
-                min-height: 2400px;
+                height: 1800px;
+                min-height: 1800px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
