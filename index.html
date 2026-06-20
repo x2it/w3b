@@ -252,38 +252,43 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 高度：保守设置，确保所有设备内容完整显示 */
-        /* 第三方页面在窄宽度下单列布局，内容高度大幅增加 */
+        /* 跨域 iframe 高度 */
+        /* PC端笔记: 实际约1007px → 1100px(余量93px) */
+        /* PC端项目: 实际需1400px → 1500px(余量100px) */
         #thinking .iframe-container.tall iframe {
-            height: 1800px;
-            min-height: 1800px;
+            height: 1100px;
+            min-height: 1100px;
         }
         #projects .iframe-container.tall iframe {
-            height: 2000px;
-            min-height: 2000px;
+            height: 1500px;
+            min-height: 1500px;
         }
 
         @media (max-width: 768px) {
+            /* 平板笔记: 实际约1007px → 1100px */
+            /* 平板项目: 第三方页面可能更高 → 2500px */
             #thinking .iframe-container.tall iframe {
-                height: 1800px;
-                min-height: 1800px;
+                height: 1100px;
+                min-height: 1100px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2000px;
-                min-height: 2000px;
+                height: 2500px;
+                min-height: 2500px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
         }
 
         @media (max-width: 480px) {
+            /* 手机笔记: 实际约1186px → 1300px(余量114px) */
+            /* 手机项目: 第三方页面窄宽度下更高 → 3000px */
             #thinking .iframe-container.tall iframe {
-                height: 1800px;
-                min-height: 1800px;
+                height: 1300px;
+                min-height: 1300px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2000px;
-                min-height: 2000px;
+                height: 3000px;
+                min-height: 3000px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
