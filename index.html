@@ -266,7 +266,7 @@
             position: relative;
             width: 100%;
             margin: 1rem auto;
-            overflow: hidden;
+            overflow: visible;
             max-width: 100%;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
@@ -282,31 +282,32 @@
             width: 100%;
             border: none;
             background: var(--card-bg);
-            overflow: hidden;
+            overflow: visible;
             transition: height var(--transition-smooth);
         }
 
         /* 跨域 iframe 使用充足高度，确保内容完整显示（无滚动条） */
         /* "理会·思考笔记" - 博客文章列表 (9篇文章 + 头部 + 底部链接) */
         #thinking .iframe-container.tall iframe {
-            height: 1600px;
-            min-height: 1600px;
+            height: 1400px;
+            min-height: 1400px;
         }
 
         /* "践行·项目作品" - 项目卡片网格 (9个项目 + 头部 + 底部链接) */
+        /* 手机端卡片纵向排列，每个卡片约200px，9个+头部+底部≈2000px */
         #projects .iframe-container.tall iframe {
-            height: 2200px;
-            min-height: 2200px;
+            height: 2600px;
+            min-height: 2600px;
         }
 
         @media (max-width: 768px) {
             #thinking .iframe-container.tall iframe {
-                height: 1500px;
-                min-height: 1500px;
+                height: 1300px;
+                min-height: 1300px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2000px;
-                min-height: 2000px;
+                height: 2400px;
+                min-height: 2400px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
@@ -314,12 +315,12 @@
 
         @media (max-width: 480px) {
             #thinking .iframe-container.tall iframe {
-                height: 1400px;
-                min-height: 1400px;
+                height: 1200px;
+                min-height: 1200px;
             }
             #projects .iframe-container.tall iframe {
-                height: 1800px;
-                min-height: 1800px;
+                height: 2200px;
+                min-height: 2200px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
