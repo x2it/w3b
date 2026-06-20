@@ -175,11 +175,11 @@
             transition: color var(--transition-normal);
         }
 
-        /* ===== 章节标题：左侧彩色竖线，现代简洁 ===== */
+        /* ===== 章节标题：左侧彩色竖线，精致柔和 ===== */
         .section-title {
             color: var(--text-color);
             position: relative;
-            padding-left: 1rem;
+            padding-left: 0.85rem;
             transition: color var(--transition-normal);
         }
 
@@ -187,16 +187,12 @@
             content: '';
             position: absolute;
             left: 0;
-            top: 0.15em;
-            bottom: 0.15em;
-            width: 4px;
+            top: 0.1em;
+            bottom: 0.1em;
+            width: 3px;
             background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
-            border-radius: 2px;
-        }
-
-        /* 竖线颜色使用主题变量，切换主题时自动变化 */
-        .section-title::before {
-            background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 3px;
+            opacity: 0.7;
         }
 
         /* ===== 模块区域：统一白色卡片，极淡色块区分 ===== */
@@ -217,7 +213,7 @@
             position: relative;
         }
 
-        /* 模块顶部色带区分 */
+        /* 模块顶部色带：精致柔和 */
         #particle-section::before,
         .timeline-section::before,
         .balance-section::before,
@@ -227,21 +223,36 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 1.5rem;
-            right: 1.5rem;
-            height: 3px;
+            left: 2rem;
+            right: 2rem;
+            height: 2px;
             border-radius: 0 0 2px 2px;
-            opacity: 0.6;
+            opacity: 0.5;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
         }
 
-        /* 顶部色带统一使用主题变量 */
-        #particle-section::before,
-        .timeline-section::before,
-        .balance-section::before,
-        #thinking::before,
-        #projects::before,
-        #contact::before {
-            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+        @media (max-width: 768px) {
+            #particle-section::before,
+            .timeline-section::before,
+            .balance-section::before,
+            #thinking::before,
+            #projects::before,
+            #contact::before {
+                left: 1rem;
+                right: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #particle-section::before,
+            .timeline-section::before,
+            .balance-section::before,
+            #thinking::before,
+            #projects::before,
+            #contact::before {
+                left: 0.75rem;
+                right: 0.75rem;
+            }
         }
 
         #particle-section:hover,
