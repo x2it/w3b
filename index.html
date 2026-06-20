@@ -288,25 +288,40 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 使用大高度确保内容完整 */
-        .iframe-container.tall iframe {
-            height: 2000px;
-            min-height: 2000px;
+        /* 跨域 iframe 使用合理高度，避免过多空白 */
+        /* "理会·思考笔记" - 博客文章列表 */
+        #thinking .iframe-container.tall iframe {
+            height: 1100px;
+            min-height: 1100px;
+        }
+
+        /* "践行·项目作品" - 项目卡片网格 */
+        #projects .iframe-container.tall iframe {
+            height: 900px;
+            min-height: 900px;
         }
 
         @media (max-width: 768px) {
-            .iframe-container.tall iframe {
-                height: 1800px;
-                min-height: 1800px;
+            #thinking .iframe-container.tall iframe {
+                height: 1000px;
+                min-height: 1000px;
+            }
+            #projects .iframe-container.tall iframe {
+                height: 850px;
+                min-height: 850px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
         }
 
         @media (max-width: 480px) {
-            .iframe-container.tall iframe {
-                height: 1600px;
-                min-height: 1600px;
+            #thinking .iframe-container.tall iframe {
+                height: 950px;
+                min-height: 950px;
+            }
+            #projects .iframe-container.tall iframe {
+                height: 800px;
+                min-height: 800px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
