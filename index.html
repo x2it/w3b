@@ -252,25 +252,26 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 高度：统一设足够大，确保内容完整显示 */
-        /* 第三方页面内容高度随视口宽度变化，保守设置 */
+        /* 跨域 iframe 高度：基于精确测量 + 余量 */
+        /* 笔记: 375px宽→1186px, 768px+宽→1007px */
+        /* 项目: 375px宽→667px, 768px宽→736px, 1058px宽→需1400px(iframe内3列布局) */
         #thinking .iframe-container.tall iframe {
-            height: 1600px;
-            min-height: 1600px;
+            height: 1100px;
+            min-height: 1100px;
         }
         #projects .iframe-container.tall iframe {
-            height: 1800px;
-            min-height: 1800px;
+            height: 1400px;
+            min-height: 1400px;
         }
 
         @media (max-width: 768px) {
             #thinking .iframe-container.tall iframe {
-                height: 1600px;
-                min-height: 1600px;
+                height: 1100px;
+                min-height: 1100px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2600px;
-                min-height: 2600px;
+                height: 850px;
+                min-height: 850px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
@@ -278,12 +279,12 @@
 
         @media (max-width: 480px) {
             #thinking .iframe-container.tall iframe {
-                height: 1600px;
-                min-height: 1600px;
+                height: 1300px;
+                min-height: 1300px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2800px;
-                min-height: 2800px;
+                height: 800px;
+                min-height: 800px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
