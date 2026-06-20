@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="知行工作室 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
+    <meta name="description" content="知行工作室的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
     <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260620c">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260621">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         /* ===== 主题变量 ===== */
@@ -185,7 +185,7 @@
             transition: all var(--transition-normal);
         }
 
-        /* ===== 模块区域：白色卡片，微妙背景差异区分 ===== */
+        /* ===== 模块区域：白色卡片 ===== */
         #particle-section,
         .timeline-section,
         .balance-section,
@@ -199,17 +199,7 @@
             padding: 2.5rem 1.5rem;
             border: 1px solid var(--border-color);
             box-shadow: var(--card-shadow);
-            transition: all var(--transition-normal);
-        }
-
-        /* 模块统一纯色背景，无渐变 */
-        #particle-section,
-        .timeline-section,
-        .balance-section,
-        #thinking,
-        #projects,
-        #contact {
-            background: var(--card-bg);
+            transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
         }
 
         #particle-section:hover,
@@ -519,7 +509,7 @@
 </head>
 <body>
     <!-- 主题切换 -->
-    <div class="theme-toggle" id="themeToggle" title="切换主题">🎨</div>
+    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">🎨</button>
     <div class="theme-menu" id="themeMenu">
         <div class="theme-option" data-theme="light">
             <div class="theme-preview" style="background: #ffffff; border-color: #e5e7eb;"></div>
@@ -562,7 +552,7 @@
 
     <section id="particle-section">
         <h2 class="section-title">理会 · 洞察本质</h2>
-        <canvas id="particle-canvas"></canvas>
+        <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示思维的不同状态"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
             <button class="control-btn" id="btn-order" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">有序思维</button>
             <button class="control-btn" id="btn-chaos" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">发散联想</button>
@@ -630,7 +620,7 @@
     </section>
 
     <!-- 整合内容 -->
-    <section id="blog-content">
+    <div id="blog-content">
         <section id="thinking">
             <h3 class="section-title">理会 · 思考笔记</h3>
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
@@ -640,8 +630,9 @@
                 <iframe
                     src="https://fudawei.coze.site/embed?limit=10&theme=light"
                     width="100%"
-                    frameborder="0"
                     scrolling="no"
+                    loading="lazy"
+                    title="Davi的践行笔记"
                     style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
@@ -656,8 +647,9 @@
                 <iframe
                     src="https://output.coze.site/embed?theme=neutral"
                     width="100%"
-                    frameborder="0"
                     scrolling="no"
+                    loading="lazy"
+                    title="7喵仓库 - 项目作品集"
                     style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
@@ -681,7 +673,7 @@
                 </p>
             </div>
         </section>
-    </section>
+    </div>
 
     <div class="footer-links">
         <a href="#" class="footer-link" title="回到顶部">顶部</a>
@@ -697,7 +689,7 @@
     </footer>
 
     <!-- 返回顶部按钮 -->
-    <div class="back-to-top" id="backToTop" title="返回顶部">↑</div>
+    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部">↑</button>
 
     <script>
         (function() {
