@@ -191,8 +191,7 @@
         .balance-section,
         #blog-content,
         #thinking,
-        #projects,
-        #contact {
+        #projects {
             background: var(--card-bg);
             border-radius: var(--radius-lg);
             margin: 2rem 0;
@@ -206,15 +205,9 @@
         .timeline-section:hover,
         .balance-section:hover,
         #thinking:hover,
-        #projects:hover,
-        #contact:hover {
+        #projects:hover {
             box-shadow: var(--card-shadow-hover);
             transform: translateY(-2px);
-        }
-
-        #contact {
-            border-radius: var(--radius-md);
-            padding: 2rem;
         }
 
         /* ===== iframe 容器 ===== */
@@ -266,7 +259,7 @@
                 min-height: 2400px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
-            #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
+            #thinking, #projects { padding: 1rem; margin-bottom: 1rem; }
             #particle-section, .timeline-section, .balance-section {
                 margin: 1.25rem 0;
                 padding: 2rem 0.75rem;
@@ -467,12 +460,18 @@
             box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
         }
 
-        /* ===== 联系区域 ===== */
-        .contact-section {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-normal);
+        /* ===== 联系区域（融入footer） ===== */
+        #contact {
+            text-align: center;
+            padding: 2.5rem 1.5rem 1.5rem;
+            margin: 0;
+            border: none;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        #contact .section-title {
+            margin-bottom: 0.75rem;
         }
 
         .email-link {
@@ -654,28 +653,26 @@
                 ></iframe>
             </div>
         </section>
-
-        <section id="contact">
-            <h3 class="section-title">联系交流</h3>
-            <div class="contact-section">
-                <p style="color: var(--text-secondary); line-height: 1.6;">
-                    在思考与实践的路上，期待与你交流碰撞，共同成长。
-                </p>
-                
-                <div class="email-wrapper">
-                    <a href="mailto:support@w3b.pub" class="email-link">
-                        support@w3b.pub
-                    </a>
-                </div>
-                
-                <p style="color: var(--text-light); font-size: 0.9rem; margin-top: 1rem;">
-                    一般会在1-2天内回复邮件
-                </p>
-            </div>
-        </section>
     </div>
 
     <footer>
+        <section id="contact">
+            <h3 class="section-title">联系交流</h3>
+            <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; line-height: 1.6; font-size: 0.95rem;">
+                在思考与实践的路上，期待与你交流碰撞，共同成长。
+            </p>
+            <div class="email-wrapper" style="text-align: center;">
+                <a href="mailto:support@w3b.pub" class="email-link">
+                    support@w3b.pub
+                </a>
+            </div>
+            <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem;">
+                一般会在1-2天内回复邮件
+            </p>
+        </section>
+
+        <div style="border-top: 1px solid var(--border-color); margin: 1.5rem 0 1rem; opacity: 0.5;"></div>
+
         <div class="footer-links">
             <a href="/about.html" class="footer-link" title="关于">关于</a>
             <span class="link-divider">|</span>
@@ -683,7 +680,7 @@
             <span class="link-divider">|</span>
             <a href="#projects" class="footer-link" title="浏览作品内容">践行</a>
         </div>
-        <p>理无专在，而学无止境也。然则问可少耶？</p>
+        <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem; text-align: center;">理无专在，而学无止境也。然则问可少耶？</p>
         <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
