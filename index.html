@@ -19,7 +19,7 @@
             --accent-secondary: #8b5cf6;
             --border-color: #e5e7eb;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
             --radius-sm: 8px;
             --radius-md: 12px;
@@ -40,7 +40,7 @@
                 --accent-secondary: #6366f1;
                 --border-color: #374151;
                 --card-bg: #1f2937;
-                --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
                 --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
             }
         }
@@ -55,7 +55,7 @@
             --accent-secondary: #6366f1;
             --border-color: #374151;
             --card-bg: #1f2937;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
         }
 
@@ -69,7 +69,7 @@
             --accent-secondary: #0ea5e9;
             --border-color: #e0e7ff;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(59, 130, 246, 0.06);
+            --card-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.12);
         }
 
@@ -83,7 +83,7 @@
             --accent-secondary: #059669;
             --border-color: #d1fae5;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(16, 185, 129, 0.06);
+            --card-shadow: 0 2px 8px rgba(16, 185, 129, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(16, 185, 129, 0.12);
         }
 
@@ -97,7 +97,7 @@
             --accent-secondary: #7c3aed;
             --border-color: #ede9fe;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(139, 92, 246, 0.06);
+            --card-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(139, 92, 246, 0.12);
         }
 
@@ -111,7 +111,7 @@
             --accent-secondary: #ea580c;
             --border-color: #ffedd5;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(249, 115, 22, 0.06);
+            --card-shadow: 0 2px 8px rgba(249, 115, 22, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(249, 115, 22, 0.12);
         }
 
@@ -125,7 +125,7 @@
             --accent-secondary: #0d9488;
             --border-color: #ccfbf1;
             --card-bg: #ffffff;
-            --card-shadow: 0 4px 20px rgba(20, 184, 166, 0.06);
+            --card-shadow: 0 2px 8px rgba(20, 184, 166, 0.06);
             --card-shadow-hover: 0 8px 24px rgba(20, 184, 166, 0.12);
         }
 
@@ -156,178 +156,121 @@
 
         /* ===== 头部 ===== */
         header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            border-bottom: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            border-radius: var(--radius-lg);
-            margin: 2rem 1rem;
-            padding: 3rem 1rem;
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.04));
+            color: var(--text-color);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
             transition: all var(--transition-normal);
         }
 
         .site-title {
-            background: linear-gradient(135deg, #ffffff, #e0e7ff);
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .site-subtitle {
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--text-secondary);
             transition: color var(--transition-normal);
         }
 
-        /* ===== 章节标题 ===== */
+        /* ===== 章节标题：左侧彩色竖线，现代简洁 ===== */
         .section-title {
             color: var(--text-color);
             position: relative;
+            padding-left: 1rem;
             transition: color var(--transition-normal);
         }
 
-        /* 理会·洞察本质 - 蓝色下划线 */
-        #particle-section .section-title::after {
+        .section-title::before {
             content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-            margin: 0.75rem auto;
+            position: absolute;
+            left: 0;
+            top: 0.15em;
+            bottom: 0.15em;
+            width: 4px;
+            background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
             border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
         }
 
-        /* 践行·当下行动 - 绿色下划线 */
-        .timeline-section .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #10b981, #14b8a6);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+        /* 不同模块的竖线颜色区分 */
+        #particle-section .section-title::before {
+            background: linear-gradient(180deg, #6366f1, #8b5cf6);
+        }
+        .timeline-section .section-title::before {
+            background: linear-gradient(180deg, #14b8a6, #10b981);
+        }
+        .balance-section .section-title::before {
+            background: linear-gradient(180deg, #6366f1, #14b8a6);
+        }
+        #thinking .section-title::before {
+            background: linear-gradient(180deg, #3b82f6, #6366f1);
+        }
+        #projects .section-title::before {
+            background: linear-gradient(180deg, #8b5cf6, #6366f1);
+        }
+        #contact .section-title::before {
+            background: linear-gradient(180deg, #6366f1, #14b8a6);
         }
 
-        /* 知行合一·动态平衡 - 蓝绿融合下划线 */
-        .balance-section .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #6366f1, #14b8a6);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
-        }
-
-        /* 理会·思考笔记 - 蓝色下划线 */
-        #thinking .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
-        }
-
-        /* 践行·项目作品 - 绿色下划线 */
-        #projects .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #10b981, #14b8a6);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
-        }
-
-        /* 联系交流 - 蓝绿融合下划线 */
-        #contact .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, #6366f1, #14b8a6);
-            margin: 0.75rem auto;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
-        }
-
-        /* ===== 粒子区域 ===== */
-        #particle-section {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+        /* ===== 模块区域：统一白色卡片，极淡色块区分 ===== */
+        #particle-section,
+        .timeline-section,
+        .balance-section,
+        #blog-content,
+        #thinking,
+        #projects,
+        #contact {
+            background: var(--card-bg);
             border-radius: var(--radius-lg);
-            margin: 2rem 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            padding: 3rem 1rem;
+            margin: 2rem 0;
+            padding: 2.5rem 1.5rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: all var(--transition-normal);
             position: relative;
-            overflow: hidden;
-            transition: all var(--transition-normal);
         }
 
-        /* ===== 时间线区域 ===== */
-        .timeline-section {
-            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            border-radius: var(--radius-lg);
-            margin: 2rem 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            padding: 3rem 1rem;
-            transition: all var(--transition-normal);
+        /* 模块顶部色带区分 */
+        #particle-section::before,
+        .timeline-section::before,
+        .balance-section::before,
+        #thinking::before,
+        #projects::before,
+        #contact::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 1.5rem;
+            right: 1.5rem;
+            height: 3px;
+            border-radius: 0 0 2px 2px;
+            opacity: 0.6;
         }
 
-        /* ===== 平衡器区域 ===== */
-        .balance-section {
-            background: linear-gradient(135deg, #eef2ff 0%, #f0fdfa 100%);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-            border-radius: var(--radius-lg);
-            margin: 2rem 1rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            padding: 3rem 1rem;
-            transition: all var(--transition-normal);
-        }
+        #particle-section::before { background: linear-gradient(90deg, #6366f1, #8b5cf6); }
+        .timeline-section::before { background: linear-gradient(90deg, #14b8a6, #10b981); }
+        .balance-section::before { background: linear-gradient(90deg, #6366f1, #14b8a6); }
+        #thinking::before { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+        #projects::before { background: linear-gradient(90deg, #8b5cf6, #6366f1); }
+        #contact::before { background: linear-gradient(90deg, #6366f1, #14b8a6); }
 
-        /* ===== 博客内容区域 ===== */
-        #blog-content {
-            background: var(--bg-color);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin: 2rem 1rem;
-            transition: all var(--transition-normal);
-        }
-
-        #thinking {
-            background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 100%);
-            border: 1px solid rgba(59, 130, 246, 0.1);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            transition: all var(--transition-normal);
-        }
-
-        #projects {
-            background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            transition: all var(--transition-normal);
+        #particle-section:hover,
+        .timeline-section:hover,
+        .balance-section:hover,
+        #thinking:hover,
+        #projects:hover,
+        #contact:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-2px);
         }
 
         #contact {
-            background: linear-gradient(135deg, #f0f4ff 0%, #f0fdf4 100%);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(135deg, var(--bg-color), rgba(20, 184, 166, 0.02));
             border-radius: var(--radius-md);
             padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: var(--card-shadow);
             transition: all var(--transition-normal);
         }
 
@@ -392,14 +335,10 @@
                 height: 2200px;
                 min-height: 2200px;
             }
-            #blog-content { padding: 1rem; margin: 1rem 0.5rem; }
+            #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
             #particle-section, .timeline-section, .balance-section {
-                margin: 1.25rem 0.5rem;
-                padding: 2rem 0.75rem;
-            }
-            header {
-                margin: 1.25rem 0.5rem;
+                margin: 1.25rem 0;
                 padding: 2rem 0.75rem;
             }
         }
@@ -410,8 +349,8 @@
             top: 20px;
             right: 20px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 50%;
             width: 48px;
             height: 48px;
@@ -419,7 +358,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: var(--card-shadow);
             transition: all var(--transition-normal);
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
@@ -429,8 +368,7 @@
 
         .theme-toggle:hover {
             transform: scale(1.08);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            background: rgba(255, 255, 255, 0.35);
+            box-shadow: var(--card-shadow-hover);
         }
 
         .theme-toggle:active {
@@ -452,10 +390,10 @@
             top: 78px;
             right: 20px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: var(--card-shadow-hover);
             padding: 8px;
             display: none;
             flex-direction: column;
@@ -506,7 +444,7 @@
         }
 
         .theme-option:hover {
-            background: rgba(99, 102, 241, 0.08);
+            background: var(--border-color);
         }
 
         .theme-option:active {
@@ -536,25 +474,25 @@
         /* ===== 平衡器容器 ===== */
         .balance-container {
             background: var(--card-bg);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             transition: all var(--transition-normal);
         }
 
         /* ===== 底部导航 ===== */
         .footer-links {
-            background: linear-gradient(135deg, #f8fafc 0%, #f0f4ff 100%);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.02));
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin: 2rem 1rem;
+            box-shadow: var(--card-shadow);
+            margin: 2rem 0;
             transition: all var(--transition-normal);
         }
 
         .footer-link {
             color: var(--text-secondary);
             background: var(--card-bg);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-sm);
             transition: all var(--transition-normal);
         }
@@ -563,31 +501,30 @@
             color: var(--accent-color);
             background: rgba(99, 102, 241, 0.04);
             transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: var(--card-shadow);
         }
 
         /* ===== 页脚 ===== */
         footer {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: #ffffff;
-            border: none;
+            background: linear-gradient(135deg, var(--bg-color), rgba(99, 102, 241, 0.03));
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-lg);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin: 2rem 1rem;
-            padding: 2rem 1rem;
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
             transition: all var(--transition-normal);
         }
 
         footer p, .copyright {
-            color: rgba(255, 255, 255, 0.75);
+            color: var(--text-secondary);
             transition: color var(--transition-normal);
         }
 
         /* ===== 返回顶部 ===== */
         .back-to-top {
-            background: rgba(255, 255, 255, 0.85);
+            background: var(--card-bg);
             color: var(--accent-color);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: all var(--transition-normal);
@@ -603,14 +540,14 @@
         /* ===== 联系区域 ===== */
         .contact-section {
             background: var(--card-bg);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
             transition: all var(--transition-normal);
         }
 
         .email-link {
             background: var(--card-bg);
-            border: 1px solid rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
             color: var(--text-color);
             font-weight: 500;
             transition: all var(--transition-normal);
