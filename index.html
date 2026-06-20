@@ -225,24 +225,32 @@
         .iframe-container iframe {
             display: block;
             width: 100%;
-            height: 80vh;
-            min-height: 600px;
             border: none;
             background: var(--card-bg);
             overflow: auto;
+            /* 初始高度，JS 会自动调整 */
+            height: 600px;
+            min-height: 600px;
+            transition: height 0.3s ease;
+        }
+
+        /* 跨域 iframe 无法直接获取内容高度，使用大高度确保内容完整显示 */
+        .iframe-container.tall iframe {
+            height: 2000px;
+            min-height: 2000px;
         }
 
         @media (max-width: 768px) {
-            .iframe-container iframe {
-                height: 70vh;
-                min-height: 500px;
+            .iframe-container.tall iframe {
+                height: 1800px;
+                min-height: 1800px;
             }
         }
 
         @media (max-width: 480px) {
-            .iframe-container iframe {
-                height: 60vh;
-                min-height: 450px;
+            .iframe-container.tall iframe {
+                height: 1600px;
+                min-height: 1600px;
             }
         }
 
@@ -581,7 +589,7 @@
     <section id="blog-content">
         <section id="thinking">
             <h3 class="section-title">理会 · 思考笔记</h3>
-            <div class="iframe-container">
+            <div class="iframe-container tall">
                 <iframe
                     src="https://fudawei.coze.site/embed?limit=10&theme=light"
                     width="100%"
@@ -594,7 +602,7 @@
 
         <section id="projects">
             <h3 class="section-title">践行 · 项目作品</h3>
-            <div class="iframe-container">
+            <div class="iframe-container tall">
                 <iframe
                     src="https://output.coze.site/embed?theme=neutral"
                     width="100%"
@@ -1114,6 +1122,20 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             }
+            // iframe 高度自适应（兼容方案）
+            // 跨域 iframe 无法直接获取内容高度，通过 postMessage 监听
+            window.addEventListener('message', function(event) {
+                const iframes = document.querySelectorAll('.iframe-container iframe');
+                iframes.forEach(function(iframe) {
+                    try {
+                        if (event.source === iframe.contentWindow) {
+                            if (event.data && typeof event.data === 'object' && event.data.height) {
+                                iframe.style.height = Math.max(event.data.height + 40, 600) + 'px';
+                            }
+                        }
+                    } catch (e) {}
+                });
+            });
         })();
     </script>
 </body>
