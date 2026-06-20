@@ -113,14 +113,9 @@ body {
 header {
     text-align: center;
     padding: 3rem 1rem 2rem;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(--border-color);
     margin-bottom: 2rem;
-    background: linear-gradient(
-        135deg, 
-        var(--card-bg) 0%, 
-        rgba(99, 102, 241, 0.05) 50%,
-        var(--card-bg) 100%
-    );
+    background: var(--bg-color);
     border-radius: 12px;
     box-shadow: var(--card-shadow);
     margin-top: 1rem;
@@ -193,7 +188,7 @@ h1, .site-title, .blog-title {
     justify-content: center;
     touch-action: manipulation;
     background: var(--gray-light);
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     white-space: nowrap;
     flex-shrink: 0;
     position: relative;
@@ -256,7 +251,7 @@ h1, .site-title, .blog-title {
 /* 章节 */
 section {
     padding: 3rem 1rem;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(--border-color);
 }
 section:last-of-type { border-bottom: none; }
 @media (max-width: 768px) { section { padding: 2rem 0.75rem; } }
@@ -681,7 +676,7 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     box-shadow: var(--card-shadow);
     transition: all 0.4s var(--ease-out-expo);
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -712,7 +707,7 @@ input[type=range]::-moz-range-thumb {
 }
 .article-header {
     padding: 1.2rem;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(--border-color);
     background: linear-gradient(135deg, var(--gray-light), #f0f0f0);
 }
 .article-category {
@@ -780,7 +775,7 @@ input[type=range]::-moz-range-thumb {
     padding: 1.5rem;
     background: white;
     border-radius: 10px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
 }
 @media (min-width: 769px) {
@@ -872,7 +867,7 @@ input[type=range]::-moz-range-thumb {
     overflow: hidden;
     box-shadow: var(--card-shadow);
     transition: all 0.4s var(--ease-out-expo);
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -903,7 +898,7 @@ input[type=range]::-moz-range-thumb {
 }
 .tool-header {
     padding: 1.2rem;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(--border-color);
     background: linear-gradient(135deg, var(--gray-light), #f0f0f0);
 }
 .tool-icon {
@@ -1003,7 +998,7 @@ input[type=range]::-moz-range-thumb {
 .tool-footer {
     padding: 1rem;
     background: var(--gray-light);
-    border-top: 1px solid var(--gray-border);
+    border-top: 1px solid var(--border-color);
     text-align: center;
 }
 .explore-btn {
@@ -1038,7 +1033,7 @@ input[type=range]::-moz-range-thumb {
     padding: 1.5rem;
     background: white;
     border-radius: 12px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
 }
 @media (max-width: 768px) { .quick-find { padding: 1.2rem; margin: 2.5rem auto 1.5rem; } }
@@ -1057,7 +1052,7 @@ input[type=range]::-moz-range-thumb {
     text-decoration: none;
     color: var(--text-primary);
     font-weight: 500;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
     font-size: 0.85rem;
     min-height: 36px;
@@ -1098,7 +1093,7 @@ input[type=range]::-moz-range-thumb {
     padding: 1.5rem;
     background: var(--gray-light);
     border-radius: 12px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
 }
 .footer-link {
     color: var(--text-primary);
@@ -1116,7 +1111,7 @@ input[type=range]::-moz-range-thumb {
     text-align: center;
     touch-action: manipulation;
     background: white;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
 }
 .footer-link:hover {
     color: var(--primary-color);
@@ -1193,7 +1188,7 @@ footer p { margin-bottom: 0.75rem; line-height: 1.6; }
     background: white;
     border-radius: 12px;
     box-shadow: var(--card-shadow);
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
 }
 .post-content h1 {
     font-size: 2rem;
@@ -1206,7 +1201,7 @@ footer p { margin-bottom: 0.75rem; line-height: 1.6; }
     font-size: 0.9rem;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(--border-color);
 }
 .post-category {
     display: inline-block;
