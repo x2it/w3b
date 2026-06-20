@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="知行工作室 的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
     <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260620">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260620b">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         /* ===== 主题变量 ===== */
@@ -202,24 +202,14 @@
             transition: all var(--transition-normal);
         }
 
-        /* 模块间微妙背景色差异，融合不割裂 */
-        #particle-section {
-            background: linear-gradient(135deg, var(--card-bg), rgba(99, 102, 241, 0.015));
-        }
-        .timeline-section {
-            background: linear-gradient(135deg, var(--card-bg), rgba(16, 185, 129, 0.015));
-        }
-        .balance-section {
-            background: linear-gradient(135deg, var(--card-bg), rgba(99, 102, 241, 0.01));
-        }
-        #thinking {
-            background: linear-gradient(135deg, var(--card-bg), rgba(59, 130, 246, 0.015));
-        }
-        #projects {
-            background: linear-gradient(135deg, var(--card-bg), rgba(139, 92, 246, 0.015));
-        }
+        /* 模块统一纯色背景，无渐变 */
+        #particle-section,
+        .timeline-section,
+        .balance-section,
+        #thinking,
+        #projects,
         #contact {
-            background: linear-gradient(135deg, var(--card-bg), rgba(20, 184, 166, 0.015));
+            background: var(--card-bg);
         }
 
         #particle-section:hover,
@@ -291,12 +281,12 @@
 
         @media (max-width: 480px) {
             #thinking .iframe-container.tall iframe {
-                height: 1350px;
-                min-height: 1350px;
+                height: 1200px;
+                min-height: 1200px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2500px;
-                min-height: 2500px;
+                height: 2200px;
+                min-height: 2200px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
