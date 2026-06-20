@@ -1160,22 +1160,7 @@ footer {
     margin-top: 2rem;
 }
 
-footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 2px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        var(--accent-color),
-        transparent
-    );
-    border-radius: 0 0 3px 3px;
-}
+/* footer装饰线已删除 - 与知行合一融合理念不协调 */
 
 footer p { margin-bottom: 0.75rem; line-height: 1.6; }
 .copyright { font-size: 0.85rem; opacity: 0.8; margin-top: 1rem; color: var(--text-secondary); }
