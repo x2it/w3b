@@ -252,28 +252,25 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 高度：PC端紧凑，手机端充足 */
-        /* PC端第三方页面为2列网格，内容高度较低 */
-        /* "理会·思考笔记" - PC端约1000px，手机端约1200px */
+        /* 跨域 iframe 高度：统一设足够大，确保内容完整显示 */
+        /* 第三方页面内容高度随视口宽度变化，保守设置 */
         #thinking .iframe-container.tall iframe {
-            height: 1050px;
-            min-height: 1050px;
+            height: 1600px;
+            min-height: 1600px;
         }
-
-        /* "践行·项目作品" - 需要充足高度确保显示到底部访问链接 */
         #projects .iframe-container.tall iframe {
-            height: 1500px;
-            min-height: 1500px;
+            height: 1800px;
+            min-height: 1800px;
         }
 
         @media (max-width: 768px) {
             #thinking .iframe-container.tall iframe {
-                height: 1200px;
-                min-height: 1200px;
+                height: 1600px;
+                min-height: 1600px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2000px;
-                min-height: 2000px;
+                height: 2600px;
+                min-height: 2600px;
             }
             #blog-content { padding: 1.25rem; }
             #thinking, #projects, #contact { padding: 1.25rem; margin-bottom: 1.25rem; }
@@ -281,12 +278,12 @@
 
         @media (max-width: 480px) {
             #thinking .iframe-container.tall iframe {
-                height: 1200px;
-                min-height: 1200px;
+                height: 1600px;
+                min-height: 1600px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2200px;
-                min-height: 2200px;
+                height: 2800px;
+                min-height: 2800px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects, #contact { padding: 1rem; margin-bottom: 1rem; }
