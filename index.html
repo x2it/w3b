@@ -16,6 +16,7 @@
             --text-light: #9ca3af;
             --dark-color: #111827;
             --accent-color: #6366f1;
+            --accent-rgb: 99, 102, 241;
             --accent-secondary: #8b5cf6;
             --border-color: #e5e7eb;
             --card-bg: #ffffff;
@@ -37,12 +38,14 @@
                 --text-light: #9ca3af;
                 --dark-color: #f9fafb;
                 --accent-color: #8b5cf6;
+                --accent-rgb: 139, 92, 246;
                 --accent-secondary: #6366f1;
                 --border-color: #374151;
                 --card-bg: #1f2937;
                 --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
                 --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
             }
+
         }
 
         body.dark-mode {
@@ -52,6 +55,7 @@
             --text-light: #9ca3af;
             --dark-color: #f9fafb;
             --accent-color: #8b5cf6;
+            --accent-rgb: 139, 92, 246;
             --accent-secondary: #6366f1;
             --border-color: #374151;
             --card-bg: #1f2937;
@@ -66,6 +70,7 @@
             --text-light: #64748b;
             --dark-color: #020617;
             --accent-color: #3b82f6;
+            --accent-rgb: 59, 130, 246;
             --accent-secondary: #0ea5e9;
             --border-color: #e0e7ff;
             --card-bg: #ffffff;
@@ -80,6 +85,7 @@
             --text-light: #15803d;
             --dark-color: #043626;
             --accent-color: #10b981;
+            --accent-rgb: 16, 185, 129;
             --accent-secondary: #059669;
             --border-color: #d1fae5;
             --card-bg: #ffffff;
@@ -94,6 +100,7 @@
             --text-light: #6d28d9;
             --dark-color: #311e88;
             --accent-color: #8b5cf6;
+            --accent-rgb: 139, 92, 246;
             --accent-secondary: #7c3aed;
             --border-color: #ede9fe;
             --card-bg: #ffffff;
@@ -108,6 +115,7 @@
             --text-light: #b45309;
             --dark-color: #451a03;
             --accent-color: #f97316;
+            --accent-rgb: 249, 115, 22;
             --accent-secondary: #ea580c;
             --border-color: #ffedd5;
             --card-bg: #ffffff;
@@ -122,6 +130,7 @@
             --text-light: #0d9488;
             --dark-color: #064e3b;
             --accent-color: #14b8a6;
+            --accent-rgb: 20, 184, 166;
             --accent-secondary: #0d9488;
             --border-color: #ccfbf1;
             --card-bg: #ffffff;
@@ -223,7 +232,7 @@
         }
 
         .iframe-container:hover {
-            border-color: rgba(99, 102, 241, 0.2);
+            border-color: rgba(var(--accent-rgb), 0.2);
         }
 
         .iframe-container iframe {
@@ -422,7 +431,7 @@
 
         .footer-link:hover {
             color: var(--accent-color);
-            background: rgba(99, 102, 241, 0.04);
+            background: rgba(var(--accent-rgb), 0.04);
             transform: translateY(-2px);
             box-shadow: var(--card-shadow);
         }
@@ -458,7 +467,7 @@
             background: var(--accent-color);
             color: white;
             border-color: var(--accent-color);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.3);
         }
 
         /* ===== 联系区域（融入footer） ===== */
@@ -488,7 +497,7 @@
             border-color: var(--accent-color) !important;
             color: white !important;
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+            box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
         }
 
         /* ===== 粒子控制按钮优化 ===== */
@@ -554,9 +563,9 @@
         <h2 class="section-title">理会 · 洞察本质</h2>
         <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示思维的不同状态"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
-            <button class="control-btn" id="btn-order" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">有序思维</button>
-            <button class="control-btn" id="btn-chaos" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">发散联想</button>
-            <button class="control-btn" id="btn-focus" style="margin: 0 10px; padding: 12px 24px; border: none; border-radius: 8px; background: var(--accent-color); color: white; cursor: pointer; transition: all 0.3s ease;">专注凝聚</button>
+            <button class="control-btn" id="btn-order" style="margin: 0 10px;">有序思维</button>
+            <button class="control-btn" id="btn-chaos" style="margin: 0 10px;">发散联想</button>
+            <button class="control-btn" id="btn-focus" style="margin: 0 10px;">专注凝聚</button>
         </div>
         <p style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
             思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为"理"之过程。
@@ -588,7 +597,7 @@
                 </div>
             </div>
             <div class="timeline-item">
-                <div class="timeline-content" style="border-color: var(--accent-color);">
+                <div class="timeline-content">
                     <h3>当下 · 你的行动</h3>
                     <p>每一个项目、每一次选择，都是古老思想在当下的实践与回响。</p>
                 </div>
@@ -633,7 +642,6 @@
                     scrolling="no"
                     loading="lazy"
                     title="Davi的践行笔记"
-                    style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
         </section>
@@ -650,7 +658,6 @@
                     scrolling="no"
                     loading="lazy"
                     title="7喵仓库 - 项目作品集"
-                    style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
         </section>
@@ -672,7 +679,7 @@
             </p>
         </section>
 
-        <div style="border-top: 1px solid var(--border-color); margin: 1.5rem 0 1rem; opacity: 0.5;"></div>
+        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0 1rem; opacity: 0.5;">
 
         <div class="footer-links">
             <a href="/about.html" class="footer-link" title="关于">关于</a>
