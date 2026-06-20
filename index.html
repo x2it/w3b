@@ -627,8 +627,8 @@
             <button class="control-btn" id="btn-focus" style="margin: 0 10px;">专注凝聚</button>
             <button class="control-btn" id="btn-ai" style="margin: 0 10px;">AI 思维</button>
         </div>
-        <p style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto;">
-            思维如同粒子系统，可在有序、发散与专注等不同状态间转换，此为"理"之过程。
+        <p id="particle-desc" style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto; transition: opacity 0.3s ease;">
+            粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。
         </p>
     </section>
 
@@ -1225,6 +1225,21 @@
             function setMode(newMode) {
                 mode = newMode;
                 initParticles();
+                // 切换描述文字
+                const desc = document.getElementById('particle-desc');
+                const descriptions = {
+                    order: '粒子排列为规则网格，象征逻辑与秩序 — 有序思维是"理"的起点。',
+                    chaos: '粒子自由运动并相互连线，象征创造性思维 — 发散联想是"理"的拓展。',
+                    focus: '粒子向中心聚拢，象征深度思考与聚焦 — 专注凝聚是"理"的深化。',
+                    ai: '粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。'
+                };
+                if (desc && descriptions[newMode]) {
+                    desc.style.opacity = '0';
+                    setTimeout(() => {
+                        desc.textContent = descriptions[newMode];
+                        desc.style.opacity = '1';
+                    }, 300);
+                }
             }
             
             function startParticles() {
