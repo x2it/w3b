@@ -431,11 +431,12 @@
         footer {
             background: var(--card-bg);
             color: var(--text-color);
-            border: 1px solid var(--border-color);
+            border: none;
             border-radius: var(--radius-lg);
             box-shadow: var(--card-shadow);
             margin-top: 2rem;
-            transition: all var(--transition-normal);
+            padding: 2.5rem 1.5rem 2rem;
+            transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
         }
 
         footer p, .copyright {
