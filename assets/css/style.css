@@ -101,9 +101,6 @@ body {
     padding: 20px;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;
-    background-image: 
-        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.03) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(34,34,34,0.03) 0%, transparent 20%);
 }
 
 @media (max-width: 768px) { html { font-size: 15px; } }
@@ -129,27 +126,6 @@ header {
     margin-top: 1rem;
     position: relative;
     overflow: hidden;
-}
-
-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-        ellipse at 30% 20%,
-        rgba(99, 102, 241, 0.08) 0%,
-        transparent 50%
-    ),
-    radial-gradient(
-        ellipse at 70% 80%,
-        rgba(139, 92, 246, 0.06) 0%,
-        transparent 50%
-    );
-    pointer-events: none;
-    z-index: 0;
 }
 
 header > * {
@@ -1182,13 +1158,9 @@ footer {
     padding: 3rem 1rem 2rem;
     color: var(--text-light);
     font-size: 0.9rem;
-    background: linear-gradient(
-        135deg,
-        var(--card-bg) 0%,
-        rgba(99, 102, 241, 0.03) 100%
-    );
+    background: var(--card-bg);
     border-radius: 12px;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(--border-color);
     position: relative;
     margin-top: 2rem;
 }
