@@ -282,9 +282,7 @@
             width: 100%;
             border: none;
             background: var(--card-bg);
-            overflow: auto;
-            height: 600px;
-            min-height: 600px;
+            overflow: hidden;
             transition: height var(--transition-smooth);
         }
 
@@ -684,7 +682,7 @@
                     width="100%"
                     frameborder="0"
                     scrolling="no"
-                    style="border: none; background: var(--card-bg);"
+                    style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
         </section>
@@ -696,8 +694,8 @@
                     src="https://output.coze.site/embed?theme=neutral"
                     width="100%"
                     frameborder="0"
-                    scrolling="auto"
-                    style="border: none; background: var(--card-bg); border-radius: 8px;"
+                    scrolling="no"
+                    style="border: none; background: var(--card-bg); display: block;"
                 ></iframe>
             </div>
         </section>
@@ -1145,10 +1143,6 @@
                                 linkElement.style.background = '';
                                 linkElement.style.borderColor = '';
                                 linkElement.style.color = '';
-                                // 强制重绘，确保CSS变量生效
-                                linkElement.style.display = 'none';
-                                linkElement.offsetHeight; // 触发重排
-                                linkElement.style.display = '';
                             }, 1500);
                         }).catch(err => {
                             console.error('复制失败:', err);
