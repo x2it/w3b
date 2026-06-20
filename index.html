@@ -219,6 +219,28 @@
             transform: translateY(-2px);
         }
 
+        /* AI赋能：卡片hover时的微妙光晕 */
+        #particle-section:hover,
+        .timeline-section:hover,
+        .balance-section:hover,
+        #thinking:hover,
+        #projects:hover {
+            position: relative;
+        }
+        #particle-section:hover::after,
+        .timeline-section:hover::after,
+        .balance-section:hover::after,
+        #thinking:hover::after,
+        #projects:hover::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.03) 0%, transparent 50%, rgba(var(--accent-rgb), 0.02) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         /* ===== iframe 容器 ===== */
         .iframe-container {
             position: relative;
@@ -586,7 +608,7 @@
 
     <header>
         <h1 class="site-title">知行工作室</h1>
-        <p class="site-subtitle">理会 · 践行 - 知与行的交互探索</p>
+        <p class="site-subtitle">理会 · 践行 · AI赋能 — 知行合一的数字演进</p>
         <div id="ai-quote" style="margin-top: 1.25rem; font-size: 0.9rem; color: var(--text-light); min-height: 1.5em; text-align: center; font-style: italic;">
             <span id="ai-quote-text"></span><span id="ai-quote-cursor" style="animation: blink 0.8s infinite;">|</span>
         </div>
@@ -594,7 +616,7 @@
 
     <section id="particle-section">
         <h2 class="section-title">理会 · 洞察本质</h2>
-        <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示思维的不同状态"></canvas>
+        <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
             <button class="control-btn" id="btn-order" style="margin: 0 10px;">有序思维</button>
             <button class="control-btn" id="btn-chaos" style="margin: 0 10px;">发散联想</button>
@@ -1010,36 +1032,63 @@
                     }
                 }
                 draw() {
-                    // 创建径向渐变
-                    const gradient = ctx.createRadialGradient(
-                        this.x, this.y, 0,
-                        this.x, this.y, this.size
-                    );
-                    
                     const accentColor = this.accentColor;
                     const textColor = this.textColor;
+                    const rgb = this.hexToRgb(accentColor);
                     
-                    // 修复颜色格式
-                    gradient.addColorStop(0, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.8})`);
-                    gradient.addColorStop(0.5, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.4})`);
-                    gradient.addColorStop(1, `rgba(${this.hexToRgb(textColor)}, ${this.opacity * 0.1})`);
-                    
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = gradient;
-                    ctx.fill();
-                    
-                    // 添加轻微的发光效果
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
-                    const glowGradient = ctx.createRadialGradient(
-                        this.x, this.y, 0,
-                        this.x, this.y, this.size * 2
-                    );
-                    glowGradient.addColorStop(0, `rgba(${this.hexToRgb(accentColor)}, ${this.opacity * 0.2})`);
-                    glowGradient.addColorStop(1, 'transparent');
-                    ctx.fillStyle = glowGradient;
-                    ctx.fill();
+                    if (mode === 'ai') {
+                        // AI模式：节点发光效果，模拟神经元激活
+                        const glowSize = this.size * (3 + Math.sin(this.pulsePhase) * 0.5);
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, glowSize, 0, Math.PI * 2);
+                        const glowGrad = ctx.createRadialGradient(
+                            this.x, this.y, 0,
+                            this.x, this.y, glowSize
+                        );
+                        glowGrad.addColorStop(0, `rgba(${rgb}, ${this.opacity * 0.35})`);
+                        glowGrad.addColorStop(0.5, `rgba(${rgb}, ${this.opacity * 0.1})`);
+                        glowGrad.addColorStop(1, 'transparent');
+                        ctx.fillStyle = glowGrad;
+                        ctx.fill();
+                        
+                        // 核心节点
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${rgb}, ${this.opacity})`;
+                        ctx.fill();
+                        
+                        // 高光点
+                        ctx.beginPath();
+                        ctx.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.25, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * 0.6})`;
+                        ctx.fill();
+                    } else {
+                        // 标准模式：径向渐变粒子
+                        const gradient = ctx.createRadialGradient(
+                            this.x, this.y, 0,
+                            this.x, this.y, this.size
+                        );
+                        gradient.addColorStop(0, `rgba(${rgb}, ${this.opacity * 0.8})`);
+                        gradient.addColorStop(0.5, `rgba(${rgb}, ${this.opacity * 0.4})`);
+                        gradient.addColorStop(1, `rgba(${this.hexToRgb(textColor)}, ${this.opacity * 0.1})`);
+                        
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                        
+                        // 轻微发光
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                        const glowGradient = ctx.createRadialGradient(
+                            this.x, this.y, 0,
+                            this.x, this.y, this.size * 2
+                        );
+                        glowGradient.addColorStop(0, `rgba(${rgb}, ${this.opacity * 0.2})`);
+                        glowGradient.addColorStop(1, 'transparent');
+                        ctx.fillStyle = glowGradient;
+                        ctx.fill();
+                    }
                 }
                 
                 // 辅助方法：将十六进制颜色转换为RGB
@@ -1082,33 +1131,52 @@
                 const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
                 
                 if (mode === 'ai') {
-                    // AI模式：画层间神经网络连接线
+                    // AI模式：画层间神经网络连接线 + 信号流动
                     const layerCount = 3;
-                    const layerWidth = containerWidth / layerCount;
                     const nodesPerLayer = Math.ceil(particles.length / layerCount);
-                    ctx.lineWidth = 0.3;
+                    const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : '99, 102, 241';
+                    const now = Date.now();
+                    
                     for (let i = 0; i < particles.length; i++) {
                         const currentLayer = Math.min(layerCount - 1, Math.floor(i / nodesPerLayer));
-                        // 连接到下一层的所有节点
                         if (currentLayer < layerCount - 1) {
                             const nextLayerStart = (currentLayer + 1) * nodesPerLayer;
                             const nextLayerEnd = Math.min(particles.length, nextLayerStart + nodesPerLayer);
                             for (let j = nextLayerStart; j < nextLayerEnd; j++) {
-                                // 随机连接（模拟神经网络稀疏连接）
                                 if (Math.sin(i * 7.3 + j * 13.7) > -0.3) {
-                                    const dx = particles[i].x - particles[j].x;
-                                    const dy = particles[i].y - particles[j].y;
-                                    const dist = Math.sqrt(dx * dx + dy * dy);
-                                    // 信号脉冲效果
-                                    const pulse = Math.sin(Date.now() * 0.003 + i * 0.5 + j * 0.3) * 0.5 + 0.5;
-                                    const opacity = pulse * 0.12;
-                                    const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : '99, 102, 241';
-                                    ctx.strokeStyle = `rgba(${rgbStr}, ${opacity})`;
-                                    ctx.lineWidth = 0.3 + pulse * 0.4;
+                                    const p1 = particles[i], p2 = particles[j];
+                                    // 基础连线（微弱）
+                                    ctx.strokeStyle = `rgba(${rgbStr}, 0.06)`;
+                                    ctx.lineWidth = 0.4;
                                     ctx.beginPath();
-                                    ctx.moveTo(particles[i].x, particles[i].y);
-                                    ctx.lineTo(particles[j].x, particles[j].y);
+                                    ctx.moveTo(p1.x, p1.y);
+                                    ctx.lineTo(p2.x, p2.y);
                                     ctx.stroke();
+                                    
+                                    // 信号流动：沿连线移动的光点
+                                    const signalSpeed = 0.0008;
+                                    const signalOffset = ((now * signalSpeed + i * 0.3 + j * 0.2) % 1);
+                                    const sx = p1.x + (p2.x - p1.x) * signalOffset;
+                                    const sy = p1.y + (p2.y - p1.y) * signalOffset;
+                                    const signalOpacity = Math.sin(signalOffset * Math.PI) * 0.7;
+                                    ctx.beginPath();
+                                    ctx.arc(sx, sy, 1.5, 0, Math.PI * 2);
+                                    ctx.fillStyle = `rgba(${rgbStr}, ${signalOpacity})`;
+                                    ctx.fill();
+                                    
+                                    // 信号拖尾
+                                    for (let t = 1; t <= 3; t++) {
+                                        const trailOffset = signalOffset - t * 0.03;
+                                        if (trailOffset > 0) {
+                                            const tx = p1.x + (p2.x - p1.x) * trailOffset;
+                                            const ty = p1.y + (p2.y - p1.y) * trailOffset;
+                                            const trailOp = Math.sin(trailOffset * Math.PI) * 0.3 / t;
+                                            ctx.beginPath();
+                                            ctx.arc(tx, ty, 1.2 - t * 0.2, 0, Math.PI * 2);
+                                            ctx.fillStyle = `rgba(${rgbStr}, ${trailOp})`;
+                                            ctx.fill();
+                                        }
+                                    }
                                 }
                             }
                         }
