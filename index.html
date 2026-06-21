@@ -348,6 +348,22 @@
             line-height: 1.5;
         }
 
+        /* ===== 平板端适配 (481px - 1024px) ===== */
+        @media (min-width: 481px) and (max-width: 1024px) {
+            .project-card {
+                width: 300px;
+            }
+            .project-card-img {
+                height: 150px;
+            }
+            #thinking, #projects { padding: 1.5rem; }
+            #particle-section, .timeline-section, .balance-section {
+                margin: 1.5rem 0;
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* ===== 移动端适配 (≤480px) ===== */
         @media (max-width: 480px) {
             /* 手机笔记: 实际约1186px → 1300px(余量114px) */
             #thinking .iframe-container.tall iframe {

@@ -568,7 +568,7 @@
                     <tbody>
                         <tr><td>Noto Sans SC</td><td>中文字体</td><td>Google Fonts CDN</td></tr>
                         <tr><td>思考笔记 iframe</td><td>博客内容嵌入</td><td>fudawei.coze.site</td></tr>
-                        <tr><td>项目作品 iframe</td><td>作品集嵌入</td><td>output.coze.site</td></tr>
+                        <tr><td>项目作品卡片</td><td>作品集展示（内联）</td><td>7miao.coze.site</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -603,7 +603,11 @@
             <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
 
             <h3>3.4 思考笔记 & 项目作品</h3>
-            <p>通过 iframe 嵌入第三方内容，展示最新的思考文章和项目作品。</p>
+            <p>思考笔记通过 iframe 嵌入第三方博客内容。项目作品改为内联卡片滑动列表，横向滑动浏览，支持 PC / 平板 / 移动端全终端适配：</p>
+            <ul>
+                <li><strong>思考笔记</strong> — iframe 嵌入 fudawei.coze.site，展示最新文章</li>
+                <li><strong>项目作品</strong> — 6 张卡片横向滑动，scroll-snap 自动吸附，隐藏滚动条。PC 端 280px 宽，平板 300px 宽，移动端 260px 宽</li>
+            </ul>
         </div>
 
         <hr class="doc-divider">
@@ -658,15 +662,16 @@
         <div class="doc-section">
             <div class="doc-section-label">Chapter 06</div>
             <h2>响应式适配</h2>
-            <p>网站适配两个版本，采用 480px 作为唯一断点：</p>
+            <p>网站适配三个版本，采用 480px 和 1024px 两个断点：</p>
             <div class="doc-table-wrap">
                 <table>
                     <thead>
-                        <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目 iframe</th></tr>
+                        <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目卡片</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 480px</td><td>1100px</td><td>2000px</td></tr>
-                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>2400px</td></tr>
+                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 1024px</td><td>1100px</td><td>280px × 6张滑动</td></tr>
+                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 1024px</td><td>1100px</td><td>300px × 6张滑动</td></tr>
+                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>260px × 6张滑动</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -684,7 +689,7 @@
             </ol>
 
             <div class="doc-callout">
-                <strong>维护注意事项：</strong>iframe 高度需根据第三方页面内容变化定期调整；第三方 iframe 内容由外部维护，无法控制其样式；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
+                <strong>维护注意事项：</strong>思考笔记 iframe 高度需根据第三方页面内容变化定期调整；项目作品为内联卡片，样式完全可控；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
             </div>
         </div>
 
