@@ -568,9 +568,7 @@
                     <tbody>
                         <tr><td>Noto Sans SC</td><td>中文字体</td><td>Google Fonts CDN</td></tr>
                         <tr><td>思考笔记 iframe</td><td>博客内容嵌入</td><td>fudawei.coze.site</td></tr>
-                        <tr><td>项目作品 iframe</td><td>作品集嵌入（主方案）</td><td>output.coze.site</td></tr>
-                        <tr><td>项目作品卡片</td><td>作品集降级（iframe失败时显示）</td><td>7miao.coze.site</td></tr>
-                        <tr><td>笔记降级列表</td><td>文章列表降级（iframe失败时显示）</td><td>fudawei.coze.site</td></tr>
+                        <tr><td>项目作品 iframe</td><td>作品集嵌入（官方API，自动高度）</td><td>output.coze.site</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -605,12 +603,12 @@
             <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
 
             <h3>3.4 思考笔记 & 项目作品</h3>
-            <p>采用 iframe + 内联降级双保险方案，确保第三方内容加载失败时仍有内容展示：</p>
+            <p>均通过 iframe 嵌入第三方内容，自动同步最新数据：</p>
             <ul>
-                <li><strong>思考笔记</strong> — 优先 iframe 嵌入 fudawei.coze.site（自动同步）；加载失败时显示内联文章列表（5 篇精选 + 查看更多链接）</li>
-                <li><strong>项目作品</strong> — 优先 iframe 嵌入 output.coze.site（自动同步）；加载失败时显示 10 张内联卡片滑动列表（真实项目数据 + 访问入口）</li>
+                <li><strong>思考笔记</strong> — iframe 嵌入 fudawei.coze.site，展示最新文章</li>
+                <li><strong>项目作品</strong> — iframe 嵌入 output.coze.site（官方 API），支持 <code>theme=colorful</code> 彩色卡片 + <code>postMessage</code> 自动高度适配</li>
             </ul>
-            <p>降级内容通过 <code>onload/onerror</code> 事件控制显示/隐藏，iframe 成功加载后降级内容自动隐藏。</p>
+            <p>项目作品 iframe 使用官方 <code>embed-height</code> postMessage 协议自动调整高度，无需手动设置固定高度。</p>
         </div>
 
         <hr class="doc-divider">
@@ -669,12 +667,12 @@
             <div class="doc-table-wrap">
                 <table>
                     <thead>
-                        <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目卡片</th></tr>
+                        <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目 iframe</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 1024px</td><td>1100px</td><td>280px × 6张滑动</td></tr>
-                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 1024px</td><td>1100px</td><td>300px × 6张滑动</td></tr>
-                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>260px × 6张滑动</td></tr>
+                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 1024px</td><td>1100px</td><td>自动高度(postMessage)</td></tr>
+                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 1024px</td><td>1100px</td><td>自动高度(postMessage)</td></tr>
+                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>自动高度(postMessage)</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -692,7 +690,7 @@
             </ol>
 
             <div class="doc-callout">
-                <strong>维护注意事项：</strong>思考笔记 iframe 高度需根据第三方页面内容变化定期调整；iframe 降级内容（卡片/列表）为静态数据，第三方内容更新后需手动同步；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
+                <strong>维护注意事项：</strong>思考笔记 iframe 高度需根据第三方页面内容变化定期调整；项目作品 iframe 通过官方 postMessage 自动调整高度，无需手动干预；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
             </div>
         </div>
 
