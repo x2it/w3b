@@ -757,6 +757,28 @@
 
     <script>
         (function() {
+            // 全局颜色缓存（性能优化：避免每帧调用getComputedStyle）
+            let cachedAccentRgb = '99, 102, 241';
+            let cachedTextRgb = '31, 41, 55';
+            
+            function hexToRgb(hex) {
+                hex = hex.replace(/^#/, '');
+                if (hex.length === 3) {
+                    hex = hex.split('').map(char => char + char).join('');
+                }
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                return `${r}, ${g}, ${b}`;
+            }
+            
+            function updateCachedColors() {
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
+                const textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim();
+                cachedAccentRgb = hexToRgb(accentColor);
+                cachedTextRgb = hexToRgb(textColor);
+            }
+
             // 主题切换
             const themeToggle = document.getElementById('themeToggle');
             const themeMenu = document.getElementById('themeMenu');
@@ -949,26 +971,6 @@
             let particles = [];
             let mode = 'ai';
             let animationId = null;
-            let cachedAccentRgb = '99, 102, 241';
-            let cachedTextRgb = '31, 41, 55';
-            
-            function updateCachedColors() {
-                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
-                const textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim();
-                cachedAccentRgb = hexToRgb(accentColor);
-                cachedTextRgb = hexToRgb(textColor);
-            }
-            
-            function hexToRgb(hex) {
-                hex = hex.replace(/^#/, '');
-                if (hex.length === 3) {
-                    hex = hex.split('').map(char => char + char).join('');
-                }
-                const r = parseInt(hex.substring(0, 2), 16);
-                const g = parseInt(hex.substring(2, 4), 16);
-                const b = parseInt(hex.substring(4, 6), 16);
-                return `${r}, ${g}, ${b}`;
-            }
             let resizeTimer = null;
             const dpr = window.devicePixelRatio || 1;
             let containerWidth = 0, containerHeight = 0;
