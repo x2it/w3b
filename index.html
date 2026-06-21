@@ -281,14 +281,14 @@
 
         @media (max-width: 480px) {
             /* 手机笔记: 实际约1186px → 1300px(余量114px) */
-            /* 手机项目: 单列布局, 实际约2000px → 2300px(余量300px) */
+            /* 手机项目: 单列布局, 实际约2000px → 2350px(余量350px) */
             #thinking .iframe-container.tall iframe {
                 height: 1300px;
                 min-height: 1300px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2300px;
-                min-height: 2300px;
+                height: 2350px;
+                min-height: 2350px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects { padding: 1rem; margin-bottom: 1rem; }
@@ -867,6 +867,9 @@
 
                 // 更新平衡器颜色
                 updateBalanceColors();
+                
+                // 更新粒子系统缓存颜色
+                updateCachedColors();
             }
 
             // 监听系统主题变化
@@ -885,6 +888,7 @@
             // 检查本地存储中的主题偏好并应用
             const savedTheme = localStorage.getItem('theme') || 'system';
             applyTheme(savedTheme);
+            updateCachedColors();
 
             // ===== AI金句轮播 =====
             (function() {
@@ -945,6 +949,26 @@
             let particles = [];
             let mode = 'ai';
             let animationId = null;
+            let cachedAccentRgb = '99, 102, 241';
+            let cachedTextRgb = '31, 41, 55';
+            
+            function updateCachedColors() {
+                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
+                const textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim();
+                cachedAccentRgb = hexToRgb(accentColor);
+                cachedTextRgb = hexToRgb(textColor);
+            }
+            
+            function hexToRgb(hex) {
+                hex = hex.replace(/^#/, '');
+                if (hex.length === 3) {
+                    hex = hex.split('').map(char => char + char).join('');
+                }
+                const r = parseInt(hex.substring(0, 2), 16);
+                const g = parseInt(hex.substring(2, 4), 16);
+                const b = parseInt(hex.substring(4, 6), 16);
+                return `${r}, ${g}, ${b}`;
+            }
             let resizeTimer = null;
             const dpr = window.devicePixelRatio || 1;
             let containerWidth = 0, containerHeight = 0;
@@ -970,8 +994,6 @@
                     this.reset();
                 }
                 reset() {
-                    const textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim();
-                    const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
                     this.x = Math.random() * containerWidth;
                     this.y = Math.random() * containerHeight;
                     this.vx = (Math.random() - 0.5) * 0.5;
@@ -979,8 +1001,6 @@
                     this.size = Math.random() * 2 + 0.3;
                     this.baseSize = Math.random() * 2 + 0.3;
                     this.opacity = Math.random() * 0.7 + 0.3;
-                    this.textColor = textColor;
-                    this.accentColor = accentColor;
                     this.pulseSpeed = Math.random() * 0.03 + 0.01;
                     this.pulsePhase = Math.random() * Math.PI * 2;
                 }
@@ -1045,9 +1065,8 @@
                     }
                 }
                 draw() {
-                    const accentColor = this.accentColor;
-                    const textColor = this.textColor;
-                    const rgb = this.hexToRgb(accentColor);
+                    const rgb = cachedAccentRgb;
+                    const textRgb = cachedTextRgb;
                     
                     if (mode === 'ai') {
                         // AI模式：节点发光效果，模拟神经元激活
@@ -1083,7 +1102,7 @@
                         );
                         gradient.addColorStop(0, `rgba(${rgb}, ${this.opacity * 0.8})`);
                         gradient.addColorStop(0.5, `rgba(${rgb}, ${this.opacity * 0.4})`);
-                        gradient.addColorStop(1, `rgba(${this.hexToRgb(textColor)}, ${this.opacity * 0.1})`);
+                        gradient.addColorStop(1, `rgba(${textRgb}, ${this.opacity * 0.1})`);
                         
                         ctx.beginPath();
                         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -1102,24 +1121,6 @@
                         ctx.fillStyle = glowGradient;
                         ctx.fill();
                     }
-                }
-                
-                // 辅助方法：将十六进制颜色转换为RGB
-                hexToRgb(hex) {
-                    // 移除#号
-                    hex = hex.replace(/^#/, '');
-                    
-                    // 处理缩写形式
-                    if (hex.length === 3) {
-                        hex = hex.split('').map(char => char + char).join('');
-                    }
-                    
-                    // 解析RGB值
-                    const r = parseInt(hex.substring(0, 2), 16);
-                    const g = parseInt(hex.substring(2, 4), 16);
-                    const b = parseInt(hex.substring(4, 6), 16);
-                    
-                    return `${r}, ${g}, ${b}`;
                 }
             }
             
@@ -1141,14 +1142,13 @@
             
             function animateParticles() {
                 ctx.clearRect(0, 0, containerWidth, containerHeight);
-                const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color').trim();
+                const rgbStr = cachedAccentRgb;
+                const now = Date.now();
                 
                 if (mode === 'ai') {
                     // AI模式：画层间神经网络连接线 + 信号流动
                     const layerCount = 3;
                     const nodesPerLayer = Math.ceil(particles.length / layerCount);
-                    const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : '99, 102, 241';
-                    const now = Date.now();
                     
                     for (let i = 0; i < particles.length; i++) {
                         const currentLayer = Math.min(layerCount - 1, Math.floor(i / nodesPerLayer));
@@ -1204,7 +1204,6 @@
                             const distance = Math.sqrt(dx * dx + dy * dy);
                             if (distance < 60) {
                                 const opacity = (1 - distance / 60) * 0.15 * (particles[i].opacity + particles[j].opacity) / 2;
-                                const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : accentColor;
                                 ctx.strokeStyle = `rgba(${rgbStr}, ${opacity})`;
                                 ctx.lineWidth = (1 - distance / 60) * 0.5;
                                 ctx.beginPath();
