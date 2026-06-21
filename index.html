@@ -348,6 +348,45 @@
             line-height: 1.5;
         }
 
+        /* ===== 笔记降级列表 ===== */
+        .blog-fallback {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .blog-fallback-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all var(--transition-fast);
+            box-shadow: var(--card-shadow);
+        }
+
+        .blog-fallback-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--card-shadow-hover);
+            border-color: rgba(var(--accent-rgb), 0.2);
+        }
+
+        .blog-fallback-title {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .blog-fallback-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
         /* ===== 平板端适配 (481px - 1024px) ===== */
         @media (min-width: 481px) and (max-width: 1024px) {
             .project-card {
@@ -783,14 +822,38 @@
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
                 穷理以致知，在思考中洞察本质。
             </p>
-            <div class="iframe-container tall">
+            <div class="iframe-container tall" id="blogIframeContainer">
                 <iframe
                     src="https://fudawei.coze.site/embed?limit=10&theme=light"
                     width="100%"
                     scrolling="no"
                     loading="lazy"
                     title="Davi的践行笔记"
+                    onload="document.getElementById('blogFallback').style.display='none'"
+                    onerror="document.getElementById('blogFallback').style.display='block'"
                 ></iframe>
+            </div>
+            <div class="blog-fallback" id="blogFallback" style="display:none;">
+                <a href="https://fudawei.coze.site/" target="_blank" rel="noopener" class="blog-fallback-item">
+                    <span class="blog-fallback-title">AI时代的知行合一</span>
+                    <span class="blog-fallback-date">2026.06</span>
+                </a>
+                <a href="https://fudawei.coze.site/" target="_blank" rel="noopener" class="blog-fallback-item">
+                    <span class="blog-fallback-title">从知到行：Web3实践笔记</span>
+                    <span class="blog-fallback-date">2026.05</span>
+                </a>
+                <a href="https://fudawei.coze.site/" target="_blank" rel="noopener" class="blog-fallback-item">
+                    <span class="blog-fallback-title">理会与践行：我的创业思考</span>
+                    <span class="blog-fallback-date">2026.04</span>
+                </a>
+                <a href="https://fudawei.coze.site/" target="_blank" rel="noopener" class="blog-fallback-item">
+                    <span class="blog-fallback-title">数字游民的一年</span>
+                    <span class="blog-fallback-date">2026.03</span>
+                </a>
+                <a href="https://fudawei.coze.site/" target="_blank" rel="noopener" class="blog-fallback-item">
+                    <span class="blog-fallback-title">查看更多笔记 →</span>
+                    <span class="blog-fallback-date"></span>
+                </a>
             </div>
         </section>
 
@@ -799,7 +862,18 @@
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
                 笃行以践知，在行动中验证思考。
             </p>
-            <div class="project-scroll-wrapper">
+            <div class="iframe-container tall" id="projectIframeContainer">
+                <iframe
+                    src="https://output.coze.site/embed?theme=neutral&cols=2&gap=6&limit=10"
+                    width="100%"
+                    scrolling="no"
+                    loading="lazy"
+                    title="7喵仓库 - 项目作品集"
+                    onload="document.getElementById('projectFallback').style.display='none'"
+                    onerror="document.getElementById('projectFallback').style.display='block'"
+                ></iframe>
+            </div>
+            <div class="project-scroll-wrapper" id="projectFallback" style="display:none;">
                 <div class="project-scroll" id="projectScroll">
                     <a href="https://w3b.pub/" target="_blank" rel="noopener" class="project-card">
                         <div class="project-card-img" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
