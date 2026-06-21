@@ -269,26 +269,26 @@
 
         /* 跨域 iframe 高度：只适配PC(>480px)和手机(≤480px)两个版本 */
         /* PC端笔记: 实际约1007px → 1100px(余量93px) */
-        /* PC端项目: iframe内3列布局, 实际约1800px → 2000px(余量200px) */
+        /* PC端项目: iframe内3列布局, 实际约1800px → 1900px(余量100px) */
         #thinking .iframe-container.tall iframe {
             height: 1100px;
             min-height: 1100px;
         }
         #projects .iframe-container.tall iframe {
-            height: 2000px;
-            min-height: 2000px;
+            height: 1900px;
+            min-height: 1900px;
         }
 
         @media (max-width: 480px) {
             /* 手机笔记: 实际约1186px → 1300px(余量114px) */
-            /* 手机项目: 单列布局, 实际约2000px → 2400px(余量400px) */
+            /* 手机项目: 单列布局, 实际约2000px → 2600px(余量600px) */
             #thinking .iframe-container.tall iframe {
                 height: 1300px;
                 min-height: 1300px;
             }
             #projects .iframe-container.tall iframe {
-                height: 2400px;
-                min-height: 2400px;
+                height: 2600px;
+                min-height: 2600px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects { padding: 1rem; margin-bottom: 1rem; }
