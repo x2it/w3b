@@ -1194,7 +1194,8 @@
                             }
                         }
                     }
-                } else if (mode !== 'chaos') {
+                } else if (mode === 'chaos') {
+                    // 发散联想模式：粒子自由运动，近距离粒子相互连线
                     ctx.lineWidth = 0.2;
                     for (let i = 0; i < particles.length; i++) {
                         for (let j = i + 1; j < particles.length; j++) {
@@ -1202,7 +1203,6 @@
                             const dy = particles[i].y - particles[j].y;
                             const distance = Math.sqrt(dx * dx + dy * dy);
                             if (distance < 60) {
-                                // 距离越近，线条越粗，透明度越高
                                 const opacity = (1 - distance / 60) * 0.15 * (particles[i].opacity + particles[j].opacity) / 2;
                                 const rgbStr = (particles[0] && particles[0].hexToRgb) ? particles[0].hexToRgb(accentColor) : accentColor;
                                 ctx.strokeStyle = `rgba(${rgbStr}, ${opacity})`;
@@ -1228,10 +1228,10 @@
                 // 切换描述文字
                 const desc = document.getElementById('particle-desc');
                 const descriptions = {
-                    order: '粒子排列为规则网格，象征逻辑与秩序 — 有序思维是"理"的起点。',
-                    chaos: '粒子自由运动并相互连线，象征创造性思维 — 发散联想是"理"的拓展。',
-                    focus: '粒子向中心聚拢，象征深度思考与聚焦 — 专注凝聚是"理"的深化。',
-                    ai: '粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。'
+                    order: '粒子排列为规则网格，各就各位互不连线 — 有序思维是"理"的起点。',
+                    chaos: '粒子自由运动，近距离粒子相互连线 — 发散联想是"理"的拓展。',
+                    focus: '粒子向中心聚拢，各自独立不连线 — 专注凝聚是"理"的深化。',
+                    ai: '粒子形成三层神经网络结构，信号在层间流动传递 — AI 思维是知行合一的数字映射。'
                 };
                 if (desc && descriptions[newMode]) {
                     desc.style.opacity = '0';
