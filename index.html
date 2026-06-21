@@ -269,26 +269,98 @@
 
         /* 跨域 iframe 高度：只适配PC(>480px)和手机(≤480px)两个版本 */
         /* PC端笔记: 实际约1007px → 1100px(余量93px) */
-        /* PC端项目: iframe内3列布局, 实际约1700px → 1800px(余量100px) */
         #thinking .iframe-container.tall iframe {
             height: 1100px;
             min-height: 1100px;
         }
-        #projects .iframe-container.tall iframe {
-            height: 1800px;
-            min-height: 1800px;
+
+        /* ===== 项目卡片滑动列表 ===== */
+        .project-scroll-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+
+        .project-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 0.5rem 0.25rem 1.5rem;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+
+        .project-scroll:active {
+            cursor: grabbing;
+        }
+
+        .project-card {
+            flex: 0 0 auto;
+            width: 280px;
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            scroll-snap-align: start;
+            text-decoration: none;
+            color: inherit;
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .project-card-img {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .project-card-img svg {
+            width: 48px;
+            height: 48px;
+            opacity: 0.9;
+        }
+
+        .project-card-body {
+            padding: 1rem 1.25rem 1.25rem;
+        }
+
+        .project-card-body h4 {
+            margin: 0 0 0.35rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .project-card-body p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
         @media (max-width: 480px) {
             /* 手机笔记: 实际约1186px → 1300px(余量114px) */
-            /* 手机项目: 单列布局, 实际约2000px → 2250px(余量250px) */
             #thinking .iframe-container.tall iframe {
                 height: 1300px;
                 min-height: 1300px;
             }
-            #projects .iframe-container.tall iframe {
-                height: 2250px;
-                min-height: 2250px;
+
+            .project-card {
+                width: 260px;
+            }
+
+            .project-card-img {
+                height: 120px;
             }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects { padding: 1rem; margin-bottom: 1rem; }
@@ -711,14 +783,63 @@
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
                 笃行以践知，在行动中验证思考。
             </p>
-            <div class="iframe-container tall">
-                <iframe
-                    src="https://output.coze.site/embed?theme=neutral&cols=2&gap=6&limit=10"
-                    width="100%"
-                    scrolling="no"
-                    loading="lazy"
-                    title="7喵仓库 - 项目作品集"
-                ></iframe>
+            <div class="project-scroll-wrapper">
+                <div class="project-scroll" id="projectScroll">
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>7喵画廊</h4>
+                            <p>一段奇妙的创作旅程，从任意灵感开始</p>
+                        </div>
+                    </a>
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>7喵 | 创作实验室</h4>
+                            <p>灵感落地，帧帧精彩</p>
+                        </div>
+                    </a>
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>知行笔记</h4>
+                            <p>理会与践行的数字记录</p>
+                        </div>
+                    </a>
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>代码工坊</h4>
+                            <p>每一行代码都是一次践行</p>
+                        </div>
+                    </a>
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>AI 实验场</h4>
+                            <p>算法穷理，模型践行</p>
+                        </div>
+                    </a>
+                    <a href="https://7miao.coze.site/" target="_blank" rel="noopener" class="project-card">
+                        <div class="project-card-img" style="background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%);">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+                        </div>
+                        <div class="project-card-body">
+                            <h4>更多作品</h4>
+                            <p>访问 7喵仓库 探索全部</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </section>
     </div>
