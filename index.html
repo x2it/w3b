@@ -1012,22 +1012,22 @@
                         }
                     } else if (mode === 'ai') {
                         // AI神经网络模式：粒子形成多层网络结构
-                        // 将画布分为3层（输入层、隐藏层、输出层）
                         const layerCount = 3;
-                        const layerWidth = containerWidth / layerCount;
-                        const layerIndex = Math.min(layerCount - 1, Math.floor(this.x / layerWidth));
-                        const nodesPerLayer = Math.ceil(Math.sqrt(particles.length / layerCount));
+                        const nodesPerLayer = Math.ceil(particles.length / layerCount);
                         const nodeIndex = this.aiNodeIndex || 0;
-                        const layerY = containerHeight / (nodesPerLayer + 1);
-                        const targetX = layerWidth * layerIndex + layerWidth / 2;
-                        const targetY = layerY * (nodeIndex % nodesPerLayer + 1);
-                        // 添加微小抖动模拟信号传递
-                        const jitterX = Math.sin(Date.now() * 0.001 + this.aiNodeIndex) * 8;
-                        const jitterY = Math.cos(Date.now() * 0.0015 + this.aiNodeIndex) * 5;
+                        const currentLayer = Math.min(layerCount - 1, Math.floor(nodeIndex / nodesPerLayer));
+                        const posInLayer = nodeIndex % nodesPerLayer;
+                        const layerWidth = containerWidth / layerCount;
+                        // 目标位置：该层的中心x，均匀分布y
+                        const targetX = layerWidth * currentLayer + layerWidth / 2;
+                        const targetY = containerHeight * (posInLayer + 1) / (nodesPerLayer + 1);
+                        // 微小抖动模拟信号传递
+                        const jitterX = Math.sin(Date.now() * 0.001 + nodeIndex) * 8;
+                        const jitterY = Math.cos(Date.now() * 0.0015 + nodeIndex) * 5;
                         this.vx += (targetX + jitterX - this.x) * 0.02;
                         this.vy += (targetY + jitterY - this.y) * 0.02;
                         // AI模式下粒子脉动更快，模拟数据流动
-                        this.pulseSpeed = 0.04 + Math.sin(Date.now() * 0.002 + this.aiNodeIndex * 0.5) * 0.02;
+                        this.pulseSpeed = 0.04 + Math.sin(Date.now() * 0.002 + nodeIndex * 0.5) * 0.02;
                     }
                     
                     // 添加一些摩擦力和惯性
