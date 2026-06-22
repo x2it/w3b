@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="知行工作室的核心理念展示 - 理会与践行的交互探索，知行合一的现代实践">
     <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260621b">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260622">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <style>
         /* ===== 主题变量 ===== */
@@ -146,13 +146,6 @@
         }
 
         /* ===== 完全隐藏滚动条（保留滚动功能） ===== */
-        html {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        html::-webkit-scrollbar { width: 0; height: 0; display: none; }
-        html::-webkit-scrollbar-track { display: none; }
-        html::-webkit-scrollbar-thumb { display: none; }
         * {
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -160,8 +153,6 @@
         *::-webkit-scrollbar { width: 0; height: 0; display: none; }
         *::-webkit-scrollbar-track { display: none; }
         *::-webkit-scrollbar-thumb { display: none; }
-        iframe { scrollbar-width: none; }
-        iframe::-webkit-scrollbar { display: none; }
 
         /* ===== 头部 ===== */
         header {
@@ -325,15 +316,6 @@
             margin: 0;
             font-size: 0.8rem;
             color: var(--text-secondary);
-        }
-
-        .fallback-hint {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            font-style: italic;
         }
 
         @media (max-width: 768px) {
@@ -760,7 +742,7 @@
                     frameborder="0"
                     scrolling="no"
                     loading="lazy"
-                    title="Davi的践行笔记"
+                    title="理会 · 博文随笔"
                     style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
             </div>
@@ -793,7 +775,7 @@
                     frameborder="0"
                     scrolling="no"
                     loading="lazy"
-                    title="7喵仓库 - 项目作品集"
+                    title="践行 · 笃行成果"
                     style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
             </div>
@@ -834,13 +816,13 @@
 
         <div class="footer-links">
             <a href="/about.html" class="footer-link" title="关于">关于</a>
-            <span class="link-divider">|</span>
-            <a href="#thinking" class="footer-link" title="访问个人博客">理会</a>
-            <span class="link-divider">|</span>
-            <a href="#projects" class="footer-link" title="浏览作品内容">践行</a>
+            <span class="link-divider" aria-hidden="true">|</span>
+            <a href="#thinking" class="footer-link" title="访问博文随笔">理会</a>
+            <span class="link-divider" aria-hidden="true">|</span>
+            <a href="#projects" class="footer-link" title="浏览笃行成果">践行</a>
         </div>
-        <p style="color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem; text-align: center;">"理无专在，而学无止境也。然则问可少耶？"</p>
-        <p style="color: var(--text-light); font-size: 0.75rem; text-align: center;">— 清代刘开《问说》</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.75rem; text-align: center;">"理无专在，而学无止境也。然则问可少耶？"</p>
+        <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">— 清代刘开《问说》</p>
         <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
@@ -947,7 +929,7 @@
 
             function applyTheme(theme) {
                 // 移除所有主题类
-                body.classList.remove('dark-mode', 'light-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
 
                 // 更新活跃状态
                 themeOptions.forEach(option => {
@@ -960,7 +942,7 @@
                 if (theme === 'dark') {
                     body.classList.add('dark-mode');
                 } else if (theme === 'light') {
-                    body.classList.add('light-mode');
+                    // 默认主题，无需添加类
                 } else if (theme === 'blue') {
                     body.classList.add('blue-mode');
                 } else if (theme === 'green') {
