@@ -1355,16 +1355,22 @@
 
             // iframe 高度自适应
             // 支持 coze.site 官方 embed-height postMessage
+            // 安全校验：origin + source + height类型
             window.addEventListener('message', function(event) {
-                if (event.data && event.data.type === 'embed-height') {
-                    const qmeow = document.getElementById('qmeow-embed');
-                    const blog = document.querySelector('#blogIframeContainer iframe');
-                    if (qmeow && event.source === qmeow.contentWindow) {
-                        qmeow.style.height = event.data.height + 'px';
-                    }
-                    if (blog && event.source === blog.contentWindow) {
-                        blog.style.height = event.data.height + 'px';
-                    }
+                // origin校验：只接受coze.site域名
+                if (!event.origin || !event.origin.endsWith('.coze.site')) return;
+                // 消息格式校验
+                if (!event.data || event.data.type !== 'embed-height') return;
+                if (typeof event.data.height !== 'number') return;
+
+                const qmeow = document.getElementById('qmeow-embed');
+                const blog = document.querySelector('#blogIframeContainer iframe');
+                // source校验：确认消息来自正确的iframe
+                if (qmeow && event.source === qmeow.contentWindow) {
+                    qmeow.style.height = event.data.height + 'px';
+                }
+                if (blog && event.source === blog.contentWindow) {
+                    blog.style.height = event.data.height + 'px';
                 }
             });
         })();
