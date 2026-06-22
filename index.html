@@ -267,13 +267,6 @@
             transition: height var(--transition-smooth);
         }
 
-        /* 跨域 iframe 高度：只适配PC(>480px)和手机(≤480px)两个版本 */
-        /* PC端笔记: 实际约1007px → 1100px(余量93px) */
-        #thinking .iframe-container.tall iframe {
-            height: 1100px;
-            min-height: 1100px;
-        }
-
         /* ===== 平板端适配 (481px - 1024px) ===== */
         @media (min-width: 481px) and (max-width: 1024px) {
             #thinking, #projects { padding: 1.5rem; }
@@ -285,11 +278,6 @@
 
         /* ===== 移动端适配 (≤480px) ===== */
         @media (max-width: 480px) {
-            /* 手机笔记: 实际约1186px → 1300px(余量114px) */
-            #thinking .iframe-container.tall iframe {
-                height: 1300px;
-                min-height: 1300px;
-            }
             #blog-content { padding: 1rem; margin: 1rem 0; }
             #thinking, #projects { padding: 1rem; margin-bottom: 1rem; }
             #particle-section, .timeline-section, .balance-section {
