@@ -1563,14 +1563,21 @@
 
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
-                // iframe 加载后等待 postMessage，超时则直接显示
+                // iframe 加载后主动请求高度（兼容 embed-request-height 协议）
+                var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
+                if (iframeEl && iframeEl.contentWindow) {
+                    try {
+                        iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
+                    } catch(e) { /* 跨域静默 */ }
+                }
+                // 等待 postMessage，超时则直接显示（博文API有5次重试，最长3秒）
                 setTimeout(function() {
                     if (!iframeMessaged[name]) {
                         var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
                         var container = document.getElementById(containerId);
                         if (container) container.classList.remove('iframe-loading');
                     }
-                }, 3000);
+                }, 4000);
             }
 
             var blogIframe = document.getElementById('blog-embed');
