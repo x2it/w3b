@@ -670,9 +670,9 @@
                         <tr><th>版本</th><th>断点</th><th>笔记 iframe</th><th>项目 iframe</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 1024px</td><td>1100px</td><td>自动高度(postMessage)</td></tr>
-                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 1024px</td><td>1100px</td><td>自动高度(postMessage)</td></tr>
-                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1300px</td><td>自动高度(postMessage)</td></tr>
+                        <tr><td><span class="doc-badge accent">PC</span></td><td>> 1024px</td><td>1050px</td><td>自动高度(postMessage)</td></tr>
+                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 1024px</td><td>1050px</td><td>自动高度(postMessage)</td></tr>
+                        <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>1050px</td><td>自动高度(postMessage)</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -690,7 +690,7 @@
             </ol>
 
             <div class="doc-callout">
-                <strong>维护注意事项：</strong>思考笔记 iframe 高度需根据第三方页面内容变化定期调整；项目作品 iframe 通过官方 postMessage 自动调整高度，无需手动干预；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
+                <strong>维护注意事项：</strong>思考笔记 iframe 固定高度 1050px（跨域 postMessage 暂不可用）；项目作品 iframe 通过官方 postMessage 自动调整高度，无需手动干预；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
             </div>
         </div>
 
