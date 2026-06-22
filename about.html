@@ -617,7 +617,13 @@
             </ul>
             <p><strong>滚动联动</strong>：滚动到"理会"区域时粒子自动切换为"有序思维"模式；滚动到"践行"区域时切换为"专注凝聚"模式。</p>
             <p><strong>降级方案</strong>：默认显示金句卡片（主题随访问时段变化），iframe 在后台加载。若收到第三方 <code>embed-height</code> postMessage（证明服务正常），自动隐藏卡片并显示 iframe。若服务异常，卡片始终可见。每个主题包含 6 条金句，每次随机显示 3 条。</p>
-            <p><strong>调试模式</strong>：URL 加 <code>?debug=1</code> 强制显示 iframe，方便排查第三方服务问题。localStorage 记忆用户偏好（<code>w3b_iframe_pref</code>），若上次手动切换 iframe 失败，5 秒后自动回退到降级。</p>
+            <p><strong>调试模式</strong>：URL 加 <code>?debug=1</code> 强制显示 iframe，绕过降级逻辑，用于排查第三方服务问题。使用场景：</p>
+            <ul>
+                <li>第三方服务续费后，验证 iframe 是否正常加载</li>
+                <li>检查 postMessage 是否正常工作</li>
+                <li>对比 iframe 内容与降级卡片的差异</li>
+            </ul>
+            <p><strong>localStorage 记忆</strong>：键名 <code>w3b_iframe_pref</code>，值 <code>'iframe'</code> 时优先显示 iframe。若 iframe 加载失败（5 秒后高度 &lt; 300px），自动清除记忆并回退到降级。开发者可在控制台执行 <code>localStorage.setItem('w3b_iframe_pref', 'iframe')</code> 手动切换。</p>
             <p><strong>主题联动</strong>：金句卡片支持暗色模式适配，暗色下阴影加深，渐变过渡更平滑。</p>
         </div>
 
