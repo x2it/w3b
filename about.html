@@ -567,7 +567,9 @@
                         <tr><td><code>index.html</code></td><td>主页，包含主题变量、页面结构、交互逻辑</td></tr>
                         <tr><td><code>about.html</code></td><td>项目说明书（本页）</td></tr>
                         <tr><td><code>assets/css/style.css</code></td><td>通用样式：动画、组件、响应式断点</td></tr>
-                        <tr><td><code>404.html</code></td><td>404 错误页面</td></tr>
+                        <tr><td><code>404.html</code></td><td>404 错误页面（noindex）</td></tr>
+                        <tr><td><code>robots.txt</code></td><td>搜索引擎爬虫规则</td></tr>
+                        <tr><td><code>sitemap.xml</code></td><td>站点地图</td></tr>
                         <tr><td><code>CNAME</code></td><td>GitHub Pages 自定义域名配置</td></tr>
                     </tbody>
                 </table>
@@ -666,7 +668,7 @@
             <p>页面背景添加 SVG pattern 平铺的神经网络节点 + 连线纹理，opacity 仅 0.03，极微妙不抢主体内容，fixed 定位跟随页面滚动。</p>
 
             <h3>4.3 AI 赋能交互</h3>
-            <p>卡片 hover 时添加基于 <code>--accent-rgb</code> 变量的微妙光晕效果（<code>rgba(var(--accent-rgb), 0.03)</code>），让交互带有 AI 驱动的数字质感。</p>
+            <p>卡片 hover 时添加基于 <code>--accent-color</code> 的微妙光晕效果，让交互带有 AI 驱动的数字质感。</p>
         </div>
 
         <hr class="doc-divider">
@@ -676,10 +678,14 @@
             <h2>主题系统</h2>
             <p>网站支持 8 种主题（默认、暗色、蓝色、绿色、紫色、橙色、青色、系统跟随），通过 CSS 变量实现全局切换。主题偏好通过 <code>localStorage</code> 持久化保存，刷新页面后自动恢复。</p>
 
+            <h3>5.1 主题切换</h3>
             <div class="doc-callout">
-                <strong>主题切换触发方式：</strong>① 手动点击右上角 🎨 按钮<br>
+                <strong>触发方式：</strong>① 手动点击右上角 🎨 按钮<br>
                 ② 系统暗色模式自动适配（当选择"系统"主题时）
             </div>
+
+            <h3>5.2 CSS 变量体系</h3>
+            <p>每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。</p>
         </div>
 
         <hr class="doc-divider">
@@ -687,6 +693,8 @@
         <div class="doc-section">
             <div class="doc-section-label">Chapter 06</div>
             <h2>响应式适配</h2>
+
+            <h3>6.1 断点与布局</h3>
             <p>网站适配三个版本，采用 480px 和 1024px 两个断点：</p>
             <div class="doc-table-wrap">
                 <table>
