@@ -616,6 +616,7 @@
                 <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀</li>
             </ul>
             <p><strong>降级方案</strong>：默认显示金句卡片，iframe 后台加载。收到第三方 <code>embed-height</code> postMessage 后自动切换 iframe；服务异常则卡片始终可见。每个主题 6 条金句，每次随机显示 3 条。</p>
+            <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
             <p><strong>调试模式</strong>：URL 加 <code>?debug=1</code> 强制显示 iframe，用于排查第三方服务问题（如续费后验证加载、检查 postMessage 等）。</p>
             <p><strong>滚动联动</strong>：滚动到"理会"区域时粒子切换"有序思维"；滚动到"践行"区域时切换"专注凝聚"。</p>
         </div>
