@@ -194,7 +194,18 @@
         .back-home:hover {
             background: var(--accent-secondary);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 8px 24px rgba(var(--accent-rgb, 99, 102, 241), 0.3);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 2rem 1rem 1.5rem; }
+            .error-section { padding: 3rem 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .error-code { font-size: 4rem; }
+            .error-section { padding: 2rem 1rem; }
+            .back-home { padding: 0.7rem 1.5rem; font-size: 0.9rem; }
         }
 
         footer {

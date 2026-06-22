@@ -227,6 +227,7 @@
             transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
         }
 
+        /* AI赋能：卡片hover时的微妙光晕 */
         #particle-section:hover,
         .timeline-section:hover,
         .balance-section:hover,
@@ -234,14 +235,6 @@
         #projects:hover {
             box-shadow: var(--card-shadow-hover);
             transform: translateY(-2px);
-        }
-
-        /* AI赋能：卡片hover时的微妙光晕 */
-        #particle-section:hover,
-        .timeline-section:hover,
-        .balance-section:hover,
-        #thinking:hover,
-        #projects:hover {
             position: relative;
         }
         #particle-section:hover::after,
@@ -341,6 +334,11 @@
             margin: 0;
             font-size: 0.8rem;
             color: var(--text-secondary);
+        }
+
+        .timeline-source {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
         }
 
         @media (max-width: 768px) {
@@ -702,28 +700,28 @@
                 <div class="timeline-content">
                     <h3>《尚书》 · 知易行难</h3>
                     <p>"非知之艰，行之惟艰。"</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">— 中国思想史上对知行关系最早的著名论断</p>
+                    <p class="timeline-source">— 中国思想史上对知行关系最早的著名论断</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>朱熹 · 理会践行</h3>
                     <p>"只有两件事：理会，践行。"</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">— 强调穷理与力行的先后次序与必要性</p>
+                    <p class="timeline-source">— 强调穷理与力行的先后次序与必要性</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>王阳明 · 知行合一</h3>
                     <p>"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">— 在心学体系中实现了知与行的本体统一</p>
+                    <p class="timeline-source">— 在心学体系中实现了知与行的本体统一</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
                     <h3>当下 · 你的行动</h3>
                     <p>"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">— 知行工作室</p>
+                    <p class="timeline-source">— 知行工作室</p>
                 </div>
             </div>
         </div>

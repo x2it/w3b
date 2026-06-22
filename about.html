@@ -396,8 +396,8 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -409,6 +409,10 @@
             font-size: 1.2rem;
             z-index: 1000;
             transition: all var(--transition-normal);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .theme-toggle:hover {
