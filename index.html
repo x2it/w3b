@@ -1508,14 +1508,37 @@
                 return a;
             }
 
+            // 主题色映射：根据当前主题生成卡片渐变
+            function getThemeGradient(baseColor, secondaryColor) {
+                return 'linear-gradient(135deg, ' + baseColor + ' 0%, ' + secondaryColor + ' 100%)';
+            }
+
+            const themeCardColors = {
+                'light':   ['#8B4513', '#2F4F4F', '#8B0000', '#556B2F', '#704214', '#4A6741'],
+                'dark':    ['#5D3A1A', '#3D5C5C', '#6B0000', '#3D4F2A', '#5A3A1A', '#3D5C3A'],
+                'blue':    ['#1E3A5F', '#2E4A6F', '#3E1A3F', '#1E4A3F', '#2E3A1F', '#1E5A4F'],
+                'green':   ['#2D5016', '#3D6026', '#4D1016', '#2D7026', '#3D5016', '#2D6036'],
+                'purple':  ['#4A1A6B', '#5A2A7B', '#6B0A1B', '#4A3A7B', '#5A1A4B', '#4A2A6B'],
+                'orange':  ['#8B4513', '#7B3F13', '#6B0000', '#7B5F13', '#8B3F13', '#6B5F13'],
+                'teal':    ['#0F4C3A', '#1F5C4A', '#2F0C1A', '#0F6C4A', '#1F4C2A', '#0F5C3A']
+            };
+
             function renderFallbackCards(containerId, phase) {
                 const container = document.getElementById(containerId);
                 if (!container) return;
                 const cards = container.querySelectorAll('.fallback-card');
                 const quotes = shuffleArray(wisdomQuotes[phase]);
+                // 获取当前主题
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                const colors = themeCardColors[currentTheme] || themeCardColors['light'];
                 cards.forEach(function(card, i) {
                     if (quotes[i]) {
-                        card.style.background = quotes[i].bg;
+                        // 使用主题色生成渐变，保持东方哲学基调
+                        const colorIndex = i % colors.length;
+                        const baseColor = colors[colorIndex];
+                        // 生成略深的 secondary color
+                        const secondaryColor = colors[(colorIndex + 1) % colors.length];
+                        card.style.background = getThemeGradient(baseColor, secondaryColor);
                         card.querySelector('.fallback-quote').textContent = '"' + quotes[i].quote + '"';
                         card.querySelector('.fallback-source').textContent = quotes[i].source;
                     }
