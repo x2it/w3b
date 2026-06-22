@@ -776,7 +776,7 @@
                     width="100%"
                     height="950"
                     frameborder="0"
-                    scrolling="no"
+                    scrolling="auto"
                     loading="lazy"
                     title="理会 · 博文随笔"
                     style="border: none; border-radius: var(--radius-md);"
@@ -1665,9 +1665,11 @@
 
                 // embed-height：内容渲染完成，设置高度并隐藏降级卡片
                 if (event.data.type === 'embed-height' && typeof event.data.height === 'number') {
+                    // 取 postMessage 高度与初始高度的最大值，确保内容不被截断
+                    var safeHeight = Math.max(event.data.height, 950);
                     if (qmeow && event.source === qmeow.contentWindow) {
                         iframeMessaged.qmeow = true;
-                        qmeow.style.height = event.data.height + 'px';
+                        qmeow.style.height = safeHeight + 'px';
                         const projectContainer = document.getElementById('projectIframeContainer');
                         const projectFallback = document.getElementById('projectFallback');
                         projectContainer.classList.remove('iframe-loading');
@@ -1675,7 +1677,7 @@
                     }
                     if (blog && event.source === blog.contentWindow) {
                         iframeMessaged.blog = true;
-                        blog.style.height = event.data.height + 'px';
+                        blog.style.height = safeHeight + 'px';
                         const blogContainer = document.getElementById('blogIframeContainer');
                         const blogFallback = document.getElementById('blogFallback');
                         blogContainer.classList.remove('iframe-loading');
