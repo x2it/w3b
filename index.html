@@ -1572,12 +1572,15 @@
                         iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
                     } catch(e) { /* 跨域静默 */ }
                 }
-                // 等待 postMessage，超时则直接显示（博文API有5次重试，最长3秒）
+                // 等待 postMessage，超时则直接显示iframe并隐藏降级卡片
                 setTimeout(function() {
                     if (!iframeMessaged[name]) {
                         var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
+                        var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
                         var container = document.getElementById(containerId);
+                        var fallback = document.getElementById(fallbackId);
                         if (container) container.classList.remove('iframe-loading');
+                        if (fallback) fallback.style.display = 'none';
                     }
                 }, 4000);
             }
@@ -1587,24 +1590,24 @@
             if (blogIframe) blogIframe.addEventListener('load', function() { onIframeLoad('blog'); });
             if (qmeowIframe) qmeowIframe.addEventListener('load', function() { onIframeLoad('qmeow'); });
 
-            // 优先级：URL参数 > localStorage记忆 > 默认降级
+            // 优先级：URL参数 > localStorage记忆 > 默认尝试iframe
             if (isDebugMode) {
                 showIframes();
-            } else if (userPref === 'iframe') {
-                showIframes();
-                // iframe加载后若收到postMessage，保持iframe；若未收到，5秒后自动切回降级
-                setTimeout(function() {
-                    var blog = document.getElementById('blog-embed');
-                    if (blog && blog.offsetHeight < 300) {
-                        showFallbacks();
-                        localStorage.removeItem('w3b_iframe_pref');
-                    }
-                }, 5000);
-            } else {
-                // 默认降级模式：渲染知行节律金句卡片
+            } else if (userPref === 'fallback') {
+                // 用户明确选择降级
                 var currentPhase = getTimePhase();
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
+            } else {
+                // 默认模式 + 用户偏好iframe：先渲染降级卡片作为兜底，同时尝试加载iframe
+                // iframe onload 或 postMessage 会自动切换显示
+                var currentPhase = getTimePhase();
+                renderFallbackCards('blogFallback', currentPhase);
+                renderFallbackCards('projectFallback', currentPhase);
+                // 如果用户之前选过iframe，直接显示
+                if (userPref === 'iframe') {
+                    showIframes();
+                }
             }
 
             // ===== 滚动联动：粒子模式随区域切换 =====
