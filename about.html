@@ -469,38 +469,38 @@
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">🎨</button>
-    <div class="theme-menu" id="themeMenu">
-        <div class="theme-option" data-theme="system">
-            <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
-            <span>系统</span>
+    <div class="theme-menu" id="themeMenu" role="menu">
+        <div class="theme-option" data-theme="light" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #ffffff; border-color: #e5e7eb;"></div>
+            <span>浅色</span>
         </div>
-        <div class="theme-option" data-theme="light">
-            <div class="theme-preview" style="background: #6366f1; border-color: #6366f1;"></div>
-            <span>默认</span>
-        </div>
-        <div class="theme-option" data-theme="dark">
+        <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #111827; border-color: #374151;"></div>
-            <span>暗色</span>
+            <span>深色</span>
         </div>
-        <div class="theme-option" data-theme="blue">
+        <div class="theme-option" data-theme="blue" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #3b82f6; border-color: #3b82f6;"></div>
             <span>蓝色</span>
         </div>
-        <div class="theme-option" data-theme="green">
+        <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #10b981; border-color: #10b981;"></div>
             <span>绿色</span>
         </div>
-        <div class="theme-option" data-theme="purple">
+        <div class="theme-option" data-theme="purple" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #8b5cf6; border-color: #8b5cf6;"></div>
             <span>紫色</span>
         </div>
-        <div class="theme-option" data-theme="orange">
+        <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #f97316; border-color: #f97316;"></div>
             <span>橙色</span>
         </div>
-        <div class="theme-option" data-theme="teal">
+        <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #14b8a6; border-color: #14b8a6;"></div>
             <span>青色</span>
+        </div>
+        <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
+            <span>系统</span>
         </div>
     </div>
 
@@ -636,7 +636,14 @@
                 <li><strong>晚间（18-24点）</strong>："合一"主题 — 知行合一、致良知、守静</li>
                 <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀</li>
             </ul>
-            <p><strong>降级方案</strong>：默认显示金句卡片，iframe 后台加载。收到第三方 <code>embed-height</code> postMessage 后自动切换 iframe；服务异常则卡片始终可见。每个主题 6 条金句，每次随机显示 3 条。</p>
+            <p><strong>降级方案</strong>：默认渲染金句卡片作为兜底，iframe 后台加载。通信流程：</p>
+            <ul>
+                <li>iframe <code>onload</code> → 主动发送 <code>embed-request-height</code> 请求高度</li>
+                <li>收到 <code>embed-ready</code> → 显示 iframe 容器</li>
+                <li>收到 <code>embed-height</code> → 设置精确高度 + 隐藏降级卡片</li>
+                <li>4 秒超时未收到 postMessage → 直接显示 iframe + 隐藏降级卡片</li>
+            </ul>
+            <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
             <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
             <p><strong>调试模式</strong>：URL 加 <code>?debug=1</code> 强制显示 iframe，用于排查第三方服务问题（如续费后验证加载、检查 postMessage 等）。</p>
             <p><strong>滚动联动</strong>：滚动到"理会"区域时粒子切换"有序思维"；滚动到"践行"区域时切换"专注凝聚"。</p>
@@ -690,7 +697,7 @@
             </div>
 
             <h3>5.2 CSS 变量体系</h3>
-            <p>每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。</p>
+            <p>每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。另有 5 个全局变量（圆角、过渡速度等）不受主题覆盖。</p>
         </div>
 
         <hr class="doc-divider">
@@ -782,7 +789,7 @@
             });
 
             function applyTheme(theme) {
-                body.classList.remove('dark-mode', 'light-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
                 themeOptions.forEach(option => {
                     option.classList.remove('active');
                     if (option.getAttribute('data-theme') === theme) {
@@ -792,8 +799,6 @@
 
                 if (theme === 'dark') {
                     body.classList.add('dark-mode');
-                } else if (theme === 'light') {
-                    body.classList.add('light-mode');
                 } else if (theme === 'blue') {
                     body.classList.add('blue-mode');
                 } else if (theme === 'green') {
