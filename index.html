@@ -276,6 +276,60 @@
             }
         }
 
+        /* ===== 降级金句卡片 ===== */
+        .fallback-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .fallback-card {
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 140px;
+        }
+
+        .fallback-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .fallback-quote {
+            margin: 0 0 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .fallback-source {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+
+        .fallback-hint {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .fallback-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ===== 移动端适配 (≤480px) ===== */
         @media (max-width: 480px) {
             #blog-content { padding: 1rem; margin: 1rem 0; }
@@ -695,6 +749,21 @@
                     style="border: none; border-radius: var(--radius-md); height: 1080px;"
                 ></iframe>
             </div>
+            <div class="fallback-cards" id="blogFallback" style="display:none;">
+                <div class="fallback-card" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                    <p class="fallback-quote">"穷理以致知，在思考中洞察本质。"</p>
+                    <p class="fallback-source">— 朱熹 · 理会践行</p>
+                </div>
+                <div class="fallback-card" style="background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);">
+                    <p class="fallback-quote">"非知之艰，行之惟艰。"</p>
+                    <p class="fallback-source">— 《尚书》 · 知易行难</p>
+                </div>
+                <div class="fallback-card" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);">
+                    <p class="fallback-quote">"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
+                    <p class="fallback-source">— 王阳明 · 知行合一</p>
+                </div>
+                <p class="fallback-hint">理无尽，行无止 — 此刻静候，彼时笃行</p>
+            </div>
         </section>
 
         <section id="projects">
@@ -714,6 +783,21 @@
                     style="border: none; border-radius: var(--radius-md); min-height: 200px;"
                     onload="this.style.height=this.contentDocument?.body?.scrollHeight+'px'"
                 ></iframe>
+            </div>
+            <div class="fallback-cards" id="projectFallback" style="display:none;">
+                <div class="fallback-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <p class="fallback-quote">"笃行以践知，在行动中验证思考。"</p>
+                    <p class="fallback-source">— 知行工作室 · 践行</p>
+                </div>
+                <div class="fallback-card" style="background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);">
+                    <p class="fallback-quote">"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
+                    <p class="fallback-source">— 当下 · 你的行动</p>
+                </div>
+                <div class="fallback-card" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">
+                    <p class="fallback-quote">"知而不行，只是未知 — 新内容正在从知到行的路上。"</p>
+                    <p class="fallback-source">— 王阳明 · 知行合一</p>
+                </div>
+                <p class="fallback-hint">知而不行，只是未知 — 新内容正在从知到行的路上</p>
             </div>
         </section>
     </div>
@@ -1355,6 +1439,35 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
             }
+
+            // iframe 降级检测：5秒后检查iframe内容高度，异常则显示降级卡片
+            function checkIframeFallback(iframeId, fallbackId) {
+                const iframe = document.getElementById(iframeId);
+                const fallback = document.getElementById(fallbackId);
+                if (!iframe || !fallback) return;
+
+                setTimeout(function() {
+                    // 检测iframe是否异常：高度异常小或内容为空
+                    const iframeHeight = iframe.offsetHeight;
+                    const iframeDoc = iframe.contentDocument;
+                    let contentHeight = 0;
+                    try {
+                        if (iframeDoc && iframeDoc.body) {
+                            contentHeight = iframeDoc.body.scrollHeight || iframeDoc.body.offsetHeight;
+                        }
+                    } catch (e) {}
+
+                    // 条件：高度<300 或 内容高度<200 视为异常
+                    const isBroken = iframeHeight < 300 || (contentHeight > 0 && contentHeight < 200);
+                    if (isBroken) {
+                        iframe.style.display = 'none';
+                        fallback.style.display = 'grid';
+                    }
+                }, 5000);
+            }
+
+            checkIframeFallback('blog-embed', 'blogFallback');
+            checkIframeFallback('qmeow-embed', 'projectFallback');
 
             // iframe 高度自适应
             // 支持 coze.site 官方 embed-height postMessage
