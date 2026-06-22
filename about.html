@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="知行工作室项目说明书 - 理会与践行的交互探索">
+    <meta name="keywords" content="知行合一,理会,践行,AI,哲学,工作室,w3b,说明书">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://w3b.pub/about.html">
     <title>关于 · 知行工作室</title>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="关于 · 知行工作室">
+    <meta property="og:description" content="知行工作室项目说明书 - 理会与践行的交互探索">
+    <meta property="og:url" content="https://w3b.pub/about.html">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="知行工作室">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="关于 · 知行工作室">
+    <meta name="twitter:description" content="知行工作室项目说明书 - 理会与践行的交互探索">
     <link rel="stylesheet" href="/assets/css/style.css?v=20260622">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap">
     <style>
@@ -702,6 +716,17 @@
             <div class="doc-callout">
                 <strong>维护注意事项：</strong>iframe 高度由 postMessage 自动调整；第三方服务异常时降级金句卡片自动显示；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。
             </div>
+
+            <h3>7.1 SEO 配置</h3>
+            <ul>
+                <li><strong>robots.txt</strong>：允许所有爬虫，禁止 <code>/assets/</code>，指向 sitemap</li>
+                <li><strong>sitemap.xml</strong>：包含首页（weekly）和关于页（monthly）</li>
+                <li><strong>canonical URL</strong>：index.html → <code>https://w3b.pub/</code>，about.html → <code>https://w3b.pub/about.html</code></li>
+                <li><strong>Open Graph</strong>：两页均配置 og:title、og:description、og:url、og:locale</li>
+                <li><strong>Twitter Card</strong>：两页均配置 summary 卡片</li>
+                <li><strong>JSON-LD</strong>：首页包含 WebSite 结构化数据</li>
+                <li><strong>404 页面</strong>：<code>noindex, nofollow</code>，防止搜索引擎索引错误页面</li>
+            </ul>
         </div>
 
         <hr class="doc-divider">
