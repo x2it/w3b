@@ -298,11 +298,16 @@
             color: white;
             text-align: center;
             box-shadow: var(--card-shadow);
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
             display: flex;
             flex-direction: column;
             justify-content: center;
             min-height: 140px;
+        }
+
+        /* 主题色联动：暗色模式下金句卡片渐变调整 */
+        [data-theme="dark"] .fallback-card {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
         .fallback-card:hover {
@@ -1514,9 +1519,44 @@
                 });
             }
 
-            const currentPhase = getTimePhase();
-            renderFallbackCards('blogFallback', currentPhase);
-            renderFallbackCards('projectFallback', currentPhase);
+            // ===== 调试模式：URL参数 ?debug=1 强制显示iframe =====
+            const urlParams = new URLSearchParams(window.location.search);
+            const isDebugMode = urlParams.get('debug') === '1';
+            const userPref = localStorage.getItem('w3b_iframe_pref'); // 'iframe' | 'fallback' | null
+
+            function showIframes() {
+                document.getElementById('blogIframeContainer').classList.remove('iframe-loading');
+                document.getElementById('projectIframeContainer').classList.remove('iframe-loading');
+                document.getElementById('blogFallback').style.display = 'none';
+                document.getElementById('projectFallback').style.display = 'none';
+            }
+
+            function showFallbacks() {
+                document.getElementById('blogIframeContainer').classList.add('iframe-loading');
+                document.getElementById('projectIframeContainer').classList.add('iframe-loading');
+                document.getElementById('blogFallback').style.display = 'grid';
+                document.getElementById('projectFallback').style.display = 'grid';
+            }
+
+            // 优先级：URL参数 > localStorage记忆 > 默认降级
+            if (isDebugMode) {
+                showIframes();
+            } else if (userPref === 'iframe') {
+                showIframes();
+                // iframe加载后若收到postMessage，保持iframe；若未收到，5秒后自动切回降级
+                setTimeout(function() {
+                    const blog = document.getElementById('blog-embed');
+                    if (blog && blog.offsetHeight < 300) {
+                        showFallbacks();
+                        localStorage.removeItem('w3b_iframe_pref');
+                    }
+                }, 5000);
+            } else {
+                // 默认降级模式：渲染知行节律金句卡片
+                const currentPhase = getTimePhase();
+                renderFallbackCards('blogFallback', currentPhase);
+                renderFallbackCards('projectFallback', currentPhase);
+            }
 
             // ===== 滚动联动：粒子模式随区域切换 =====
             const particleSection = document.getElementById('particle-section');
