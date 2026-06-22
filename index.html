@@ -277,6 +277,14 @@
         }
 
         /* ===== 降级金句卡片 ===== */
+        .iframe-loading {
+            visibility: hidden;
+            height: 0;
+            overflow: hidden;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
         .fallback-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -737,7 +745,7 @@
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
                 穷理以致知，在思考中洞察本质。
             </p>
-            <div class="iframe-container" id="blogIframeContainer">
+            <div class="iframe-container iframe-loading" id="blogIframeContainer">
                 <iframe
                     id="blog-embed"
                     src="https://fudawei.coze.site/embed?limit=10&theme=auto"
@@ -746,10 +754,10 @@
                     scrolling="no"
                     loading="lazy"
                     title="Davi的践行笔记"
-                    style="border: none; border-radius: var(--radius-md); height: 1080px;"
+                    style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
             </div>
-            <div class="fallback-cards" id="blogFallback" style="display:none;">
+            <div class="fallback-cards" id="blogFallback">
                 <div class="fallback-card" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
                     <p class="fallback-quote">"穷理以致知，在思考中洞察本质。"</p>
                     <p class="fallback-source">— 朱熹 · 理会践行</p>
@@ -771,7 +779,7 @@
             <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6; font-size: 0.95rem;">
                 笃行以践知，在行动中验证思考。
             </p>
-            <div class="iframe-container" id="projectIframeContainer">
+            <div class="iframe-container iframe-loading" id="projectIframeContainer">
                 <iframe
                     id="qmeow-embed"
                     src="https://output.coze.site/embed?theme=colorful&gap=12"
@@ -780,11 +788,10 @@
                     scrolling="no"
                     loading="lazy"
                     title="7喵仓库 - 项目作品集"
-                    style="border: none; border-radius: var(--radius-md); min-height: 200px;"
-                    onload="this.style.height=this.contentDocument?.body?.scrollHeight+'px'"
+                    style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
             </div>
-            <div class="fallback-cards" id="projectFallback" style="display:none;">
+            <div class="fallback-cards" id="projectFallback">
                 <div class="fallback-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
                     <p class="fallback-quote">"笃行以践知，在行动中验证思考。"</p>
                     <p class="fallback-source">— 知行工作室 · 践行</p>
@@ -1440,35 +1447,6 @@
                 });
             }
 
-            // iframe 降级检测：5秒后检查iframe内容高度，异常则显示降级卡片
-            function checkIframeFallback(iframeId, fallbackId) {
-                const iframe = document.getElementById(iframeId);
-                const fallback = document.getElementById(fallbackId);
-                if (!iframe || !fallback) return;
-
-                setTimeout(function() {
-                    // 检测iframe是否异常：高度异常小或内容为空
-                    const iframeHeight = iframe.offsetHeight;
-                    const iframeDoc = iframe.contentDocument;
-                    let contentHeight = 0;
-                    try {
-                        if (iframeDoc && iframeDoc.body) {
-                            contentHeight = iframeDoc.body.scrollHeight || iframeDoc.body.offsetHeight;
-                        }
-                    } catch (e) {}
-
-                    // 条件：高度<300 或 内容高度<200 视为异常
-                    const isBroken = iframeHeight < 300 || (contentHeight > 0 && contentHeight < 200);
-                    if (isBroken) {
-                        iframe.style.display = 'none';
-                        fallback.style.display = 'grid';
-                    }
-                }, 5000);
-            }
-
-            checkIframeFallback('blog-embed', 'blogFallback');
-            checkIframeFallback('qmeow-embed', 'projectFallback');
-
             // ===== 知行节律：时间感知金句轮换 =====
             const wisdomQuotes = {
                 morning: [ // 6-12点：理会
@@ -1566,7 +1544,7 @@
                 scrollObserver.observe(projectsSection);
             }
 
-            // iframe 高度自适应
+            // iframe 健康确认：收到 postMessage → 服务正常 → 显示iframe，隐藏降级
             // 支持 coze.site 官方 embed-height postMessage
             // 安全校验：origin + source + height类型
             window.addEventListener('message', function(event) {
@@ -1581,9 +1559,19 @@
                 // source校验：确认消息来自正确的iframe
                 if (qmeow && event.source === qmeow.contentWindow) {
                     qmeow.style.height = event.data.height + 'px';
+                    // 项目：隐藏降级，显示iframe
+                    const projectContainer = document.getElementById('projectIframeContainer');
+                    const projectFallback = document.getElementById('projectFallback');
+                    projectContainer.classList.remove('iframe-loading');
+                    if (projectFallback) projectFallback.style.display = 'none';
                 }
                 if (blog && event.source === blog.contentWindow) {
                     blog.style.height = event.data.height + 'px';
+                    // 笔记：隐藏降级，显示iframe
+                    const blogContainer = document.getElementById('blogIframeContainer');
+                    const blogFallback = document.getElementById('blogFallback');
+                    blogContainer.classList.remove('iframe-loading');
+                    if (blogFallback) blogFallback.style.display = 'none';
                 }
             });
         })();
