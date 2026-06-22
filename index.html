@@ -294,38 +294,37 @@
 
         .fallback-card {
             border-radius: var(--radius-md);
-            padding: 1.5rem;
-            color: white;
-            text-align: center;
+            padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            text-align: left;
             box-shadow: var(--card-shadow);
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+            border-left: 3px solid var(--accent-color);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 140px;
-        }
-
-        /* 主题色联动：暗色模式下金句卡片渐变调整 */
-        [data-theme="dark"] .fallback-card {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            min-height: 120px;
         }
 
         .fallback-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             box-shadow: var(--card-shadow-hover);
+            border-left-color: var(--accent-secondary);
         }
 
         .fallback-quote {
             margin: 0 0 0.5rem;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 500;
             line-height: 1.6;
+            color: var(--text-color);
         }
 
         .fallback-source {
             margin: 0;
             font-size: 0.8rem;
-            opacity: 0.85;
+            color: var(--text-secondary);
         }
 
         .fallback-hint {
@@ -767,15 +766,15 @@
                 ></iframe>
             </div>
             <div class="fallback-cards" id="blogFallback">
-                <div class="fallback-card" style="background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"穷理以致知，在思考中洞察本质。"</p>
                     <p class="fallback-source">— 朱熹 · 理会践行</p>
                 </div>
-                <div class="fallback-card" style="background: linear-gradient(135deg, #2F4F4F 0%, #3C6E6E 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"非知之艰，行之惟艰。"</p>
                     <p class="fallback-source">— 《尚书》 · 知易行难</p>
                 </div>
-                <div class="fallback-card" style="background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
                     <p class="fallback-source">— 王阳明 · 知行合一</p>
                 </div>
@@ -800,15 +799,15 @@
                 ></iframe>
             </div>
             <div class="fallback-cards" id="projectFallback">
-                <div class="fallback-card" style="background: linear-gradient(135deg, #556B2F 0%, #6B8E23 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"笃行以践知，在行动中验证思考。"</p>
                     <p class="fallback-source">— 知行工作室 · 践行</p>
                 </div>
-                <div class="fallback-card" style="background: linear-gradient(135deg, #4A6741 0%, #5A7D52 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
                     <p class="fallback-source">— 当下 · 你的行动</p>
                 </div>
-                <div class="fallback-card" style="background: linear-gradient(135deg, #704214 0%, #8B5A2B 100%);">
+                <div class="fallback-card">
                     <p class="fallback-quote">"知而不行，只是未知 — 新内容正在从知到行的路上。"</p>
                     <p class="fallback-source">— 王阳明 · 知行合一</p>
                 </div>
@@ -1458,36 +1457,36 @@
             // ===== 知行节律：时间感知金句轮换 =====
             const wisdomQuotes = {
                 morning: [ // 6-12点：理会
-                    { quote: "穷理以致知，在思考中洞察本质。", source: "— 朱熹 · 理会践行", bg: "linear-gradient(135deg, #8B4513 0%, #A0522D 100%)" },
-                    { quote: "博学之，审问之，慎思之，明辨之，笃行之。", source: "— 《中庸》", bg: "linear-gradient(135deg, #2F4F4F 0%, #3C6E6E 100%)" },
-                    { quote: "学而不思则罔，思而不学则殆。", source: "— 孔子 · 论语", bg: "linear-gradient(135deg, #8B0000 0%, #A52A2A 100%)" },
-                    { quote: "格物致知，诚意正心。", source: "— 《大学》", bg: "linear-gradient(135deg, #556B2F 0%, #6B8E23 100%)" },
-                    { quote: "理一分殊，月印万川。", source: "— 朱熹 · 理学", bg: "linear-gradient(135deg, #704214 0%, #8B5A2B 100%)" },
-                    { quote: "为学之道，莫先于穷理；穷理之要，必在于读书。", source: "— 朱熹", bg: "linear-gradient(135deg, #4A6741 0%, #5A7D52 100%)" }
+                    { quote: "穷理以致知，在思考中洞察本质。", source: "— 朱熹 · 理会践行" },
+                    { quote: "博学之，审问之，慎思之，明辨之，笃行之。", source: "— 《中庸》" },
+                    { quote: "学而不思则罔，思而不学则殆。", source: "— 孔子 · 论语" },
+                    { quote: "格物致知，诚意正心。", source: "— 《大学》" },
+                    { quote: "理一分殊，月印万川。", source: "— 朱熹 · 理学" },
+                    { quote: "为学之道，莫先于穷理；穷理之要，必在于读书。", source: "— 朱熹" }
                 ],
                 afternoon: [ // 12-18点：践行
-                    { quote: "笃行以践知，在行动中验证思考。", source: "— 知行工作室 · 践行", bg: "linear-gradient(135deg, #556B2F 0%, #6B8E23 100%)" },
-                    { quote: "知行合一，止于至善。", source: "— 王阳明", bg: "linear-gradient(135deg, #8B4513 0%, #A0522D 100%)" },
-                    { quote: "非知之艰，行之惟艰。", source: "— 《尚书》", bg: "linear-gradient(135deg, #2F4F4F 0%, #3C6E6E 100%)" },
-                    { quote: "纸上得来终觉浅，绝知此事要躬行。", source: "— 陆游", bg: "linear-gradient(135deg, #704214 0%, #8B5A2B 100%)" },
-                    { quote: "道虽迩，不行不至；事虽小，不为不成。", source: "— 《荀子》", bg: "linear-gradient(135deg, #4A6741 0%, #5A7D52 100%)" },
-                    { quote: "行之力则知愈进，知之深则行愈达。", source: "— 张栻", bg: "linear-gradient(135deg, #8B0000 0%, #A52A2A 100%)" }
+                    { quote: "笃行以践知，在行动中验证思考。", source: "— 知行工作室 · 践行" },
+                    { quote: "知行合一，止于至善。", source: "— 王阳明" },
+                    { quote: "非知之艰，行之惟艰。", source: "— 《尚书》" },
+                    { quote: "纸上得来终觉浅，绝知此事要躬行。", source: "— 陆游" },
+                    { quote: "道虽迩，不行不至；事虽小，不为不成。", source: "— 《荀子》" },
+                    { quote: "行之力则知愈进，知之深则行愈达。", source: "— 张栻" }
                 ],
                 evening: [ // 18-24点：合一
-                    { quote: "知是行的主意，行是知的功夫；知是行之始，行是知之成。", source: "— 王阳明 · 知行合一", bg: "linear-gradient(135deg, #8B0000 0%, #A52A2A 100%)" },
-                    { quote: "知行合一，致良知。", source: "— 王阳明", bg: "linear-gradient(135deg, #8B4513 0%, #A0522D 100%)" },
-                    { quote: "致虚极，守静笃。万物并作，吾以观复。", source: "— 老子 · 道德经", bg: "linear-gradient(135deg, #2F4F4F 0%, #3C6E6E 100%)" },
-                    { quote: "反者道之动，弱者道之用。", source: "— 老子", bg: "linear-gradient(135deg, #556B2F 0%, #6B8E23 100%)" },
-                    { quote: "万物负阴而抱阳，冲气以为和。", source: "— 老子 · 道德经", bg: "linear-gradient(135deg, #704214 0%, #8B5A2B 100%)" },
-                    { quote: "知止而后有定，定而后能静，静而后能安。", source: "— 《大学》", bg: "linear-gradient(135deg, #4A6741 0%, #5A7D52 100%)" }
+                    { quote: "知是行的主意，行是知的功夫；知是行之始，行是知之成。", source: "— 王阳明 · 知行合一" },
+                    { quote: "知行合一，致良知。", source: "— 王阳明" },
+                    { quote: "致虚极，守静笃。万物并作，吾以观复。", source: "— 老子 · 道德经" },
+                    { quote: "反者道之动，弱者道之用。", source: "— 老子" },
+                    { quote: "万物负阴而抱阳，冲气以为和。", source: "— 老子 · 道德经" },
+                    { quote: "知止而后有定，定而后能静，静而后能安。", source: "— 《大学》" }
                 ],
                 night: [ // 0-6点：静思
-                    { quote: "静而后能安，安而后能虑，虑而后能得。", source: "— 《大学》", bg: "linear-gradient(135deg, #2C2C2C 0%, #3D3D3D 100%)" },
-                    { quote: "致虚极，守静笃。", source: "— 老子 · 道德经", bg: "linear-gradient(135deg, #1C1C1C 0%, #2C2C2C 100%)" },
-                    { quote: "知者不言，言者不知。", source: "— 老子", bg: "linear-gradient(135deg, #3D3D3D 0%, #4D4D4D 100%)" },
-                    { quote: "大音希声，大象无形。", source: "— 老子 · 道德经", bg: "linear-gradient(135deg, #1C1C1C 0%, #3D3D3D 100%)" },
-                    { quote: "知人者智，自知者明。", source: "— 老子", bg: "linear-gradient(135deg, #2C2C2C 0%, #4D4D4D 100%)" },
-                    { quote: "合抱之木，生于毫末；九层之台，起于累土。", source: "— 老子", bg: "linear-gradient(135deg, #1C1C1C 0%, #2C2C2C 100%)" }
+                    { quote: "静而后能安，安而后能虑，虑而后能得。", source: "— 《大学》" },
+                    { quote: "致虚极，守静笃。", source: "— 老子 · 道德经" },
+                    { quote: "知者不言，言者不知。", source: "— 老子" },
+                    { quote: "大音希声，大象无形。", source: "— 老子 · 道德经" },
+                    { quote: "知人者智，自知者明。", source: "— 老子" },
+                    { quote: "合抱之木，生于毫末；九层之台，起于累土。", source: "— 老子" }
                 ]
             };
 
@@ -1508,37 +1507,13 @@
                 return a;
             }
 
-            // 主题色映射：根据当前主题生成卡片渐变
-            function getThemeGradient(baseColor, secondaryColor) {
-                return 'linear-gradient(135deg, ' + baseColor + ' 0%, ' + secondaryColor + ' 100%)';
-            }
-
-            const themeCardColors = {
-                'light':   ['#8B4513', '#2F4F4F', '#8B0000', '#556B2F', '#704214', '#4A6741'],
-                'dark':    ['#5D3A1A', '#3D5C5C', '#6B0000', '#3D4F2A', '#5A3A1A', '#3D5C3A'],
-                'blue':    ['#1E3A5F', '#2E4A6F', '#3E1A3F', '#1E4A3F', '#2E3A1F', '#1E5A4F'],
-                'green':   ['#2D5016', '#3D6026', '#4D1016', '#2D7026', '#3D5016', '#2D6036'],
-                'purple':  ['#4A1A6B', '#5A2A7B', '#6B0A1B', '#4A3A7B', '#5A1A4B', '#4A2A6B'],
-                'orange':  ['#8B4513', '#7B3F13', '#6B0000', '#7B5F13', '#8B3F13', '#6B5F13'],
-                'teal':    ['#0F4C3A', '#1F5C4A', '#2F0C1A', '#0F6C4A', '#1F4C2A', '#0F5C3A']
-            };
-
             function renderFallbackCards(containerId, phase) {
                 const container = document.getElementById(containerId);
                 if (!container) return;
                 const cards = container.querySelectorAll('.fallback-card');
                 const quotes = shuffleArray(wisdomQuotes[phase]);
-                // 获取当前主题
-                const currentTheme = localStorage.getItem('theme') || 'light';
-                const colors = themeCardColors[currentTheme] || themeCardColors['light'];
                 cards.forEach(function(card, i) {
                     if (quotes[i]) {
-                        // 使用主题色生成渐变，保持东方哲学基调
-                        const colorIndex = i % colors.length;
-                        const baseColor = colors[colorIndex];
-                        // 生成略深的 secondary color
-                        const secondaryColor = colors[(colorIndex + 1) % colors.length];
-                        card.style.background = getThemeGradient(baseColor, secondaryColor);
                         card.querySelector('.fallback-quote').textContent = '"' + quotes[i].quote + '"';
                         card.querySelector('.fallback-source').textContent = quotes[i].source;
                     }
