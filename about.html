@@ -603,12 +603,20 @@
             <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
 
             <h3>3.4 思考笔记 & 项目作品</h3>
-            <p>均通过 iframe 嵌入第三方内容，自动同步最新数据。当第三方服务异常时，显示降级金句卡片：</p>
+            <p>均通过 iframe 嵌入第三方内容，自动同步最新数据。当第三方服务异常时，显示<strong>知行节律</strong>降级金句卡片：</p>
             <ul>
-                <li><strong>思考笔记</strong> — iframe 嵌入 fudawei.coze.site；异常时显示 3 张"理会"主题金句卡片（朱熹、《尚书》、王阳明）</li>
-                <li><strong>项目作品</strong> — iframe 嵌入 output.coze.site（官方 API），支持 <code>theme=colorful</code> 彩色卡片 + <code>postMessage</code> 自动高度适配；异常时显示 3 张"践行"主题金句卡片</li>
+                <li><strong>思考笔记</strong> — iframe 嵌入 fudawei.coze.site；异常时显示 3 张金句卡片，主题随访问时段变化</li>
+                <li><strong>项目作品</strong> — iframe 嵌入 output.coze.site（官方 API），支持 <code>theme=colorful</code> 彩色卡片 + <code>postMessage</code> 自动高度适配；异常时显示 3 张金句卡片，主题随访问时段变化</li>
             </ul>
-            <p>降级检测：iframe 加载 5 秒后检查内容高度，若异常（高度 &lt; 300px 或内容高度 &lt; 200px）则自动隐藏 iframe，显示金句卡片。</p>
+            <p><strong>知行节律</strong>：金句主题根据访问时段自动切换，符合人体认知节律：</p>
+            <ul>
+                <li><strong>晨间（6-12点）</strong>："理会"主题 — 穷理、博学、慎思（朱熹、孔子、《大学》）</li>
+                <li><strong>午后（12-18点）</strong>："践行"主题 — 笃行、躬行、力行（王阳明、陆游、《荀子》）</li>
+                <li><strong>晚间（18-24点）</strong>："合一"主题 — 知行合一、致良知、守静（王阳明、老子、《大学》）</li>
+                <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀（老子、《大学》）</li>
+            </ul>
+            <p><strong>滚动联动</strong>：滚动到"理会"区域时粒子自动切换为"有序思维"模式；滚动到"践行"区域时切换为"专注凝聚"模式。</p>
+            <p>降级检测：iframe 加载 5 秒后检查内容高度，若异常（高度 &lt; 300px 或内容高度 &lt; 200px）则自动隐藏 iframe，显示金句卡片。每个主题包含 6 条金句，每次随机显示 3 条。</p>
         </div>
 
         <hr class="doc-divider">
