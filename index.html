@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="知行工作室的核心理念展示 - 理会与践行的交融探索，知行合一的现代实践">
     <meta name="keywords" content="知行合一,理会,践行,AI,哲学,工作室,w3b">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <link rel="canonical" href="https://w3b.pub/">
     <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
     <!-- Open Graph -->
@@ -16,7 +16,7 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:site_name" content="知行工作室">
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="知行工作室 | 理会·践行">
     <meta name="twitter:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践">
     <!-- JSON-LD 结构化数据 -->
@@ -27,596 +27,22 @@
         "name": "知行工作室",
         "url": "https://w3b.pub/",
         "description": "知行合一的现代探索 - 理会与践行的交互展示",
-        "inLanguage": "zh-CN"
+        "inLanguage": "zh-CN",
+        "author": {
+            "@type": "Organization",
+            "name": "知行工作室"
+        },
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://w3b.pub/?s={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
     }
     </script>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260622">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260623">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
-    <style>
-        /* ===== 主题变量 ===== */
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #1f2937;
-            --text-secondary: #4b5563;
-            --text-light: #9ca3af;
-            --dark-color: #111827;
-            --accent-color: #6366f1;
-            --accent-rgb: 99, 102, 241;
-            --accent-secondary: #8b5cf6;
-            --border-color: #e5e7eb;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #111827;
-                --text-color: #f3f4f6;
-                --text-secondary: #d1d5db;
-                --text-light: #9ca3af;
-                --dark-color: #f9fafb;
-                --accent-color: #8b5cf6;
-                --accent-rgb: 139, 92, 246;
-                --accent-secondary: #6366f1;
-                --border-color: #374151;
-                --card-bg: #1f2937;
-                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-                --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
-            }
-
-        }
-
-        body.dark-mode {
-            --bg-color: #111827;
-            --text-color: #f3f4f6;
-            --text-secondary: #d1d5db;
-            --text-light: #9ca3af;
-            --dark-color: #f9fafb;
-            --accent-color: #8b5cf6;
-            --accent-rgb: 139, 92, 246;
-            --accent-secondary: #6366f1;
-            --border-color: #374151;
-            --card-bg: #1f2937;
-            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
-        }
-
-        body.blue-mode {
-            --bg-color: #f8fafc;
-            --text-color: #0f172a;
-            --text-secondary: #334155;
-            --text-light: #64748b;
-            --dark-color: #020617;
-            --accent-color: #3b82f6;
-            --accent-rgb: 59, 130, 246;
-            --accent-secondary: #0ea5e9;
-            --border-color: #e0e7ff;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.12);
-        }
-
-        body.green-mode {
-            --bg-color: #f0fdf4;
-            --text-color: #065f46;
-            --text-secondary: #166534;
-            --text-light: #15803d;
-            --dark-color: #043626;
-            --accent-color: #10b981;
-            --accent-rgb: 16, 185, 129;
-            --accent-secondary: #059669;
-            --border-color: #d1fae5;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(16, 185, 129, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(16, 185, 129, 0.12);
-        }
-
-        body.purple-mode {
-            --bg-color: #faf5ff;
-            --text-color: #4c1d95;
-            --text-secondary: #5b21b6;
-            --text-light: #6d28d9;
-            --dark-color: #311e88;
-            --accent-color: #8b5cf6;
-            --accent-rgb: 139, 92, 246;
-            --accent-secondary: #7c3aed;
-            --border-color: #ede9fe;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(139, 92, 246, 0.12);
-        }
-
-        body.orange-mode {
-            --bg-color: #fffbeb;
-            --text-color: #78350f;
-            --text-secondary: #92400e;
-            --text-light: #b45309;
-            --dark-color: #451a03;
-            --accent-color: #f97316;
-            --accent-rgb: 249, 115, 22;
-            --accent-secondary: #ea580c;
-            --border-color: #ffedd5;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(249, 115, 22, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(249, 115, 22, 0.12);
-        }
-
-        body.teal-mode {
-            --bg-color: #f0fdfa;
-            --text-color: #0f766e;
-            --text-secondary: #134e4a;
-            --text-light: #0d9488;
-            --dark-color: #064e3b;
-            --accent-color: #14b8a6;
-            --accent-rgb: 20, 184, 166;
-            --accent-secondary: #0d9488;
-            --border-color: #ccfbf1;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(20, 184, 166, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(20, 184, 166, 0.12);
-        }
-
-        /* ===== 全局基础 ===== */
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color var(--transition-normal), color var(--transition-normal);
-        }
-
-        /* ===== 完全隐藏滚动条（保留滚动功能） ===== */
-        * {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        *::-webkit-scrollbar { width: 0; height: 0; display: none; }
-        *::-webkit-scrollbar-track { display: none; }
-        *::-webkit-scrollbar-thumb { display: none; }
-
-        /* ===== 头部 ===== */
-        header {
-            background: var(--bg-color);
-            color: var(--text-color);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: var(--card-shadow);
-            transition: all var(--transition-normal);
-        }
-
-        .site-title {
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .site-subtitle {
-            color: var(--text-secondary);
-            transition: color var(--transition-normal);
-            word-break: keep-all;
-        }
-
-        /* ===== 章节标题：渐变文字，融合不割裂 ===== */
-        .section-title {
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-            transition: all var(--transition-normal);
-        }
-
-        /* ===== 模块区域：白色卡片 ===== */
-        #particle-section,
-        .timeline-section,
-        .balance-section,
-        #thinking,
-        #projects {
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            margin: 2rem 0;
-            padding: 2.5rem 1.5rem;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--card-shadow);
-            transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
-        }
-
-        /* AI赋能：卡片hover时的微妙光晕 */
-        #particle-section:hover,
-        .timeline-section:hover,
-        .balance-section:hover,
-        #thinking:hover,
-        #projects:hover {
-            box-shadow: var(--card-shadow-hover);
-            transform: translateY(-2px);
-            position: relative;
-        }
-        #particle-section:hover::after,
-        .timeline-section:hover::after,
-        .balance-section:hover::after,
-        #thinking:hover::after,
-        #projects:hover::after {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.03) 0%, transparent 50%, rgba(var(--accent-rgb), 0.02) 100%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== iframe 容器 ===== */
-        .iframe-container {
-            position: relative;
-            width: 100%;
-            margin: 1rem auto;
-            overflow: visible;
-            max-width: 100%;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-color);
-            transition: border-color var(--transition-normal);
-        }
-
-        .iframe-container:hover {
-            border-color: rgba(var(--accent-rgb), 0.2);
-        }
-
-        .iframe-container iframe {
-            display: block;
-            width: 100%;
-            border: none;
-            background: var(--card-bg);
-            overflow: visible;
-            transition: height var(--transition-smooth);
-        }
-
-        /* ===== 平板端适配 (481px - 1024px) ===== */
-        @media (min-width: 481px) and (max-width: 1024px) {
-            #thinking, #projects,
-            #particle-section, .timeline-section, .balance-section {
-                margin: 1.5rem 0;
-                padding: 2rem 1rem;
-            }
-        }
-
-        /* ===== 降级金句卡片 ===== */
-        .iframe-loading {
-            visibility: hidden;
-            height: 0;
-            overflow: hidden;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        .fallback-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .fallback-card {
-            border-radius: var(--radius-md);
-            padding: 1.5rem 1.5rem 1.5rem 1.75rem;
-            background: var(--card-bg);
-            color: var(--text-color);
-            text-align: left;
-            box-shadow: var(--card-shadow);
-            border-left: 3px solid var(--accent-color);
-            transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: 120px;
-        }
-
-        .fallback-card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--card-shadow-hover);
-            border-left-color: var(--accent-secondary);
-        }
-
-        .fallback-quote {
-            margin: 0 0 0.5rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            line-height: 1.6;
-            color: var(--text-color);
-        }
-
-        .fallback-source {
-            margin: 0;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        .section-intro {
-            text-align: center;
-            color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 1.5rem;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .section-sub {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-
-        .timeline-source {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .fallback-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* ===== 移动端适配 (≤480px) ===== */
-        @media (max-width: 480px) {
-            #thinking, #projects,
-            #particle-section, .timeline-section, .balance-section {
-                margin: 1.25rem 0;
-                padding: 1.5rem 0.75rem;
-            }
-            .site-subtitle {
-                font-size: 0.95rem;
-            }
-        }
-
-        /* ===== 主题切换按钮 ===== */
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: var(--card-shadow);
-            transition: all var(--transition-normal);
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.08);
-            box-shadow: var(--card-shadow-hover);
-        }
-
-        .theme-toggle:active {
-            transform: scale(0.95);
-        }
-
-        @media (max-width: 480px) {
-            .theme-toggle {
-                top: 12px;
-                right: 12px;
-                width: 42px;
-                height: 42px;
-                font-size: 1.1rem;
-            }
-        }
-
-        .theme-menu {
-            position: fixed;
-            top: 78px;
-            right: 20px;
-            z-index: 1000;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            box-shadow: var(--card-shadow-hover);
-            padding: 8px;
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 120px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            animation: menuFadeIn 0.25s var(--transition-smooth);
-        }
-
-        @keyframes menuFadeIn {
-            from { opacity: 0; transform: translateY(-8px) scale(0.96); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        @media (max-width: 480px) {
-            .theme-menu {
-                top: 62px;
-                right: 12px;
-                min-width: 110px;
-                padding: 6px;
-            }
-        }
-
-        .theme-menu.show {
-            display: flex;
-        }
-
-        .theme-option {
-            padding: 10px 12px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-height: 40px;
-            touch-action: manipulation;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 480px) {
-            .theme-option {
-                padding: 8px 10px;
-                min-height: 36px;
-                font-size: 0.85rem;
-            }
-        }
-
-        .theme-option:hover {
-            background: var(--border-color);
-        }
-
-        .theme-option:active {
-            transform: scale(0.97);
-        }
-
-        .theme-option.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .theme-preview {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid var(--border-color);
-            flex-shrink: 0;
-        }
-
-        @media (max-width: 480px) {
-            .theme-preview {
-                width: 14px;
-                height: 14px;
-            }
-        }
-
-        /* ===== 平衡器容器 ===== */
-        .balance-container {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-normal);
-        }
-
-        /* ===== 底部导航 ===== */
-        .footer-links {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--card-shadow);
-            margin: 2rem 0;
-            transition: all var(--transition-normal);
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
-            transition: all var(--transition-normal);
-        }
-
-        .footer-link:hover {
-            color: var(--accent-color);
-            background: rgba(var(--accent-rgb), 0.04);
-            transform: translateY(-2px);
-            box-shadow: var(--card-shadow);
-        }
-
-        /* ===== 页脚 ===== */
-        footer {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: none;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--card-shadow);
-            margin-top: 2rem;
-            padding: 2.5rem 1.5rem 2rem;
-            transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
-        }
-
-        footer p, .copyright {
-            color: var(--text-secondary);
-            transition: color var(--transition-normal);
-        }
-
-        /* ===== 返回顶部 ===== */
-        .back-to-top {
-            background: var(--card-bg);
-            color: var(--accent-color);
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: all var(--transition-normal);
-        }
-
-        .back-to-top:hover {
-            background: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-            box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.3);
-        }
-
-        /* ===== 联系区域（融入footer） ===== */
-        #contact {
-            text-align: center;
-            padding: 2.5rem 1.5rem 1.5rem;
-            margin: 0;
-            border: none;
-            background: transparent;
-            box-shadow: none;
-        }
-
-        #contact .section-title {
-            margin-bottom: 0.75rem;
-        }
-
-        .email-link {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            font-weight: 500;
-            transition: all var(--transition-normal);
-        }
-
-        .email-link:hover {
-            background: var(--accent-color);
-            border-color: var(--accent-color) !important;
-            color: white !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
-        }
-
-        /* ===== 粒子控制按钮优化 ===== */
-        .control-btn {
-            transition: all var(--transition-normal) !important;
-            letter-spacing: 0.02em;
-        }
-
-        /* ===== 移动端额外优化 ===== */
-        @media (max-width: 480px) {
-            .particle-controls button {
-                margin: 0 6px !important;
-                padding: 10px 18px !important;
-                font-size: 0.88rem !important;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- AI神经网络背景装饰 -->
@@ -778,6 +204,7 @@
                     frameborder="0"
                     scrolling="auto"
                     loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
                     title="理会 · 博文随笔"
                     style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
@@ -812,6 +239,7 @@
                     frameborder="0"
                     scrolling="auto"
                     loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
                     title="践行 · 笃行成果"
                     style="border: none; border-radius: var(--radius-md);"
                 ></iframe>
@@ -906,6 +334,24 @@
                 if (!themeToggle.contains(event.target) && !themeMenu.contains(event.target)) {
                     themeMenu.classList.remove('show');
                 }
+            });
+
+            // 键盘支持：Escape 关闭菜单；Enter/Space 激活选项
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    themeMenu.classList.remove('show');
+                }
+            });
+            themeOptions.forEach(option => {
+                option.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        const theme = this.getAttribute('data-theme');
+                        applyTheme(theme);
+                        localStorage.setItem('theme', theme);
+                        themeMenu.classList.remove('show');
+                    }
+                });
             });
 
             // 主题选项点击事件
@@ -1085,6 +531,8 @@
             let resizeTimer = null;
             const dpr = window.devicePixelRatio || 1;
             let containerWidth = 0, containerHeight = 0;
+            // prefers-reduced-motion: 减少动画消耗，提升可访问性
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             
             function updateCanvasSize() {
                 const section = document.getElementById('particle-section');
@@ -1118,9 +566,13 @@
                     this.pulsePhase = Math.random() * Math.PI * 2;
                 }
                 update() {
-                    // 粒子脉动效果
-                    this.pulsePhase += this.pulseSpeed;
-                    this.size = this.baseSize * (1 + Math.sin(this.pulsePhase) * 0.3);
+                    // 减少动画时仅保留最小位置更新，避免完全静止
+                    this.pulsePhase += this.pulseSpeed * (reducedMotion ? 0.1 : 1);
+                    this.size = this.baseSize * (1 + (reducedMotion ? 0.05 : Math.sin(this.pulsePhase) * 0.3));
+                    
+                    if (reducedMotion) {
+                        return;
+                    }
                     
                     if (mode === 'order') {
                         const gridX = Math.round(this.x / 40) * 40 + 20;
@@ -1258,6 +710,13 @@
                 const rgbStr = cachedAccentRgb;
                 const now = Date.now();
                 
+                if (reducedMotion) {
+                    // 减少动画：仅绘制静态粒子，不连线不流动
+                    particles.forEach(p => p.draw());
+                    animationId = requestAnimationFrame(animateParticles);
+                    return;
+                }
+                
                 if (mode === 'ai') {
                     // AI模式：画层间神经网络连接线 + 信号流动
                     const layerCount = 3;
@@ -1370,6 +829,18 @@
                 if (animationId) cancelAnimationFrame(animationId);
                 animateParticles();
             }
+            
+            // 页面不可见时暂停粒子动画（节省 CPU/GPU）
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    if (animationId) {
+                        cancelAnimationFrame(animationId);
+                        animationId = null;
+                    }
+                } else if (!animationId && canvas) {
+                    animateParticles();
+                }
+            });
             
             if (window.ResizeObserver) {
                 const resizeObserver = new ResizeObserver(entries => {

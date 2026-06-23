@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="知行工作室项目说明书 - 理会与践行的交互探索">
     <meta name="keywords" content="知行合一,理会,践行,AI,哲学,工作室,w3b,说明书">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <link rel="canonical" href="https://w3b.pub/about.html">
     <title>关于 · 知行工作室</title>
     <!-- Open Graph -->
@@ -16,132 +16,15 @@
     <meta property="og:locale" content="zh_CN">
     <meta property="og:site_name" content="知行工作室">
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="关于 · 知行工作室">
     <meta name="twitter:description" content="知行工作室项目说明书 - 理会与践行的交互探索">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260622">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260623">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap">
     <style>
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #1f2937;
-            --text-secondary: #4b5563;
-            --text-light: #9ca3af;
-            --dark-color: #111827;
-            --accent-color: #6366f1;
-            --accent-secondary: #8b5cf6;
-            --border-color: #e5e7eb;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.08);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-smooth: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --bg-color: #111827;
-                --text-color: #f3f4f6;
-                --text-secondary: #d1d5db;
-                --text-light: #9ca3af;
-                --dark-color: #f9fafb;
-                --accent-color: #8b5cf6;
-                --accent-secondary: #6366f1;
-                --border-color: #374151;
-                --card-bg: #1f2937;
-                --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-                --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
-            }
-        }
-
-        body.dark-mode {
-            --bg-color: #111827;
-            --text-color: #f3f4f6;
-            --text-secondary: #d1d5db;
-            --text-light: #9ca3af;
-            --dark-color: #f9fafb;
-            --accent-color: #8b5cf6;
-            --accent-secondary: #6366f1;
-            --border-color: #374151;
-            --card-bg: #1f2937;
-            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.25);
-        }
-
-        body.blue-mode {
-            --bg-color: #f8fafc;
-            --text-color: #0f172a;
-            --text-secondary: #334155;
-            --text-light: #64748b;
-            --dark-color: #020617;
-            --accent-color: #3b82f6;
-            --accent-secondary: #0ea5e9;
-            --border-color: #e0e7ff;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(59, 130, 246, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(59, 130, 246, 0.12);
-        }
-
-        body.green-mode {
-            --bg-color: #f0fdf4;
-            --text-color: #065f46;
-            --text-secondary: #166534;
-            --text-light: #15803d;
-            --dark-color: #043626;
-            --accent-color: #10b981;
-            --accent-secondary: #059669;
-            --border-color: #d1fae5;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(16, 185, 129, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(16, 185, 129, 0.12);
-        }
-
-        body.purple-mode {
-            --bg-color: #faf5ff;
-            --text-color: #4c1d95;
-            --text-secondary: #5b21b6;
-            --text-light: #6d28d9;
-            --dark-color: #311e88;
-            --accent-color: #8b5cf6;
-            --accent-secondary: #7c3aed;
-            --border-color: #ede9fe;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(139, 92, 246, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(139, 92, 246, 0.12);
-        }
-
-        body.orange-mode {
-            --bg-color: #fffbeb;
-            --text-color: #78350f;
-            --text-secondary: #92400e;
-            --text-light: #b45309;
-            --dark-color: #451a03;
-            --accent-color: #f97316;
-            --accent-secondary: #ea580c;
-            --border-color: #ffedd5;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(249, 115, 22, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(249, 115, 22, 0.12);
-        }
-
-        body.teal-mode {
-            --bg-color: #f0fdfa;
-            --text-color: #0f766e;
-            --text-secondary: #134e4a;
-            --text-light: #0d9488;
-            --dark-color: #064e3b;
-            --accent-color: #14b8a6;
-            --accent-secondary: #0d9488;
-            --border-color: #ccfbf1;
-            --card-bg: #ffffff;
-            --card-shadow: 0 2px 8px rgba(20, 184, 166, 0.06);
-            --card-shadow-hover: 0 8px 24px rgba(20, 184, 166, 0.12);
-        }
-
+        /* 主题变量定义：见 /assets/css/style.css */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
