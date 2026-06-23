@@ -200,13 +200,13 @@
                     id="blog-embed"
                     src="https://fudawei.coze.site/embed?limit=10&theme=auto"
                     width="100%"
-                    height="1500"
+                    height="0"
                     frameborder="0"
                     scrolling="auto"
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
                     title="理会 · 博文随笔"
-                    style="border: none; border-radius: var(--radius-md);"
+                    style="border: none; border-radius: var(--radius-md); min-height: 200px;"
                 ></iframe>
             </div>
             <div class="fallback-cards" id="blogFallback">
@@ -235,13 +235,13 @@
                     id="qmeow-embed"
                     src="https://output.coze.site/embed?theme=colorful&gap=12"
                     width="100%"
-                    height="950"
+                    height="0"
                     frameborder="0"
                     scrolling="auto"
                     loading="lazy"
                     referrerpolicy="no-referrer-when-downgrade"
                     title="践行 · 笃行成果"
-                    style="border: none; border-radius: var(--radius-md);"
+                    style="border: none; border-radius: var(--radius-md); min-height: 200px;"
                 ></iframe>
             </div>
             <div class="fallback-cards" id="projectFallback">
@@ -1049,10 +1049,16 @@
                     if (!iframeMessaged[name]) {
                         var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
                         var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
+                        var iframeId = name === 'blog' ? 'blog-embed' : 'qmeow-embed';
                         var container = document.getElementById(containerId);
                         var fallback = document.getElementById(fallbackId);
+                        var iframe = document.getElementById(iframeId);
                         if (container) container.classList.remove('iframe-loading');
                         if (fallback) fallback.style.display = 'none';
+                        // 超时回退：给 iframe 设置合理高度，避免 height=0 留白
+                        if (iframe && (parseInt(iframe.style.height, 10) || 0) < 100) {
+                            iframe.style.height = '900px';
+                        }
                     }
                 }, 4000);
             }
@@ -1136,8 +1142,9 @@
 
                 // embed-height：内容渲染完成，设置高度并隐藏降级卡片
                 if (event.data.type === 'embed-height' && typeof event.data.height === 'number') {
-                    // 取 postMessage 高度与初始高度的最大值，确保内容不被截断
-                    var safeHeight = Math.max(event.data.height, 1500);
+                    // 自适应高度：取报告值与最小安全值（200px）中的较大者，确保内容不被截断
+                    // 不再使用固定 1500 下限，避免内容短时留下大量空白
+                    var safeHeight = Math.max(event.data.height, 200);
                     if (qmeow && event.source === qmeow.contentWindow) {
                         iframeMessaged.qmeow = true;
                         qmeow.style.height = safeHeight + 'px';
