@@ -1147,22 +1147,25 @@
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
-                // 侧边导航：高亮当前区域
+                // 侧边导航：高亮当前区域（滚动位置计算法，确保唯一激活）
                 var navDots = document.querySelectorAll('.nav-dot');
-                var sections = ['particle-section', 'timeline-section', 'thinking', 'projects'];
-                var observerNav = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            navDots.forEach(function(dot) { dot.classList.remove('active'); });
-                            var activeDot = document.querySelector('.nav-dot[href="#' + entry.target.id + '"]');
-                            if (activeDot) activeDot.classList.add('active');
+                var navSections = ['particle-section', 'timeline-section', 'thinking', 'projects'];
+
+                function updateActiveNav() {
+                    var scrollY = window.scrollY + window.innerHeight * 0.4;
+                    var currentId = navSections[0];
+                    for (var i = 0; i < navSections.length; i++) {
+                        var el = document.getElementById(navSections[i]);
+                        if (el && el.offsetTop <= scrollY) {
+                            currentId = navSections[i];
                         }
+                    }
+                    navDots.forEach(function(dot) {
+                        dot.classList.toggle('active', dot.getAttribute('href') === '#' + currentId);
                     });
-                }, { threshold: 0.3 });
-                sections.forEach(function(id) {
-                    var el = document.getElementById(id);
-                    if (el) observerNav.observe(el);
-                });
+                }
+                updateActiveNav();
+                window.addEventListener('scroll', updateActiveNav, { passive: true });
                 // 时间线入场动画
                 var timelineItems = document.querySelectorAll('.timeline-item');
                 var observerTimeline = new IntersectionObserver(function(entries) {
@@ -1257,7 +1260,7 @@
             var iframeMessaged = window._iframeMessaged || { blog: false, qmeow: false };
 
             var defaultHeights = {
-                blog: 1000,
+                blog: 1100,
                 qmeow: 800
             };
 
