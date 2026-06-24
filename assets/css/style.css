@@ -499,36 +499,6 @@ body {
     }
 }
 
-/* 入场动画 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
 
@@ -680,7 +650,7 @@ section:last-of-type { border-bottom: none; }
 .control-btn {
     background: var(--accent-color);
     color: white;
-    border: none;
+    border: 2px solid var(--accent-color);
     padding: 0.8rem 1.5rem;
     border-radius: 30px;
     cursor: pointer;
@@ -691,7 +661,7 @@ section:last-of-type { border-bottom: none; }
     min-height: 44px;
     min-width: 120px;
     touch-action: manipulation;
-    border: 2px solid var(--accent-color);
+    margin: 0 10px;
     -webkit-tap-highlight-color: transparent;
     position: relative;
     overflow: hidden;

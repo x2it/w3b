@@ -130,10 +130,10 @@
         <h2 class="section-title" data-i18n="section.thinking">理会 · 洞察本质</h2>
         <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态" data-i18n-aria="aria.canvas"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
-            <button class="control-btn active" id="btn-order" style="margin: 0 10px;" data-i18n="btn.order">有序思维</button>
-            <button class="control-btn" id="btn-chaos" style="margin: 0 10px;" data-i18n="btn.chaos">发散联想</button>
-            <button class="control-btn" id="btn-focus" style="margin: 0 10px;" data-i18n="btn.focus">专注凝聚</button>
-            <button class="control-btn" id="btn-ai" style="margin: 0 10px;" data-i18n="btn.ai">AI 思维</button>
+            <button class="control-btn active" id="btn-order" data-i18n="btn.order">有序思维</button>
+            <button class="control-btn" id="btn-chaos" data-i18n="btn.chaos">发散联想</button>
+            <button class="control-btn" id="btn-focus" data-i18n="btn.focus">专注凝聚</button>
+            <button class="control-btn" id="btn-ai" data-i18n="btn.ai">AI 思维</button>
         </div>
         <p id="particle-desc" data-i18n="desc.ai" style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto; transition: opacity 0.3s ease;">
             粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。
@@ -404,7 +404,7 @@
                         renderFallbackCards('projectFallback', currentPhase);
                     }
                     // 更新平衡器状态
-                    if (typeof updateBalanceState === 'function') updateBalanceState();
+                    if (typeof updateBalance === 'function') updateBalance();
                     // 更新AI金句
                     var quoteText = document.getElementById('ai-quote-text');
                     if (quoteText) {
@@ -623,7 +623,6 @@
                 const quotes = [];
                 for (var i = 0; i < 15; i++) quotes.push(t('ai.quote.' + i));
                 const quoteText = document.getElementById('ai-quote-text');
-                const quoteCursor = document.getElementById('ai-quote-cursor');
                 let quoteIndex = 0;
                 let charIndex = 0;
                 let isDeleting = false;
