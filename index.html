@@ -1117,14 +1117,31 @@
                 const qmeow = document.getElementById('qmeow-embed');
                 const blog = document.getElementById('blog-embed');
 
+                // 匹配iframe：优先用event.source(精确)，备用origin(兼容跨域)
+                function matchIframe(iframeEl, origin) {
+                    if (!iframeEl) return false;
+                    try {
+                        if (event.source === iframeEl.contentWindow) return true;
+                    } catch(e) { /* 跨域安全限制 */ }
+                    // 备用：通过src的origin匹配
+                    try {
+                        var srcOrigin = new URL(iframeEl.src).origin;
+                        if (origin === srcOrigin) return true;
+                    } catch(e) {}
+                    return false;
+                }
+
+                var isBlog = matchIframe(blog, event.origin);
+                var isQmeow = matchIframe(qmeow, event.origin);
+
                 // embed-ready：iframe 已就绪，先显示容器让用户看到加载状态
                 if (event.data.type === 'embed-ready') {
-                    if (blog && event.source === blog.contentWindow) {
+                    if (isBlog) {
                         iframeMessaged.blog = true;
                         const blogContainer = document.getElementById('blogIframeContainer');
                         if (blogContainer) blogContainer.classList.remove('iframe-loading');
                     }
-                    if (qmeow && event.source === qmeow.contentWindow) {
+                    if (isQmeow) {
                         iframeMessaged.qmeow = true;
                         const projectContainer = document.getElementById('projectIframeContainer');
                         if (projectContainer) projectContainer.classList.remove('iframe-loading');
@@ -1137,7 +1154,7 @@
                     // 自适应高度：取报告值与最小安全值（200px）中的较大者，确保内容不被截断
                     // 不再使用固定 1500 下限，避免内容短时留下大量空白
                     var safeHeight = Math.max(event.data.height, 200);
-                    if (qmeow && event.source === qmeow.contentWindow) {
+                    if (isQmeow) {
                         iframeMessaged.qmeow = true;
                         qmeow.style.height = safeHeight + 'px';
                         const projectContainer = document.getElementById('projectIframeContainer');
@@ -1145,7 +1162,7 @@
                         projectContainer.classList.remove('iframe-loading');
                         if (projectFallback) projectFallback.style.display = 'none';
                     }
-                    if (blog && event.source === blog.contentWindow) {
+                    if (isBlog) {
                         iframeMessaged.blog = true;
                         blog.style.height = safeHeight + 'px';
                         const blogContainer = document.getElementById('blogIframeContainer');
