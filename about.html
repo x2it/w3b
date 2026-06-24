@@ -276,7 +276,7 @@
 
 /* about页面特有样式 · Theme toggle 样式：见 /assets/css/style.css */
     </style>
-    <script src="/assets/js/i18n.js?v=20260624"></script>
+    <script src="/assets/js/i18n.js?v=20260624b"></script>
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
@@ -424,7 +424,7 @@
                 <li><strong>有序思维</strong> — 粒子排列为规则网格，各就各位互不连线，象征逻辑与秩序</li>
                 <li><strong>发散联想</strong> — 粒子自由运动，近距离粒子相互连线，象征创造性思维</li>
                 <li><strong>专注凝聚</strong> — 粒子向中心聚拢，各自独立不连线，象征深度思考与聚焦</li>
-                <li><strong>AI 思维</strong> — 粒子形成 3 层神经网络结构（输入层 → 隐藏层 → 输出层），层间连线模拟突触连接，信号光点沿连线流动并带拖尾效果，节点发光模拟神经元激活。象征 AI 作为知与行的数字映射</li>
+                <li><strong>AI 思维</strong> — 粒子形成 3 层神经网络结构（输入层、隐藏层、输出层），层间连线模拟突触连接，信号光点沿连线流动并带拖尾效果，节点发光模拟神经元激活。象征 AI 作为知与行的数字映射</li>
             </ul>
             <p>80-120 个粒子，requestAnimationFrame 驱动，支持鼠标/触摸交互。颜色跟随主题变量动态变化。</p>
 
@@ -455,11 +455,11 @@
             </ul>
             <p><strong>降级方案</strong>：iframe 加载成功即显示，postMessage 用于精确高度调整。通信流程：</p>
             <ul>
-                <li>iframe <code>onload</code> → 内容加载成功，发送 <code>embed-request-height</code> 请求高度</li>
-                <li>1.5 秒内未收到高度消息 → 使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
-                <li>收到 <code>embed-ready</code> → 标记 iframe 就绪</li>
-                <li>收到 <code>embed-height</code> → 设置精确高度</li>
-                <li>iframe <code>onerror</code> / 网络错误 → 显示金句降级卡片</li>
+                <li>iframe <code>onload</code> 触发时，内容加载成功，发送 <code>embed-request-height</code> 请求高度</li>
+                <li>1.5 秒内未收到高度消息，则使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
+                <li>收到 <code>embed-ready</code> 消息，标记 iframe 就绪</li>
+                <li>收到 <code>embed-height</code> 消息，设置精确高度</li>
+                <li>iframe <code>onerror</code> 或网络错误时，显示金句降级卡片</li>
             </ul>
             <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
             <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
@@ -559,7 +559,7 @@
             <ul>
                 <li><strong>robots.txt</strong>：允许所有爬虫，禁止 <code>/assets/</code>，指向 sitemap</li>
                 <li><strong>sitemap.xml</strong>：包含首页（weekly）和关于页（monthly）</li>
-                <li><strong>canonical URL</strong>：index.html → <code>https://w3b.pub/</code>，about.html → <code>https://w3b.pub/about.html</code></li>
+                <li><strong>canonical URL</strong>：index.html 对应 <code>https://w3b.pub/</code>，about.html 对应 <code>https://w3b.pub/about.html</code></li>
                 <li><strong>Open Graph</strong>：两页均配置 og:title、og:description、og:url、og:locale</li>
                 <li><strong>Twitter Card</strong>：两页均配置 summary 卡片</li>
                 <li><strong>JSON-LD</strong>：首页包含 WebSite 结构化数据</li>
