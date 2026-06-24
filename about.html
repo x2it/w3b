@@ -19,7 +19,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="关于 · 知行工作室" data-i18n-content="about.meta.twitter.title">
     <meta name="twitter:description" content="知行工作室项目说明书 - 理会与践行的交互探索" data-i18n-content="about.meta.twitter.description">
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260624">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260624b">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap">
@@ -358,7 +358,7 @@
                 </div>
                 <div class="doc-info-card">
                     <div class="doc-info-card-label" data-i18n="about.info.version">版本</div>
-                    <div class="doc-info-card-value">v2.1</div>
+                    <div class="doc-info-card-value">v2.2</div>
                 </div>
             </div>
 
@@ -453,12 +453,13 @@
                 <li><strong>晚间（18-24点）</strong>："合一"主题 — 知行合一、致良知、守静</li>
                 <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀</li>
             </ul>
-            <p><strong>降级方案</strong>：默认渲染金句卡片作为兜底，iframe 后台加载。通信流程：</p>
+            <p><strong>降级方案</strong>：iframe 加载成功即显示，postMessage 用于精确高度调整。通信流程：</p>
             <ul>
-                <li>iframe <code>onload</code> → 主动发送 <code>embed-request-height</code> 请求高度</li>
-                <li>收到 <code>embed-ready</code> → 显示 iframe 容器</li>
-                <li>收到 <code>embed-height</code> → 设置精确高度 + 隐藏降级卡片</li>
-                <li>4 秒超时未收到 postMessage → 直接显示 iframe + 隐藏降级卡片</li>
+                <li>iframe <code>onload</code> → 内容加载成功，发送 <code>embed-request-height</code> 请求高度</li>
+                <li>1.5 秒内未收到高度消息 → 使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
+                <li>收到 <code>embed-ready</code> → 标记 iframe 就绪</li>
+                <li>收到 <code>embed-height</code> → 设置精确高度</li>
+                <li>iframe <code>onerror</code> / 网络错误 → 显示金句降级卡片</li>
             </ul>
             <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
             <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
@@ -574,8 +575,8 @@
         </div>
 
         <div class="doc-footer">
-            <p data-i18n="about.footer.title">知行工作室 · 项目说明书 v2.1</p>
-            <p data-i18n="about.footer.date">2026年6月21日 · w3b.pub</p>
+            <p data-i18n="about.footer.title">知行工作室 · 项目说明书 v2.2</p>
+            <p data-i18n="about.footer.date">2026年6月24日 · w3b.pub</p>
         </div>
     </div>
 

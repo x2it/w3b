@@ -279,8 +279,8 @@ window.I18N = {
         'about.table.layout': '布局特点',
         'about.ch7.title': '部署与维护',
         'about.ch7.s1.title': '7.1 SEO 配置',
-        'about.footer.title': '知行工作室 · 项目说明书 v2.1',
-        'about.footer.date': '2026年6月21日 · w3b.pub'
+        'about.footer.title': '知行工作室 · 项目说明书 v2.2',
+        'about.footer.date': '2026年6月24日 · w3b.pub'
     },
 
     // ===== 繁体中文 =====
@@ -538,8 +538,8 @@ window.I18N = {
         'about.table.layout': '佈局特點',
         'about.ch7.title': '部署與維護',
         'about.ch7.s1.title': '7.1 SEO 配置',
-        'about.footer.title': '知行工作室 · 項目說明書 v2.1',
-        'about.footer.date': '2026年6月21日 · w3b.pub'
+        'about.footer.title': '知行工作室 · 項目說明書 v2.2',
+        'about.footer.date': '2026年6月24日 · w3b.pub'
     },
 
     // ===== English =====
@@ -797,7 +797,7 @@ window.I18N = {
         'about.table.layout': 'Layout Features',
         'about.ch7.title': 'Deployment & Maintenance',
         'about.ch7.s1.title': '7.1 SEO Configuration',
-        'about.footer.title': 'Zhixing Studio · Project Documentation v2.1',
-        'about.footer.date': 'June 21, 2026 · w3b.pub'
+        'about.footer.title': 'Zhixing Studio · Project Documentation v2.2',
+        'about.footer.date': 'June 24, 2026 · w3b.pub'
     }
 };

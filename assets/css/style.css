@@ -980,10 +980,10 @@ input[type=range]::-moz-range-thumb {
     border: 1px solid var(--border-color);
 }
 .footer-link {
-    color: var(--text-primary);
+    color: var(--text-color);
     text-decoration: none;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.6rem 1.2rem;
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -994,15 +994,19 @@ input[type=range]::-moz-range-thumb {
     min-width: 100px;
     text-align: center;
     touch-action: manipulation;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
+    background: var(--gray-light, #f8f9fa);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+body.dark-mode .footer-link {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 .footer-link:hover {
     color: var(--accent-color);
-    background: rgba(var(--accent-rgb), 0.05);
+    background: rgba(var(--accent-rgb), 0.08);
     transform: translateY(-2px);
-    border-color: rgba(var(--accent-rgb), 0.3);
-    box-shadow: 0 4px 8px rgba(var(--accent-rgb), 0.1);
+    border-color: rgba(var(--accent-rgb), 0.4);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
 }
 .footer-link:active { transform: translateY(0); }
 .link-divider {
