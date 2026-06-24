@@ -276,7 +276,7 @@
 
 /* about页面特有样式 · Theme toggle 样式：见 /assets/css/style.css */
     </style>
-    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n.js?v=20260624"></script>
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
@@ -649,36 +649,52 @@
                 (navigator.language.startsWith('zh-TW') || navigator.language.startsWith('zh-HK') ? 'zh-TW' :
                  navigator.language.startsWith('zh') ? 'zh' : 'en');
 
+            var I18N = window.I18N || null;
+            var i18nReady = !!(I18N && I18N.zh);
+
             function t(key) {
-                var dict = (typeof I18N !== 'undefined' && I18N[currentLang]) ? I18N[currentLang] : I18N['zh'];
-                return dict[key] || I18N['zh'][key] || key;
+                if (!i18nReady) return null;
+                try {
+                    var dict = I18N[currentLang] || I18N['zh'];
+                    if (dict && dict[key]) return dict[key];
+                    if (I18N['zh'] && I18N['zh'][key]) return I18N['zh'][key];
+                    return null;
+                } catch(e) {
+                    return null;
+                }
             }
 
             function applyI18n() {
-                var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
-                document.documentElement.lang = htmlLang;
-                document.querySelectorAll('[data-i18n]').forEach(function(el) {
-                    var text = t(el.getAttribute('data-i18n'));
-                    if (text) el.textContent = text;
-                });
-                document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
-                    var text = t(el.getAttribute('data-i18n-content'));
-                    if (text) el.setAttribute('content', text);
-                });
-                document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
-                    var text = t(el.getAttribute('data-i18n-title'));
-                    if (text) el.setAttribute('title', text);
-                });
-                document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
-                    var text = t(el.getAttribute('data-i18n-aria'));
-                    if (text) el.setAttribute('aria-label', text);
-                });
-                document.title = t('about.meta.title');
-                var langToggle = document.getElementById('langToggle');
-                if (langToggle) langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
-                document.querySelectorAll('.lang-option').forEach(function(opt) {
-                    opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
-                });
+                if (!i18nReady) return;
+                try {
+                    var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
+                    document.documentElement.lang = htmlLang;
+                    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                        var text = t(el.getAttribute('data-i18n'));
+                        if (text) el.textContent = text;
+                    });
+                    document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
+                        var text = t(el.getAttribute('data-i18n-content'));
+                        if (text) el.setAttribute('content', text);
+                    });
+                    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+                        var text = t(el.getAttribute('data-i18n-title'));
+                        if (text) el.setAttribute('title', text);
+                    });
+                    document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
+                        var text = t(el.getAttribute('data-i18n-aria'));
+                        if (text) el.setAttribute('aria-label', text);
+                    });
+                    var titleText = t('about.meta.title');
+                    if (titleText) document.title = titleText;
+                    var langToggle = document.getElementById('langToggle');
+                    if (langToggle) langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
+                    document.querySelectorAll('.lang-option').forEach(function(opt) {
+                        opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
+                    });
+                } catch(e) {
+                    console.warn('i18n apply failed:', e);
+                }
             }
 
             // 语言切换事件

@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
-    <script src="/assets/js/i18n.js"></script>
+    <script src="/assets/js/i18n.js?v=20260624"></script>
     <!-- 提前设置iframe message监听器，防止消息丢失 -->
     <script>
         window._iframeMessaged = { blog: false, qmeow: false };
@@ -352,60 +352,76 @@
                 (navigator.language.startsWith('zh-TW') || navigator.language.startsWith('zh-HK') ? 'zh-TW' :
                  navigator.language.startsWith('zh') ? 'zh' : 'en');
 
+            var I18N = window.I18N || null;
+            var i18nReady = !!(I18N && I18N.zh);
+
             function t(key) {
-                var dict = (typeof I18N !== 'undefined' && I18N[currentLang]) ? I18N[currentLang] : I18N['zh'];
-                return dict[key] || I18N['zh'][key] || key;
+                if (!i18nReady) return null;
+                try {
+                    var dict = I18N[currentLang] || I18N['zh'];
+                    if (dict && dict[key]) return dict[key];
+                    if (I18N['zh'] && I18N['zh'][key]) return I18N['zh'][key];
+                    return null;
+                } catch(e) {
+                    return null;
+                }
             }
 
             function applyI18n() {
-                // 更新 html lang
-                var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
-                document.documentElement.lang = htmlLang;
+                if (!i18nReady) return;
+                try {
+                    // 更新 html lang
+                    var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
+                    document.documentElement.lang = htmlLang;
 
-                // data-i18n: textContent
-                document.querySelectorAll('[data-i18n]').forEach(function(el) {
-                    var key = el.getAttribute('data-i18n');
-                    var text = t(key);
-                    if (text) el.textContent = text;
-                });
+                    // data-i18n: textContent
+                    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                        var key = el.getAttribute('data-i18n');
+                        var text = t(key);
+                        if (text) el.textContent = text;
+                    });
 
-                // data-i18n-content: meta content
-                document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
-                    var key = el.getAttribute('data-i18n-content');
-                    var text = t(key);
-                    if (text) el.setAttribute('content', text);
-                });
+                    // data-i18n-content: meta content
+                    document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
+                        var key = el.getAttribute('data-i18n-content');
+                        var text = t(key);
+                        if (text) el.setAttribute('content', text);
+                    });
 
-                // data-i18n-title: title属性
-                document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
-                    var key = el.getAttribute('data-i18n-title');
-                    var text = t(key);
-                    if (text) el.setAttribute('title', text);
-                });
+                    // data-i18n-title: title属性
+                    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+                        var key = el.getAttribute('data-i18n-title');
+                        var text = t(key);
+                        if (text) el.setAttribute('title', text);
+                    });
 
-                // data-i18n-aria: aria-label属性
-                document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
-                    var key = el.getAttribute('data-i18n-aria');
-                    var text = t(key);
-                    if (text) el.setAttribute('aria-label', text);
-                });
+                    // data-i18n-aria: aria-label属性
+                    document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
+                        var key = el.getAttribute('data-i18n-aria');
+                        var text = t(key);
+                        if (text) el.setAttribute('aria-label', text);
+                    });
 
-                // 更新 document.title
-                document.title = t('meta.title');
+                    // 更新 document.title
+                    var titleText = t('meta.title');
+                    if (titleText) document.title = titleText;
 
-                // 更新语言切换按钮文字（简/繁/EN）
-                var langToggle = document.getElementById('langToggle');
-                if (langToggle) {
-                    langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
+                    // 更新语言切换按钮文字（简/繁/EN）
+                    var langToggle = document.getElementById('langToggle');
+                    if (langToggle) {
+                        langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
+                    }
+
+                    // 更新语言菜单active状态
+                    document.querySelectorAll('.lang-option').forEach(function(opt) {
+                        opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
+                    });
+
+                    // 更新JS动态文案的引用（粒子描述、平衡器状态等）
+                    if (typeof updateDynamicText === 'function') updateDynamicText();
+                } catch(e) {
+                    console.warn('i18n apply failed:', e);
                 }
-
-                // 更新语言菜单active状态
-                document.querySelectorAll('.lang-option').forEach(function(opt) {
-                    opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
-                });
-
-                // 更新JS动态文案的引用（粒子描述、平衡器状态等）
-                if (typeof updateDynamicText === 'function') updateDynamicText();
             }
 
             function setLang(lang) {
@@ -416,11 +432,13 @@
 
             // 更新JS动态文案（语言切换后调用）
             function updateDynamicText() {
+                if (!i18nReady) return;
                 try {
                     // 更新粒子描述
                     var desc = document.getElementById('particle-desc');
                     if (desc && typeof window._particleMode !== 'undefined') {
-                        desc.textContent = t('desc.' + window._particleMode);
+                        var descText = t('desc.' + window._particleMode);
+                        if (descText) desc.textContent = descText;
                     }
                     // 重建wisdomQuotes
                     if (typeof buildWisdomQuotes === 'function') {
@@ -438,7 +456,8 @@
                     var quoteText = document.getElementById('ai-quote-text');
                     if (quoteText) {
                         var idx = Math.floor(Math.random() * 15);
-                        quoteText.textContent = t('ai.quote.' + idx);
+                        var quote = t('ai.quote.' + idx);
+                        if (quote) quoteText.textContent = quote;
                     }
                 } catch(e) { /* i18n更新时部分功能可能未初始化 */ }
             }
@@ -560,14 +579,18 @@
                 const angle = diff * 0.3;
                 balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
                 const absDiff = Math.abs(diff);
+                var text;
                 if (absDiff < 10) {
-                    balanceState.textContent = t('balance.ideal');
+                    text = t('balance.ideal');
+                    if (text) balanceState.textContent = text;
                     balanceState.style.color = "var(--accent-color)";
                 } else if (diff > 0) {
-                    balanceState.textContent = t('balance.action.lead').replace('{diff}', absDiff);
+                    text = t('balance.action.lead');
+                    if (text) balanceState.textContent = text.replace('{diff}', absDiff);
                     balanceState.style.color = "var(--accent-secondary)";
                 } else {
-                    balanceState.textContent = t('balance.know.lead').replace('{diff}', absDiff);
+                    text = t('balance.know.lead');
+                    if (text) balanceState.textContent = text.replace('{diff}', absDiff);
                     balanceState.style.color = "var(--dark-color)";
                 }
             }
@@ -650,8 +673,12 @@
             // ===== AI金句轮播 =====
             (function() {
                 const quotes = [];
-                for (var i = 0; i < 15; i++) quotes.push(t('ai.quote.' + i));
+                for (var i = 0; i < 15; i++) {
+                    var q = t('ai.quote.' + i);
+                    if (q) quotes.push(q);
+                }
                 const quoteText = document.getElementById('ai-quote-text');
+                if (!quoteText || quotes.length === 0) return;
                 let quoteIndex = 0;
                 let charIndex = 0;
                 let isDeleting = false;
@@ -659,12 +686,13 @@
 
                 function typeQuote() {
                     const currentQuote = quotes[quoteIndex];
+                    if (!currentQuote) return;
                     if (!isDeleting) {
                         quoteText.textContent = currentQuote.substring(0, charIndex + 1);
                         charIndex++;
                         if (charIndex === currentQuote.length) {
                             isDeleting = true;
-                            typingSpeed = 2000; // 停留2秒
+                            typingSpeed = 2000;
                         } else {
                             typingSpeed = 50 + Math.random() * 40;
                         }
@@ -674,7 +702,7 @@
                         if (charIndex === 0) {
                             isDeleting = false;
                             quoteIndex = (quoteIndex + 1) % quotes.length;
-                            typingSpeed = 500; // 切换间隔
+                            typingSpeed = 500;
                         } else {
                             typingSpeed = 25;
                         }
@@ -1077,7 +1105,8 @@
                         navigator.clipboard.writeText('support@w3b.pub').then(() => {
                             const originalText = linkElement.textContent;
                             const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
-                            linkElement.textContent = t('feedback.copied');
+                            var copiedText = t('feedback.copied');
+                            if (copiedText) linkElement.textContent = copiedText;
                             linkElement.style.background = accentColor;
                             linkElement.style.borderColor = accentColor;
                             linkElement.style.color = 'white';
@@ -1149,15 +1178,17 @@
 
             // ===== 知行节律：时间感知金句轮换 =====
             function buildWisdomQuotes() {
+                if (!i18nReady) return { morning: [], afternoon: [], evening: [], night: [] };
                 var phases = ['morning', 'afternoon', 'evening', 'night'];
                 var result = {};
                 phases.forEach(function(phase) {
                     var arr = [];
                     for (var i = 0; i < 6; i++) {
-                        arr.push({
-                            quote: t('wq.' + phase + '.' + i + '.quote'),
-                            source: t('wq.' + phase + '.' + i + '.source')
-                        });
+                        var quote = t('wq.' + phase + '.' + i + '.quote');
+                        var source = t('wq.' + phase + '.' + i + '.source');
+                        if (quote && source) {
+                            arr.push({ quote: quote, source: source });
+                        }
                     }
                     result[phase] = arr;
                 });
@@ -1183,17 +1214,19 @@
             }
 
             function renderFallbackCards(containerId, phase) {
+                if (!i18nReady) return;
                 const container = document.getElementById(containerId);
                 if (!container) return;
+                const quotes = wisdomQuotes[phase] || [];
+                if (quotes.length === 0) return;
+                const shuffled = shuffleArray(quotes);
                 const cards = container.querySelectorAll('.fallback-card');
-                const quotes = shuffleArray(wisdomQuotes[phase]);
-                // blog 和 project 使用不同的起始偏移，避免重复
                 const offset = containerId === 'projectFallback' ? 3 : 0;
                 cards.forEach(function(card, i) {
-                    const idx = (offset + i) % quotes.length;
-                    if (quotes[idx]) {
-                        card.querySelector('.fallback-quote').textContent = '"' + quotes[idx].quote + '"';
-                        card.querySelector('.fallback-source').textContent = quotes[idx].source;
+                    const idx = (offset + i) % shuffled.length;
+                    if (shuffled[idx]) {
+                        card.querySelector('.fallback-quote').textContent = '"' + shuffled[idx].quote + '"';
+                        card.querySelector('.fallback-source').textContent = shuffled[idx].source;
                     }
                 });
             }
