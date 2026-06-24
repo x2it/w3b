@@ -48,6 +48,37 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <script src="/assets/js/i18n.js"></script>
+    <!-- 提前设置iframe message监听器，防止消息丢失 -->
+    <script>
+        window._iframeMessaged = { blog: false, qmeow: false };
+        window._iframeOriginMap = {};
+        window.addEventListener('message', function(event) {
+            if (!event.origin || !event.origin.endsWith('.coze.site')) return;
+            if (!event.data || typeof event.data.type !== 'string') return;
+            // 缓存origin映射，供后续脚本使用
+            if (event.data.source) {
+                window._iframeOriginMap[event.data.source] = event.origin;
+            }
+            if (event.data.type === 'embed-ready' || event.data.type === 'embed-height') {
+                // 通过src origin匹配iframe
+                var blog = document.getElementById('blog-embed');
+                var qmeow = document.getElementById('qmeow-embed');
+                var isBlog = false, isQmeow = false;
+                try {
+                    if (blog && new URL(blog.src).origin === event.origin) isBlog = true;
+                } catch(e) {}
+                try {
+                    if (qmeow && new URL(qmeow.src).origin === event.origin) isQmeow = true;
+                } catch(e) {}
+                if (isBlog) window._iframeMessaged.blog = true;
+                if (isQmeow) window._iframeMessaged.qmeow = true;
+                // 触发自定义事件，让底部脚本处理UI
+                window.dispatchEvent(new CustomEvent('iframe-health', {
+                    detail: { type: event.data.type, isBlog: isBlog, isQmeow: isQmeow, height: event.data.height }
+                }));
+            }
+        });
+    </script>
 </head>
 <body>
     <!-- AI神经网络背景装饰 -->
@@ -1190,7 +1221,8 @@
 
             // iframe onload 备用方案：iframe 加载成功但未收到 postMessage 时，直接显示
             var iframeLoaded = { blog: false, qmeow: false };
-            var iframeMessaged = { blog: false, qmeow: false };
+            // 使用 head 中提前设置的 window._iframeMessaged，防止消息丢失
+            var iframeMessaged = window._iframeMessaged || { blog: false, qmeow: false };
 
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
@@ -1263,67 +1295,44 @@
                 scrollObserver.observe(projectsSection);
             }
 
-            // iframe 健康确认：收到 postMessage → 服务正常 → 显示iframe，隐藏降级
-            // 支持 coze.site 官方 embed-height / embed-ready postMessage
-            // 安全校验：origin + type + height类型
-            window.addEventListener('message', function(event) {
-                // origin校验：只接受coze.site域名
-                if (!event.origin || !event.origin.endsWith('.coze.site')) return;
-                if (!event.data || typeof event.data.type !== 'string') return;
-
-                const qmeow = document.getElementById('qmeow-embed');
-                const blog = document.getElementById('blog-embed');
-
-                // 匹配iframe：优先用event.source(精确)，备用origin(兼容跨域)
-                function matchIframe(iframeEl, origin) {
-                    if (!iframeEl) return false;
-                    try {
-                        if (event.source === iframeEl.contentWindow) return true;
-                    } catch(e) { /* 跨域安全限制 */ }
-                    // 备用：通过src的origin匹配
-                    try {
-                        var srcOrigin = new URL(iframeEl.src).origin;
-                        if (origin === srcOrigin) return true;
-                    } catch(e) {}
-                    return false;
-                }
-
-                var isBlog = matchIframe(blog, event.origin);
-                var isQmeow = matchIframe(qmeow, event.origin);
+            // 监听 head 中提前设置的 iframe-health 事件，处理UI更新
+            window.addEventListener('iframe-health', function(e) {
+                var detail = e.detail;
+                if (!detail) return;
+                var qmeow = document.getElementById('qmeow-embed');
+                var blog = document.getElementById('blog-embed');
 
                 // embed-ready：iframe 已就绪，先显示容器让用户看到加载状态
-                if (event.data.type === 'embed-ready') {
-                    if (isBlog) {
+                if (detail.type === 'embed-ready') {
+                    if (detail.isBlog) {
                         iframeMessaged.blog = true;
-                        const blogContainer = document.getElementById('blogIframeContainer');
+                        var blogContainer = document.getElementById('blogIframeContainer');
                         if (blogContainer) blogContainer.classList.remove('iframe-loading');
                     }
-                    if (isQmeow) {
+                    if (detail.isQmeow) {
                         iframeMessaged.qmeow = true;
-                        const projectContainer = document.getElementById('projectIframeContainer');
+                        var projectContainer = document.getElementById('projectIframeContainer');
                         if (projectContainer) projectContainer.classList.remove('iframe-loading');
                     }
                     return;
                 }
 
                 // embed-height：内容渲染完成，设置高度并隐藏降级卡片
-                if (event.data.type === 'embed-height' && typeof event.data.height === 'number') {
-                    // 自适应高度：取报告值与最小安全值（200px）中的较大者，确保内容不被截断
-                    // 不再使用固定 1500 下限，避免内容短时留下大量空白
-                    var safeHeight = Math.max(event.data.height, 200);
-                    if (isQmeow) {
+                if (detail.type === 'embed-height' && typeof detail.height === 'number') {
+                    var safeHeight = Math.max(detail.height, 200);
+                    if (detail.isQmeow) {
                         iframeMessaged.qmeow = true;
                         qmeow.style.height = safeHeight + 'px';
-                        const projectContainer = document.getElementById('projectIframeContainer');
-                        const projectFallback = document.getElementById('projectFallback');
+                        var projectContainer = document.getElementById('projectIframeContainer');
+                        var projectFallback = document.getElementById('projectFallback');
                         projectContainer.classList.remove('iframe-loading');
                         if (projectFallback) projectFallback.style.display = 'none';
                     }
-                    if (isBlog) {
+                    if (detail.isBlog) {
                         iframeMessaged.blog = true;
                         blog.style.height = safeHeight + 'px';
-                        const blogContainer = document.getElementById('blogIframeContainer');
-                        const blogFallback = document.getElementById('blogFallback');
+                        var blogContainer = document.getElementById('blogIframeContainer');
+                        var blogFallback = document.getElementById('blogFallback');
                         blogContainer.classList.remove('iframe-loading');
                         if (blogFallback) blogFallback.style.display = 'none';
                     }
