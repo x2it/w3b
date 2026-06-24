@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="知行工作室 - 页面未找到">
-    <meta name="robots" content="noindex, nofollow">
-    <title>页面未找到 · 知行工作室</title>
+    <meta name="description" content="知行工作室 - 页面未找到" data-i18n-content="404.meta.description">
+    <meta name="robots" content="noindex, follow">
+    <title data-i18n-content="404.meta.title">页面未找到 · 知行工作室</title>
     <link rel="stylesheet" href="/assets/css/style.css?v=20260623">
+    <script src="/assets/js/i18n.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
@@ -138,22 +139,22 @@
     </svg>
 
     <header>
-        <h1 class="site-title">知行工作室</h1>
+        <h1 class="site-title" data-i18n="site.title">知行工作室</h1>
     </header>
 
     <section class="error-section">
         <div class="error-code">404</div>
-        <p class="error-message">
+        <p class="error-message" data-i18n="404.message">
             页面未找到<br>
             您访问的页面可能已被移除或暂时不可用
         </p>
-        <a href="/" class="back-home">返回首页</a>
+        <a href="/" class="back-home" data-i18n="404.back">返回首页</a>
     </section>
 
     <footer>
-        <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center;">"理无专在，而学无止境也。然则问可少耶？"</p>
-        <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">— 清代刘开《问说》</p>
-        <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; text-align: center;" data-i18n="footer.quote">"知之真切笃实处即是行，行之明觉精察处即是知。"</p>
+        <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;" data-i18n="footer.quote.source">— 王阳明 · 《传习录》</p>
+        <p class="copyright" data-i18n="footer.copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
     <script>
@@ -167,6 +168,15 @@
                     document.body.classList.add('dark-mode');
                 }
             }
+            // i18n
+            var cl = localStorage.getItem('w3b_lang') ||
+                (navigator.language.startsWith('zh-TW') || navigator.language.startsWith('zh-HK') ? 'zh-TW' :
+                 navigator.language.startsWith('zh') ? 'zh' : 'en');
+            function t(k) { var d = (typeof I18N !== 'undefined' && I18N[cl]) ? I18N[cl] : I18N['zh']; return d[k] || I18N['zh'][k] || k; }
+            document.documentElement.lang = cl === 'zh-TW' ? 'zh-TW' : cl === 'en' ? 'en' : 'zh-CN';
+            document.querySelectorAll('[data-i18n]').forEach(function(el) { var v = t(el.getAttribute('data-i18n')); if (v) el.textContent = v; });
+            document.querySelectorAll('[data-i18n-content]').forEach(function(el) { var v = t(el.getAttribute('data-i18n-content')); if (v) el.setAttribute('content', v); });
+            document.title = t('404.meta.title');
         })();
     </script>
 </body>

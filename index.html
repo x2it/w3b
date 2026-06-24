@@ -135,7 +135,7 @@
             <button class="control-btn" id="btn-focus" style="margin: 0 10px;" data-i18n="btn.focus">专注凝聚</button>
             <button class="control-btn" id="btn-ai" style="margin: 0 10px;" data-i18n="btn.ai">AI 思维</button>
         </div>
-        <p id="particle-desc" style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto; transition: opacity 0.3s ease;">
+        <p id="particle-desc" data-i18n="desc.ai" style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto; transition: opacity 0.3s ease;">
             粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。
         </p>
     </section>
@@ -387,26 +387,31 @@
 
             // 更新JS动态文案（语言切换后调用）
             function updateDynamicText() {
-                // 更新粒子描述
-                var desc = document.getElementById('particle-desc');
-                if (desc && typeof mode !== 'undefined') {
-                    desc.textContent = t('desc.' + mode);
-                }
-                // 重建wisdomQuotes
-                wisdomQuotes = buildWisdomQuotes();
-                // 重新渲染降级卡片
-                var currentPhase = getTimePhase();
-                renderFallbackCards('blogFallback', currentPhase);
-                renderFallbackCards('projectFallback', currentPhase);
-                // 更新平衡器状态
-                if (typeof updateBalanceState === 'function') updateBalanceState();
-                // 更新AI金句（重新构建quotes数组）
-                // AI金句轮播是IIFE内部变量，通过重新设置textContent更新
-                var quoteText = document.getElementById('ai-quote-text');
-                if (quoteText) {
-                    var idx = Math.floor(Math.random() * 15);
-                    quoteText.textContent = t('ai.quote.' + idx);
-                }
+                try {
+                    // 更新粒子描述
+                    var desc = document.getElementById('particle-desc');
+                    if (desc && typeof window._particleMode !== 'undefined') {
+                        desc.textContent = t('desc.' + window._particleMode);
+                    }
+                    // 重建wisdomQuotes
+                    if (typeof buildWisdomQuotes === 'function') {
+                        wisdomQuotes = buildWisdomQuotes();
+                    }
+                    // 重新渲染降级卡片
+                    if (typeof getTimePhase === 'function' && typeof renderFallbackCards === 'function') {
+                        var currentPhase = getTimePhase();
+                        renderFallbackCards('blogFallback', currentPhase);
+                        renderFallbackCards('projectFallback', currentPhase);
+                    }
+                    // 更新平衡器状态
+                    if (typeof updateBalanceState === 'function') updateBalanceState();
+                    // 更新AI金句
+                    var quoteText = document.getElementById('ai-quote-text');
+                    if (quoteText) {
+                        var idx = Math.floor(Math.random() * 15);
+                        quoteText.textContent = t('ai.quote.' + idx);
+                    }
+                } catch(e) { /* i18n更新时部分功能可能未初始化 */ }
             }
 
             // 全局颜色缓存（性能优化：避免每帧调用getComputedStyle）
@@ -656,6 +661,7 @@
             const ctx = canvas.getContext('2d');
             let particles = [];
             let mode = 'ai';
+            window._particleMode = mode; // 暴露给i18n系统
             let animationId = null;
             let resizeTimer = null;
             const dpr = window.devicePixelRatio || 1;
@@ -924,6 +930,7 @@
             
             function setMode(newMode) {
                 mode = newMode;
+                window._particleMode = newMode; // 暴露给i18n系统
                 // 更新按钮active状态
                 document.querySelectorAll('.control-btn').forEach(function(btn) { btn.classList.remove('active'); });
                 var activeBtn = document.getElementById('btn-' + newMode);

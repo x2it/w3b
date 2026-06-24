@@ -214,6 +214,12 @@ const I18N = {
         'lang.zh-TW': '繁體',
         'lang.en': 'EN',
 
+        // === 404.html ===
+        '404.meta.title': '页面未找到 · 知行工作室',
+        '404.meta.description': '知行工作室 - 页面未找到',
+        '404.message': '页面未找到\n您访问的页面可能已被移除或暂时不可用',
+        '404.back': '返回首页',
+
         // === about.html ===
         'about.meta.title': '关于 · 知行工作室',
         'about.meta.description': '知行工作室项目说明书 - 理会与践行的交互探索',
@@ -460,7 +466,70 @@ const I18N = {
         'lang.label': '語言',
         'lang.zh': '簡體',
         'lang.zh-TW': '繁體',
-        'lang.en': 'EN'
+        'lang.en': 'EN',
+
+        // === 404.html ===
+        '404.meta.title': '頁面未找到 · 知行工作室',
+        '404.meta.description': '知行工作室 - 頁面未找到',
+        '404.message': '頁面未找到\n您訪問的頁面可能已被移除或暫時不可用',
+        '404.back': '返回首頁',
+
+        // === about.html ===
+        'about.meta.title': '關於 · 知行工作室',
+        'about.meta.description': '知行工作室項目說明書 - 理會與踐行的交互探索',
+        'about.meta.keywords': '知行合一,理會,踐行,AI,哲學,工作室,w3b,說明書',
+        'about.title': '知行工作室 · 項目說明書',
+        'about.subtitle': '理會與踐行的交互探索 — 知行合一的現代實踐',
+        'about.back': '← 返回首頁',
+        'about.info.url': '網站地址',
+        'about.info.stack': '技術棧',
+        'about.info.platform': '部署平台',
+        'about.info.version': '版本',
+        'about.ch1.title': '項目概覽',
+        'about.ch1.p1': '知行工作室（w3b.pub）是一個以「知行合一」為核心理念的個人品牌展示網站。網站通過粒子動畫、時間線敘事、交互式平衡器和嵌入式內容模組，將中國傳統哲學思想與現代 Web 技術、AI 理念相融合，呈現「理會」（思考與洞察）、「踐行」（行動與創造）與「AI 賦能」（數位演進）的三位一體。',
+        'about.ch1.s1.title': '1.1 設計理念',
+        'about.ch1.li1': '理會 · 洞察本質 — 通過粒子動畫可視化思維的四種狀態（有序、發散、專注、AI 神經網絡），呼應朱熹「窮理」的思想',
+        'about.ch1.li2': '踐行 · 當下行動 — 通過時間線串聯從《尚書》到王陽明再到當下的知行思想脈絡',
+        'about.ch1.li3': '知行合一 · 動態平衡 — 通過交互式天平讓用戶直觀感受知與行的平衡關係',
+        'about.ch1.li4': 'AI 賦能 · 數位演進 — AI 是知與行的數位映射：數據為知，決策為行。神經網絡中每一層都是「知」，每一次前向傳播都是「行」',
+        'about.ch2.title': '技術架構',
+        'about.ch2.s1.title': '2.1 文件結構',
+        'about.table.file': '文件',
+        'about.table.role': '職責',
+        'about.ch2.s2.title': '2.2 外部依賴',
+        'about.table.dep': '依賴',
+        'about.table.usage': '用途',
+        'about.table.source': '來源',
+        'about.ch3.title': '頁面模組',
+        'about.ch3.s1.title': '3.1 粒子動畫區（理會 · 洞察本質）',
+        'about.ch3.s1.p1': '基於 Canvas 的粒子系統，支援四種思維狀態切換，其中 AI 模式將知行合一理念與神經網絡可視化融合：',
+        'about.ch3.s2.title': '3.2 時間線（踐行 · 當下行動）',
+        'about.ch3.s2.p1': '縱向時間線展示知行思想的歷史脈絡：',
+        'about.ch3.s3.title': '3.3 平衡器（知行合一 · 動態平衡）',
+        'about.ch3.s3.p1': '交互式天平可視化，用戶通過兩個滑塊控制「理的深度」和「行的力度」，天平橫梁實時傾斜反映平衡狀態。',
+        'about.ch3.s4.title': '3.4 博文隨筆 & 篤行成果',
+        'about.ch3.s4.p1': '均通過 iframe 嵌入第三方內容，自動同步最新數據。當第三方服務異常時，顯示降級金句卡片。',
+        'about.ch4.title': 'AI 元素',
+        'about.ch4.s1.title': '4.1 AI 金句輪播',
+        'about.ch4.s1.p1': 'Header 區域動態展示 AI 與知行合一相關的金句，打字機效果逐字顯示/刪除，15 條金句循環。',
+        'about.ch4.s2.title': '4.2 神經網絡背景',
+        'about.ch4.s2.p1': '頁面背景添加 SVG pattern 平鋪的神經網絡節點 + 連線紋理，opacity 僅 0.03，極微妙不搶主體內容，fixed 定位跟隨頁面滾動。',
+        'about.ch4.s3.title': '4.3 AI 賦能交互',
+        'about.ch4.s3.p1': '卡片 hover 時添加基於 CSS 變量的微妙光暈效果，讓交互帶有 AI 驅動的數位質感。',
+        'about.ch5.title': '主題系統',
+        'about.ch5.s1.title': '5.1 主題切換',
+        'about.ch5.s1.p1': '網站支援 8 種主題（預設、暗色、藍色、綠色、紫色、橙色、青色、系統跟隨），通過 CSS 變量實現全局切換。主題偏好通過 localStorage 持久化保存，刷新頁面後自動恢復。',
+        'about.ch5.s2.title': '5.2 CSS 變量體系',
+        'about.ch5.s2.p1': '每個主題定義 12 個 CSS 變量：背景色、文字色、次要文字色、淺色文字、深色、強調色、強調色 RGB、次要強調色、邊框色、卡片背景、卡片陰影、卡片懸浮陰影。切換主題時只需替換 body 的 class，所有組件自動響應。另有 5 個全局變量（圓角、過渡速度等）不受主題覆蓋。',
+        'about.ch6.title': '響應式適配',
+        'about.ch6.s1.title': '6.1 斷點與佈局',
+        'about.table.version': '版本',
+        'about.table.breakpoint': '斷點',
+        'about.table.layout': '佈局特點',
+        'about.ch7.title': '部署與維護',
+        'about.ch7.s1.title': '7.1 SEO 配置',
+        'about.footer.title': '知行工作室 · 項目說明書 v2.1',
+        'about.footer.date': '2026年6月21日 · w3b.pub'
     },
 
     // ===== English =====
@@ -652,6 +721,12 @@ const I18N = {
         'lang.zh': '简体',
         'lang.zh-TW': '繁體',
         'lang.en': 'EN',
+
+        // === 404.html ===
+        '404.meta.title': 'Page Not Found · Zhixing Studio',
+        '404.meta.description': 'Zhixing Studio - Page not found',
+        '404.message': 'Page Not Found\nThe page you are looking for may have been removed or is temporarily unavailable.',
+        '404.back': 'Back to Home',
 
         // === about.html ===
         'about.meta.title': 'About · Zhixing Studio',
