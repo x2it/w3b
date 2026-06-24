@@ -42,7 +42,11 @@
     <link rel="stylesheet" href="/assets/css/style.css?v=20260623">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="//fudawei.coze.site">
+    <link rel="dns-prefetch" href="//output.coze.site">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
 </head>
 <body>
     <!-- AI神经网络背景装饰 -->
@@ -118,7 +122,7 @@
         <h2 class="section-title">理会 · 洞察本质</h2>
         <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
-            <button class="control-btn" id="btn-order" style="margin: 0 10px;">有序思维</button>
+            <button class="control-btn active" id="btn-order" style="margin: 0 10px;">有序思维</button>
             <button class="control-btn" id="btn-chaos" style="margin: 0 10px;">发散联想</button>
             <button class="control-btn" id="btn-focus" style="margin: 0 10px;">专注凝聚</button>
             <button class="control-btn" id="btn-ai" style="margin: 0 10px;">AI 思维</button>
@@ -290,6 +294,14 @@
         <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">— 王阳明 · 《传习录》</p>
         <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
+
+    <!-- 固定侧边导航 -->
+    <nav class="side-nav" id="sideNav" aria-label="页面导航">
+        <a href="#particle-section" class="nav-dot" title="理会 · 洞察本质" aria-label="粒子动画区域">理</a>
+        <a href="#timeline-section" class="nav-dot" title="践行 · 当下行动" aria-label="时间线区域">行</a>
+        <a href="#thinking" class="nav-dot" title="理会 · 博文随笔" aria-label="博文区域">文</a>
+        <a href="#projects" class="nav-dot" title="践行 · 笃行成果" aria-label="作品集区域">果</a>
+    </nav>
 
     <!-- 返回顶部按钮 -->
     <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部">↑</button>
@@ -795,6 +807,10 @@
             
             function setMode(newMode) {
                 mode = newMode;
+                // 更新按钮active状态
+                document.querySelectorAll('.control-btn').forEach(function(btn) { btn.classList.remove('active'); });
+                var activeBtn = document.getElementById('btn-' + newMode);
+                if (activeBtn) activeBtn.classList.add('active');
                 initParticles();
                 // 切换描述文字
                 const desc = document.getElementById('particle-desc');
@@ -936,11 +952,47 @@
                     } else {
                         backToTop.classList.remove('show');
                     }
+                    // 侧边导航：滚动超过一屏后显示
+                    var sideNav = document.getElementById('sideNav');
+                    if (sideNav) {
+                        if (window.scrollY > window.innerHeight * 0.5) {
+                            sideNav.classList.add('visible');
+                        } else {
+                            sideNav.classList.remove('visible');
+                        }
+                    }
                 });
                 backToTop.addEventListener('click', function(e) {
                     e.preventDefault();
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 });
+                // 侧边导航：高亮当前区域
+                var navDots = document.querySelectorAll('.nav-dot');
+                var sections = ['particle-section', 'timeline-section', 'thinking', 'projects'];
+                var observerNav = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            navDots.forEach(function(dot) { dot.classList.remove('active'); });
+                            var activeDot = document.querySelector('.nav-dot[href="#' + entry.target.id + '"]');
+                            if (activeDot) activeDot.classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.3 });
+                sections.forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el) observerNav.observe(el);
+                });
+                // 时间线入场动画
+                var timelineItems = document.querySelectorAll('.timeline-item');
+                var observerTimeline = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observerTimeline.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.15 });
+                timelineItems.forEach(function(item) { observerTimeline.observe(item); });
             }
 
             // ===== 知行节律：时间感知金句轮换 =====

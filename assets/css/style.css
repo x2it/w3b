@@ -681,9 +681,14 @@ section:last-of-type { border-bottom: none; }
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
 }
-.control-btn:active { 
+.control-btn:active {
     transform: translateY(-1px) scale(0.98);
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+.control-btn.active {
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+    box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.3);
 }
 @media (max-width: 480px) {
     #particle-section p {
@@ -716,6 +721,13 @@ section:last-of-type { border-bottom: none; }
     position: relative;
     margin-bottom: 2rem;
     width: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.timeline-item.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 .timeline-content {
     position: relative;
@@ -1004,6 +1016,71 @@ footer {
 
 footer p { margin-bottom: 0.75rem; line-height: 1.6; }
 .copyright { font-size: 0.85rem; opacity: 0.8; margin-top: 1rem; color: var(--text-secondary); }
+
+/* 固定侧边导航 */
+.side-nav {
+    position: fixed;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+.side-nav.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+.nav-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+}
+.nav-dot:hover,
+.nav-dot.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+}
+@media (max-width: 768px) {
+    .side-nav {
+        right: 8px;
+        gap: 8px;
+    }
+    .nav-dot {
+        width: 30px;
+        height: 30px;
+        font-size: 0.65rem;
+    }
+}
+@media (max-width: 480px) {
+    .side-nav {
+        right: 6px;
+        gap: 6px;
+    }
+    .nav-dot {
+        width: 26px;
+        height: 26px;
+        font-size: 0.6rem;
+    }
+}
 
 /* 返回顶部按钮 */
 .back-to-top {
