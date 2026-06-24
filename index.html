@@ -39,7 +39,7 @@
         }
     }
     </script>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260623b">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260624">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="//fudawei.coze.site">
@@ -171,7 +171,7 @@
         </p>
     </section>
 
-    <section class="timeline-section">
+    <section class="timeline-section" id="timeline-section">
         <h2 class="section-title" data-i18n="section.action">践行 · 当下行动</h2>
         <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; line-height: 1.6;" data-i18n="intro.timeline">
             行动如同时间的河流，从古代的艰难探索到当下的每一次实践，皆为"行"之历程。
@@ -1217,10 +1217,30 @@
                 document.getElementById('projectFallback').style.display = 'grid';
             }
 
-            // iframe onload 备用方案：iframe 加载成功但未收到 postMessage 时，直接显示
+            // iframe 加载管理：load 事件成功即显示，postMessage 用于精确高度
             var iframeLoaded = { blog: false, qmeow: false };
+            var iframeHasHeight = { blog: false, qmeow: false };
             // 使用 head 中提前设置的 window._iframeMessaged，防止消息丢失
             var iframeMessaged = window._iframeMessaged || { blog: false, qmeow: false };
+
+            var defaultHeights = {
+                blog: 1000,
+                qmeow: 800
+            };
+
+            function showIframeWithFallbackHeight(name) {
+                if (iframeHasHeight[name]) return;
+                var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
+                var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
+                var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
+                var container = document.getElementById(containerId);
+                var fallback = document.getElementById(fallbackId);
+                if (iframeEl) {
+                    iframeEl.style.height = defaultHeights[name] + 'px';
+                }
+                if (container) container.classList.remove('iframe-loading');
+                if (fallback) fallback.style.display = 'none';
+            }
 
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
@@ -1230,22 +1250,34 @@
                         iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
                     } catch(e) { /* 跨域静默 */ }
                 }
-                // 4秒超时检测：如果仍未收到任何postMessage，判定为加载失败/错误页面
+                // 1.5秒后如果仍未收到高度消息，使用默认高度显示iframe
+                // 说明：iframe load事件触发 = 内容已加载，应该显示
+                // postMessage只是用来精确设置高度，不是显示的必要条件
                 setTimeout(function() {
-                    if (!iframeMessaged[name]) {
-                        // iframe加载失败或返回错误页面(402/403/404等)
-                        // 保持降级模式：iframe隐藏，降级卡片显示
-                        var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
-                        var container = document.getElementById(containerId);
-                        if (container) container.classList.add('iframe-loading');
+                    if (!iframeHasHeight[name]) {
+                        showIframeWithFallbackHeight(name);
                     }
-                }, 4000);
+                }, 1500);
+            }
+
+            function onIframeError(name) {
+                // iframe加载失败（网络错误等），保持降级模式
+                iframeLoaded[name] = false;
+                var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
+                var container = document.getElementById(containerId);
+                if (container) container.classList.add('iframe-loading');
             }
 
             var blogIframe = document.getElementById('blog-embed');
             var qmeowIframe = document.getElementById('qmeow-embed');
-            if (blogIframe) blogIframe.addEventListener('load', function() { onIframeLoad('blog'); });
-            if (qmeowIframe) qmeowIframe.addEventListener('load', function() { onIframeLoad('qmeow'); });
+            if (blogIframe) {
+                blogIframe.addEventListener('load', function() { onIframeLoad('blog'); });
+                blogIframe.addEventListener('error', function() { onIframeError('blog'); });
+            }
+            if (qmeowIframe) {
+                qmeowIframe.addEventListener('load', function() { onIframeLoad('qmeow'); });
+                qmeowIframe.addEventListener('error', function() { onIframeError('qmeow'); });
+            }
 
             // 优先级：URL参数 > localStorage记忆 > 默认尝试iframe
             if (isDebugMode) {
@@ -1320,6 +1352,7 @@
                     var safeHeight = Math.max(detail.height, 200);
                     if (detail.isQmeow) {
                         iframeMessaged.qmeow = true;
+                        iframeHasHeight.qmeow = true;
                         qmeow.style.height = safeHeight + 'px';
                         var projectContainer = document.getElementById('projectIframeContainer');
                         var projectFallback = document.getElementById('projectFallback');
@@ -1328,6 +1361,7 @@
                     }
                     if (detail.isBlog) {
                         iframeMessaged.blog = true;
+                        iframeHasHeight.blog = true;
                         blog.style.height = safeHeight + 'px';
                         var blogContainer = document.getElementById('blogIframeContainer');
                         var blogFallback = document.getElementById('blogFallback');
