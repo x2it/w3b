@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="知行工作室的核心理念展示 - 理会与践行的交融探索，知行合一的现代实践">
-    <meta name="keywords" content="知行合一,理会,践行,AI,哲学,工作室,w3b">
+    <meta name="description" content="知行工作室的核心理念展示 - 理会与践行的交融探索，知行合一的现代实践" data-i18n-content="meta.description">
+    <meta name="keywords" content="知行合一,理会,践行,AI,哲学,工作室,w3b" data-i18n-content="meta.keywords">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <link rel="canonical" href="https://w3b.pub/">
-    <title>知行工作室 | 理会·践行 - 知行合一的现代探索</title>
+    <title data-i18n-content="meta.title">知行工作室 | 理会·践行 - 知行合一的现代探索</title>
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="知行工作室 | 理会·践行">
-    <meta property="og:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践">
+    <meta property="og:title" content="知行工作室 | 理会·践行" data-i18n-content="meta.og.title">
+    <meta property="og:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践" data-i18n-content="meta.og.description">
     <meta property="og:url" content="https://w3b.pub/">
     <meta property="og:locale" content="zh_CN">
-    <meta property="og:site_name" content="知行工作室">
+    <meta property="og:site_name" content="知行工作室" data-i18n-content="meta.og.site_name">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="知行工作室 | 理会·践行">
-    <meta name="twitter:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践">
+    <meta name="twitter:title" content="知行工作室 | 理会·践行" data-i18n-content="meta.twitter.title">
+    <meta name="twitter:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践" data-i18n-content="meta.twitter.description">
     <!-- JSON-LD 结构化数据 -->
     <script type="application/ld+json">
     {
@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <script src="/assets/js/i18n.js"></script>
 </head>
 <body>
     <!-- AI神经网络背景装饰 -->
@@ -75,57 +76,64 @@
         <rect width="100%" height="100%" fill="url(#neural-grid)"/>
     </svg>
     <!-- 主题切换 -->
-    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题">🎨</button>
+    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-aria="aria.theme">🎨</button>
+    <!-- 语言切换 -->
+    <button class="lang-toggle" id="langToggle" title="Language" aria-label="Language">🌐</button>
+    <div class="lang-menu" id="langMenu">
+        <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0">简体</div>
+        <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0">繁體</div>
+        <div class="lang-option" data-lang="en" role="menuitem" tabindex="0">EN</div>
+    </div>
     <div class="theme-menu" id="themeMenu" role="menu">
         <div class="theme-option" data-theme="light" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #ffffff; border-color: #e5e7eb;"></div>
-            <span>浅色</span>
+            <span data-i18n="theme.light">浅色</span>
         </div>
         <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #111827; border-color: #374151;"></div>
-            <span>深色</span>
+            <span data-i18n="theme.dark">深色</span>
         </div>
         <div class="theme-option" data-theme="blue" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #f8fafc; border-color: #3b82f6;"></div>
-            <span>蓝色</span>
+            <span data-i18n="theme.blue">蓝色</span>
         </div>
         <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #f0fdf4; border-color: #10b981;"></div>
-            <span>绿色</span>
+            <span data-i18n="theme.green">绿色</span>
         </div>
         <div class="theme-option" data-theme="purple" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #faf5ff; border-color: #8b5cf6;"></div>
-            <span>紫色</span>
+            <span data-i18n="theme.purple">紫色</span>
         </div>
         <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #fffbeb; border-color: #f97316;"></div>
-            <span>橙色</span>
+            <span data-i18n="theme.orange">橙色</span>
         </div>
         <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #f0fdfa; border-color: #14b8a6;"></div>
-            <span>青色</span>
+            <span data-i18n="theme.teal">青色</span>
         </div>
         <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
-            <span>系统</span>
+            <span data-i18n="theme.system">系统</span>
         </div>
     </div>
 
     <header>
-        <h1 class="site-title">知行工作室</h1>
+        <h1 class="site-title" data-i18n="site.title">知行工作室</h1>
         <div id="ai-quote" aria-live="polite" style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-light); min-height: 1.5em; text-align: center; font-style: italic;">
             <span id="ai-quote-text"></span><span id="ai-quote-cursor" style="animation: blink 0.8s infinite;">|</span>
         </div>
     </header>
 
     <section id="particle-section">
-        <h2 class="section-title">理会 · 洞察本质</h2>
-        <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态"></canvas>
+        <h2 class="section-title" data-i18n="section.thinking">理会 · 洞察本质</h2>
+        <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态" data-i18n-aria="aria.canvas"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
-            <button class="control-btn active" id="btn-order" style="margin: 0 10px;">有序思维</button>
-            <button class="control-btn" id="btn-chaos" style="margin: 0 10px;">发散联想</button>
-            <button class="control-btn" id="btn-focus" style="margin: 0 10px;">专注凝聚</button>
-            <button class="control-btn" id="btn-ai" style="margin: 0 10px;">AI 思维</button>
+            <button class="control-btn active" id="btn-order" style="margin: 0 10px;" data-i18n="btn.order">有序思维</button>
+            <button class="control-btn" id="btn-chaos" style="margin: 0 10px;" data-i18n="btn.chaos">发散联想</button>
+            <button class="control-btn" id="btn-focus" style="margin: 0 10px;" data-i18n="btn.focus">专注凝聚</button>
+            <button class="control-btn" id="btn-ai" style="margin: 0 10px;" data-i18n="btn.ai">AI 思维</button>
         </div>
         <p id="particle-desc" style="position: relative; z-index: 2; text-align: center; margin-top: 2rem; color: var(--text-secondary); max-width: 600px; margin-left: auto; margin-right: auto; transition: opacity 0.3s ease;">
             粒子形成三层神经网络结构，信号在层间流动传递，模拟 AI 从感知到决策的知行过程。
@@ -133,71 +141,71 @@
     </section>
 
     <section class="timeline-section">
-        <h2 class="section-title">践行 · 当下行动</h2>
-        <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; line-height: 1.6;">
+        <h2 class="section-title" data-i18n="section.action">践行 · 当下行动</h2>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem; line-height: 1.6;" data-i18n="intro.timeline">
             行动如同时间的河流，从古代的艰难探索到当下的每一次实践，皆为"行"之历程。
         </p>
         <div class="timeline">
             <div class="timeline-item">
                 <div class="timeline-content">
-                    <h3>《尚书》 · 知易行难</h3>
-                    <p>"非知之艰，行之惟艰。"</p>
-                    <p class="timeline-source">— 中国思想史上对知行关系最早的著名论断</p>
+                    <h3 data-i18n="tl.shangshu.title">《尚书》 · 知易行难</h3>
+                    <p data-i18n="tl.shangshu.quote">"非知之艰，行之惟艰。"</p>
+                    <p class="timeline-source" data-i18n="tl.shangshu.note">— 中国思想史上对知行关系最早的著名论断</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
-                    <h3>朱熹 · 理会践行</h3>
-                    <p>"只有两件事：理会，践行。"</p>
-                    <p class="timeline-source">— 强调穷理与力行的先后次序与必要性</p>
+                    <h3 data-i18n="tl.zhuxi.title">朱熹 · 理会践行</h3>
+                    <p data-i18n="tl.zhuxi.quote">"只有两件事：理会，践行。"</p>
+                    <p class="timeline-source" data-i18n="tl.zhuxi.note">— 强调穷理与力行的先后次序与必要性</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
-                    <h3>王阳明 · 知行合一</h3>
-                    <p>"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
-                    <p class="timeline-source">— 在心学体系中实现了知与行的本体统一</p>
+                    <h3 data-i18n="tl.wangyangming.title">王阳明 · 知行合一</h3>
+                    <p data-i18n="tl.wangyangming.quote">"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
+                    <p class="timeline-source" data-i18n="tl.wangyangming.note">— 在心学体系中实现了知与行的本体统一</p>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-content">
-                    <h3>当下 · 你的行动</h3>
-                    <p>"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
-                    <p class="timeline-source">— 知行工作室</p>
+                    <h3 data-i18n="tl.present.title">当下 · 你的行动</h3>
+                    <p data-i18n="tl.present.quote">"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
+                    <p class="timeline-source" data-i18n="tl.present.note">— 知行工作室</p>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="balance-section">
-        <h2 class="section-title">知行合一 · 动态平衡</h2>
+        <h2 class="section-title" data-i18n="section.balance">知行合一 · 动态平衡</h2>
         <div class="balance-container">
-            <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">"知"与"行"并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;" data-i18n="intro.balance">"知"与"行"并非固定不变，理想的实践状态在于两者根据情境的动态平衡。</p>
             <div class="balance-visual">
                 <div class="balance-beam" id="balanceBeam"></div>
-                <div class="weight weight-knowledge" id="weightKnow">知</div>
-                <div class="weight weight-action" id="weightAction">行</div>
+                <div class="weight weight-knowledge" id="weightKnow" data-i18n="balance.know">知</div>
+                <div class="weight weight-action" id="weightAction" data-i18n="balance.action">行</div>
             </div>
             <div class="slider-container">
                 <div class="slider-wrapper">
-                    <label for="knowledgeSlider">理的深度 (知)：<span id="knowledgeValue">50</span>%</label>
+                    <label for="knowledgeSlider" data-i18n="balance.know.label">理的深度 (知)：<span id="knowledgeValue">50</span>%</label>
                     <input type="range" id="knowledgeSlider" min="0" max="100" value="50">
                 </div>
                 <div class="slider-wrapper">
-                    <label for="actionSlider">行的力度 (行)：<span id="actionValue">50</span>%</label>
+                    <label for="actionSlider" data-i18n="balance.action.label">行的力度 (行)：<span id="actionValue">50</span>%</label>
                     <input type="range" id="actionSlider" min="0" max="100" value="50">
                 </div>
             </div>
-            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: var(--dark-color); font-size: 1.1rem;">状态：知行均衡</p>
+            <p id="balanceState" style="margin-top: 2rem; font-weight: 500; color: var(--dark-color); font-size: 1.1rem;" data-i18n="balance.equal">状态：知行均衡</p>
         </div>
     </section>
 
     <!-- 整合内容 -->
     <div id="blog-content">
         <section id="thinking">
-            <h3 class="section-title">理会 · 博文随笔</h3>
-            <p class="section-intro">
-                穷理以致知，在思考中洞察本质。<br><span class="section-sub">理无尽，行无止 — 以文载道，以笔践行</span>
+            <h3 class="section-title" data-i18n="section.blog">理会 · 博文随笔</h3>
+            <p class="section-intro" data-i18n="intro.blog">
+                穷理以致知，在思考中洞察本质。<br><span class="section-sub" data-i18n="intro.blog.sub">理无尽，行无止 — 以文载道，以笔践行</span>
             </p>
             <div class="iframe-container iframe-loading" id="blogIframeContainer">
                 <iframe
@@ -211,28 +219,29 @@
                     referrerpolicy="no-referrer-when-downgrade"
                     title="理会 · 博文随笔"
                     style="border: none; border-radius: var(--radius-md); min-height: 200px;"
+                    data-i18n-title="aria.blog.iframe"
                 ></iframe>
             </div>
             <div class="fallback-cards" id="blogFallback">
                 <div class="fallback-card">
-                    <p class="fallback-quote">"穷理以致知，在思考中洞察本质。"</p>
-                    <p class="fallback-source">— 朱熹 · 理会践行</p>
+                    <p class="fallback-quote" data-i18n="fb.blog.0.quote">"穷理以致知，在思考中洞察本质。"</p>
+                    <p class="fallback-source" data-i18n="fb.blog.0.source">— 朱熹 · 理会践行</p>
                 </div>
                 <div class="fallback-card">
-                    <p class="fallback-quote">"非知之艰，行之惟艰。"</p>
-                    <p class="fallback-source">— 《尚书》 · 知易行难</p>
+                    <p class="fallback-quote" data-i18n="fb.blog.1.quote">"非知之艰，行之惟艰。"</p>
+                    <p class="fallback-source" data-i18n="fb.blog.1.source">— 《尚书》 · 知易行难</p>
                 </div>
                 <div class="fallback-card">
-                    <p class="fallback-quote">"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
-                    <p class="fallback-source">— 王阳明 · 知行合一</p>
+                    <p class="fallback-quote" data-i18n="fb.blog.2.quote">"知是行的主意，行是知的功夫；知是行之始，行是知之成。"</p>
+                    <p class="fallback-source" data-i18n="fb.blog.2.source">— 王阳明 · 知行合一</p>
                 </div>
             </div>
         </section>
 
         <section id="projects">
-            <h3 class="section-title">践行 · 笃行成果</h3>
-            <p class="section-intro">
-                笃行以践知，在行动中验证思考。<br><span class="section-sub">知而不行，只是未知 — 行胜于言，成果为证</span>
+            <h3 class="section-title" data-i18n="section.projects">践行 · 笃行成果</h3>
+            <p class="section-intro" data-i18n="intro.projects">
+                笃行以践知，在行动中验证思考。<br><span class="section-sub" data-i18n="intro.projects.sub">知而不行，只是未知 — 行胜于言，成果为证</span>
             </p>
             <div class="iframe-container iframe-loading" id="projectIframeContainer">
                 <iframe
@@ -246,20 +255,21 @@
                     referrerpolicy="no-referrer-when-downgrade"
                     title="践行 · 笃行成果"
                     style="border: none; border-radius: var(--radius-md); min-height: 200px;"
+                    data-i18n-title="aria.projects.iframe"
                 ></iframe>
             </div>
             <div class="fallback-cards" id="projectFallback">
                 <div class="fallback-card">
-                    <p class="fallback-quote">"笃行以践知，在行动中验证思考。"</p>
-                    <p class="fallback-source">— 知行工作室 · 践行</p>
+                    <p class="fallback-quote" data-i18n="fb.project.0.quote">"笃行以践知，在行动中验证思考。"</p>
+                    <p class="fallback-source" data-i18n="fb.project.0.source">— 知行工作室 · 践行</p>
                 </div>
                 <div class="fallback-card">
-                    <p class="fallback-quote">"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
-                    <p class="fallback-source">— 当下 · 你的行动</p>
+                    <p class="fallback-quote" data-i18n="fb.project.1.quote">"每一个项目、每一次选择，都是古老思想在当下的实践与回响。"</p>
+                    <p class="fallback-source" data-i18n="fb.project.1.source">— 当下 · 你的行动</p>
                 </div>
                 <div class="fallback-card">
-                    <p class="fallback-quote">"知而不行，只是未知 — 新内容正在从知到行的路上。"</p>
-                    <p class="fallback-source">— 王阳明 · 知行合一</p>
+                    <p class="fallback-quote" data-i18n="fb.project.2.quote">"知而不行，只是未知 — 新内容正在从知到行的路上。"</p>
+                    <p class="fallback-source" data-i18n="fb.project.2.source">— 王阳明 · 知行合一</p>
                 </div>
             </div>
         </section>
@@ -267,8 +277,8 @@
 
     <footer>
         <section id="contact">
-            <h3 class="section-title">联系交流</h3>
-            <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; line-height: 1.6; font-size: 0.95rem;">
+            <h3 class="section-title" data-i18n="section.contact">联系交流</h3>
+            <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; line-height: 1.6; font-size: 0.95rem;" data-i18n="contact.intro">
                 思以广之，行以践之。期待与你交流。
             </p>
             <div class="email-wrapper" style="text-align: center;">
@@ -276,7 +286,7 @@
                     support@w3b.pub
                 </a>
             </div>
-            <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem;">
+            <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem;" data-i18n="contact.reply">
                 一般会在1-2天内回复邮件
             </p>
         </section>
@@ -284,30 +294,115 @@
         <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0 1rem; opacity: 0.5;">
 
         <div class="footer-links">
-            <a href="/about.html" class="footer-link" title="关于">关于</a>
+            <a href="/about.html" class="footer-link" title="关于" data-i18n="footer.about" data-i18n-title="footer.about">关于</a>
             <span class="link-divider" aria-hidden="true">|</span>
-            <a href="#thinking" class="footer-link" title="访问博文随笔">理会</a>
+            <a href="#thinking" class="footer-link" title="访问博文随笔" data-i18n="footer.thinking" data-i18n-title="nav.blog">理会</a>
             <span class="link-divider" aria-hidden="true">|</span>
-            <a href="#projects" class="footer-link" title="浏览笃行成果">践行</a>
+            <a href="#projects" class="footer-link" title="浏览笃行成果" data-i18n="footer.projects" data-i18n-title="nav.projects">践行</a>
         </div>
-        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.75rem; text-align: center;">"知之真切笃实处即是行，行之明觉精察处即是知。"</p>
-        <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;">— 王阳明 · 《传习录》</p>
-        <p class="copyright">© 2026 知行工作室 - 理会 · 践行</p>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.75rem; text-align: center;" data-i18n="footer.quote">"知之真切笃实处即是行，行之明觉精察处即是知。"</p>
+        <p style="color: var(--text-secondary); font-size: 0.8rem; text-align: center;" data-i18n="footer.quote.source">— 王阳明 · 《传习录》</p>
+        <p class="copyright" data-i18n="footer.copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
     <!-- 固定侧边导航 -->
-    <nav class="side-nav" id="sideNav" aria-label="页面导航">
-        <a href="#particle-section" class="nav-dot" title="理会 · 洞察本质" aria-label="粒子动画区域">理</a>
-        <a href="#timeline-section" class="nav-dot" title="践行 · 当下行动" aria-label="时间线区域">行</a>
-        <a href="#thinking" class="nav-dot" title="理会 · 博文随笔" aria-label="博文区域">文</a>
-        <a href="#projects" class="nav-dot" title="践行 · 笃行成果" aria-label="作品集区域">果</a>
+    <nav class="side-nav" id="sideNav" aria-label="页面导航" data-i18n-aria="nav.aria">
+        <a href="#particle-section" class="nav-dot" title="理会 · 洞察本质" aria-label="粒子动画区域" data-i18n-title="nav.thinking" data-i18n-aria="nav.thinking.aria" data-i18n="side.thinking">理</a>
+        <a href="#timeline-section" class="nav-dot" title="践行 · 当下行动" aria-label="时间线区域" data-i18n-title="nav.action" data-i18n-aria="nav.action.aria" data-i18n="side.action">行</a>
+        <a href="#thinking" class="nav-dot" title="理会 · 博文随笔" aria-label="博文区域" data-i18n-title="nav.blog" data-i18n-aria="nav.blog.aria" data-i18n="side.blog">文</a>
+        <a href="#projects" class="nav-dot" title="践行 · 笃行成果" aria-label="作品集区域" data-i18n-title="nav.projects" data-i18n-aria="nav.projects.aria" data-i18n="side.projects">果</a>
     </nav>
 
     <!-- 返回顶部按钮 -->
-    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部">↑</button>
+    <button class="back-to-top" id="backToTop" title="返回顶部" aria-label="返回顶部" data-i18n-title="aria.top" data-i18n-aria="aria.top">↑</button>
 
     <script>
         (function() {
+            // ===== i18n 多语言系统 =====
+            var currentLang = localStorage.getItem('w3b_lang') || 
+                (navigator.language.startsWith('zh-TW') || navigator.language.startsWith('zh-HK') ? 'zh-TW' :
+                 navigator.language.startsWith('zh') ? 'zh' : 'en');
+
+            function t(key) {
+                var dict = (typeof I18N !== 'undefined' && I18N[currentLang]) ? I18N[currentLang] : I18N['zh'];
+                return dict[key] || I18N['zh'][key] || key;
+            }
+
+            function applyI18n() {
+                // 更新 html lang
+                var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
+                document.documentElement.lang = htmlLang;
+
+                // data-i18n: textContent
+                document.querySelectorAll('[data-i18n]').forEach(function(el) {
+                    var key = el.getAttribute('data-i18n');
+                    var text = t(key);
+                    if (text) el.textContent = text;
+                });
+
+                // data-i18n-content: meta content
+                document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
+                    var key = el.getAttribute('data-i18n-content');
+                    var text = t(key);
+                    if (text) el.setAttribute('content', text);
+                });
+
+                // data-i18n-title: title属性
+                document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+                    var key = el.getAttribute('data-i18n-title');
+                    var text = t(key);
+                    if (text) el.setAttribute('title', text);
+                });
+
+                // data-i18n-aria: aria-label属性
+                document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
+                    var key = el.getAttribute('data-i18n-aria');
+                    var text = t(key);
+                    if (text) el.setAttribute('aria-label', text);
+                });
+
+                // 更新 document.title
+                document.title = t('meta.title');
+
+                // 更新语言菜单active状态
+                document.querySelectorAll('.lang-option').forEach(function(opt) {
+                    opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
+                });
+
+                // 更新JS动态文案的引用（粒子描述、平衡器状态等）
+                if (typeof updateDynamicText === 'function') updateDynamicText();
+            }
+
+            function setLang(lang) {
+                currentLang = lang;
+                localStorage.setItem('w3b_lang', lang);
+                applyI18n();
+            }
+
+            // 更新JS动态文案（语言切换后调用）
+            function updateDynamicText() {
+                // 更新粒子描述
+                var desc = document.getElementById('particle-desc');
+                if (desc && typeof mode !== 'undefined') {
+                    desc.textContent = t('desc.' + mode);
+                }
+                // 重建wisdomQuotes
+                wisdomQuotes = buildWisdomQuotes();
+                // 重新渲染降级卡片
+                var currentPhase = getTimePhase();
+                renderFallbackCards('blogFallback', currentPhase);
+                renderFallbackCards('projectFallback', currentPhase);
+                // 更新平衡器状态
+                if (typeof updateBalanceState === 'function') updateBalanceState();
+                // 更新AI金句（重新构建quotes数组）
+                // AI金句轮播是IIFE内部变量，通过重新设置textContent更新
+                var quoteText = document.getElementById('ai-quote-text');
+                if (quoteText) {
+                    var idx = Math.floor(Math.random() * 15);
+                    quoteText.textContent = t('ai.quote.' + idx);
+                }
+            }
+
             // 全局颜色缓存（性能优化：避免每帧调用getComputedStyle）
             let cachedAccentRgb = '99, 102, 241';
             let cachedTextRgb = '31, 41, 55';
@@ -376,6 +471,37 @@
                 });
             });
 
+            // 语言切换
+            const langToggle = document.getElementById('langToggle');
+            const langMenu = document.getElementById('langMenu');
+            const langOptions = document.querySelectorAll('.lang-option');
+
+            langToggle.addEventListener('click', function() {
+                langMenu.classList.toggle('show');
+                themeMenu.classList.remove('show');
+            });
+            document.addEventListener('click', function(event) {
+                if (!langToggle.contains(event.target) && !langMenu.contains(event.target)) {
+                    langMenu.classList.remove('show');
+                }
+            });
+            langOptions.forEach(function(opt) {
+                opt.addEventListener('click', function() {
+                    setLang(this.getAttribute('data-lang'));
+                    langMenu.classList.remove('show');
+                });
+                opt.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setLang(this.getAttribute('data-lang'));
+                        langMenu.classList.remove('show');
+                    }
+                });
+            });
+
+            // 初始化i18n
+            applyI18n();
+
             // 平衡器相关变量
             const knowledgeSlider = document.getElementById('knowledgeSlider');
             const actionSlider = document.getElementById('actionSlider');
@@ -395,13 +521,13 @@
                 balanceBeam.style.setProperty('--beam-angle', `${angle}deg`);
                 const absDiff = Math.abs(diff);
                 if (absDiff < 10) {
-                    balanceState.textContent = "状态：知行合一 (理想平衡)";
+                    balanceState.textContent = t('balance.ideal');
                     balanceState.style.color = "var(--accent-color)";
                 } else if (diff > 0) {
-                    balanceState.textContent = `状态：行胜于知 (行动领先 ${absDiff}%)`;
+                    balanceState.textContent = t('balance.action.lead').replace('{diff}', absDiff);
                     balanceState.style.color = "var(--accent-secondary)";
                 } else {
-                    balanceState.textContent = `状态：知胜于行 (思考领先 ${absDiff}%)`;
+                    balanceState.textContent = t('balance.know.lead').replace('{diff}', absDiff);
                     balanceState.style.color = "var(--dark-color)";
                 }
             }
@@ -483,23 +609,8 @@
 
             // ===== AI金句轮播 =====
             (function() {
-                const quotes = [
-                    'AI 是知与行的数字映射 — 数据为知，决策为行。',
-                    '当机器学会了思考，知行合一便有了新的注解。',
-                    '算法穷理，模型践行 — AI时代的知行合一。',
-                    '神经网络中，每一层都是"知"，每一次前向传播都是"行"。',
-                    'AI不是替代思考，而是延伸知行的边界。',
-                    '从感知到认知，从推理到行动 — AI正在重走知行之路。',
-                    '大模型是穷理的现代工具，Agent是践行的数字化身。',
-                    '知而不行，只是未知；行而不知，只是盲行 — AI让知行真正合一。',
-                    '每一行代码都是一次践行，每一次调试都是一次理会。',
-                    'AI的涌现能力，恰如知行合一时的豁然贯通。',
-                    '训练是知，推理是行，微调是知行合一的迭代。',
-                    '从GPT到Agent，AI正在完成从"知"到"行"的跨越。',
-                    '数据是新的经典，算法是新的诠释 — AI时代的格物致知。',
-                    '提示工程是知，生成结果是行 — 人机协作的知行合一。',
-                    'AI让"知易行难"变为"知行合一" — 因为知即行，行即知。'
-                ];
+                const quotes = [];
+                for (var i = 0; i < 15; i++) quotes.push(t('ai.quote.' + i));
                 const quoteText = document.getElementById('ai-quote-text');
                 const quoteCursor = document.getElementById('ai-quote-cursor');
                 let quoteIndex = 0;
@@ -815,10 +926,10 @@
                 // 切换描述文字
                 const desc = document.getElementById('particle-desc');
                 const descriptions = {
-                    order: '粒子排列为规则网格，各就各位互不连线 — 有序思维是"理"的起点。',
-                    chaos: '粒子自由运动，近距离粒子相互连线 — 发散联想是"理"的拓展。',
-                    focus: '粒子向中心聚拢，各自独立不连线 — 专注凝聚是"理"的深化。',
-                    ai: '粒子形成三层神经网络结构，信号在层间流动传递 — AI 思维是知行合一的数字映射。'
+                    order: t('desc.order'),
+                    chaos: t('desc.chaos'),
+                    focus: t('desc.focus'),
+                    ai: t('desc.ai')
                 };
                 if (desc && descriptions[newMode]) {
                     desc.style.opacity = '0';
@@ -925,7 +1036,7 @@
                         navigator.clipboard.writeText('support@w3b.pub').then(() => {
                             const originalText = linkElement.textContent;
                             const accentColor = getComputedStyle(document.body).getPropertyValue('--accent-color');
-                            linkElement.textContent = '已复制邮箱';
+                            linkElement.textContent = t('feedback.copied');
                             linkElement.style.background = accentColor;
                             linkElement.style.borderColor = accentColor;
                             linkElement.style.color = 'white';
@@ -996,40 +1107,22 @@
             }
 
             // ===== 知行节律：时间感知金句轮换 =====
-            const wisdomQuotes = {
-                morning: [ // 6-12点：理会
-                    { quote: "穷理以致知，在思考中洞察本质。", source: "— 朱熹 · 理会践行" },
-                    { quote: "博学之，审问之，慎思之，明辨之，笃行之。", source: "— 《中庸》" },
-                    { quote: "学而不思则罔，思而不学则殆。", source: "— 孔子 · 论语" },
-                    { quote: "格物致知，诚意正心。", source: "— 《大学》" },
-                    { quote: "理一分殊，月印万川。", source: "— 朱熹 · 理学" },
-                    { quote: "为学之道，莫先于穷理；穷理之要，必在于读书。", source: "— 朱熹" }
-                ],
-                afternoon: [ // 12-18点：践行
-                    { quote: "笃行以践知，在行动中验证思考。", source: "— 知行工作室 · 践行" },
-                    { quote: "知行合一，止于至善。", source: "— 王阳明 · 《大学》" },
-                    { quote: "非知之艰，行之惟艰。", source: "— 《尚书》" },
-                    { quote: "纸上得来终觉浅，绝知此事要躬行。", source: "— 陆游" },
-                    { quote: "道虽迩，不行不至；事虽小，不为不成。", source: "— 《荀子》" },
-                    { quote: "行之力则知愈进，知之深则行愈达。", source: "— 张栻" }
-                ],
-                evening: [ // 18-24点：合一
-                    { quote: "知是行的主意，行是知的功夫；知是行之始，行是知之成。", source: "— 王阳明 · 知行合一" },
-                    { quote: "知行合一，致良知。", source: "— 王阳明" },
-                    { quote: "致虚极，守静笃。万物并作，吾以观复。", source: "— 老子 · 道德经" },
-                    { quote: "反者道之动，弱者道之用。", source: "— 老子" },
-                    { quote: "万物负阴而抱阳，冲气以为和。", source: "— 老子 · 道德经" },
-                    { quote: "知止而后有定，定而后能静，静而后能安。", source: "— 《大学》" }
-                ],
-                night: [ // 0-6点：静思
-                    { quote: "静而后能安，安而后能虑，虑而后能得。", source: "— 《大学》" },
-                    { quote: "致虚极，守静笃。", source: "— 老子 · 道德经" },
-                    { quote: "知者不言，言者不知。", source: "— 老子" },
-                    { quote: "大音希声，大象无形。", source: "— 老子 · 道德经" },
-                    { quote: "知人者智，自知者明。", source: "— 老子" },
-                    { quote: "合抱之木，生于毫末；九层之台，起于累土。", source: "— 老子" }
-                ]
-            };
+            function buildWisdomQuotes() {
+                var phases = ['morning', 'afternoon', 'evening', 'night'];
+                var result = {};
+                phases.forEach(function(phase) {
+                    var arr = [];
+                    for (var i = 0; i < 6; i++) {
+                        arr.push({
+                            quote: t('wq.' + phase + '.' + i + '.quote'),
+                            source: t('wq.' + phase + '.' + i + '.source')
+                        });
+                    }
+                    result[phase] = arr;
+                });
+                return result;
+            }
+            var wisdomQuotes = buildWisdomQuotes();
 
             function getTimePhase() {
                 const hour = new Date().getHours();
