@@ -78,7 +78,7 @@
     <!-- 主题切换 -->
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-aria="aria.theme">🎨</button>
     <!-- 语言切换 -->
-    <button class="lang-toggle" id="langToggle" title="Language" aria-label="Language">🌐</button>
+    <button class="lang-toggle" id="langToggle" title="Language" aria-label="Language">简</button>
     <div class="lang-menu" id="langMenu">
         <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0">简体</div>
         <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0">繁體</div>
@@ -363,6 +363,12 @@
 
                 // 更新 document.title
                 document.title = t('meta.title');
+
+                // 更新语言切换按钮文字（简/繁/EN）
+                var langToggle = document.getElementById('langToggle');
+                if (langToggle) {
+                    langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
+                }
 
                 // 更新语言菜单active状态
                 document.querySelectorAll('.lang-option').forEach(function(opt) {
