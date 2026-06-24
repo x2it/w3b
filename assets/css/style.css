@@ -308,6 +308,23 @@ body {
         height: 42px;
         font-size: 1.1rem;
     }
+    .lang-toggle {
+        top: 13px;
+        right: 42px;
+        height: 36px;
+        min-width: 36px;
+        padding: 0 8px;
+        font-size: 0.78rem;
+        border-radius: 18px;
+    }
+    .lang-menu {
+        top: 52px;
+        right: 12px;
+    }
+    .theme-menu {
+        top: 62px;
+        right: 12px;
+    }
 }
 
 .theme-menu {
