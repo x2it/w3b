@@ -1038,41 +1038,19 @@
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
-                // 检测 iframe 是否返回错误页面（如 402）——错误页面通常高度很小
-                // 跨域无法直接读取内容，但可以通过高度推断：正常 embed 页面高度 > 300px
-                // 同时检查 iframe 的 src 是否被浏览器阻止（如 CSP 拦截）
-                if (iframeEl) {
-                    // 延迟检测，给 iframe 内容渲染时间
-                    setTimeout(function() {
-                        var rect = iframeEl.getBoundingClientRect();
-                        // 如果 iframe 高度异常小（< 200px），判定为加载失败/错误页面
-                        if (rect.height < 200) {
-                            // 保持降级模式，不显示 iframe
-                            return;
-                        }
-                        // 正常加载：主动请求高度
-                        if (iframeEl.contentWindow) {
-                            try {
-                                iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
-                            } catch(e) { /* 跨域静默 */ }
-                        }
-                    }, 500);
+                if (iframeEl && iframeEl.contentWindow) {
+                    try {
+                        iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
+                    } catch(e) { /* 跨域静默 */ }
                 }
-                // 等待 postMessage，超时则直接显示iframe并隐藏降级卡片
+                // 4秒超时检测：如果仍未收到任何postMessage，判定为加载失败/错误页面
                 setTimeout(function() {
                     if (!iframeMessaged[name]) {
+                        // iframe加载失败或返回错误页面(402/403/404等)
+                        // 保持降级模式：iframe隐藏，降级卡片显示
                         var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
-                        var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
-                        var iframeId = name === 'blog' ? 'blog-embed' : 'qmeow-embed';
                         var container = document.getElementById(containerId);
-                        var fallback = document.getElementById(fallbackId);
-                        var iframe = document.getElementById(iframeId);
-                        if (container) container.classList.remove('iframe-loading');
-                        if (fallback) fallback.style.display = 'none';
-                        // 超时回退：给 iframe 设置合理高度，避免 height=0 留白
-                        if (iframe && (parseInt(iframe.style.height, 10) || 0) < 100) {
-                            iframe.style.height = '1050px';
-                        }
+                        if (container) container.classList.add('iframe-loading');
                     }
                 }, 4000);
             }
