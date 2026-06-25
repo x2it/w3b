@@ -1281,13 +1281,15 @@
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
-                if (iframeEl && iframeEl.contentWindow) {
-                    try {
-                        // 发送 embed-ready 触发博客 embed 页面发送高度
-                        // 博客使用 ResizeObserver，收到 embed-ready 后会立即 notifyHeight
-                        iframeEl.contentWindow.postMessage({ type: 'embed-ready', source: 'w3b-parent' }, '*');
-                    } catch(e) { /* 跨域静默 */ }
-                }
+                // 延迟发送消息，确保 embed 页面 JS 完全初始化后再触发
+                // 部分 embed 页面的 listener 在 onload 时尚未注册
+                setTimeout(function() {
+                    if (iframeEl && iframeEl.contentWindow) {
+                        try {
+                            iframeEl.contentWindow.postMessage({ type: 'embed-ready', source: 'w3b-parent' }, '*');
+                        } catch(e) { /* 跨域静默 */ }
+                    }
+                }, 500);
                 setTimeout(function() {
                     if (!iframeMessaged[name] && !iframeHasHeight[name]) {
                         var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
@@ -1299,7 +1301,7 @@
                     } else if (!iframeHasHeight[name]) {
                         showIframeWithFallbackHeight(name);
                     }
-                }, 5000);
+                }, 6000);
             }
 
             function onIframeError(name) {
