@@ -1283,7 +1283,9 @@
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
                 if (iframeEl && iframeEl.contentWindow) {
                     try {
-                        iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
+                        // 发送 embed-ready 触发博客 embed 页面发送高度
+                        // 博客使用 ResizeObserver，收到 embed-ready 后会立即 notifyHeight
+                        iframeEl.contentWindow.postMessage({ type: 'embed-ready', source: 'w3b-parent' }, '*');
                     } catch(e) { /* 跨域静默 */ }
                 }
                 setTimeout(function() {
