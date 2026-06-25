@@ -441,10 +441,10 @@
             <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
 
             <h3 data-i18n="about.ch3.s4.title">3.4 博文随笔 & 笃行成果</h3>
-            <p>均通过 iframe 嵌入第三方内容，自动同步最新数据。当第三方服务异常时，显示<strong>知行节律</strong>降级金句卡片：</p>
+            <p>均通过 iframe 嵌入第三方内容，自动同步最新数据。iframe 加载失败（网络错误）时，显示<strong>知行节律</strong>降级金句卡片：</p>
             <ul>
-                <li><strong>博文随笔</strong> — iframe 嵌入 fudawei.coze.site，展示博文随笔；异常时显示 3 张金句卡片</li>
-                <li><strong>笃行成果</strong> — iframe 嵌入 output.coze.site，展示项目作品集；异常时显示 3 张金句卡片</li>
+                <li><strong>博文随笔</strong> — iframe 嵌入 fudawei.coze.site，展示博文随笔；加载失败时显示 3 张金句卡片</li>
+                <li><strong>笃行成果</strong> — iframe 嵌入 output.coze.site，展示项目作品集；加载失败时显示 3 张金句卡片</li>
             </ul>
             <p><strong>知行节律</strong>：金句主题根据访问时段自动切换：</p>
             <ul>
@@ -453,12 +453,12 @@
                 <li><strong>晚间（18-24点）</strong>："合一"主题 — 知行合一、致良知、守静</li>
                 <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀</li>
             </ul>
-            <p><strong>降级方案</strong>：iframe 加载成功即显示，postMessage 用于精确高度调整。通信流程：</p>
+            <p><strong>降级方案</strong>：iframe 加载成功即显示，postMessage 仅用于精确高度调整。通信流程：</p>
             <ul>
-                <li>iframe <code>onload</code> 触发时，内容加载成功，发送 <code>embed-request-height</code> 请求高度</li>
-                <li>1.5 秒内未收到高度消息，则使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
-                <li>收到 <code>embed-ready</code> 消息，标记 iframe 就绪</li>
+                <li>iframe <code>onload</code> 触发时，立即显示 iframe 内容并隐藏降级卡片</li>
+                <li>同时发送 <code>embed-ready</code> 请求精确高度</li>
                 <li>收到 <code>embed-height</code> 消息，设置精确高度</li>
+                <li>6 秒内未收到高度消息，使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
                 <li>iframe <code>onerror</code> 或网络错误时，显示金句降级卡片</li>
             </ul>
             <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
@@ -552,7 +552,7 @@
             </ol>
 
             <div class="doc-callout">
-                <strong>维护注意事项：</strong><span>iframe 高度由 postMessage 自动调整；第三方服务异常时降级金句卡片自动显示；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。</span>
+                <strong>维护注意事项：</strong><span>iframe 高度由 postMessage 自动调整；iframe 加载失败（网络错误）时降级金句卡片自动显示；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。</span>
             </div>
 
             <h3 data-i18n="about.ch7.s1.title">7.1 SEO 配置</h3>
