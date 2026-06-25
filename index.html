@@ -1286,14 +1286,18 @@
                         iframeEl.contentWindow.postMessage({ type: 'embed-request-height', source: 'w3b-parent' }, '*');
                     } catch(e) { /* 跨域静默 */ }
                 }
-                // 1.5秒后如果仍未收到高度消息，使用默认高度显示iframe
-                // 说明：iframe load事件触发 = 内容已加载，应该显示
-                // postMessage只是用来精确设置高度，不是显示的必要条件
                 setTimeout(function() {
-                    if (!iframeHasHeight[name]) {
+                    if (!iframeMessaged[name] && !iframeHasHeight[name]) {
+                        var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
+                        var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
+                        var container = document.getElementById(containerId);
+                        var fallback = document.getElementById(fallbackId);
+                        if (container) container.classList.add('iframe-loading');
+                        if (fallback) fallback.style.display = 'grid';
+                    } else if (!iframeHasHeight[name]) {
                         showIframeWithFallbackHeight(name);
                     }
-                }, 1500);
+                }, 2000);
             }
 
             function onIframeError(name) {
