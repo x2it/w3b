@@ -453,13 +453,13 @@
                 <li><strong>晚间（18-24点）</strong>："合一"主题 — 知行合一、致良知、守静</li>
                 <li><strong>深夜（0-6点）</strong>："静思"主题 — 虚静、自知、沉淀</li>
             </ul>
-            <p><strong>降级方案</strong>：iframe 加载成功即显示，postMessage 仅用于精确高度调整。通信流程：</p>
+            <p><strong>加载策略</strong>：iframe 在确定最终高度前保持隐藏，一步到位显示，避免高度跳变。通信流程：</p>
             <ul>
-                <li>iframe <code>onload</code> 触发时，立即显示 iframe 内容并隐藏降级卡片</li>
-                <li>同时发送 <code>embed-ready</code> 请求精确高度</li>
-                <li>收到 <code>embed-height</code> 消息，设置精确高度</li>
-                <li>6 秒内未收到高度消息，使用默认高度显示 iframe（博客 1080px / 成果 800px）</li>
-                <li>iframe <code>onerror</code> 或网络错误时，显示金句降级卡片</li>
+                <li>iframe <code>onload</code> 触发时，iframe 仍保持隐藏（降级卡片可见）</li>
+                <li>发送 <code>embed-ready</code> 请求精确高度，同时启动轮询监听</li>
+                <li>收到 <code>embed-height</code> 消息，设置精确高度后一步到位显示 iframe</li>
+                <li>800ms 内未收到高度消息，使用默认高度（800px）一步到位显示 iframe</li>
+                <li>iframe <code>onerror</code> 或网络错误时，保持降级金句卡片显示</li>
             </ul>
             <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
             <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
@@ -552,7 +552,7 @@
             </ol>
 
             <div class="doc-callout">
-                <strong>维护注意事项：</strong><span>iframe 高度由 postMessage 自动调整；iframe 加载失败（网络错误）时降级金句卡片自动显示；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。</span>
+                <strong>维护注意事项：</strong><span>iframe 在确定最终高度前保持隐藏，收到 postMessage 后一步到位显示；iframe 加载失败（网络错误）时降级金句卡片自动显示；每次修改 style.css 后必须更新 <code>?v=</code> 版本参数。</span>
             </div>
 
             <h3 data-i18n="about.ch7.s1.title">7.1 SEO 配置</h3>
