@@ -1331,13 +1331,23 @@
                     var preciseHeight = window._iframeHeights ? window._iframeHeights[name] : null;
 
                     if (preciseHeight !== null && preciseHeight !== undefined) {
-                        // 收到精确高度，一步到位显示
                         clearInterval(timer);
-                        revealIframe(name, preciseHeight);
+                        if (preciseHeight < 100) {
+                            // 高度异常小（错误页面通常很短），视为加载失败
+                            onIframeError(name);
+                        } else {
+                            // 收到合理高度，一步到位显示
+                            revealIframe(name, preciseHeight);
+                        }
                     } else if (checks >= maxChecks) {
-                        // 超时未收到，使用默认高度一步到位显示
                         clearInterval(timer);
-                        revealIframe(name, defaultHeights[name]);
+                        if (preciseHeight === null || preciseHeight === undefined) {
+                            // 超时且未收到任何 postMessage 响应 → coze 服务可能异常（如402错误页面不会回传高度）
+                            onIframeError(name);
+                        } else {
+                            // 收到高度但可能偏小，仍使用默认高度显示
+                            revealIframe(name, defaultHeights[name]);
+                        }
                     }
                 }, 100);
             }
