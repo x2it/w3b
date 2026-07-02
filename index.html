@@ -149,7 +149,7 @@
         </div>
     </header>
 
-    <section id="particle-section">
+    <section class="particle-section" id="particle-section">
         <h2 class="section-title" data-i18n="section.thinking">理会 · 洞察本质</h2>
         <canvas id="particle-canvas" role="img" aria-label="粒子动画，展示人类思维与AI神经网络的四种状态" data-i18n-aria="aria.canvas"></canvas>
         <div class="particle-controls" style="position: relative; z-index: 2; text-align: center; margin: 2rem 0;">
@@ -225,7 +225,7 @@
 
     <!-- 整合内容 -->
     <div id="blog-content">
-        <section id="thinking">
+        <section class="thinking-section" id="thinking">
             <h3 class="section-title" data-i18n="section.blog">理会 · 博文随笔</h3>
             <p class="section-intro" data-i18n="intro.blog">
                 穷理以致知，在思考中洞察本质。<br><span class="section-sub" data-i18n="intro.blog.sub">理无尽，行无止 — 以文载道，以笔践行</span>
@@ -259,7 +259,7 @@
             </div>
         </section>
 
-        <section id="projects">
+        <section class="projects-section" id="projects">
             <h3 class="section-title" data-i18n="section.projects">践行 · 笃行成果</h3>
             <p class="section-intro" data-i18n="intro.projects">
                 笃行以践知，在行动中验证思考。<br><span class="section-sub" data-i18n="intro.projects.sub">知而不行，只是未知 — 行胜于言，成果为证</span>
@@ -296,24 +296,22 @@
         </section>
     </div>
 
+    <section id="contact">
+        <h3 class="section-title" data-i18n="section.contact">联系交流</h3>
+        <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; line-height: 1.6; font-size: 0.95rem;" data-i18n="contact.intro">
+            思以广之，行以践之。期待与你交流。
+        </p>
+        <div class="email-wrapper" style="text-align: center;">
+            <a href="mailto:support@w3b.pub" class="email-link">
+                support@w3b.pub
+            </a>
+        </div>
+        <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem;" data-i18n="contact.reply">
+            一般会在1-2天内回复邮件
+        </p>
+    </section>
+
     <footer>
-        <section id="contact">
-            <h3 class="section-title" data-i18n="section.contact">联系交流</h3>
-            <p style="text-align: center; color: var(--text-secondary); max-width: 500px; margin: 0 auto 1.25rem; line-height: 1.6; font-size: 0.95rem;" data-i18n="contact.intro">
-                思以广之，行以践之。期待与你交流。
-            </p>
-            <div class="email-wrapper" style="text-align: center;">
-                <a href="mailto:support@w3b.pub" class="email-link">
-                    support@w3b.pub
-                </a>
-            </div>
-            <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 0.75rem;" data-i18n="contact.reply">
-                一般会在1-2天内回复邮件
-            </p>
-        </section>
-
-        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0 1rem; opacity: 0.5;">
-
         <div class="footer-links">
             <a href="/about.html" class="footer-link" title="关于" data-i18n="footer.about" data-i18n-title="footer.about">关于</a>
             <span class="link-divider" aria-hidden="true">|</span>

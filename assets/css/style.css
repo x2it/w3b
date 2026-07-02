@@ -545,9 +545,9 @@ body {
 /* 头部通用 */
 header {
     text-align: center;
-    padding: 3rem 1rem 2rem;
+    padding: 3rem 1rem 1.5rem;
     border-bottom: 1px solid var(--border-color);
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     background: var(--bg-color);
     border-radius: 12px;
     box-shadow: var(--card-shadow);
@@ -598,11 +598,10 @@ h1, .site-title, .blog-title {
 }
 
 /* 章节 */
+/* 通用 section 基础样式 — 卡片类 section 会覆盖这些 */
 section {
     padding: 3rem 1rem;
-    border-bottom: 1px solid var(--border-color);
 }
-section:last-of-type { border-bottom: none; }
 @media (max-width: 768px) { section { padding: 2rem 0.75rem; } }
 @media (max-width: 480px) { section { padding: 1.5rem 0.5rem; } }
 
@@ -994,8 +993,8 @@ input[type=range]::-moz-range-thumb {
     align-items: center;
     flex-wrap: wrap;
     gap: 1.5rem;
-    margin: 3rem 0 2rem;
-    padding: 1.5rem;
+    margin: 0.5rem 0 1rem;
+    padding: 1rem;
     background: var(--card-bg);
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -1059,7 +1058,7 @@ body.dark-mode .footer-link {
 
 footer {
     text-align: center;
-    padding: 2rem 1rem 1.5rem;
+    padding: 1.5rem 1rem 1rem;
     color: var(--text-light);
     font-size: 0.9rem;
     background: var(--card-bg);
@@ -1067,7 +1066,7 @@ footer {
     border: 1px solid var(--border-color);
     border-bottom: none;
     position: relative;
-    margin-top: 0.5rem;
+    margin-top: 0;
 }
 
 /* footer装饰线已删除 - 与知行合一融合理念不协调 */
@@ -1077,10 +1076,17 @@ footer p { margin-bottom: 0.75rem; line-height: 1.6; }
 #contact {
     text-align: center;
     padding: 2.5rem 1.5rem 1.5rem;
-    margin: 0;
-    border: none;
-    background: transparent;
-    box-shadow: none;
+    margin: 0.5rem 0 0;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+@media (max-width: 768px) {
+    #contact { padding: 2rem 1rem 1rem; }
+}
+@media (max-width: 480px) {
+    #contact { padding: 1.5rem 0.75rem 1rem; }
 }
 
 #contact .section-title {
