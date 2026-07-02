@@ -338,9 +338,19 @@
     <script>
         (function() {
             // ===== i18n 多语言系统 =====
-            var currentLang = localStorage.getItem('w3b_lang') || 
-                (navigator.language.startsWith('zh-TW') || navigator.language.startsWith('zh-HK') ? 'zh-TW' :
-                 navigator.language.startsWith('zh') ? 'zh' : 'en');
+            // 安全读取 localStorage（兼容 Safari 隐私模式等禁用环境）
+            var savedLang = null;
+            try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
+
+            // 扩展语言检测：覆盖 zh-Hant / zh-HK / zh-MO / zh-SG 等变体
+            var navLang = navigator.language || '';
+            var currentLang = savedLang ||
+                (navLang.match(/^zh-(TW|HK|MO)$/i) ? 'zh-TW' :
+                 navLang.match(/^zh(-Hant)?$/i) ? 'zh' : 'en');
+
+            // 初始化时同步 html lang（避免搜索引擎抓取错误或语言闪烁）
+            var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
+            document.documentElement.lang = htmlLang;
 
             var I18N = window.I18N || null;
             var i18nReady = !!(I18N && I18N.zh);
@@ -363,6 +373,10 @@
                     // 更新 html lang
                     var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
                     document.documentElement.lang = htmlLang;
+
+                    // 更新 og:locale
+                    var ogLocale = document.querySelector('meta[property="og:locale"]');
+                    if (ogLocale) ogLocale.setAttribute('content', htmlLang.replace('-', '_'));
 
                     // data-i18n: textContent
                     document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -402,10 +416,13 @@
                         langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
                     }
 
-                    // 更新语言菜单active状态
-                    document.querySelectorAll('.lang-option').forEach(function(opt) {
-                        opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
-                    });
+                    // 更新语言菜单 active 状态与 aria-expanded
+                    var langMenu = document.getElementById('langMenu');
+                    if (langMenu) {
+                        langMenu.querySelectorAll('.lang-option').forEach(function(opt) {
+                            opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
+                        });
+                    }
 
                     // 更新JS动态文案的引用（粒子描述、平衡器状态等）
                     if (typeof updateDynamicText === 'function') updateDynamicText();
@@ -416,7 +433,7 @@
 
             function setLang(lang) {
                 currentLang = lang;
-                localStorage.setItem('w3b_lang', lang);
+                try { localStorage.setItem('w3b_lang', lang); } catch(e) {}
                 applyI18n();
             }
 
