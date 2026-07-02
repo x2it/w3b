@@ -194,8 +194,8 @@ body {
 .projects-section {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
-    margin: 2rem 0;
-    padding: 2.5rem 1.5rem;
+    margin: 2rem 0 0.5rem;
+    padding: 2.5rem 1.5rem 1.5rem;
     border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
     transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
@@ -514,6 +514,10 @@ body {
     .projects-section {
         margin: 1.25rem 0;
         padding: 1.5rem 0.75rem;
+    }
+    .projects-section {
+        margin: 1.25rem 0 0.25rem;
+        padding: 1.5rem 0.75rem 0.75rem;
     }
 }
 
@@ -1055,14 +1059,15 @@ body.dark-mode .footer-link {
 
 footer {
     text-align: center;
-    padding: 3rem 1rem 2rem;
+    padding: 2rem 1rem 1.5rem;
     color: var(--text-light);
     font-size: 0.9rem;
     background: var(--card-bg);
-    border-radius: 12px;
+    border-radius: 12px 12px 0 0;
     border: 1px solid var(--border-color);
+    border-bottom: none;
     position: relative;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
 }
 
 /* footer装饰线已删除 - 与知行合一融合理念不协调 */
