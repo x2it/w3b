@@ -994,110 +994,165 @@ input[type=range]::-moz-range-thumb {
     }
 }
 
-/* 底部导航 (通用) */
+/* ===== 底部区域：统一卡片容器 ===== */
+.footer-section {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    margin: 2rem 0 0.5rem;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+    transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal);
+    overflow: hidden;
+}
+
+.footer-section:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+    position: relative;
+}
+
+/* 联系内容区 */
+.footer-section #contact {
+    text-align: center;
+    padding: 2.5rem 1.5rem 1.5rem;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+.contact-intro {
+    text-align: center;
+    color: var(--text-secondary);
+    max-width: 500px;
+    margin: 0 auto 1.25rem;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.contact-reply {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+}
+
+/* 分割线 */
+.footer-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0 1.5rem;
+    opacity: 0.6;
+}
+
+/* 页脚内容区 */
+.footer-section footer {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+.footer-quote {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    margin-top: 0.75rem;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+}
+
+.footer-quote-source {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-align: center;
+    margin-bottom: 0.75rem;
+}
+
+/* 底部导航链接组 — 轻量设计，无嵌套卡片 */
 .footer-links {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin: 0.5rem 0 1rem;
-    padding: 1rem;
-    background: var(--card-bg);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+    gap: 0.75rem;
+    margin: 0 auto 1rem;
+    padding: 0;
+    background: none;
+    border: none;
+    border-radius: 0;
 }
+
 .footer-link {
     color: var(--text-color);
     text-decoration: none;
-    font-size: 1rem;
-    font-weight: 600;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    min-width: 100px;
+    min-height: 40px;
+    min-width: 80px;
     text-align: center;
     touch-action: manipulation;
-    background: var(--gray-light, #f8f9fa);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: transparent;
+    border: 1px solid var(--border-color);
 }
+
 body.dark-mode .footer-link {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: transparent;
+    border-color: var(--border-color);
 }
+
 .footer-link:hover {
     color: var(--accent-color);
-    background: rgba(var(--accent-rgb), 0.08);
-    transform: translateY(-2px);
+    background: rgba(var(--accent-rgb), 0.06);
     border-color: rgba(var(--accent-rgb), 0.4);
-    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
+    transform: translateY(-1px);
 }
+
 .footer-link:active { transform: translateY(0); }
+
 .link-divider {
     color: var(--border-color);
     font-weight: 200;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    user-select: none;
 }
 
-/* 窄屏底部导航优化 - 允许换行，保持触控区域 */
+/* 响应式 */
+@media (max-width: 768px) {
+    .footer-section #contact { padding: 2rem 1rem 1rem; }
+    .footer-divider { margin: 0 1rem; }
+}
+
 @media (max-width: 480px) {
+    .footer-section #contact { padding: 1.5rem 0.75rem 1rem; }
+    .footer-section footer { padding: 1.25rem 0.75rem; }
+    .footer-divider { margin: 0 0.75rem; }
     .footer-links {
-        flex-wrap: wrap;
         gap: 0.5rem;
-        padding: 0.75rem;
     }
     .footer-link {
-        padding: 0.6rem 0.75rem;
+        padding: 0.5rem 0.75rem;
         font-size: 0.85rem;
-        min-width: 80px;
-        min-height: 44px;
+        min-width: 70px;
+        min-height: 40px;
         flex: 1 1 auto;
         white-space: nowrap;
     }
     .link-divider {
         display: none;
     }
-}
-
-footer {
-    text-align: center;
-    padding: 1.5rem 1rem 1rem;
-    color: var(--text-light);
-    font-size: 0.9rem;
-    background: var(--card-bg);
-    border-radius: 12px 12px 0 0;
-    border: 1px solid var(--border-color);
-    border-bottom: none;
-    position: relative;
-    margin-top: 0;
-}
-
-/* footer装饰线已删除 - 与知行合一融合理念不协调 */
-
-footer p { margin-bottom: 0.75rem; line-height: 1.6; }
-/* 联系区域 */
-#contact {
-    text-align: center;
-    padding: 2.5rem 1.5rem 1.5rem;
-    margin: 0.5rem 0 0;
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--card-shadow);
-}
-@media (max-width: 768px) {
-    #contact { padding: 2rem 1rem 1rem; }
-}
-@media (max-width: 480px) {
-    #contact { padding: 1.5rem 0.75rem 1rem; }
-}
-
-#contact .section-title {
-    margin-bottom: 0.75rem;
 }
 
 .email-link {
