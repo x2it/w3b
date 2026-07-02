@@ -1309,54 +1309,49 @@
             }
 
             function onIframeLoad(name) {
+                if (iframeRevealed[name]) return;
                 iframeLoaded[name] = true;
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
 
-                // 方案A: 通过 PerformanceResourceTiming 读取 iframe 加载的真实 HTTP 状态码
-                // 跨域 iframe 无 Timing-Allow-Origin 头时 responseStatus 为 0（非有效值）
+                // 通过 PerformanceResourceTiming 读取 HTTP 状态码（仅当 responseStatus > 0 时有效）
                 var responseStatus = null;
                 try {
                     var entries = performance.getEntriesByType('resource');
                     var src = iframeEl ? iframeEl.src : '';
                     for (var i = entries.length - 1; i >= 0; i--) {
                         if (entries[i].name === src && entries[i].responseStatus !== undefined) {
-                            var status = entries[i].responseStatus;
-                            if (status > 0) responseStatus = status;
+                            if (entries[i].responseStatus > 0) responseStatus = entries[i].responseStatus;
                             break;
                         }
                     }
                 } catch(e) {}
 
+                // 如果确认是 HTTP 错误（402/403/5xx），显示降级
                 if (responseStatus !== null && responseStatus !== 200) {
                     onIframeError(name);
                     return;
                 }
 
-                // 方案B: 请求 iframe 报告精确高度
+                // iframe load 成功 → 先用默认高度显示（不等待 postMessage）
+                revealIframe(name, defaultHeights[name]);
+
+                // 继续请求精确高度，收到后平滑更新
                 if (iframeEl && iframeEl.contentWindow) {
                     try {
                         iframeEl.contentWindow.postMessage({ type: 'embed-ready', source: 'w3b-parent' }, '*');
-                    } catch(e) { /* 跨域静默 */ }
+                    } catch(e) {}
                 }
 
-                // 轮询检查 postMessage（每 200ms，最多 1.5s）
                 var checks = 0;
-                var maxChecks = 8;
+                var maxChecks = 15; // 3s 窗口
                 var timer = setInterval(function() {
                     checks++;
                     var preciseHeight = window._iframeHeights ? window._iframeHeights[name] : null;
-
-                    if (preciseHeight !== null && preciseHeight !== undefined) {
+                    if (preciseHeight !== null && preciseHeight !== undefined && preciseHeight >= 100) {
                         clearInterval(timer);
-                        if (preciseHeight < 100) {
-                            onIframeError(name);
-                        } else {
-                            revealIframe(name, preciseHeight);
-                        }
-                    } else if (checks >= maxChecks) {
-                        clearInterval(timer);
-                        onIframeError(name);
+                        iframeEl.style.height = preciseHeight + 'px';
                     }
+                    if (checks >= maxChecks) clearInterval(timer);
                 }, 200);
             }
 
