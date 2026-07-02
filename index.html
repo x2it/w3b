@@ -459,12 +459,9 @@
                     }
                     // 更新平衡器状态
                     if (typeof updateBalance === 'function') updateBalance();
-                    // 更新AI金句
-                    var quoteText = document.getElementById('ai-quote-text');
-                    if (quoteText) {
-                        var idx = Math.floor(Math.random() * 15);
-                        var quote = t('ai.quote.' + idx);
-                        if (quote) quoteText.textContent = quote;
+                    // 更新AI金句（重置打字机效果）
+                    if (typeof window._resetTypewriter === 'function') {
+                        window._resetTypewriter();
                     }
                 } catch(e) { /* i18n更新时部分功能可能未初始化 */ }
             }
@@ -679,44 +676,71 @@
 
             // ===== AI金句轮播 =====
             (function() {
-                const quotes = [];
-                for (var i = 0; i < 15; i++) {
-                    var q = t('ai.quote.' + i);
-                    if (q) quotes.push(q);
-                }
                 const quoteText = document.getElementById('ai-quote-text');
-                if (!quoteText || quotes.length === 0) return;
-                let quoteIndex = 0;
-                let charIndex = 0;
-                let isDeleting = false;
-                let typingSpeed = 60;
+                if (!quoteText) return;
+
+                // 暴露给 i18n 系统，语言切换时重置
+                window._typewriter = {
+                    quotes: [],
+                    quoteIndex: 0,
+                    charIndex: 0,
+                    isDeleting: false,
+                    typingSpeed: 60,
+                    timer: null,
+                    el: quoteText
+                };
+
+                function loadQuotes() {
+                    window._typewriter.quotes = [];
+                    for (var i = 0; i < 15; i++) {
+                        var q = t('ai.quote.' + i);
+                        if (q) window._typewriter.quotes.push(q);
+                    }
+                }
 
                 function typeQuote() {
-                    const currentQuote = quotes[quoteIndex];
-                    if (!currentQuote) return;
-                    if (!isDeleting) {
-                        quoteText.textContent = currentQuote.substring(0, charIndex + 1);
-                        charIndex++;
-                        if (charIndex === currentQuote.length) {
-                            isDeleting = true;
-                            typingSpeed = 2000;
+                    var tw = window._typewriter;
+                    var quotes = tw.quotes;
+                    var currentQuote = quotes[tw.quoteIndex];
+                    if (!currentQuote || quotes.length === 0) return;
+
+                    if (!tw.isDeleting) {
+                        tw.el.textContent = currentQuote.substring(0, tw.charIndex + 1);
+                        tw.charIndex++;
+                        if (tw.charIndex === currentQuote.length) {
+                            tw.isDeleting = true;
+                            tw.typingSpeed = 2000;
                         } else {
-                            typingSpeed = 50 + Math.random() * 40;
+                            tw.typingSpeed = 50 + Math.random() * 40;
                         }
                     } else {
-                        quoteText.textContent = currentQuote.substring(0, charIndex - 1);
-                        charIndex--;
-                        if (charIndex === 0) {
-                            isDeleting = false;
-                            quoteIndex = (quoteIndex + 1) % quotes.length;
-                            typingSpeed = 500;
+                        tw.el.textContent = currentQuote.substring(0, tw.charIndex - 1);
+                        tw.charIndex--;
+                        if (tw.charIndex === 0) {
+                            tw.isDeleting = false;
+                            tw.quoteIndex = (tw.quoteIndex + 1) % quotes.length;
+                            tw.typingSpeed = 500;
                         } else {
-                            typingSpeed = 25;
+                            tw.typingSpeed = 25;
                         }
                     }
-                    setTimeout(typeQuote, typingSpeed);
+                    tw.timer = setTimeout(typeQuote, tw.typingSpeed);
                 }
-                typeQuote();
+
+                loadQuotes();
+                if (window._typewriter.quotes.length > 0) typeQuote();
+
+                // 暴露重置函数给 i18n
+                window._resetTypewriter = function() {
+                    var tw = window._typewriter;
+                    if (tw.timer) clearTimeout(tw.timer);
+                    loadQuotes();
+                    tw.quoteIndex = 0;
+                    tw.charIndex = 0;
+                    tw.isDeleting = false;
+                    tw.typingSpeed = 60;
+                    if (tw.quotes.length > 0) typeQuote();
+                };
             })();
 
             // 局部粒子系统（粒子区域）
