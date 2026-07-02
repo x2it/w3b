@@ -60,12 +60,12 @@
             var blog = document.getElementById('blog-embed');
             var qmeow = document.getElementById('qmeow-embed');
             try {
-                if (blog && new URL(blog.src).origin === event.origin) {
+                if (blog && blog.src && new URL(blog.src).origin === event.origin) {
                     window._iframeHeights.blog = event.data.height;
                 }
             } catch(e) {}
             try {
-                if (qmeow && new URL(qmeow.src).origin === event.origin) {
+                if (qmeow && qmeow.src && new URL(qmeow.src).origin === event.origin) {
                     window._iframeHeights.qmeow = event.data.height;
                 }
             } catch(e) {}
@@ -233,7 +233,7 @@
             <div class="iframe-container iframe-loading" id="blogIframeContainer">
                 <iframe
                     id="blog-embed"
-                    src="https://fudawei.coze.site/embed?limit=10&theme=auto"
+                    data-src="https://fudawei.coze.site/embed?limit=10&theme=auto"
                     width="100%"
                     height="0"
                     frameborder="0"
@@ -267,7 +267,7 @@
             <div class="iframe-container iframe-loading" id="projectIframeContainer">
                 <iframe
                     id="qmeow-embed"
-                    src="https://output.coze.site/embed?theme=colorful&gap=12"
+                    data-src="https://output.coze.site/embed?theme=colorful&gap=12"
                     width="100%"
                     height="0"
                     frameborder="0"
@@ -1277,28 +1277,6 @@
                 document.getElementById('projectFallback').style.display = 'none';
             }
 
-            // 预检测 iframe 源是否可用（通过 no-cors fetch，只检测网络可达性）
-            // 无法读取具体响应内容，但可以检测是否完全不可达
-            var iframeSrcChecked = { blog: false, qmeow: false };
-            function checkIframeSrc(name) {
-                var src = name === 'blog'
-                    ? 'https://fudawei.coze.site/embed?limit=10&theme=auto'
-                    : 'https://output.coze.site/embed?theme=colorful&gap=12';
-                // no-cors 模式下只能拿到 opaque response（status=0），无法判断 HTTP 状态码
-                // 所以我们用 cors 模式尝试 — 如果被 CORS 拒绝也没关系，说明服务还在运行
-                // 如果完全网络不可达（DNS解析失败等），fetch 会抛异常
-                fetch(src, { mode: 'no-cors', cache: 'no-store' })
-                    .then(function() {
-                        iframeSrcChecked[name] = true; // 网络可达（但可能是402等错误页）
-                    })
-                    .catch(function() {
-                        iframeSrcChecked[name] = false; // 完全不可达
-                        onIframeError(name);
-                    });
-            }
-            checkIframeSrc('blog');
-            checkIframeSrc('qmeow');
-
             function showFallbacks() {
                 document.getElementById('blogIframeContainer').classList.add('iframe-loading');
                 document.getElementById('projectIframeContainer').classList.add('iframe-loading');
@@ -1306,14 +1284,81 @@
                 document.getElementById('projectFallback').style.display = 'grid';
             }
 
-            // iframe 加载管理：先确定最终高度，再一步到位显示，避免跳变
+            // iframe 加载管理：先探测服务可用性，再决定是否加载
             var iframeLoaded = { blog: false, qmeow: false };
             var iframeRevealed = { blog: false, qmeow: false };
+            var iframeSrcSet = { blog: false, qmeow: false };
 
             var defaultHeights = {
                 blog: 1080,
                 qmeow: 800
             };
+
+            var iframeSrcMap = {
+                blog: 'https://fudawei.coze.site/embed?limit=10&theme=auto',
+                qmeow: 'https://output.coze.site/embed?theme=colorful&gap=12'
+            };
+
+            // 探测 coze 服务是否正常（使用 HEAD 请求，检查是否返回 200）
+            // coze.site 可能不允许 CORS，所以用 no-cors 模式
+            // no-cors 模式下 status 始终为 0，但网络错误（DNS 失败等）会抛异常
+            // 我们额外用 cors 模式试探：如果 coze 正常运行且允许 CORS，会得到真实状态码
+            // 如果 CORS 被拒绝（正常情况），fetch 会失败 → 说明服务在运行
+            // 如果服务 402/502，可能返回 opaque 也可能 CORS 失败
+            // 综合判断：用 cors 模式 fetch，如果抛 TypeError（CORS 拒绝）→ 服务在运行
+            // 如果得到 response 且 ok → 服务正常
+            // 如果得到 response 且 !ok → 服务异常（402等）
+            function checkCozeService(name) {
+                var src = iframeSrcMap[name];
+                return new Promise(function(resolve) {
+                    // 先用 cors 模式尝试
+                    var controller = new AbortController();
+                    var timeout = setTimeout(function() { controller.abort(); }, 5000);
+
+                    fetch(src, { mode: 'cors', signal: controller.signal, cache: 'no-store' })
+                        .then(function(resp) {
+                            clearTimeout(timeout);
+                            if (resp.ok) {
+                                resolve({ ok: true, status: resp.status });
+                            } else {
+                                // 402/403/404/5xx 等
+                                resolve({ ok: false, status: resp.status });
+                            }
+                        })
+                        .catch(function(err) {
+                            clearTimeout(timeout);
+                            if (err.name === 'AbortError') {
+                                // 超时，可能是网络慢
+                                resolve({ ok: false, status: 0, timeout: true });
+                            } else {
+                                // CORS 拒绝或网络错误
+                                // CORS 拒绝意味着服务器在运行（返回了响应但不允许跨域读取）
+                                // 网络错误意味着服务器不可达
+                                // 两者都保守处理：尝试加载 iframe，由后续 postMessage 检测
+                                resolve({ ok: null, corsBlocked: true });
+                            }
+                        });
+                });
+            }
+
+            async function loadIframe(name) {
+                if (iframeSrcSet[name]) return;
+                var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
+                if (!iframeEl) return;
+
+                // 先探测服务状态
+                var result = await checkCozeService(name);
+
+                if (result.ok === false) {
+                    // 服务返回非 200 状态码（402/403/5xx），直接显示 fallback
+                    onIframeError(name);
+                    return;
+                }
+
+                // 设置 src 开始加载 iframe
+                iframeEl.src = iframeSrcMap[name];
+                iframeSrcSet[name] = true;
+            }
 
             function revealIframe(name, height) {
                 if (iframeRevealed[name]) return;
@@ -1325,11 +1370,9 @@
                 var container = document.getElementById(containerId);
                 var fallback = document.getElementById(fallbackId);
 
-                // 先设置最终高度（此时 iframe 仍在 iframe-loading 中不可见）
                 if (iframeEl) {
                     iframeEl.style.height = Math.max(height, 200) + 'px';
                 }
-                // 再移除 iframe-loading，iframe 以正确高度一步到位显示
                 if (container) container.classList.remove('iframe-loading');
                 if (fallback) fallback.style.display = 'none';
             }
@@ -1337,9 +1380,6 @@
             function onIframeLoad(name) {
                 iframeLoaded[name] = true;
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
-
-                // 记录 load 前的高度值（如果 postMessage 在 load 之前就到了）
-                var heightBeforeRequest = window._iframeHeights ? window._iframeHeights[name] : null;
 
                 // 请求 iframe 报告精确高度
                 if (iframeEl && iframeEl.contentWindow) {
@@ -1358,25 +1398,22 @@
                     if (preciseHeight !== null && preciseHeight !== undefined) {
                         clearInterval(timer);
                         if (preciseHeight < 100) {
-                            // 高度异常小（错误页面通常很短），视为加载失败
                             onIframeError(name);
                         } else {
-                            // 收到合理高度，一步到位显示
                             revealIframe(name, preciseHeight);
                         }
                     } else if (checks >= maxChecks) {
                         clearInterval(timer);
-                        // 超时未收到任何 postMessage 响应 → coze embed 未正常初始化
-                        // 正常的 coze embed 会在 load 后几百毫秒内回传高度
-                        // 402/502 等错误页面不会有 embed SDK 运行，不会回传高度
                         onIframeError(name);
                     }
                 }, 200);
             }
 
             function onIframeError(name) {
-                // iframe 加载失败（网络错误等），显示降级卡片
                 iframeLoaded[name] = false;
+                // 移除 iframe src 避免持续加载错误内容
+                var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
+                if (iframeEl && iframeEl.src) iframeEl.removeAttribute('src');
                 var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
                 var fallbackId = name === 'blog' ? 'blogFallback' : 'projectFallback';
                 var container = document.getElementById(containerId);
@@ -1398,6 +1435,11 @@
 
             // 优先级：URL参数 > localStorage记忆 > 默认尝试iframe
             if (isDebugMode) {
+                // debug 模式：直接设置 src 并显示
+                var blogEl = document.getElementById('blog-embed');
+                var qmeowEl = document.getElementById('qmeow-embed');
+                if (blogEl) blogEl.src = iframeSrcMap.blog;
+                if (qmeowEl) qmeowEl.src = iframeSrcMap.qmeow;
                 showIframes();
             } else if (userPref === 'fallback') {
                 // 用户明确选择降级
@@ -1405,12 +1447,13 @@
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
             } else {
-                // 默认模式：先渲染降级卡片作为兜底，同时尝试加载iframe
-                // iframe onload 后通过 postMessage 检测是否正常 → 正常才显示 iframe
+                // 默认模式：先渲染降级卡片，然后通过 fetch 探测 + iframe 加载
                 var currentPhase = getTimePhase();
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
-                // 不再无条件 showIframes()，等 onIframeLoad 检测通过后再显示
+                // 异步探测 coze 服务状态，通过后再加载 iframe
+                loadIframe('blog');
+                loadIframe('qmeow');
             }
 
             // ===== 滚动联动：粒子模式随区域切换 =====
