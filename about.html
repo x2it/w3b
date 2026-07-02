@@ -426,7 +426,7 @@
                 <li><strong>专注凝聚</strong> — 粒子向中心聚拢，各自独立不连线，象征深度思考与聚焦</li>
                 <li><strong>AI 思维</strong> — 粒子形成 3 层神经网络结构（输入层、隐藏层、输出层），层间连线模拟突触连接，信号光点沿连线流动并带拖尾效果，节点发光模拟神经元激活。象征 AI 作为知与行的数字映射</li>
             </ul>
-            <p>80-120 个粒子，requestAnimationFrame 驱动，支持鼠标/触摸交互。颜色跟随主题变量动态变化。</p>
+            <p>60-120 个粒子（默认 80 个，专注模式 120 个，有序/发散模式 60 个），requestAnimationFrame 驱动。颜色跟随主题变量动态变化。</p>
 
             <h3 data-i18n="about.ch3.s2.title">3.2 时间线（践行 · 当下行动）</h3>
             <p>纵向时间线展示知行思想的历史脉络：</p>
@@ -458,13 +458,13 @@
                 <li>iframe <code>onload</code> 触发时，iframe 仍保持隐藏（降级卡片可见）</li>
                 <li>发送 <code>embed-ready</code> 请求精确高度，同时启动轮询监听</li>
                 <li>收到 <code>embed-height</code> 消息，设置精确高度后一步到位显示 iframe</li>
-                <li>800ms 内未收到高度消息，使用默认高度（800px）一步到位显示 iframe</li>
+                <li>800ms 内未收到高度消息，使用默认高度（博文 1080px / 笃行成果 800px）一步到位显示 iframe</li>
                 <li>iframe <code>onerror</code> 或网络错误时，保持降级金句卡片显示</li>
             </ul>
             <p>博文和笃行两组降级卡片使用不同偏移，避免显示重复金句。每个时段 6 条金句，每次随机显示 3 条。</p>
             <p><strong>卡片样式</strong>：浅色背景 + 左侧主题色竖线 + 深色文字，与页面整体风格统一。竖线颜色跟随主题切换（<code>var(--accent-color)</code>），hover 时变为次要色（<code>var(--accent-secondary)</code>）。</p>
             <p><strong>调试模式</strong>：URL 加 <code>?debug=1</code> 强制显示 iframe，用于排查第三方服务问题（如续费后验证加载、检查 postMessage 等）。</p>
-            <p><strong>滚动联动</strong>：滚动到"理会"区域时粒子切换"有序思维"；滚动到"践行"区域时切换"专注凝聚"。</p>
+            <p><strong>滚动联动</strong>：滚动到"博文随笔"区域时粒子切换"有序思维"；滚动到"笃行成果"区域时切换"专注凝聚"。</p>
         </div>
 
         <hr class="doc-divider">
@@ -515,7 +515,7 @@
             </div>
 
             <h3 data-i18n="about.ch5.s2.title">5.2 CSS 变量体系</h3>
-            <p>每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。另有 5 个全局变量（圆角、过渡速度等）不受主题覆盖。</p>
+            <p>每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。另有 6 个全局变量（3 个圆角 + 3 个过渡速度）不受主题覆盖。</p>
         </div>
 
         <hr class="doc-divider">
@@ -533,7 +533,7 @@
                     </thead>
                     <tbody>
                         <tr><td><span class="doc-badge accent">PC</span></td><td>> 768px</td><td>三列金句卡片，完整粒子动画</td></tr>
-                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 768px</td><td>单列金句卡片，简化间距</td></tr>
+                        <tr><td><span class="doc-badge accent">平板</span></td><td>481px - 768px</td><td>两列金句卡片，简化间距</td></tr>
                         <tr><td><span class="doc-badge accent">手机</span></td><td>≤ 480px</td><td>单列金句卡片，紧凑布局</td></tr>
                     </tbody>
                 </table>
@@ -561,7 +561,7 @@
                 <li><strong>sitemap.xml</strong>：包含首页（weekly）和关于页（monthly）</li>
                 <li><strong>canonical URL</strong>：首页为 <code>https://w3b.pub/</code>；说明书为 <code>https://w3b.pub/about.html</code></li>
                 <li><strong>Open Graph</strong>：两页均配置 og:title、og:description、og:url、og:locale</li>
-                <li><strong>Twitter Card</strong>：两页均配置 summary 卡片</li>
+                <li><strong>Twitter Card</strong>：两页均配置 summary_large_image 卡片</li>
                 <li><strong>JSON-LD</strong>：首页包含 WebSite 结构化数据</li>
                 <li><strong>404 页面</strong>：<code>noindex, nofollow</code>，防止搜索引擎索引错误页面</li>
             </ul>

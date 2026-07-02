@@ -248,8 +248,8 @@ body {
     position: fixed;
     top: 16px;
     right: 56px;
-    height: 40px;
-    min-width: 40px;
+    height: 44px;
+    min-width: 44px;
     padding: 0 10px;
     border-radius: 20px;
     background: var(--card-bg);
@@ -304,8 +304,8 @@ body {
     .theme-toggle {
         top: 12px;
         right: 12px;
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         font-size: 1.1rem;
     }
     .lang-toggle {
@@ -377,7 +377,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    min-height: 40px;
+    min-height: 44px;
     touch-action: manipulation;
     font-size: 0.9rem;
     color: var(--text-color);
@@ -462,7 +462,7 @@ body {
 
 .fallback-card:hover {
     transform: translateY(-3px);
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: var(--card-shadow-hover), 0 0 24px rgba(var(--accent-rgb), 0.12);
     border-left-color: var(--accent-secondary);
 }
 
@@ -519,10 +519,18 @@ body {
         margin: 1.25rem 0 0.25rem;
         padding: 1.5rem 0.75rem 0.75rem;
     }
+    .fallback-cards {
+        grid-template-columns: 1fr;
+    }
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
+img, video, iframe, canvas, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
 
 body {
     font-family: 'Noto Sans SC', sans-serif;
@@ -894,8 +902,8 @@ section {
 }
 @media (max-width: 480px) { 
     .weight { 
-        width: 40px; 
-        height: 40px; 
+        width: 44px; 
+        height: 44px; 
         font-size: 0.9rem; 
     } 
 }
@@ -1035,24 +1043,23 @@ body.dark-mode .footer-link {
     font-size: 1.2rem;
 }
 
-/* 窄屏底部导航优化 - 强制一行显示，等宽，溢出省略 */
-@media (max-width: 600px) {
+/* 窄屏底部导航优化 - 允许换行，保持触控区域 */
+@media (max-width: 480px) {
     .footer-links {
-        flex-wrap: nowrap;           /* 强制不换行 */
-        gap: 0.1rem;                 /* 间隙最小化 */
-        padding: 0.8rem 0.3rem;      /* 减少内边距 */
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.75rem;
     }
     .footer-link {
-        padding: 0.4rem 0.3rem;      /* 按钮内边距压缩 */
-        font-size: 0.78rem;          /* 字体约11px，可读性下限 */
-        min-width: 0;                 /* 允许收缩 */
-        flex: 1 1 0;                  /* 等宽分配 */
+        padding: 0.6rem 0.75rem;
+        font-size: 0.85rem;
+        min-width: 80px;
+        min-height: 44px;
+        flex: 1 1 auto;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;      /* 长文字显示省略号 */
     }
     .link-divider {
-        display: none;                 /* 隐藏分隔符，腾出空间 */
+        display: none;
     }
 }
 
@@ -1164,20 +1171,14 @@ footer p { margin-bottom: 0.75rem; line-height: 1.6; }
         gap: 8px;
     }
     .nav-dot {
-        width: 30px;
-        height: 30px;
-        font-size: 0.65rem;
+        width: 36px;
+        height: 36px;
+        font-size: 0.7rem;
     }
 }
 @media (max-width: 480px) {
     .side-nav {
-        right: 6px;
-        gap: 6px;
-    }
-    .nav-dot {
-        width: 26px;
-        height: 26px;
-        font-size: 0.6rem;
+        display: none;
     }
 }
 
