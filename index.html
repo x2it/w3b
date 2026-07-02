@@ -233,7 +233,7 @@
             <div class="iframe-container iframe-loading" id="blogIframeContainer">
                 <iframe
                     id="blog-embed"
-                    data-src="https://fudawei.coze.site/embed?limit=10&theme=auto"
+                    src="https://fudawei.coze.site/embed?limit=10&theme=auto"
                     width="100%"
                     height="0"
                     frameborder="0"
@@ -267,7 +267,7 @@
             <div class="iframe-container iframe-loading" id="projectIframeContainer">
                 <iframe
                     id="qmeow-embed"
-                    data-src="https://output.coze.site/embed?theme=colorful&gap=12"
+                    src="https://output.coze.site/embed?theme=colorful&gap=12"
                     width="100%"
                     height="0"
                     frameborder="0"
@@ -1282,81 +1282,14 @@
                 document.getElementById('projectFallback').style.display = 'grid';
             }
 
-            // iframe 加载管理：先探测服务可用性，再决定是否加载
+            // iframe 加载管理：iframe 直接加载，通过 onload 检测是否正常工作
             var iframeLoaded = { blog: false, qmeow: false };
             var iframeRevealed = { blog: false, qmeow: false };
-            var iframeSrcSet = { blog: false, qmeow: false };
 
             var defaultHeights = {
                 blog: 1080,
                 qmeow: 800
             };
-
-            var iframeSrcMap = {
-                blog: 'https://fudawei.coze.site/embed?limit=10&theme=auto',
-                qmeow: 'https://output.coze.site/embed?theme=colorful&gap=12'
-            };
-
-            // 探测 coze 服务是否正常（使用 HEAD 请求，检查是否返回 200）
-            // coze.site 可能不允许 CORS，所以用 no-cors 模式
-            // no-cors 模式下 status 始终为 0，但网络错误（DNS 失败等）会抛异常
-            // 我们额外用 cors 模式试探：如果 coze 正常运行且允许 CORS，会得到真实状态码
-            // 如果 CORS 被拒绝（正常情况），fetch 会失败 → 说明服务在运行
-            // 如果服务 402/502，可能返回 opaque 也可能 CORS 失败
-            // 综合判断：用 cors 模式 fetch，如果抛 TypeError（CORS 拒绝）→ 服务在运行
-            // 如果得到 response 且 ok → 服务正常
-            // 如果得到 response 且 !ok → 服务异常（402等）
-            function checkCozeService(name) {
-                var src = iframeSrcMap[name];
-                return new Promise(function(resolve) {
-                    // 先用 cors 模式尝试
-                    var controller = new AbortController();
-                    var timeout = setTimeout(function() { controller.abort(); }, 5000);
-
-                    fetch(src, { mode: 'cors', signal: controller.signal, cache: 'no-store' })
-                        .then(function(resp) {
-                            clearTimeout(timeout);
-                            if (resp.ok) {
-                                resolve({ ok: true, status: resp.status });
-                            } else {
-                                // 402/403/404/5xx 等
-                                resolve({ ok: false, status: resp.status });
-                            }
-                        })
-                        .catch(function(err) {
-                            clearTimeout(timeout);
-                            if (err.name === 'AbortError') {
-                                // 超时，可能是网络慢
-                                resolve({ ok: false, status: 0, timeout: true });
-                            } else {
-                                // CORS 拒绝或网络错误
-                                // CORS 拒绝意味着服务器在运行（返回了响应但不允许跨域读取）
-                                // 网络错误意味着服务器不可达
-                                // 两者都保守处理：尝试加载 iframe，由后续 postMessage 检测
-                                resolve({ ok: null, corsBlocked: true });
-                            }
-                        });
-                });
-            }
-
-            async function loadIframe(name) {
-                if (iframeSrcSet[name]) return;
-                var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
-                if (!iframeEl) return;
-
-                // 先探测服务状态
-                var result = await checkCozeService(name);
-
-                if (result.ok === false) {
-                    // 服务返回非 200 状态码（402/403/5xx），直接显示 fallback
-                    onIframeError(name);
-                    return;
-                }
-
-                // 设置 src 开始加载 iframe
-                iframeEl.src = iframeSrcMap[name];
-                iframeSrcSet[name] = true;
-            }
 
             function revealIframe(name, height) {
                 if (iframeRevealed[name]) return;
@@ -1380,8 +1313,7 @@
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
 
                 // 方案A: 通过 PerformanceResourceTiming 读取 iframe 加载的真实 HTTP 状态码
-                // 注意：跨域 iframe 无 Timing-Allow-Origin 头时 responseStatus 为 0（非有效值）
-                // 只有 responseStatus > 0 时才视为真实状态码
+                // 跨域 iframe 无 Timing-Allow-Origin 头时 responseStatus 为 0（非有效值）
                 var responseStatus = null;
                 try {
                     var entries = performance.getEntriesByType('resource');
@@ -1389,28 +1321,25 @@
                     for (var i = entries.length - 1; i >= 0; i--) {
                         if (entries[i].name === src && entries[i].responseStatus !== undefined) {
                             var status = entries[i].responseStatus;
-                            if (status > 0) {
-                                responseStatus = status;
-                            }
+                            if (status > 0) responseStatus = status;
                             break;
                         }
                     }
                 } catch(e) {}
 
-                // 如果检测到非 200 状态码（如 402），直接降级
                 if (responseStatus !== null && responseStatus !== 200) {
                     onIframeError(name);
                     return;
                 }
 
-                // 方案B: 请求 iframe 报告精确高度（备用方案，当 Performance API 不可用或返回 200 时）
+                // 方案B: 请求 iframe 报告精确高度
                 if (iframeEl && iframeEl.contentWindow) {
                     try {
                         iframeEl.contentWindow.postMessage({ type: 'embed-ready', source: 'w3b-parent' }, '*');
                     } catch(e) { /* 跨域静默 */ }
                 }
 
-                // 轮询检查 postMessage 是否到达（每 200ms 检查一次，最多 1.5s）
+                // 轮询检查 postMessage（每 200ms，最多 1.5s）
                 var checks = 0;
                 var maxChecks = 8;
                 var timer = setInterval(function() {
@@ -1433,7 +1362,6 @@
 
             function onIframeError(name) {
                 iframeLoaded[name] = false;
-                // 移除 iframe src 避免持续加载错误内容
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
                 if (iframeEl && iframeEl.src) iframeEl.removeAttribute('src');
                 var containerId = name === 'blog' ? 'blogIframeContainer' : 'projectIframeContainer';
@@ -1457,25 +1385,17 @@
 
             // 优先级：URL参数 > localStorage记忆 > 默认尝试iframe
             if (isDebugMode) {
-                // debug 模式：直接设置 src 并显示
-                var blogEl = document.getElementById('blog-embed');
-                var qmeowEl = document.getElementById('qmeow-embed');
-                if (blogEl) blogEl.src = iframeSrcMap.blog;
-                if (qmeowEl) qmeowEl.src = iframeSrcMap.qmeow;
                 showIframes();
             } else if (userPref === 'fallback') {
-                // 用户明确选择降级
                 var currentPhase = getTimePhase();
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
             } else {
-                // 默认模式：先渲染降级卡片，然后通过 fetch 探测 + iframe 加载
+                // 默认模式：iframe 直接加载（src 已在 HTML 中设置）
+                // 先渲染 fallback 作为兜底，iframe onload 后会自动切换显示
                 var currentPhase = getTimePhase();
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
-                // 异步探测 coze 服务状态，通过后再加载 iframe
-                loadIframe('blog');
-                loadIframe('qmeow');
             }
 
             // ===== 滚动联动：粒子模式随区域切换 =====
