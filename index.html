@@ -1380,13 +1380,18 @@
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
 
                 // 方案A: 通过 PerformanceResourceTiming 读取 iframe 加载的真实 HTTP 状态码
+                // 注意：跨域 iframe 无 Timing-Allow-Origin 头时 responseStatus 为 0（非有效值）
+                // 只有 responseStatus > 0 时才视为真实状态码
                 var responseStatus = null;
                 try {
                     var entries = performance.getEntriesByType('resource');
                     var src = iframeEl ? iframeEl.src : '';
                     for (var i = entries.length - 1; i >= 0; i--) {
                         if (entries[i].name === src && entries[i].responseStatus !== undefined) {
-                            responseStatus = entries[i].responseStatus;
+                            var status = entries[i].responseStatus;
+                            if (status > 0) {
+                                responseStatus = status;
+                            }
                             break;
                         }
                     }
