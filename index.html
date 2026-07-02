@@ -1277,6 +1277,28 @@
                 document.getElementById('projectFallback').style.display = 'none';
             }
 
+            // 预检测 iframe 源是否可用（通过 no-cors fetch，只检测网络可达性）
+            // 无法读取具体响应内容，但可以检测是否完全不可达
+            var iframeSrcChecked = { blog: false, qmeow: false };
+            function checkIframeSrc(name) {
+                var src = name === 'blog'
+                    ? 'https://fudawei.coze.site/embed?limit=10&theme=auto'
+                    : 'https://output.coze.site/embed?theme=colorful&gap=12';
+                // no-cors 模式下只能拿到 opaque response（status=0），无法判断 HTTP 状态码
+                // 所以我们用 cors 模式尝试 — 如果被 CORS 拒绝也没关系，说明服务还在运行
+                // 如果完全网络不可达（DNS解析失败等），fetch 会抛异常
+                fetch(src, { mode: 'no-cors', cache: 'no-store' })
+                    .then(function() {
+                        iframeSrcChecked[name] = true; // 网络可达（但可能是402等错误页）
+                    })
+                    .catch(function() {
+                        iframeSrcChecked[name] = false; // 完全不可达
+                        onIframeError(name);
+                    });
+            }
+            checkIframeSrc('blog');
+            checkIframeSrc('qmeow');
+
             function showFallbacks() {
                 document.getElementById('blogIframeContainer').classList.add('iframe-loading');
                 document.getElementById('projectIframeContainer').classList.add('iframe-loading');
@@ -1316,6 +1338,9 @@
                 iframeLoaded[name] = true;
                 var iframeEl = name === 'blog' ? document.getElementById('blog-embed') : document.getElementById('qmeow-embed');
 
+                // 记录 load 前的高度值（如果 postMessage 在 load 之前就到了）
+                var heightBeforeRequest = window._iframeHeights ? window._iframeHeights[name] : null;
+
                 // 请求 iframe 报告精确高度
                 if (iframeEl && iframeEl.contentWindow) {
                     try {
@@ -1323,7 +1348,7 @@
                     } catch(e) { /* 跨域静默 */ }
                 }
 
-                // 轮询检查 postMessage 是否到达（每 100ms 检查一次，最多 800ms）
+                // 轮询检查 postMessage 是否到达（每 200ms 检查一次，最多 1.5s）
                 var checks = 0;
                 var maxChecks = 8;
                 var timer = setInterval(function() {
@@ -1341,15 +1366,12 @@
                         }
                     } else if (checks >= maxChecks) {
                         clearInterval(timer);
-                        if (preciseHeight === null || preciseHeight === undefined) {
-                            // 超时且未收到任何 postMessage 响应 → coze 服务可能异常（如402错误页面不会回传高度）
-                            onIframeError(name);
-                        } else {
-                            // 收到高度但可能偏小，仍使用默认高度显示
-                            revealIframe(name, defaultHeights[name]);
-                        }
+                        // 超时未收到任何 postMessage 响应 → coze embed 未正常初始化
+                        // 正常的 coze embed 会在 load 后几百毫秒内回传高度
+                        // 402/502 等错误页面不会有 embed SDK 运行，不会回传高度
+                        onIframeError(name);
                     }
-                }, 100);
+                }, 200);
             }
 
             function onIframeError(name) {
@@ -1383,15 +1405,12 @@
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
             } else {
-                // 默认模式 + 用户偏好iframe：先渲染降级卡片作为兜底，同时尝试加载iframe
-                // iframe onload 或 postMessage 会自动切换显示
+                // 默认模式：先渲染降级卡片作为兜底，同时尝试加载iframe
+                // iframe onload 后通过 postMessage 检测是否正常 → 正常才显示 iframe
                 var currentPhase = getTimePhase();
                 renderFallbackCards('blogFallback', currentPhase);
                 renderFallbackCards('projectFallback', currentPhase);
-                // 如果用户之前选过iframe，直接显示
-                if (userPref === 'iframe') {
-                    showIframes();
-                }
+                // 不再无条件 showIframes()，等 onIframeLoad 检测通过后再显示
             }
 
             // ===== 滚动联动：粒子模式随区域切换 =====
