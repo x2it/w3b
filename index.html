@@ -99,12 +99,12 @@
         <rect width="100%" height="100%" fill="url(#neural-grid)"/>
     </svg>
     <!-- 主题切换 -->
-    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-aria="aria.theme">🎨</button>
+    <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
     <!-- 语言切换 -->
-    <button class="lang-toggle" id="langToggle" title="Language" aria-label="Language">简</button>
-    <div class="lang-menu" id="langMenu">
-        <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0">简体</div>
-        <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0">繁體</div>
+    <button class="lang-toggle" id="langToggle" title="语言" aria-label="语言" data-i18n-title="lang.label" data-i18n-aria="lang.label">简</button>
+    <div class="lang-menu" id="langMenu" role="menu" aria-expanded="false">
+        <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0" data-i18n="lang.zh">简体</div>
+        <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0" data-i18n="lang.zh-TW">繁體</div>
         <div class="lang-option" data-lang="en" role="menuitem" tabindex="0">EN</div>
     </div>
     <div class="theme-menu" id="themeMenu" role="menu">
@@ -289,7 +289,7 @@
                     <p class="fallback-source" data-i18n="fb.project.1.source">— 当下 · 你的行动</p>
                 </div>
                 <div class="fallback-card">
-                    <p class="fallback-quote" data-i18n="fb.project.2.quote">"知而不行，只是未知 — 新内容正在从知到行的路上。"</p>
+                    <p class="fallback-quote" data-i18n="fb.project.2.quote">"知而不行，只是未知 — 行胜于言，成果为证。"</p>
                     <p class="fallback-source" data-i18n="fb.project.2.source">— 王阳明 · 知行合一</p>
                 </div>
             </div>

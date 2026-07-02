@@ -585,10 +585,10 @@ window.I18N = {
         'tl.zhuxi.quote': '"There are only two things: understanding, and practice."',
         'tl.zhuxi.note': '— On the sequence and necessity of pursuing truth and taking action',
         'tl.wangyangming.title': 'Wang Yangming · Unity of Knowledge and Action',
-        'tl.wangyangming.quote': '"Knowledge is the beginning of action; action is the completion of knowledge."',
+        'tl.wangyangming.quote': '"Knowledge is the director of action, action is the effort of knowledge; knowledge is the beginning of action, action is the completion of knowledge."',
         'tl.wangyangming.note': '— Achieving ontological unity of knowledge and action in the philosophy of mind',
         'tl.present.title': 'Present · Your Action',
-        'tl.present.quote': '"Every project, every choice, is an ancient philosophy practiced in the present."',
+        'tl.present.quote': '"Every project, every choice, is an ancient philosophy practiced in the present, echoing through time."',
         'tl.present.note': '— Zhixing Studio',
 
         'balance.know': 'Know',
@@ -624,10 +624,10 @@ window.I18N = {
         'btn.focus': 'Focused',
         'btn.ai': 'AI Mind',
 
-        'desc.order': 'Particles form an ordered grid — Structured thinking is the origin of "insight."',
+        'desc.order': 'Particles form an ordered grid, each in its place without connections — Structured thinking is the origin of "insight."',
         'desc.chaos': 'Particles move freely, nearby particles connect — Divergent association expands "insight."',
         'desc.focus': 'Particles converge to center, each alone — Focused concentration deepens "insight."',
-        'desc.ai': 'Particles form a three-layer neural network — AI thinking is the digital mapping of unity of knowledge and action.',
+        'desc.ai': 'Particles form a three-layer neural network, signals flowing between layers — AI thinking is the digital mapping of unity of knowledge and action.',
 
         'feedback.copied': 'Email copied',
 
@@ -691,7 +691,7 @@ window.I18N = {
         'wq.afternoon.3.source': '— Lu You',
         'wq.afternoon.4.quote': 'Though the way is short, without walking you will not arrive; though the task is small, without acting it remains undone.',
         'wq.afternoon.4.source': '— Xunzi',
-        'wq.afternoon.5.quote': 'Action deepens knowledge; profound knowledge guides action.',
+        'wq.afternoon.5.quote': 'The more forceful the action, the further knowledge advances; the deeper the knowledge, the more accomplished the action.',
         'wq.afternoon.5.source': '— Zhang Shi',
         'wq.evening.0.quote': 'Knowledge is the beginning of action; action is the completion of knowledge.',
         'wq.evening.0.source': '— Wang Yangming · Unity of Knowledge & Action',
@@ -728,7 +728,7 @@ window.I18N = {
         'fb.project.0.source': '— Zhixing Studio · Practice',
         'fb.project.1.quote': '"Every project, every choice, is an ancient philosophy practiced in the present."',
         'fb.project.1.source': '— Present · Your Action',
-        'fb.project.2.quote': '"Knowledge without action is mere ignorance — Deeds speak louder, results as proof."',
+        'fb.project.2.quote': '"Knowledge without action is mere ignorance — Deeds speak louder than words, results as proof."',
         'fb.project.2.source': '— Wang Yangming · Unity of Knowledge & Action',
 
         'lang.label': 'Language',

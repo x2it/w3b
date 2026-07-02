@@ -280,10 +280,10 @@
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
-    <button class="lang-toggle" id="langToggle" title="Language" aria-label="Language">简</button>
-    <div class="lang-menu" id="langMenu">
-        <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0">简体</div>
-        <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0">繁體</div>
+    <button class="lang-toggle" id="langToggle" title="语言" aria-label="语言" data-i18n-title="lang.label" data-i18n-aria="lang.label">简</button>
+    <div class="lang-menu" id="langMenu" role="menu" aria-expanded="false">
+        <div class="lang-option" data-lang="zh" role="menuitem" tabindex="0" data-i18n="lang.zh">简体</div>
+        <div class="lang-option" data-lang="zh-TW" role="menuitem" tabindex="0" data-i18n="lang.zh-TW">繁體</div>
         <div class="lang-option" data-lang="en" role="menuitem" tabindex="0">EN</div>
     </div>
     <div class="theme-menu" id="themeMenu" role="menu">
@@ -382,7 +382,7 @@
             <div class="doc-table-wrap">
                 <table>
                     <thead>
-                        <tr><th data-i18n="about.table.file">文件</th><th data-i18n="about.table.role">职责</th></tr>
+                        <tr><th data-i18n="about.table.file">文件</th><th data-i18n="about.table.role">功能</th></tr>
                     </thead>
                     <tbody>
                         <tr><td><code>index.html</code></td><td>主页，包含主题变量、页面结构、交互逻辑</td></tr>
@@ -440,7 +440,7 @@
             <h3 data-i18n="about.ch3.s3.title">3.3 平衡器（知行合一 · 动态平衡）</h3>
             <p>交互式天平可视化，用户通过两个滑块控制"理的深度"和"行的力度"，天平横梁实时倾斜反映平衡状态。</p>
 
-            <h3 data-i18n="about.ch3.s4.title">3.4 博文随笔 & 笃行成果</h3>
+            <h3 data-i18n="about.ch3.s4.title">3.4 博文随笔 &amp; 笃行成果</h3>
             <p>均通过 iframe 嵌入第三方内容，自动同步最新数据。iframe 加载失败（网络错误）时，显示<strong>知行节律</strong>降级金句卡片：</p>
             <ul>
                 <li><strong>博文随笔</strong> — iframe 嵌入 fudawei.coze.site，展示博文随笔；加载失败时显示 3 张金句卡片</li>
