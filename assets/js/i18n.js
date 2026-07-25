@@ -85,8 +85,8 @@ window.I18N = {
         'subscribe.rss': 'RSS 链接',
         'subscribe.copy': '复制',
         'subscribe.copied': '已复制',
-        'subscribe.feedly': '添加到 Feedly',
-        'subscribe.inoreader': '添加到 Inoreader',
+        'subscribe.tip': '复制以上链接，粘贴到你的 RSS 阅读器中即可订阅。',
+        'subscribe.preview': '预览 RSS',
         'subscribe.close': '关闭',
 
         // === 主题菜单 ===
@@ -376,8 +376,8 @@ window.I18N = {
         'subscribe.rss': 'RSS 連結',
         'subscribe.copy': '複製',
         'subscribe.copied': '已複製',
-        'subscribe.feedly': '加入 Feedly',
-        'subscribe.inoreader': '加入 Inoreader',
+        'subscribe.tip': '複製以上連結，貼到你的 RSS 閱讀器中即可訂閱。',
+        'subscribe.preview': '預覽 RSS',
         'subscribe.close': '關閉',
 
         'theme.light': '淺色',
@@ -657,8 +657,8 @@ window.I18N = {
         'subscribe.rss': 'RSS Feed',
         'subscribe.copy': 'Copy',
         'subscribe.copied': 'Copied',
-        'subscribe.feedly': 'Add to Feedly',
-        'subscribe.inoreader': 'Add to Inoreader',
+        'subscribe.tip': 'Copy the link above and paste it into your RSS reader to subscribe.',
+        'subscribe.preview': 'Preview RSS',
         'subscribe.close': 'Close',
 
         'theme.light': 'Light',

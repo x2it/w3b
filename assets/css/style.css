@@ -1370,7 +1370,14 @@ body.dark-mode .footer-link {
 .subscribe-feed-row {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.subscribe-tip {
+    font-size: 0.82rem;
+    color: var(--text-light);
+    margin: 0 0 1.25rem;
+    line-height: 1.5;
 }
 
 .subscribe-feed-input {
