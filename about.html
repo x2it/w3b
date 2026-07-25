@@ -327,9 +327,9 @@
             <div class="theme-preview" style="background: #f97316; border-color: #f97316;"></div>
             <span data-i18n="theme.orange">橙色</span>
         </div>
-        <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
+        <div class="theme-option" data-theme="cyan" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: #14b8a6; border-color: #14b8a6;"></div>
-            <span data-i18n="theme.teal">青色</span>
+            <span data-i18n="theme.cyan">青色</span>
         </div>
         <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
@@ -626,7 +626,7 @@
             });
 
             function applyTheme(theme) {
-                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'cyan-mode');
                 themeOptions.forEach(option => {
                     option.classList.remove('active');
                     if (option.getAttribute('data-theme') === theme) {
@@ -644,8 +644,8 @@
                     body.classList.add('purple-mode');
                 } else if (theme === 'orange') {
                     body.classList.add('orange-mode');
-                } else if (theme === 'teal') {
-                    body.classList.add('teal-mode');
+                } else if (theme === 'cyan') {
+                    body.classList.add('cyan-mode');
                 } else if (theme === 'system') {
                     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     if (prefersDark) {

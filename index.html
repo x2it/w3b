@@ -20,7 +20,7 @@
     <meta name="twitter:title" content="知行工作室 | 理会·践行" data-i18n-content="meta.twitter.title">
     <meta name="twitter:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践" data-i18n-content="meta.twitter.description">
     <!-- JSON-LD 结构化数据 -->
-    <script type="application/ld+json">
+    <script type="application/ld+json" id="ld-json">
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -378,6 +378,22 @@
                     // 更新 og:locale
                     var ogLocale = document.querySelector('meta[property="og:locale"]');
                     if (ogLocale) ogLocale.setAttribute('content', htmlLang.replace('-', '_'));
+
+                    // 更新 JSON-LD 结构化数据
+                    var ldScript = document.getElementById('ld-json');
+                    if (ldScript) {
+                        try {
+                            var ldData = JSON.parse(ldScript.textContent);
+                            var ldName = t('ld.name');
+                            var ldDesc = t('ld.description');
+                            var ldAuthor = t('ld.author');
+                            if (ldName) ldData.name = ldName;
+                            if (ldDesc) ldData.description = ldDesc;
+                            if (ldAuthor) ldData.author.name = ldAuthor;
+                            ldData.inLanguage = htmlLang;
+                            ldScript.textContent = JSON.stringify(ldData, null, 4);
+                        } catch(e) {}
+                    }
 
                     // data-i18n: textContent
                     document.querySelectorAll('[data-i18n]').forEach(function(el) {
