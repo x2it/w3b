@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>知行工作室 · w3b.pub</title>
+    <link>https://w3b.pub/</link>
+    <atom:link href="https://w3b.pub/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>理会·践行 — 知行合一的现代探索。AI 与哲学的交融实践。</description>
+    <language>zh-CN</language>
+    <copyright>© 2026 知行工作室</copyright>
+    <lastBuildDate>Wed, 02 Jul 2026 00:00:00 +0800</lastBuildDate>
+    <generator>手工维护</generator>
+    <image>
+      <url>https://w3b.pub/favicon.svg</url>
+      <title>知行工作室 · w3b.pub</title>
+      <link>https://w3b.pub/</link>
+    </image>
+
+    <item>
+      <title>统一模块感设计语言 · 全站视觉一致性优化</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-update-20260702-design</guid>
+      <pubDate>Wed, 02 Jul 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[修复下半部分模块感缺失问题：统一 #contact 间距与标题层级、footer 间距、.projects-section 移动端样式，全站卡片模块节奏一致。]]></description>
+      <category>设计优化</category>
+    </item>
+
+    <item>
+      <title>iframe 加载策略重写 · fetch 探测 + 402 降级检测</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-update-20260625-iframe</guid>
+      <pubDate>Wed, 25 Jun 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[彻底重写 iframe 加载策略：先通过 fetch 探测第三方服务可用性，服务异常（如402欠费）时直接显示金句降级卡片，避免欠费页面透出。]]></description>
+      <category>功能修复</category>
+    </item>
+
+    <item>
+      <title>语言切换与打字机效果优化 · 多语言体验打磨</title>
+      <link>https://w3b.pub/about.html</link>
+      <guid isPermaLink="false">w3b-update-20260624-i18n</guid>
+      <pubDate>Mon, 24 Jun 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[修复语言切换逻辑、打字机效果语言同步、about.html 全面国际化、文案审计与翻译修复。]]></description>
+      <category>国际化</category>
+    </item>
+
+    <item>
+      <title>UI 精细化与响应式修复 · 全站细节打磨</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-update-20260623-ui</guid>
+      <pubDate>Sun, 23 Jun 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[底部导航配色增强、PC/移动端按钮布局统一、侧边栏激活逻辑修复、全局间距层叠优化、文档描述与翻译一致性检查。]]></description>
+      <category>UI/UX</category>
+    </item>
+
+    <item>
+      <title>项目上线 · 知行工作室官网正式发布</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-launch-202606</guid>
+      <pubDate>Sat, 01 Jun 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[知行工作室官方网站 w3b.pub 正式上线。以「理会·践行」为核心理念，融合粒子动画、时间线、动态平衡器等交互体验，呈现知行合一的现代探索。]]></description>
+      <category>发布</category>
+    </item>
+
+  </channel>
+</rss>
