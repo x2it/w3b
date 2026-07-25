@@ -566,6 +566,9 @@
             // 初始化i18n
             applyI18n();
 
+            // 暴露全局 i18n 对象供订阅弹窗等外部脚本使用
+            window.i18n = { t: t };
+
             // 平衡器相关变量
             const knowledgeSlider = document.getElementById('knowledgeSlider');
             const actionSlider = document.getElementById('actionSlider');
