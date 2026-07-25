@@ -77,6 +77,17 @@ window.I18N = {
         'footer.quote': '"知之真切笃实处即是行，行之明觉精察处即是知。"',
         'footer.quote.source': '— 王阳明 · 《传习录》',
         'footer.copyright': '© 2026 知行工作室 - 理会 · 践行',
+        'footer.subscribe': '订阅',
+
+        // === 订阅弹窗 ===
+        'subscribe.title': '订阅更新',
+        'subscribe.desc': '通过 RSS 订阅，第一时间获取知行工作室的更新日志。',
+        'subscribe.rss': 'RSS 链接',
+        'subscribe.copy': '复制',
+        'subscribe.copied': '已复制',
+        'subscribe.feedly': '添加到 Feedly',
+        'subscribe.inoreader': '添加到 Inoreader',
+        'subscribe.close': '关闭',
 
         // === 主题菜单 ===
         'theme.light': '浅色',
@@ -357,6 +368,17 @@ window.I18N = {
         'footer.quote': '「知之真切篤實處即是行，行之明覺精察處即是知。」',
         'footer.quote.source': '— 王陽明 · 《傳習錄》',
         'footer.copyright': '© 2026 知行工作室 - 理會 · 踐行',
+        'footer.subscribe': '訂閱',
+
+        // === 訂閱彈窗 ===
+        'subscribe.title': '訂閱更新',
+        'subscribe.desc': '透過 RSS 訂閱，第一時間獲取知行工作室的更新日誌。',
+        'subscribe.rss': 'RSS 連結',
+        'subscribe.copy': '複製',
+        'subscribe.copied': '已複製',
+        'subscribe.feedly': '加入 Feedly',
+        'subscribe.inoreader': '加入 Inoreader',
+        'subscribe.close': '關閉',
 
         'theme.light': '淺色',
         'theme.dark': '深色',
@@ -627,6 +649,17 @@ window.I18N = {
         'footer.quote': '"Where knowledge is genuine and thorough, there is action; where action is clear and precise, there is knowledge."',
         'footer.quote.source': '— Wang Yangming · Chuan Xi Lu (Record of Practice)',
         'footer.copyright': '© 2026 Zhixing Studio - Understanding · Practice',
+        'footer.subscribe': 'Subscribe',
+
+        // === Subscribe modal ===
+        'subscribe.title': 'Subscribe to Updates',
+        'subscribe.desc': 'Subscribe via RSS to get the latest updates from Zhixing Studio.',
+        'subscribe.rss': 'RSS Feed',
+        'subscribe.copy': 'Copy',
+        'subscribe.copied': 'Copied',
+        'subscribe.feedly': 'Add to Feedly',
+        'subscribe.inoreader': 'Add to Inoreader',
+        'subscribe.close': 'Close',
 
         'theme.light': 'Light',
         'theme.dark': 'Dark',
