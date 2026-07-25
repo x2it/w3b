@@ -407,6 +407,7 @@
                         <tr><td><code>404.html</code></td><td>404 错误页面（noindex）</td></tr>
                         <tr><td><code>robots.txt</code></td><td>搜索引擎爬虫规则</td></tr>
                         <tr><td><code>sitemap.xml</code></td><td>站点地图</td></tr>
+                        <tr><td><code>feed.xml</code></td><td>RSS 订阅源（更新日志）</td></tr>
                         <tr><td><code>CNAME</code></td><td>GitHub Pages 自定义域名配置</td></tr>
                         <tr><td><code>.gitignore</code></td><td>Git 忽略规则（排除 node_modules、系统文件等）</td></tr>
                     </tbody>
@@ -580,6 +581,7 @@
                 <li><strong>Twitter Card</strong>：两页均配置 summary_large_image 卡片</li>
                 <li><strong>JSON-LD</strong>：首页包含 WebSite 结构化数据</li>
                 <li><strong>404 页面</strong>：<code>noindex, nofollow</code>，防止搜索引擎索引错误页面</li>
+                <li><strong>RSS Feed</strong>：两页均声明 <code>&lt;link rel="alternate" type="application/rss+xml"&gt;</code> 指向 <code>/feed.xml</code>；底部"订阅"入口提供复制链接与预览功能</li>
             </ul>
         </div>
 
