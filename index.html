@@ -343,11 +343,15 @@
             var savedLang = null;
             try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
 
-            // 扩展语言检测：覆盖 zh-Hant / zh-HK / zh-MO / zh-SG 等变体
+            // 自动检测浏览器语言：手动切换过的优先（savedLang），否则按环境自动判断
             var navLang = navigator.language || '';
-            var currentLang = savedLang ||
-                (navLang.match(/^zh-(TW|HK|MO)$/i) ? 'zh-TW' :
-                 navLang.match(/^zh(-Hant)?$/i) ? 'zh' : 'en');
+            var autoLang;
+            if (navLang.match(/^zh/i)) {
+                autoLang = navLang.match(/(TW|HK|MO|Hant)/i) ? 'zh-TW' : 'zh';
+            } else {
+                autoLang = 'en';
+            }
+            var currentLang = savedLang || autoLang;
 
             // 初始化时同步 html lang（避免搜索引擎抓取错误或语言闪烁）
             var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';

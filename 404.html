@@ -294,10 +294,15 @@
             initTheme();
 
             // i18n
+            // 自动检测浏览器语言：手动切换过的优先，否则按环境自动判断
             var navLang = navigator.language || '';
-            var cl = localStorage.getItem('w3b_lang') ||
-                (navLang.match(/^zh-(TW|HK|MO)$/i) ? 'zh-TW' :
-                 navLang.match(/^zh(-Hant)?$/i) ? 'zh' : 'en');
+            var autoLang;
+            if (navLang.match(/^zh/i)) {
+                autoLang = navLang.match(/(TW|HK|MO|Hant)/i) ? 'zh-TW' : 'zh';
+            } else {
+                autoLang = 'en';
+            }
+            var cl = localStorage.getItem('w3b_lang') || autoLang;
             var I18N = window.I18N || null;
             var i18nReady = !!(I18N && I18N.zh);
             function t(k) {
