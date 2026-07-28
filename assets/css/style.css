@@ -578,7 +578,6 @@ body {
     font-family: 'Noto Sans SC', sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
-    background-color: var(--bg-color);
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
@@ -589,7 +588,7 @@ body {
 @media (max-width: 768px) { html { font-size: 15px; } }
 @media (max-width: 480px) { 
     html { font-size: 14px; } 
-    body { padding: 15px; background-image: none; }
+    body { padding: 15px; }
 }
 
 /* 头部通用 */
@@ -1027,7 +1026,7 @@ input[type=range]::-webkit-slider-thumb {
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid var(--bg-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.25);
     touch-action: manipulation;
 }
 @media (max-width: 480px) {
@@ -1047,7 +1046,7 @@ input[type=range]::-moz-range-thumb {
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid var(--bg-color);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.25);
 }
 @media (max-width: 480px) {
     input[type=range]::-moz-range-thumb {

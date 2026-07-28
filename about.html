@@ -515,7 +515,7 @@
             <p data-i18n="about.ch4.s2.p1">页面背景添加 SVG pattern 平铺的神经网络节点 + 连线纹理，opacity 仅 0.03，极微妙不抢主体内容，fixed 定位跟随页面滚动。</p>
 
             <h3 data-i18n="about.ch4.s3.title">4.3 AI 赋能交互</h3>
-            <p data-i18n="about.ch4.s3.p1">卡片 hover 时添加基于 <code>--accent-color</code> 的微妙光晕效果，让交互带有 AI 驱动的数字质感。</p>
+            <p data-i18n-html="about.ch4.s3.p1">卡片 hover 时显示基于 <code>--accent-rgb</code> 的渐变边框光泽（<code>::before</code> + mask 技术实现），边框微透强调色，悬浮上移 3px 并加深双层阴影，让交互带有 AI 驱动的数字质感。</p>
         </div>
 
         <hr class="doc-divider">
@@ -532,7 +532,7 @@
             </div>
 
             <h3 data-i18n="about.ch5.s2.title">5.2 CSS 变量体系</h3>
-            <p data-i18n="about.ch5.s2.p1">每个主题定义 12 个 CSS 变量：背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。另有 6 个全局变量（3 个圆角 + 3 个过渡速度）不受主题覆盖。</p>
+            <p data-i18n-html="about.ch5.s2.p1">每个主题定义 13 个 CSS 变量：背景渐变、背景色、文字色、次要文字色、浅色文字、深色、强调色、强调色 RGB、次要强调色、边框色、卡片背景、卡片阴影、卡片悬浮阴影。切换主题时只需替换 <code>body</code> 的 class，所有组件自动响应。另有 6 个全局变量（3 个圆角 + 3 个过渡速度）不受主题覆盖。背景使用微妙渐变（<code>--bg-gradient</code>）替代纯色，增强视觉层次。</p>
         </div>
 
         <hr class="doc-divider">
@@ -575,7 +575,7 @@
             <h3 data-i18n="about.ch7.s1.title">7.1 SEO 配置</h3>
             <ul>
                 <li data-i18n-html="about.ch7.s1.li1"><strong>robots.txt</strong>：允许所有爬虫，禁止 <code>/assets/</code>，指向 sitemap</li>
-                <li data-i18n-html="about.ch7.s1.li2"><strong>sitemap.xml</strong>：包含首页（weekly）和关于页（monthly）</li>
+                <li data-i18n-html="about.ch7.s1.li2"><strong>sitemap.xml</strong>：包含首页（weekly）、关于页（monthly）和 RSS 订阅源（weekly）</li>
                 <li data-i18n-html="about.ch7.s1.li3"><strong>canonical URL</strong>：首页为 <code>https://w3b.pub/</code>；说明书为 <code>https://w3b.pub/about.html</code></li>
                 <li data-i18n-html="about.ch7.s1.li4"><strong>Open Graph</strong>：两页均配置 og:title、og:description、og:url、og:locale</li>
                 <li data-i18n-html="about.ch7.s1.li5"><strong>Twitter Card</strong>：两页均配置 summary_large_image 卡片</li>
@@ -593,8 +593,8 @@
         </div>
 
         <div class="doc-footer">
-            <p data-i18n="about.footer.title">知行工作室 · 项目说明书 v2.2</p>
-            <p data-i18n="about.footer.date">2026年6月24日 · w3b.pub</p>
+            <p data-i18n="about.footer.title">知行工作室 · 项目说明书 v2.3</p>
+            <p data-i18n="about.footer.date">2026年7月28日 · w3b.pub</p>
             <p class="doc-footer-subscribe"><a href="/feed.xml" target="_blank" rel="noopener" data-i18n="footer.subscribe">订阅</a></p>
         </div>
     </div>
