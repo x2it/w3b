@@ -295,6 +295,14 @@
     <script src="/assets/js/i18n.js?v=20260725"></script>
 </head>
 <body>
+    <!-- 风格装饰层（固定背景/侧边/网格，随 data-theme-style 切换） -->
+    <div class="theme-deco" aria-hidden="true">
+        <div class="theme-deco__corner theme-deco__corner--tl theme-deco__parallax"></div>
+        <div class="theme-deco__corner theme-deco__corner--br theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--l theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--r theme-deco__parallax"></div>
+        <div class="theme-deco__grid"></div>
+    </div>
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
     <button class="lang-toggle" id="langToggle" title="语言" aria-label="语言" data-i18n-title="lang.label" data-i18n-aria="lang.label">简</button>
     <div class="lang-menu" id="langMenu" role="menu" aria-expanded="false">
@@ -327,9 +335,9 @@
             <div class="theme-preview" style="background: #b8763a; border-color: #b8763a;"></div>
             <span data-i18n="theme.orange">橙色</span>
         </div>
-        <div class="theme-option" data-theme="cyan" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #3a8a96; border-color: #3a8a96;"></div>
-            <span data-i18n="theme.cyan">青色</span>
+        <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #14b8a6; border-color: #14b8a6;"></div>
+            <span data-i18n="theme.teal">青色</span>
         </div>
         <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
             <div class="theme-preview" style="background: linear-gradient(45deg, #fafafa 50%, #181828 50%); border-color: #ececf0;"></div>
@@ -625,33 +633,43 @@
                 });
             });
 
+            function themeToStyle(theme, resolvedDark) {
+                if (theme === 'light') return 'classic';
+                if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
+                return 'classic';
+            }
             function applyTheme(theme) {
-                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'cyan-mode');
+                const THEME_CLASSES = [
+                    'light-mode', 'default-mode',
+                    'dark-mode',
+                    'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
+                    'teal-mode', 'cyan-mode'
+                ];
+                body.classList.remove.apply(body.classList, THEME_CLASSES);
                 themeOptions.forEach(option => {
                     option.classList.remove('active');
                     if (option.getAttribute('data-theme') === theme) {
                         option.classList.add('active');
                     }
                 });
-
-                if (theme === 'dark') {
-                    body.classList.add('dark-mode');
-                } else if (theme === 'blue') {
-                    body.classList.add('blue-mode');
-                } else if (theme === 'green') {
-                    body.classList.add('green-mode');
-                } else if (theme === 'purple') {
-                    body.classList.add('purple-mode');
-                } else if (theme === 'orange') {
-                    body.classList.add('orange-mode');
-                } else if (theme === 'cyan') {
-                    body.classList.add('cyan-mode');
-                } else if (theme === 'system') {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (prefersDark) {
-                        body.classList.add('dark-mode');
-                    }
+                let resolvedDark = false;
+                const t = (theme || 'system').toString();
+                if (t === 'dark') { body.classList.add('dark-mode'); resolvedDark = true; }
+                else if (t === 'light') { body.classList.add('light-mode'); }
+                else if (t === 'blue') { body.classList.add('blue-mode'); }
+                else if (t === 'green') { body.classList.add('green-mode'); }
+                else if (t === 'purple') { body.classList.add('purple-mode'); }
+                else if (t === 'orange') { body.classList.add('orange-mode'); }
+                else if (t === 'teal') { body.classList.add('teal-mode'); }
+                else if (t === 'cyan') { body.classList.add('cyan-mode'); }
+                else if (t === 'system') {
+                    resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (resolvedDark) body.classList.add('dark-mode');
+                    else body.classList.add('light-mode');
                 }
+                body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
             }
 
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
@@ -724,9 +742,10 @@
                     var titleText = t('about.meta.title');
                     if (titleText) document.title = titleText;
                     var langToggle = document.getElementById('langToggle');
+                    var langMenuRef = document.getElementById('langMenu');
                     if (langToggle) langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
-                    if (langMenu) {
-                        langMenu.querySelectorAll('.lang-option').forEach(function(opt) {
+                    if (langMenuRef) {
+                        langMenuRef.querySelectorAll('.lang-option').forEach(function(opt) {
                             opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
                         });
                     }
@@ -767,6 +786,25 @@
             });
 
             applyI18n();
+
+            // 滚动视差（rAF 节流）
+            (function() {
+                var ticking = false;
+                var items = document.querySelectorAll('.theme-deco__parallax');
+                function update() {
+                    var y = window.scrollY || 0;
+                    if (items.length >= 4) {
+                        items[0].style.transform = 'translateY(' + (y * 0.08) + 'px)';
+                        items[1].style.transform = 'translateY(' + (-y * 0.08) + 'px)';
+                        items[2].style.transform = 'translateY(' + (y * 0.14) + 'px)';
+                        items[3].style.transform = 'translateY(' + (-y * 0.14) + 'px)';
+                    }
+                    ticking = false;
+                }
+                window.addEventListener('scroll', function() {
+                    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+                }, { passive: true });
+            })();
         })();
     </script>
 </body>

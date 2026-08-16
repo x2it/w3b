@@ -99,6 +99,14 @@
         </defs>
         <rect width="100%" height="100%" fill="url(#neural-grid)"/>
     </svg>
+    <!-- 风格装饰层（固定背景/侧边/网格，随 data-theme-style 切换） -->
+    <div class="theme-deco" aria-hidden="true">
+        <div class="theme-deco__corner theme-deco__corner--tl theme-deco__parallax"></div>
+        <div class="theme-deco__corner theme-deco__corner--br theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--l theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--r theme-deco__parallax"></div>
+        <div class="theme-deco__grid"></div>
+    </div>
     <!-- 主题切换 -->
     <button class="theme-toggle" id="themeToggle" title="切换主题" aria-label="切换主题" data-i18n-title="aria.theme" data-i18n-aria="aria.theme">🎨</button>
     <!-- 语言切换 -->
@@ -639,9 +647,24 @@
                 }
             }
 
+            function themeToStyle(theme, resolvedDark) {
+                // 三种风格身份：classic / studio / philosophic
+                if (theme === 'light') return 'classic';
+                if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
+                return 'classic';
+            }
+
             function applyTheme(theme) {
-                // 移除所有主题类
-                body.classList.remove('dark-mode', 'blue-mode', 'green-mode', 'purple-mode', 'orange-mode', 'teal-mode');
+                // 完整主题类列表（8 种 + default-mode 兼容 404 旧值）
+                const THEME_CLASSES = [
+                    'light-mode', 'default-mode',
+                    'dark-mode',
+                    'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
+                    'teal-mode', 'cyan-mode'
+                ];
+                body.classList.remove.apply(body.classList, THEME_CLASSES);
 
                 // 更新活跃状态
                 themeOptions.forEach(option => {
@@ -651,33 +674,38 @@
                     }
                 });
 
-                if (theme === 'dark') {
+                let resolvedDark = false;
+                const t = (theme || 'system').toString();
+                if (t === 'dark') {
                     body.classList.add('dark-mode');
-                } else if (theme === 'light') {
-                    // 默认主题，无需添加类
-                } else if (theme === 'blue') {
+                    resolvedDark = true;
+                } else if (t === 'light') {
+                    body.classList.add('light-mode');
+                } else if (t === 'blue') {
                     body.classList.add('blue-mode');
-                } else if (theme === 'green') {
+                } else if (t === 'green') {
                     body.classList.add('green-mode');
-                } else if (theme === 'purple') {
+                } else if (t === 'purple') {
                     body.classList.add('purple-mode');
-                } else if (theme === 'orange') {
+                } else if (t === 'orange') {
                     body.classList.add('orange-mode');
-                } else if (theme === 'teal') {
+                } else if (t === 'teal') {
                     body.classList.add('teal-mode');
-                } else if (theme === 'system') {
-                    // 跟随系统主题
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (prefersDark) {
-                        body.classList.add('dark-mode');
-                    }
+                } else if (t === 'cyan') {
+                    body.classList.add('cyan-mode');
+                } else if (t === 'system') {
+                    resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (resolvedDark) body.classList.add('dark-mode');
+                    else body.classList.add('light-mode');
                 }
 
+                // 设置风格身份 → 触发 body[data-theme-style="xxx"] 的结构/排版/装饰变化
+                body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
+
                 // 更新平衡器颜色
-                updateBalanceColors();
-                
+                if (typeof updateBalanceColors === 'function') updateBalanceColors();
                 // 更新粒子系统缓存颜色
-                updateCachedColors();
+                if (typeof updateCachedColors === 'function') updateCachedColors();
             }
 
             // 监听系统主题变化
@@ -1181,6 +1209,28 @@
 
             // 返回顶部功能
             const backToTop = document.getElementById('backToTop');
+            // 滚动视差（rAF 节流，小倍率避免晕眩）
+            var parallaxTick = false;
+            var parallaxItems = document.querySelectorAll('.theme-deco__parallax');
+            function updateParallax() {
+                var y = window.scrollY || 0;
+                if (parallaxItems.length >= 4) {
+                    // 左上 / 右上（其实是 corner）用 0.08，侧边用 0.14（细腻但不晕）
+                    parallaxItems[0].style.transform = 'translateY(' + (y * 0.08) + 'px)';
+                    parallaxItems[1].style.transform = 'translateY(' + (-y * 0.08) + 'px)';
+                    parallaxItems[2].style.transform = 'translateY(' + (y * 0.14) + 'px)';
+                    parallaxItems[3].style.transform = 'translateY(' + (-y * 0.14) + 'px)';
+                }
+                parallaxTick = false;
+            }
+            function onScrollParallax() {
+                if (!parallaxTick) {
+                    parallaxTick = true;
+                    window.requestAnimationFrame(updateParallax);
+                }
+            }
+            window.addEventListener('scroll', onScrollParallax, { passive: true });
+
             if (backToTop) {
                 window.addEventListener('scroll', function() {
                     if (window.scrollY > 300) {

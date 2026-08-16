@@ -187,6 +187,14 @@
     </style>
 </head>
 <body>
+    <!-- 风格装饰层（固定背景/侧边/网格，随 data-theme-style 切换） -->
+    <div class="theme-deco" aria-hidden="true">
+        <div class="theme-deco__corner theme-deco__corner--tl theme-deco__parallax"></div>
+        <div class="theme-deco__corner theme-deco__corner--br theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--l theme-deco__parallax"></div>
+        <div class="theme-deco__side theme-deco__side--r theme-deco__parallax"></div>
+        <div class="theme-deco__grid"></div>
+    </div>
     <!-- AI神经网络背景装饰 -->
     <svg class="neural-bg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.03; pointer-events: none;">
         <defs>
@@ -217,13 +225,13 @@
         <div class="theme-switcher">
             <button class="theme-btn" id="themeBtn" title="切换主题">🎨</button>
             <div class="theme-panel" id="themePanel">
-                <div class="theme-option" data-theme="default" style="background: linear-gradient(135deg, #fafafa, #ececf0);"></div>
+                <div class="theme-option" data-theme="light" style="background: linear-gradient(135deg, #fafafa, #ececf0);"></div>
                 <div class="theme-option" data-theme="dark" style="background: linear-gradient(135deg, #181828, #0d0d14);"></div>
                 <div class="theme-option" data-theme="blue" style="background: linear-gradient(135deg, #f4f7fb, #dde4ee);"></div>
                 <div class="theme-option" data-theme="green" style="background: linear-gradient(135deg, #f3f7f4, #d8e6dc);"></div>
                 <div class="theme-option" data-theme="purple" style="background: linear-gradient(135deg, #f6f3f8, #e0d8e6);"></div>
                 <div class="theme-option" data-theme="orange" style="background: linear-gradient(135deg, #faf6f2, #e8ddd0);"></div>
-                <div class="theme-option" data-theme="cyan" style="background: linear-gradient(135deg, #f2f7f8, #d6e6e9);"></div>
+                <div class="theme-option" data-theme="teal" style="background: linear-gradient(135deg, #f0fdfa, #cdf5ed);"></div>
                 <div class="theme-option" data-theme="system"></div>
             </div>
         </div>
@@ -248,29 +256,65 @@
     <script>
         (function() {
             // 主题切换逻辑
-            const themes = ['default', 'dark', 'blue', 'green', 'purple', 'orange', 'cyan', 'system'];
+            const themes = ['light', 'dark', 'blue', 'green', 'purple', 'orange', 'teal', 'system'];
             const themeBtn = document.getElementById('themeBtn');
             const themePanel = document.getElementById('themePanel');
             const themeOptions = document.querySelectorAll('.theme-option');
 
+            function themeToStyle(theme, resolvedDark) {
+                if (theme === 'light') return 'classic';
+                if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
+                return 'classic';
+            }
+
             function applyTheme(themeName) {
-                document.body.classList.remove(...themes.map(t => t + '-mode'));
-                if (themeName === 'system') {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (prefersDark) {
-                        document.body.classList.add('dark-mode');
-                    }
+                const THEME_CLASSES = [
+                    'light-mode', 'default-mode',
+                    'dark-mode',
+                    'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
+                    'teal-mode', 'cyan-mode'
+                ];
+                document.body.classList.remove.apply(document.body.classList, THEME_CLASSES);
+                let resolvedDark = false;
+                const t = (themeName || 'system').toString();
+                if (t === 'system') {
+                    resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (resolvedDark) document.body.classList.add('dark-mode');
+                    else document.body.classList.add('light-mode');
+                } else if (t === 'dark') {
+                    document.body.classList.add('dark-mode'); resolvedDark = true;
                 } else {
-                    document.body.classList.add(themeName + '-mode');
+                    document.body.classList.add(t + '-mode');
                 }
+                document.body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
                 localStorage.setItem('theme', themeName);
                 themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === themeName));
             }
 
             function initTheme() {
-                const savedTheme = localStorage.getItem('theme') || 'default';
+                const savedTheme = localStorage.getItem('theme') || 'light';
                 applyTheme(savedTheme);
             }
+            // 滚动视差（rAF 节流）
+            (function() {
+                var ticking = false;
+                var items = document.querySelectorAll('.theme-deco__parallax');
+                function update() {
+                    var y = window.scrollY || 0;
+                    if (items.length >= 4) {
+                        items[0].style.transform = 'translateY(' + (y * 0.08) + 'px)';
+                        items[1].style.transform = 'translateY(' + (-y * 0.08) + 'px)';
+                        items[2].style.transform = 'translateY(' + (y * 0.14) + 'px)';
+                        items[3].style.transform = 'translateY(' + (-y * 0.14) + 'px)';
+                    }
+                    ticking = false;
+                }
+                window.addEventListener('scroll', function() {
+                    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+                }, { passive: true });
+            })();
 
             themeBtn.addEventListener('click', function(e) {
                 e.stopPropagation();

@@ -1518,3 +1518,384 @@ body.dark-mode .footer-link {
         flex-direction: column;
     }
 }
+
+/* ================================================================
+   Bugfix / 一致性：body.light-mode 与 body.default-mode 占位
+   （页面切换主题时，选浅色会加 light-mode，但 CSS 里此前无此选择器）
+   ================================================================ */
+body.light-mode,
+body.default-mode {
+    /* 保持与 :root 默认变量完全一致，避免 classList.add('light-mode') 后无效果 */
+}
+
+/* ================================================================
+   主题→风格映射（共 3 种风格身份）
+   Classic 经典书卷气    : light(浅色) / system(跟随，在浅色态下生效)
+   Studio 工作室现代感   : blue / purple / teal / cyan
+   Philosophic 哲学沉静  : dark(暗色) / green / orange
+   通过 body[data-theme-style="xxx"] 触发，由 applyTheme 统一设置
+   ================================================================ */
+
+/* 统一风格装饰层（固定定位，pointer-events:none 不挡点击，z-index 远低于导航/按钮） */
+.theme-deco {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+body[data-theme-style="classic"] .theme-deco,
+body[data-theme-style="studio"] .theme-deco,
+body[data-theme-style="philosophic"] .theme-deco {
+    opacity: 1;
+}
+.theme-deco__corner,
+.theme-deco__side,
+.theme-deco__grid,
+.theme-deco__parallax {
+    position: absolute;
+    pointer-events: none;
+}
+
+/* ===== 风格一：Classic（书卷气，居中窄栏 + 衬线字体 + 角落细装饰） ===== */
+body[data-theme-style="classic"] {
+    --style-maxw: 900px;
+    --style-ff-title: 'Noto Serif SC', 'Songti SC', 'STSong', 'Source Han Serif SC', 'SimSun', serif;
+    --style-ff-body:  'Noto Serif SC', 'Songti SC', 'STSong', 'Source Han Serif SC', 'SimSun', serif;
+    --style-card-radius: 4px;
+    --style-card-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    --style-title-letter: 0.04em;
+}
+body[data-theme-style="classic"] main,
+body[data-theme-style="classic"] > section,
+body[data-theme-style="classic"] header,
+body[data-theme-style="classic"] .container,
+body[data-theme-style="classic"] #blog-content > section,
+body[data-theme-style="classic"] .particle-section,
+body[data-theme-style="classic"] .timeline-section,
+body[data-theme-style="classic"] .balance-section,
+body[data-theme-style="classic"] .footer-section #contact,
+body[data-theme-style="classic"] .footer-section footer {
+    max-width: var(--style-maxw);
+    margin-left: auto;
+    margin-right: auto;
+}
+body[data-theme-style="classic"] {
+    font-family: var(--style-ff-body);
+}
+body[data-theme-style="classic"] .site-title,
+body[data-theme-style="classic"] .section-title,
+body[data-theme-style="classic"] .timeline-content h3 {
+    font-family: var(--style-ff-title);
+    letter-spacing: var(--style-title-letter);
+    font-weight: 500;
+}
+body[data-theme-style="classic"] .fallback-card,
+body[data-theme-style="classic"] .timeline-content,
+body[data-theme-style="classic"] .subscribe-modal {
+    border-radius: var(--style-card-radius);
+    box-shadow: var(--style-card-shadow);
+    border: 1px solid var(--border-color);
+}
+body[data-theme-style="classic"] .theme-deco__corner {
+    width: 260px;
+    height: 260px;
+    opacity: 0.5;
+    background: radial-gradient(circle at 30% 30%, rgba(var(--accent-rgb), 0.12) 0%, transparent 55%);
+}
+body[data-theme-style="classic"] .theme-deco__corner--tl { top: -40px; left: -40px; }
+body[data-theme-style="classic"] .theme-deco__corner--br { bottom: -40px; right: -40px; transform: rotate(180deg); }
+body[data-theme-style="classic"] header::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--accent-color);
+    margin: 1.5rem auto 0;
+    opacity: 0.6;
+}
+
+/* ===== 风格二：Studio（现代宽屏 + 双栏时间线 + 侧边色条 + 网格背景） ===== */
+body[data-theme-style="studio"] {
+    --style-maxw: 1200px;
+    --style-ff-title: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+    --style-ff-body:  'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
+    --style-card-radius: 16px;
+}
+body[data-theme-style="studio"] main,
+body[data-theme-style="studio"] > section,
+body[data-theme-style="studio"] header,
+body[data-theme-style="studio"] .container,
+body[data-theme-style="studio"] #blog-content > section,
+body[data-theme-style="studio"] .particle-section,
+body[data-theme-style="studio"] .timeline-section,
+body[data-theme-style="studio"] .balance-section,
+body[data-theme-style="studio"] .footer-section #contact,
+body[data-theme-style="studio"] .footer-section footer {
+    max-width: var(--style-maxw);
+    margin-left: auto;
+    margin-right: auto;
+}
+body[data-theme-style="studio"] {
+    font-family: var(--style-ff-body);
+}
+body[data-theme-style="studio"] .site-title,
+body[data-theme-style="studio"] .section-title,
+body[data-theme-style="studio"] .timeline-content h3 {
+    font-family: var(--style-ff-title);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+body[data-theme-style="studio"] .theme-deco__side--l {
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg,
+        rgba(var(--accent-rgb), 0.0) 0%,
+        rgba(var(--accent-rgb), 0.5) 40%,
+        rgba(255,255,255,0.0) 100%);
+}
+body[data-theme-style="studio"] .theme-deco__side--r {
+    right: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(0deg,
+        rgba(var(--accent-rgb), 0.0) 0%,
+        rgba(var(--accent-rgb), 0.4) 50%,
+        rgba(255,255,255,0.0) 100%);
+}
+body[data-theme-style="studio"] .theme-deco__grid {
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(var(--accent-rgb), 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), 0.045) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+}
+body[data-theme-style="studio"] .fallback-card,
+body[data-theme-style="studio"] .timeline-content {
+    position: relative;
+    border-radius: var(--style-card-radius);
+}
+body[data-theme-style="studio"] .fallback-card::before,
+body[data-theme-style="studio"] .timeline-content::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px; bottom: 12px;
+    width: 4px;
+    border-radius: 0 2px 2px 0;
+    background: linear-gradient(180deg, var(--accent-color), var(--accent-secondary));
+}
+@media (min-width: 769px) {
+    body[data-theme-style="studio"] .timeline::before { left: 50%; }
+    body[data-theme-style="studio"] .timeline-item:nth-child(odd) .timeline-content { margin-right: 52%; margin-left: 0; }
+    body[data-theme-style="studio"] .timeline-item:nth-child(even) .timeline-content { margin-left: 52%; margin-right: 0; }
+    body[data-theme-style="studio"] .timeline-item::before { left: 50%; transform: translateX(-50%); }
+}
+
+/* ===== 风格三：Philosophic（沉静阅读，窄栏 + 楷体混排 + 墨滴晕染 + 粒子减弱） ===== */
+body[data-theme-style="philosophic"] {
+    --style-maxw: 780px;
+    --style-ff-title: 'KaiTi', 'STKaiti', 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+    --style-ff-body:  'KaiTi', 'STKaiti', 'Noto Serif SC', 'Songti SC', serif;
+    --style-card-radius: 2px;
+    --style-line-h: 1.9;
+}
+body[data-theme-style="philosophic"] main,
+body[data-theme-style="philosophic"] > section,
+body[data-theme-style="philosophic"] header,
+body[data-theme-style="philosophic"] .container,
+body[data-theme-style="philosophic"] #blog-content > section,
+body[data-theme-style="philosophic"] .particle-section,
+body[data-theme-style="philosophic"] .timeline-section,
+body[data-theme-style="philosophic"] .balance-section,
+body[data-theme-style="philosophic"] .footer-section #contact,
+body[data-theme-style="philosophic"] .footer-section footer {
+    max-width: var(--style-maxw);
+    margin-left: auto;
+    margin-right: auto;
+}
+body[data-theme-style="philosophic"] {
+    font-family: var(--style-ff-body);
+    line-height: var(--style-line-h);
+}
+body[data-theme-style="philosophic"] p,
+body[data-theme-style="philosophic"] .timeline-content p,
+body[data-theme-style="philosophic"] .fallback-quote {
+    line-height: var(--style-line-h);
+}
+body[data-theme-style="philosophic"] .site-title,
+body[data-theme-style="philosophic"] .section-title,
+body[data-theme-style="philosophic"] .timeline-content h3 {
+    font-family: var(--style-ff-title);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+}
+body[data-theme-style="philosophic"] .section-title::first-letter {
+    font-size: 1.8em;
+    float: left;
+    line-height: 1;
+    margin-right: 0.15em;
+    color: var(--accent-color);
+}
+body[data-theme-style="philosophic"] .theme-deco__corner {
+    width: 420px;
+    height: 420px;
+    opacity: 0.85;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(var(--accent-rgb), 0.18) 0%, rgba(var(--accent-rgb), 0.06) 35%, transparent 70%);
+    filter: blur(20px);
+}
+body[data-theme-style="philosophic"] .theme-deco__corner--tl { top: -180px; left: -160px; }
+body[data-theme-style="philosophic"] .theme-deco__corner--br { bottom: -180px; right: -160px; }
+body[data-theme-style="philosophic"] #ai-quote {
+    position: relative;
+    padding-left: 1.25rem;
+    border-left: 3px solid rgba(var(--accent-rgb), 0.55);
+    text-align: left !important;
+    font-style: italic;
+}
+body[data-theme-style="philosophic"] .timeline-content,
+body[data-theme-style="philosophic"] .fallback-card {
+    border-radius: var(--style-card-radius);
+    box-shadow: none;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(180deg, var(--card-bg), rgba(var(--accent-rgb), 0.025) 100%);
+}
+body[data-theme-style="philosophic"] .particle-section canvas {
+    opacity: 0.55;
+}
+
+/* ================================================================
+   UI 质感补丁（全风格通用，不改变原颜色变量）
+   ================================================================ */
+
+.fallback-card,
+.timeline-content,
+.iframe-container,
+.subscribe-modal {
+    background-color: var(--card-bg);
+    position: relative;
+    overflow: hidden;
+}
+.fallback-card::after,
+.timeline-content::after,
+.iframe-container::after,
+.subscribe-modal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 1px 0 rgba(255,255,255,0.18);
+    mix-blend-mode: soft-light;
+    opacity: 0.8;
+}
+.fallback-card,
+.timeline-content {
+    transition:
+        transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease;
+    position: relative;
+}
+.fallback-card:hover,
+.timeline-content:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--card-shadow-hover), 0 0 0 1px rgba(var(--accent-rgb), 0.18);
+}
+.fallback-card::before,
+.timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.18) 50%,
+        transparent 100%);
+    transform: skewX(-20deg);
+    transition: none;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+.fallback-card:hover::before,
+.timeline-content:hover::before {
+    opacity: 1;
+    left: 120%;
+    transition: left 0.9s ease, opacity 0.3s ease 0.6s;
+}
+
+.control-btn,
+.theme-option,
+.lang-option,
+.subscribe-copy-btn,
+.subscribe-reader-btn,
+.back-to-top,
+.nav-dot {
+    position: relative;
+    overflow: hidden;
+}
+.control-btn::after,
+.theme-option::after,
+.lang-option::after,
+.subscribe-copy-btn::after,
+.subscribe-reader-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(255,255,255,0.14), transparent 40%);
+    mix-blend-mode: soft-light;
+    opacity: 0.6;
+    border-radius: inherit;
+}
+.control-btn:active,
+.theme-option:active,
+.lang-option:active,
+.subscribe-copy-btn:active,
+.subscribe-reader-btn:active {
+    transform: translateY(1px) scale(0.985);
+    filter: brightness(0.94);
+}
+
+.particle-section {
+    position: relative;
+}
+.particle-section::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: min(1100px, 100%);
+    height: 100%;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, var(--bg-color) 98%);
+    z-index: 1;
+}
+
+.timeline-item::before {
+    animation: nodePulse 2.8s ease-in-out infinite;
+}
+@keyframes nodePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.35); }
+    50%      { box-shadow: 0 0 0 8px rgba(var(--accent-rgb), 0.0); }
+}
+.timeline-item:nth-child(2)::before { animation-delay: 0.5s; }
+.timeline-item:nth-child(3)::before { animation-delay: 1.0s; }
+.timeline-item:nth-child(4)::before { animation-delay: 1.5s; }
+
+.theme-deco__parallax { will-change: transform; }
+
+@media (max-width: 768px) {
+    body[data-theme-style="studio"] .theme-deco__side--l,
+    body[data-theme-style="studio"] .theme-deco__side--r { width: 2px; opacity: 0.6; }
+    body[data-theme-style="studio"] .theme-deco__grid { background-size: 32px 32px; }
+}
+@media (max-width: 480px) {
+    .theme-deco { opacity: 0.4 !important; }
+}
