@@ -312,36 +312,36 @@
     </div>
     <div class="theme-menu" id="themeMenu" role="menu">
         <div class="theme-option" data-theme="light" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #fafafa; border-color: #ececf0;"></div>
-            <span data-i18n="theme.light">浅色</span>
-        </div>
-        <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #181828; border-color: #252538;"></div>
-            <span data-i18n="theme.dark">深色</span>
+            <div class="theme-preview" style="background: #faf9f5; border-color: #5b5f97;"></div>
+            <span data-i18n="theme.classic_light">书卷·米白</span>
         </div>
         <div class="theme-option" data-theme="blue" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #4a6fa5; border-color: #4a6fa5;"></div>
-            <span data-i18n="theme.blue">蓝色</span>
-        </div>
-        <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #4a8265; border-color: #4a8265;"></div>
-            <span data-i18n="theme.green">绿色</span>
+            <div class="theme-preview" style="background: #f4f7fb; border-color: #2563eb;"></div>
+            <span data-i18n="theme.studio_blue">工作室·靛蓝</span>
         </div>
         <div class="theme-option" data-theme="purple" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #7d5ba6; border-color: #7d5ba6;"></div>
-            <span data-i18n="theme.purple">紫色</span>
-        </div>
-        <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #b8763a; border-color: #b8763a;"></div>
-            <span data-i18n="theme.orange">橙色</span>
+            <div class="theme-preview" style="background: #f6f3f8; border-color: #7c3aed;"></div>
+            <span data-i18n="theme.studio_purple">工作室·紫罗兰</span>
         </div>
         <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #14b8a6; border-color: #14b8a6;"></div>
-            <span data-i18n="theme.teal">青色</span>
+            <div class="theme-preview" style="background: #f2f7f8; border-color: #0d9488;"></div>
+            <span data-i18n="theme.studio_teal">工作室·青瓷</span>
+        </div>
+        <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #0d0d14; border-color: #94a3b8;"></div>
+            <span data-i18n="theme.philo_dark">哲学·深夜</span>
+        </div>
+        <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #0f1a15; border-color: #059669;"></div>
+            <span data-i18n="theme.philo_green">哲学·松绿</span>
+        </div>
+        <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #1a1209; border-color: #b45309;"></div>
+            <span data-i18n="theme.philo_orange">哲学·琥珀</span>
         </div>
         <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: linear-gradient(45deg, #fafafa 50%, #181828 50%); border-color: #ececf0;"></div>
-            <span data-i18n="theme.system">系统</span>
+            <div class="theme-preview" style="background: linear-gradient(45deg, #faf9f5 50%, #0d0d14 50%); border-color: #5b5f97;"></div>
+            <span data-i18n="theme.system">跟随系统</span>
         </div>
     </div>
 
@@ -628,7 +628,6 @@
                 option.addEventListener('click', function() {
                     const theme = this.getAttribute('data-theme');
                     applyTheme(theme);
-                    localStorage.setItem('theme', theme);
                     themeMenu.classList.remove('show');
                 });
             });
@@ -636,40 +635,45 @@
             function themeToStyle(theme, resolvedDark) {
                 if (theme === 'light') return 'classic';
                 if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
-                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal') return 'studio';
                 if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
                 return 'classic';
             }
             function applyTheme(theme) {
                 const THEME_CLASSES = [
-                    'light-mode', 'default-mode',
+                    'light-mode', 'default-mode', 'serif_dark-mode',
                     'dark-mode',
                     'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
                     'teal-mode', 'cyan-mode'
                 ];
                 body.classList.remove.apply(body.classList, THEME_CLASSES);
+
+                let raw = (theme || 'system').toString();
+                if (raw === 'cyan') raw = 'teal';
+                else if (raw === 'default' || raw === 'serif_dark') raw = 'light';
+
                 themeOptions.forEach(option => {
                     option.classList.remove('active');
-                    if (option.getAttribute('data-theme') === theme) {
+                    if (option.getAttribute('data-theme') === raw) {
                         option.classList.add('active');
                     }
                 });
                 let resolvedDark = false;
-                const t = (theme || 'system').toString();
+                const t = raw;
                 if (t === 'dark') { body.classList.add('dark-mode'); resolvedDark = true; }
                 else if (t === 'light') { body.classList.add('light-mode'); }
                 else if (t === 'blue') { body.classList.add('blue-mode'); }
-                else if (t === 'green') { body.classList.add('green-mode'); }
+                else if (t === 'green') { body.classList.add('green-mode'); resolvedDark = true; }
                 else if (t === 'purple') { body.classList.add('purple-mode'); }
-                else if (t === 'orange') { body.classList.add('orange-mode'); }
+                else if (t === 'orange') { body.classList.add('orange-mode'); resolvedDark = true; }
                 else if (t === 'teal') { body.classList.add('teal-mode'); }
-                else if (t === 'cyan') { body.classList.add('cyan-mode'); }
                 else if (t === 'system') {
                     resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     if (resolvedDark) body.classList.add('dark-mode');
                     else body.classList.add('light-mode');
                 }
                 body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
+                localStorage.setItem('theme', t);
             }
 
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {

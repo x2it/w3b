@@ -118,36 +118,36 @@
     </div>
     <div class="theme-menu" id="themeMenu" role="menu">
         <div class="theme-option" data-theme="light" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #ffffff; border-color: #e5e7eb;"></div>
-            <span data-i18n="theme.light">浅色</span>
-        </div>
-        <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #111827; border-color: #374151;"></div>
-            <span data-i18n="theme.dark">深色</span>
+            <div class="theme-preview" style="background: #faf9f5; border-color: #5b5f97;"></div>
+            <span data-i18n="theme.classic_light">书卷·米白</span>
         </div>
         <div class="theme-option" data-theme="blue" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #f8fafc; border-color: #3b82f6;"></div>
-            <span data-i18n="theme.blue">蓝色</span>
-        </div>
-        <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #f0fdf4; border-color: #10b981;"></div>
-            <span data-i18n="theme.green">绿色</span>
+            <div class="theme-preview" style="background: #f4f7fb; border-color: #2563eb;"></div>
+            <span data-i18n="theme.studio_blue">工作室·靛蓝</span>
         </div>
         <div class="theme-option" data-theme="purple" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #faf5ff; border-color: #8b5cf6;"></div>
-            <span data-i18n="theme.purple">紫色</span>
-        </div>
-        <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #fffbeb; border-color: #f97316;"></div>
-            <span data-i18n="theme.orange">橙色</span>
+            <div class="theme-preview" style="background: #f6f3f8; border-color: #7c3aed;"></div>
+            <span data-i18n="theme.studio_purple">工作室·紫罗兰</span>
         </div>
         <div class="theme-option" data-theme="teal" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: #f0fdfa; border-color: #14b8a6;"></div>
-            <span data-i18n="theme.teal">青色</span>
+            <div class="theme-preview" style="background: #f2f7f8; border-color: #0d9488;"></div>
+            <span data-i18n="theme.studio_teal">工作室·青瓷</span>
+        </div>
+        <div class="theme-option" data-theme="dark" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #0d0d14; border-color: #94a3b8;"></div>
+            <span data-i18n="theme.philo_dark">哲学·深夜</span>
+        </div>
+        <div class="theme-option" data-theme="green" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #0f1a15; border-color: #059669;"></div>
+            <span data-i18n="theme.philo_green">哲学·松绿</span>
+        </div>
+        <div class="theme-option" data-theme="orange" role="menuitem" tabindex="0">
+            <div class="theme-preview" style="background: #1a1209; border-color: #b45309;"></div>
+            <span data-i18n="theme.philo_orange">哲学·琥珀</span>
         </div>
         <div class="theme-option" data-theme="system" role="menuitem" tabindex="0">
-            <div class="theme-preview" style="background: linear-gradient(45deg, #ffffff 50%, #111827 50%); border-color: #e5e7eb;"></div>
-            <span data-i18n="theme.system">系统</span>
+            <div class="theme-preview" style="background: linear-gradient(45deg, #faf9f5 50%, #0d0d14 50%); border-color: #5b5f97;"></div>
+            <span data-i18n="theme.system">跟随系统</span>
         </div>
     </div>
 
@@ -648,34 +648,38 @@
             }
 
             function themeToStyle(theme, resolvedDark) {
-                // 三种风格身份：classic / studio / philosophic
+                // 风格身份与主题一一绑定，不再中间映射（避免名字、颜色、结构错位）
                 if (theme === 'light') return 'classic';
                 if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
-                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal') return 'studio';
                 if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
                 return 'classic';
             }
 
             function applyTheme(theme) {
-                // 完整主题类列表（8 种 + default-mode 兼容 404 旧值）
                 const THEME_CLASSES = [
-                    'light-mode', 'default-mode',
+                    'light-mode', 'default-mode', 'serif_dark-mode',
                     'dark-mode',
                     'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
                     'teal-mode', 'cyan-mode'
                 ];
                 body.classList.remove.apply(body.classList, THEME_CLASSES);
 
-                // 更新活跃状态
+                let raw = (theme || 'system').toString();
+                // 旧缓存归一（老用户 localStorage 里可能存在被淘汰的命名）
+                if (raw === 'cyan') raw = 'teal';
+                else if (raw === 'default' || raw === 'serif_dark') raw = 'light';
+
+                // 更新活跃状态（显示上用归一后的 raw）
                 themeOptions.forEach(option => {
                     option.classList.remove('active');
-                    if (option.getAttribute('data-theme') === theme) {
+                    if (option.getAttribute('data-theme') === raw) {
                         option.classList.add('active');
                     }
                 });
 
                 let resolvedDark = false;
-                const t = (theme || 'system').toString();
+                const t = raw;
                 if (t === 'dark') {
                     body.classList.add('dark-mode');
                     resolvedDark = true;
@@ -685,26 +689,25 @@
                     body.classList.add('blue-mode');
                 } else if (t === 'green') {
                     body.classList.add('green-mode');
+                    resolvedDark = true;
                 } else if (t === 'purple') {
                     body.classList.add('purple-mode');
                 } else if (t === 'orange') {
                     body.classList.add('orange-mode');
+                    resolvedDark = true;
                 } else if (t === 'teal') {
                     body.classList.add('teal-mode');
-                } else if (t === 'cyan') {
-                    body.classList.add('cyan-mode');
                 } else if (t === 'system') {
                     resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     if (resolvedDark) body.classList.add('dark-mode');
                     else body.classList.add('light-mode');
                 }
 
-                // 设置风格身份 → 触发 body[data-theme-style="xxx"] 的结构/排版/装饰变化
+                // 风格身份直接绑定（不再通过中间推导，避免理解错位）
                 body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
 
-                // 更新平衡器颜色
+                localStorage.setItem('theme', t);
                 if (typeof updateBalanceColors === 'function') updateBalanceColors();
-                // 更新粒子系统缓存颜色
                 if (typeof updateCachedColors === 'function') updateCachedColors();
             }
 

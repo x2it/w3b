@@ -225,14 +225,14 @@
         <div class="theme-switcher">
             <button class="theme-btn" id="themeBtn" title="切换主题">🎨</button>
             <div class="theme-panel" id="themePanel">
-                <div class="theme-option" data-theme="light" style="background: linear-gradient(135deg, #fafafa, #ececf0);"></div>
-                <div class="theme-option" data-theme="dark" style="background: linear-gradient(135deg, #181828, #0d0d14);"></div>
-                <div class="theme-option" data-theme="blue" style="background: linear-gradient(135deg, #f4f7fb, #dde4ee);"></div>
-                <div class="theme-option" data-theme="green" style="background: linear-gradient(135deg, #f3f7f4, #d8e6dc);"></div>
-                <div class="theme-option" data-theme="purple" style="background: linear-gradient(135deg, #f6f3f8, #e0d8e6);"></div>
-                <div class="theme-option" data-theme="orange" style="background: linear-gradient(135deg, #faf6f2, #e8ddd0);"></div>
-                <div class="theme-option" data-theme="teal" style="background: linear-gradient(135deg, #f0fdfa, #cdf5ed);"></div>
-                <div class="theme-option" data-theme="system"></div>
+                <div class="theme-option" data-theme="light" style="background: linear-gradient(135deg, #faf9f5, #e8e3d5); border-color: #5b5f97;"></div>
+                <div class="theme-option" data-theme="blue" style="background: linear-gradient(135deg, #f4f7fb, #d7e2f1); border-color: #2563eb;"></div>
+                <div class="theme-option" data-theme="purple" style="background: linear-gradient(135deg, #f6f3f8, #d9cde9); border-color: #7c3aed;"></div>
+                <div class="theme-option" data-theme="teal" style="background: linear-gradient(135deg, #f2f7f8, #c9e2e5); border-color: #0d9488;"></div>
+                <div class="theme-option" data-theme="dark" style="background: linear-gradient(135deg, #181828, #0d0d14); border-color: #94a3b8;"></div>
+                <div class="theme-option" data-theme="green" style="background: linear-gradient(135deg, #16271e, #0f1a15); border-color: #059669;"></div>
+                <div class="theme-option" data-theme="orange" style="background: linear-gradient(135deg, #251a0d, #1a1209); border-color: #b45309;"></div>
+                <div class="theme-option" data-theme="system" style="background: linear-gradient(135deg, #faf9f5 50%, #0d0d14 50%); border-color: #5b5f97;"></div>
             </div>
         </div>
         <h1 class="site-title" data-i18n="site.title">知行工作室</h1>
@@ -264,37 +264,46 @@
             function themeToStyle(theme, resolvedDark) {
                 if (theme === 'light') return 'classic';
                 if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
-                if (theme === 'blue' || theme === 'purple' || theme === 'teal' || theme === 'cyan') return 'studio';
+                if (theme === 'blue' || theme === 'purple' || theme === 'teal') return 'studio';
                 if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
                 return 'classic';
             }
 
             function applyTheme(themeName) {
                 const THEME_CLASSES = [
-                    'light-mode', 'default-mode',
+                    'light-mode', 'default-mode', 'serif_dark-mode',
                     'dark-mode',
                     'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
                     'teal-mode', 'cyan-mode'
                 ];
                 document.body.classList.remove.apply(document.body.classList, THEME_CLASSES);
+
+                let raw = (themeName || 'system').toString();
+                if (raw === 'cyan') raw = 'teal';
+                else if (raw === 'default' || raw === 'serif_dark') raw = 'light';
+
                 let resolvedDark = false;
-                const t = (themeName || 'system').toString();
+                const t = raw;
                 if (t === 'system') {
                     resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                     if (resolvedDark) document.body.classList.add('dark-mode');
                     else document.body.classList.add('light-mode');
                 } else if (t === 'dark') {
                     document.body.classList.add('dark-mode'); resolvedDark = true;
+                } else if (t === 'green') {
+                    document.body.classList.add('green-mode'); resolvedDark = true;
+                } else if (t === 'orange') {
+                    document.body.classList.add('orange-mode'); resolvedDark = true;
                 } else {
                     document.body.classList.add(t + '-mode');
                 }
                 document.body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
-                localStorage.setItem('theme', themeName);
-                themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === themeName));
+                localStorage.setItem('theme', t);
+                themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === t));
             }
 
             function initTheme() {
-                const savedTheme = localStorage.getItem('theme') || 'light';
+                const savedTheme = localStorage.getItem('theme') || 'system';
                 applyTheme(savedTheme);
             }
             // 滚动视差（rAF 节流）
