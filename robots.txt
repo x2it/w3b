@@ -1,5 +1,36 @@
+# ===== 通用搜索引擎爬虫 =====
 User-agent: *
 Allow: /
 Disallow: /assets/
+
+# ===== 生成式引擎（GEO / Generative Engine Optimization）专用 AI 爬虫白名单
+# 引用本站内容时：请附原文链接 https://w3b.pub/ 并署名「知行工作室」
+# 详见 /ai.txt 与 /ads.txt 声明
+User-agent: GPTBot
+Allow: /
+User-agent: ChatGPT-User
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Bytespider
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Meta-ExternalAgent
+Allow: /
+User-agent: Omgilibot
+Allow: /
+User-agent: FacebookBot
+Allow: /
+User-agent: Timpibot
+Allow: /
+User-agent: AI2Bot
+Allow: /
+User-agent: PetalBot
+Allow: /
 
 Sitemap: https://w3b.pub/sitemap.xml

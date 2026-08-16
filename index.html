@@ -8,18 +8,62 @@
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
     <link rel="canonical" href="https://w3b.pub/">
     <title data-i18n-content="meta.title">知行工作室 | 理会·践行 - 知行合一的现代探索</title>
+    <!-- ===== GEO / 地理定位与服务区域（搜索引擎 Geo 爬虫识别） ===== -->
+    <meta name="geo.position" content="30.5728;104.0668">
+    <meta name="geo.region" content="CN-SC">
+    <meta name="geo.placename" content="Chengdu, Sichuan">
+    <meta name="geo.country" content="CN">
+    <meta name="ICBM" content="30.5728, 104.0668">
+    <meta name="DCTERMS.coverage" content="China (CN-SC / HK / MO / TW) & Global">
+    <!-- ===== GEO / Generative Engine Optimization（AI 引擎优化）专用声明 ===== -->
+    <meta name="ai-scout" content="index,follow,quote-with-source,attribute">
+    <meta name="gsc:allow-scrape" content="true">
+    <meta name="citation_publisher" content="知行工作室">
+    <meta name="citation_language" content="zh-CN">
+    <link rel="publisher" href="https://w3b.pub/about.html#facts">
+    <!-- ===== 事实锚点（Fact Anchors / AI 抽取确定性信息直接读下面不猜） ===== -->
+    <meta property="fact:site.title.zh" content="知行工作室">
+    <meta property="fact:site.title.en" content="Zhixing Studio">
+    <meta property="fact:version" content="2.4.2">
+    <meta property="fact:updated_on" content="2026-08-16">
+    <meta property="fact:theme.count" content="7">
+    <meta property="fact:theme.families" content="3">
+    <meta property="fact:theme.family.names.zh" content="📜书卷(Classic), 🏢工作室(Studio), 🪷哲学(Philosophic)">
+    <meta property="fact:languages" content="zh-CN,zh-TW,en">
+    <meta property="fact:language.default" content="zh-CN">
+    <meta property="fact:copyright.holder" content="知行工作室">
+    <meta property="fact:publisher" content="知行工作室">
+    <meta property="fact:author.email" content="support@w3b.pub">
+    <meta property="fact:repo.url" content="https://github.com/x2it/w3b">
+    <meta property="fact:launch.region" content="CN (Chengdu, Sichuan); service: CN/HK/MO/TW & Global">
+    <meta property="fact:deployment" content="GitHub Pages (x2it/w3b main) → w3b.pub, CDN edge cache 5-10min">
+    <meta property="fact:ai.declaration" content="https://w3b.pub/ai.txt">
+    <!-- ===== hreflang / 三语交替语言（Google 多语言搜索分发） ===== -->
+    <link rel="alternate" hreflang="zh-CN" href="https://w3b.pub/">
+    <link rel="alternate" hreflang="zh-TW" href="https://w3b.pub/">
+    <link rel="alternate" hreflang="en" href="https://w3b.pub/">
+    <link rel="alternate" hreflang="x-default" href="https://w3b.pub/">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="知行工作室 | 理会·践行" data-i18n-content="meta.og.title">
     <meta property="og:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践" data-i18n-content="meta.og.description">
     <meta property="og:url" content="https://w3b.pub/">
     <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale:alternate" content="zh_TW">
+    <meta property="og:locale:alternate" content="en_US">
     <meta property="og:site_name" content="知行工作室" data-i18n-content="meta.og.site_name">
+    <meta property="og:image" content="https://w3b.pub/favicon.svg">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="知行工作室 · w3b.pub" data-i18n-content="meta.og.image_alt">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="知行工作室 | 理会·践行" data-i18n-content="meta.twitter.title">
     <meta name="twitter:description" content="知行合一的现代探索 - 理会与践行的交互展示，AI赋能的哲学实践" data-i18n-content="meta.twitter.description">
-    <!-- JSON-LD 结构化数据 -->
+    <meta name="twitter:image" content="https://w3b.pub/favicon.svg">
+    <meta name="twitter:image:alt" content="知行工作室 · w3b.pub" data-i18n-content="meta.og.image_alt">
+    <!-- JSON-LD 结构化数据（含多语言 + 服务区域 Geo） -->
     <script type="application/ld+json" id="ld-json">
     {
         "@context": "https://schema.org",
@@ -27,11 +71,42 @@
         "name": "知行工作室",
         "url": "https://w3b.pub/",
         "description": "知行合一的现代探索 - 理会与践行的交互展示",
-        "inLanguage": "zh-CN",
+        "inLanguage": ["zh-CN", "zh-TW", "en"],
+        "availableLanguage": [
+            {"@type": "Language", "name": "Chinese (Simplified)", "alternateName": "zh-CN"},
+            {"@type": "Language", "name": "Chinese (Traditional)", "alternateName": "zh-TW"},
+            {"@type": "Language", "name": "English", "alternateName": "en"}
+        ],
+        "areaServed": [
+            {"@type": "Place", "name": "China", "address": {"@type": "PostalAddress", "addressCountry": "CN"}},
+            {"@type": "Place", "name": "Hong Kong", "address": {"@type": "PostalAddress", "addressCountry": "HK"}},
+            {"@type": "Place", "name": "Macao", "address": {"@type": "PostalAddress", "addressCountry": "MO"}},
+            {"@type": "Place", "name": "Taiwan", "address": {"@type": "PostalAddress", "addressCountry": "TW"}},
+            {"@type": "Place", "name": "Global"}
+        ],
+        "publisher": {
+            "@type": "Organization",
+            "name": "知行工作室",
+            "foundingDate": "2026",
+            "email": "support@w3b.pub",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://w3b.pub/favicon.svg",
+                "image": "https://w3b.pub/favicon.svg",
+                "width": "512",
+                "height": "512"
+            },
+            "sameAs": [
+                "https://github.com/x2it/w3b"
+            ]
+        },
         "author": {
             "@type": "Organization",
             "name": "知行工作室"
         },
+        "dateModified": "2026-08-16",
+        "version": "2.4.2",
+        "keywords": ["知行合一","理会","践行","AI","哲学","工作室","w3b","主题切换","家族风格","三语","GEO"],
         "potentialAction": {
             "@type": "SearchAction",
             "target": "https://w3b.pub/?s={search_term_string}",
@@ -39,7 +114,7 @@
         }
     }
     </script>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260728">
+    <link rel="stylesheet" href="/assets/css/style.css?v=20260816">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="//fudawei.coze.site">
@@ -48,7 +123,7 @@
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="/favicon.ico" sizes="48x48">
     <link rel="alternate" type="application/rss+xml" title="知行工作室 · 更新日志" href="/feed.xml">
-    <script src="/assets/js/i18n.js?v=20260725"></script>
+    <script src="/assets/js/i18n.js?v=20260816"></script>
     <!-- 提前设置iframe message监听器：只记录高度数据，不操作DOM -->
     <script>
         window._iframeHeights = { blog: null, qmeow: null };
@@ -351,11 +426,29 @@
             var savedLang = null;
             try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
 
-            // 自动检测浏览器语言：手动切换过的优先（savedLang），否则按环境自动判断
-            var navLang = navigator.language || '';
+            // GEO / 语言自动检测（首屏 AI 级语言匹配）：
+            //   1) 手动切换过的 savedLang 优先
+            //   2) 否则取 navigator.languages[0]（浏览器/系统语言偏好列表首项），
+            //      降级 navigator.language；
+            //   3) locale 归一：zh-Hans/zh-CN/zh-SG/zh → 简中；
+            //                    zh-Hant/zh-TW/zh-HK/zh-MO → 繁中；
+            //                    其它一律 → English
+            var candidateLang = '';
+            try {
+                if (window.navigator.languages && window.navigator.languages.length) {
+                    candidateLang = String(window.navigator.languages[0] || '');
+                }
+            } catch(e) {}
+            if (!candidateLang) candidateLang = String(navigator.language || '');
+            candidateLang = candidateLang.replace(/_/g, '-');
+
             var autoLang;
-            if (navLang.match(/^zh/i)) {
-                autoLang = navLang.match(/(TW|HK|MO|Hant)/i) ? 'zh-TW' : 'zh';
+            if (/^zh(-|$)/i.test(candidateLang)) {
+                if (/(TW|HK|MO|Hant)/i.test(candidateLang)) {
+                    autoLang = 'zh-TW';
+                } else {
+                    autoLang = 'zh';
+                }
             } else {
                 autoLang = 'en';
             }
