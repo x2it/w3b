@@ -770,6 +770,27 @@
                 });
             });
 
+            // 7 主题 × 13 核心变量（与 style.css body.X-mode 一一对应）
+            // 写入 documentElement.style 覆盖 @media(prefers-color-scheme:dark) :root 的变量
+            var THEME_VARS = (function(){
+                var k = ['--bg-color','--bg-gradient','--text-color','--text-secondary','--text-light',
+                         '--dark-color','--accent-color','--accent-rgb','--accent-secondary',
+                         '--border-color','--card-bg','--card-shadow','--card-shadow-hover'];
+                return {
+                    keys: k,
+                    themes: {
+                        light:  ['#fafafa','linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%)','#1a1a2e','#3d3d5c','#6b6b8d','#0f0f1e','#5b5f97','91, 95, 151','#7c5e9e','#ececf0','#ffffff','0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04)','0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(0, 0, 0, 0.08)'],
+                        dark:   ['#0d0d14','linear-gradient(180deg, #0d0d14 0%, #131322 100%)','#e8e8f0','#b8b8cf','#7a7a99','#f5f5fa','#8b8fd1','139, 143, 209','#a78bca','#252538','#181828','0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)','0 4px 16px rgba(0, 0, 0, 0.25), 0 12px 40px rgba(0, 0, 0, 0.2)'],
+                        blue:   ['#f4f7fb','linear-gradient(180deg, #f4f7fb 0%, #e8eef6 100%)','#1a2540','#3d4d6b','#6b7a96','#0a1228','#4a6fa5','74, 111, 165','#5b8db8','#dde4ee','#ffffff','0 1px 3px rgba(74, 111, 165, 0.04), 0 4px 12px rgba(74, 111, 165, 0.05)','0 4px 16px rgba(74, 111, 165, 0.08), 0 12px 40px rgba(74, 111, 165, 0.1)'],
+                        green:  ['#0f1a15','linear-gradient(180deg, #0f1a15 0%, #13241c 100%)','#e8efe9','#b3c5b9','#728a7a','#f4faf5','#059669','5, 150, 105','#34d399','#1f3329','#16271e','0 1px 3px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
+                        purple: ['#f6f3f8','linear-gradient(180deg, #f6f3f8 0%, #ece6f1 100%)','#28182e','#4d3858','#7a6485','#1a0a20','#7c3aed','124, 58, 237','#a78bfa','#e0d8e6','#ffffff','0 1px 3px rgba(125, 91, 166, 0.04), 0 4px 12px rgba(125, 91, 166, 0.05)','0 4px 16px rgba(125, 91, 166, 0.08), 0 12px 40px rgba(125, 91, 166, 0.1)'],
+                        orange: ['#1a1209','linear-gradient(180deg, #1a1209 0%, #231910 100%)','#f4eadd','#c9b499','#8d7857','#fbf3e7','#b45309','180, 83, 9','#f59e0b','#332617','#251a0d','0 1px 3px rgba(0,0,0,0.24), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
+                        teal:   ['#f2f7f8','linear-gradient(180deg, #f2f7f8 0%, #e4eff1 100%)','#122a2e','#38595e','#6b8388','#081e22','#0d9488','13, 148, 136','#14b8a6','#d6e6e9','#ffffff','0 1px 3px rgba(58, 138, 150, 0.04), 0 4px 12px rgba(58, 138, 150, 0.05)','0 4px 16px rgba(58, 138, 150, 0.08), 0 12px 40px rgba(58, 138, 150, 0.1)']
+                    }
+                };
+            })();
+            function syncRootVars(n){var r=document.documentElement,i;if(n==='system'||!THEME_VARS.themes[n]){for(i=0;i<THEME_VARS.keys.length;i++)r.style.removeProperty(THEME_VARS.keys[i]);return;}var v=THEME_VARS.themes[n];for(i=0;i<THEME_VARS.keys.length;i++)r.style.setProperty(THEME_VARS.keys[i],v[i]);}
+
             function themeToStyle(theme, resolvedDark) {
                 if (theme === 'light') return 'classic';
                 if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
@@ -811,17 +832,20 @@
                     else body.classList.add('light-mode');
                 }
                 body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
-                localStorage.setItem('theme', t);
+                syncRootVars(t);
+                try { localStorage.setItem('theme', t); } catch(e) {}
             }
 
             window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                const currentTheme = localStorage.getItem('theme') || 'system';
+                var currentTheme = 'system';
+                try { currentTheme = localStorage.getItem('theme') || 'system'; } catch(e) {}
                 if (currentTheme === 'system') {
                     applyTheme('system');
                 }
             });
 
-            const savedTheme = localStorage.getItem('theme') || 'system';
+            var savedTheme = 'system';
+            try { savedTheme = localStorage.getItem('theme') || 'system'; } catch(e) {}
             applyTheme(savedTheme);
 
             // ===== i18n 多语言 =====
