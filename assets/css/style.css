@@ -757,6 +757,8 @@ section {
     position: relative;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.2);
+    white-space: nowrap;
+    word-break: keep-all;
 }
 
 .control-btn::before {
@@ -889,9 +891,13 @@ section {
     margin-bottom: 0.4rem; 
     color: var(--dark-color); 
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
 }
 @media (max-width: 480px) {
-    .timeline-content h3 { font-size: 1rem; }
+    .timeline-content h3 { font-size: 1rem; white-space: normal; overflow-wrap: anywhere; }
 }
 .timeline-content p { 
     color: var(--text-secondary); 
@@ -1000,6 +1006,16 @@ section {
 @media (max-width: 480px) {
     .slider-wrapper {
         max-width: 240px;
+    }
+}
+#balanceState {
+    white-space: nowrap;
+    word-break: keep-all;
+}
+@media (max-width: 480px) {
+    #balanceState {
+        white-space: normal;
+        overflow-wrap: anywhere;
     }
 }
 .slider-wrapper label {
@@ -1779,6 +1795,8 @@ body[data-theme-style="philosophic"] #ai-quote {
     border-left: 3px solid rgba(var(--accent-rgb), 0.55);
     text-align: left !important;
     font-style: italic;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 body[data-theme-style="philosophic"] .timeline-content,
 body[data-theme-style="philosophic"] .fallback-card {
