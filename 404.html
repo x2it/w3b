@@ -27,8 +27,8 @@
     <meta name="description" content="知行工作室 - 页面未找到" data-i18n-content="404.meta.description">
     <meta name="robots" content="noindex, nofollow">
     <title data-i18n-content="404.meta.title">页面未找到 · 知行工作室</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=20260816">
-    <script src="/assets/js/i18n.js?v=20260816"></script>
+    <link rel="stylesheet" href="/assets/css/style.css?v=2.5.0">
+    <script src="/assets/js/i18n.js?v=2.5.0"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
@@ -208,6 +208,7 @@
     </style>
 </head>
 <body>
+    <a href="#error-section" class="skip-link" data-i18n="aria.skip">跳到主内容</a>
     <!-- 风格装饰层（固定背景/侧边/网格，随 data-theme-style 切换） -->
     <div class="theme-deco" aria-hidden="true">
         <div class="theme-deco__corner theme-deco__corner--tl theme-deco__parallax"></div>
@@ -259,7 +260,7 @@
         <h1 class="site-title" data-i18n="site.title">知行工作室</h1>
     </header>
 
-    <section class="error-section">
+    <section class="error-section" id="error-section" role="main">
         <div class="error-code">404</div>
         <p class="error-message" data-i18n="404.message">
             页面未找到<br>
@@ -369,14 +370,30 @@
 
             // i18n
             // 自动检测浏览器语言：手动切换过的优先，否则按环境自动判断
-            var navLang = navigator.language || '';
+            // 与 index.html 一致：navigator.languages[0] 优先，locale 归一
+            var savedLang = null;
+            try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
+
+            var candidateLang = '';
+            try {
+                if (window.navigator.languages && window.navigator.languages.length) {
+                    candidateLang = String(window.navigator.languages[0] || '');
+                }
+            } catch(e) {}
+            if (!candidateLang) candidateLang = String(navigator.language || '');
+            candidateLang = candidateLang.replace(/_/g, '-');
+
             var autoLang;
-            if (navLang.match(/^zh/i)) {
-                autoLang = navLang.match(/(TW|HK|MO|Hant)/i) ? 'zh-TW' : 'zh';
+            if (/^zh(-|$)/i.test(candidateLang)) {
+                if (/(TW|HK|MO|Hant)/i.test(candidateLang)) {
+                    autoLang = 'zh-TW';
+                } else {
+                    autoLang = 'zh';
+                }
             } else {
                 autoLang = 'en';
             }
-            var cl = localStorage.getItem('w3b_lang') || autoLang;
+            var cl = savedLang || autoLang;
             var I18N = window.I18N || null;
             var i18nReady = !!(I18N && I18N.zh);
             function t(k) {

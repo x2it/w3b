@@ -9,13 +9,31 @@
     <description>理会·践行 — 知行合一的现代探索。AI 与哲学的交融实践。</description>
     <language>zh-CN</language>
     <copyright>© 2026 知行工作室</copyright>
-    <lastBuildDate>Mon, 28 Jul 2026 00:00:00 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2026 00:00:00 +0800</lastBuildDate>
     <generator>手工维护</generator>
     <image>
       <url>https://w3b.pub/favicon.svg</url>
       <title>知行工作室 · w3b.pub</title>
       <link>https://w3b.pub/</link>
     </image>
+
+    <item>
+      <title>系统性审计定稿 · 最终版 v2.5.0</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-update-20260816-final</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[系统性审计修复 40 项问题：about.html 7 处 section 闭合错误、style.css light-mode 空块导致 OS 暗色下浅色主题失效、menuFadeIn 0.5s 延迟、index/404 localStorage 异常保护与 autoLang 逻辑统一、新增 skip-link 可访问性、文件结构表补全 ai.txt/ads.txt、三语 i18n 同步。定为最终版。]]></description>
+      <category>最终版</category>
+    </item>
+
+    <item>
+      <title>生成式引擎优化（GEO）一步到位 · v2.4.2</title>
+      <link>https://w3b.pub/</link>
+      <guid isPermaLink="false">w3b-update-20260816-geo</guid>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 +0800</pubDate>
+      <description><![CDATA[完成生成式引擎优化（GEO），新增 ai.txt/ads.txt，13 种 AI 爬虫白名单，15 项 fact: meta 锚点，JSON-LD publisher/version/areaServed，about 语义化重构，sitemap hreflang 三语交替。]]></description>
+      <category>GEO优化</category>
+    </item>
 
     <item>
       <title>统一模块感设计语言 · 全站视觉一致性优化</title>

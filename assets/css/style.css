@@ -383,7 +383,7 @@ body {
     min-width: 168px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    animation: menuFadeIn 0.25s var(--transition-smooth);
+    animation: menuFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes menuFadeIn {
@@ -573,6 +573,24 @@ body {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; font-size: 16px; }
+
+/* 可访问性：跳过导航直达主内容（Tab 焦点触发显示） */
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: 10000;
+    padding: 0.6rem 1.2rem;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 0 0 var(--radius-md) 0;
+    transition: top 0.2s ease;
+}
+.skip-link:focus { top: 0; }
+
 img, video, iframe, canvas, svg {
     max-width: 100%;
     height: auto;
@@ -1541,12 +1559,25 @@ body.dark-mode .footer-link {
 }
 
 /* ================================================================
-   Bugfix / 一致性：body.light-mode 与 body.default-mode 占位
-   （页面切换主题时，选浅色会加 light-mode，但 CSS 里此前无此选择器）
+   Bugfix / 一致性：body.light-mode 显式定义浅色变量
+   （OS 暗色模式下 @media(prefers-color-scheme:dark) 会覆盖 :root，
+    若 light-mode 为空块，选"书卷·米白"仍显示暗色。此处显式补齐 13 变量。）
    ================================================================ */
 body.light-mode,
 body.default-mode {
-    /* 保持与 :root 默认变量完全一致，避免 classList.add('light-mode') 后无效果 */
+    --bg-color: #fafafa;
+    --bg-gradient: linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%);
+    --text-color: #1a1a2e;
+    --text-secondary: #3d3d5c;
+    --text-light: #6b6b8d;
+    --dark-color: #0f0f1e;
+    --accent-color: #5b5f97;
+    --accent-rgb: 91, 95, 151;
+    --accent-secondary: #7c5e9e;
+    --border-color: #ececf0;
+    --card-bg: #ffffff;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04);
+    --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* ================================================================

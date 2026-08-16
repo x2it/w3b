@@ -80,10 +80,11 @@
 ### 📱 响应式
 - 三版本适配：PC（>768px）/ 平板（481-768px）/ 手机（≤480px）
 
-### 🔍 SEO 完整
-- `robots.txt` + `sitemap.xml` + `feed.xml`（RSS 订阅）
-- canonical URL、Open Graph、Twitter Card、JSON-LD
+### 🔍 SEO + GEO 完整
+- `robots.txt`（含 13 种 AI 爬虫白名单）+ `sitemap.xml`（hreflang 三语）+ `feed.xml`（RSS 订阅）
+- canonical URL、Open Graph、Twitter Card、JSON-LD（WebSite + TechArticle）
 - 404 页面 `noindex`，避免错误索引
+- **GEO（生成式引擎优化）**：`/ai.txt`（IAF 声明 + 事实锚点）+ `/ads.txt`（AI 引用条款）+ 15 项 `fact:` meta + hreflang 三语交替
 
 ---
 
@@ -110,9 +111,11 @@ w3b/
 │   ├── css/style.css       # 通用样式 + 主题变量体系 + 响应式
 │   └── js/i18n.js          # 多语言翻译字典（zh / zh-TW / en）
 ├── favicon.svg             # 站点图标
-├── robots.txt              # 爬虫规则
-├── sitemap.xml             # 站点地图
+├── robots.txt              # 爬虫规则（含 AI 爬虫白名单）
+├── sitemap.xml             # 站点地图（hreflang 三语）
 ├── feed.xml                # RSS 订阅源（更新日志）
+├── ai.txt                  # GEO 生成式引擎声明（IAF 标准）
+├── ads.txt                 # IAB 广告授权 + AI 引用声明
 ├── CNAME                   # GitHub Pages 自定义域名：w3b.pub
 ├── .gitignore              # Git 忽略规则
 └── README.md               # 本文件
