@@ -380,7 +380,7 @@ body {
     display: none;
     flex-direction: column;
     gap: 4px;
-    min-width: 120px;
+    min-width: 168px;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     animation: menuFadeIn 0.25s var(--transition-smooth);
@@ -400,7 +400,7 @@ body {
     .theme-menu {
         top: 62px;
         right: 12px;
-        min-width: 110px;
+        min-width: 158px;
         padding: 6px;
     }
 }
@@ -421,6 +421,11 @@ body {
     touch-action: manipulation;
     font-size: 0.9rem;
     color: var(--text-color);
+}
+
+.theme-option > span {
+    white-space: nowrap;
+    flex: 1;
 }
 
 .theme-option:hover {
