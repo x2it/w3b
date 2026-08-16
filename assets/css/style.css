@@ -1737,12 +1737,31 @@ body[data-theme-style="philosophic"] .timeline-content h3 {
     font-weight: 500;
     letter-spacing: 0.06em;
 }
-body[data-theme-style="philosophic"] .section-title::first-letter {
-    font-size: 1.8em;
-    float: left;
-    line-height: 1;
-    margin-right: 0.15em;
-    color: var(--accent-color);
+body[data-theme-style="philosophic"] .section-title {
+    position: relative;
+    padding-left: 1.1rem;
+    text-align: left !important;
+    white-space: nowrap;      /* 完整词组禁止拆词换行 */
+    overflow: visible;
+}
+body[data-theme-style="philosophic"] .section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.15em;
+    bottom: 0.15em;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(180deg,
+        rgba(var(--accent-rgb), 0.9) 0%,
+        rgba(var(--accent-rgb), 0.45) 100%);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.35);
+}
+@media (max-width: 480px) {
+    body[data-theme-style="philosophic"] .section-title {
+        white-space: normal;     /* 移动端：仅允许在 · / 空格这种自然断点换行，不拆单字 */
+        overflow-wrap: anywhere;
+    }
 }
 body[data-theme-style="philosophic"] .theme-deco__corner {
     width: 420px;
