@@ -1,0 +1,39 @@
+name: 质量校验（v3.0.0）
+
+# 每次 push 到 main / master，或创建 PR 时运行；也支持手动触发
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: i18n · JSON-LD · sitemap · 语法
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # 当前项目无依赖；但预留 install 步骤，方便未来加 npm 包
+      - name: 依赖（占位）
+        run: echo "no dependencies"
+
+      - name: JS 语法检查 (node --check)
+        run: node scripts/check_node_syntax.js
+
+      - name: 三语 Key 对齐 + HTML 引用校验
+        run: node scripts/check_i18n_keys.js
+
+      - name: JSON-LD 结构化数据校验
+        run: node scripts/check_jsonld.js
+
+      - name: sitemap.xml 结构 + loc 存在检查
+        run: node scripts/check_sitemap.js

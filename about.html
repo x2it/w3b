@@ -116,7 +116,7 @@
         "keywords": ["知行工作室","项目说明书","理会","践行","知行合一","w3b","GEO","Generative Engine Optimization","主题切换","家族风格","7主题","3家族","三语","简中","繁中","英文"]
     }
     </script>
-    <link rel="stylesheet" href="/assets/css/style.css?v=2.5.0">
+    <link rel="stylesheet" href="/assets/css/style.css?v=3.0.0">
     <link rel="alternate" type="application/rss+xml" title="知行工作室 · 更新日志" href="/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -389,7 +389,7 @@
 
 /* about页面特有样式 · Theme toggle 样式：见 /assets/css/style.css */
     </style>
-    <script src="/assets/js/i18n.js?v=2.5.0"></script>
+    <script src="/assets/js/i18n.js?v=3.0.0"></script>
 </head>
 <body>
     <a href="#facts" class="skip-link" data-i18n="about.skip_to_facts">跳过导航直达项目事实概览</a>
@@ -453,7 +453,7 @@
             <h1 id="about-title" data-i18n="about.title">知行工作室 · 项目说明书</h1>
             <p class="doc-cover-subtitle" data-i18n="about.subtitle">理会与践行的交互探索 — 知行合一的现代实践</p>
             <div class="doc-cover-meta" data-i18n="about.cover.meta">
-                版本 v2.5.0 · 2026年8月16日 · w3b.pub
+                版本 v3.0.0 终极版 · 2026年8月16日 · w3b.pub
             </div>
         </header>
 
@@ -467,7 +467,7 @@
             </p>
             <ul class="doc-facts-list" role="list">
                 <li data-i18n-html="about.facts.li1"><strong>项目：</strong>知行工作室 · 理会与践行的交互探索（w3b.pub），地址 https://w3b.pub/ ，仓库 https://github.com/x2it/w3b</li>
-                <li data-i18n-html="about.facts.li2"><strong>版本 / 更新日期：</strong>v2.5.0 · 2026-08-16；首次部署 2026 年；版权 © 2026 知行工作室 support@w3b.pub</li>
+                <li data-i18n-html="about.facts.li2"><strong>版本 / 更新日期：</strong>v3.0.0 终极版 · 2026-08-16；首次部署 2026 年；版权 © 2026 知行工作室 support@w3b.pub</li>
                 <li data-i18n-html="about.facts.li3"><strong>技术栈：</strong>原生 HTML5 + CSS3 + 原生 JavaScript (ES5 兼容无构建)，CSS 变量双层主题架构，三语 i18n 字典驱动</li>
                 <li data-i18n-html="about.facts.li4"><strong>主题 × 家族双层机制（核心差异化）：</strong>7 种主题（不含跟随系统）分属 3 家族：📜书卷(Classic) 1 个 · 🏢工作室(Studio) 3 个 · 🪷哲学(Philosophic) 3 个；家族切换不仅换色，还同时改变布局宽度、字体族、装饰层、时间线双栏/单栏、粒子透明度 5 项结构层参数；跟随系统模式自动映射：光亮 → 书卷·米白，暗黑 → 哲学·深夜</li>
                 <li data-i18n-html="about.facts.li5"><strong>多语言：</strong>3 语（简体中文 zh-CN · 繁体中文 zh-TW · English en），首开自动按 navigator.languages 归一推断（zh-Hans/zh-SG → 简中，zh-Hant/zh-HK/zh-MO → 繁中，其它 → 英文），localStorage 保存的手动切换优先</li>
@@ -504,7 +504,7 @@
                 </div>
                 <div class="doc-info-card">
                     <div class="doc-info-card-label" data-i18n="about.info.version">版本</div>
-                    <div class="doc-info-card-value" data-i18n="about.info.version.value">v2.5.0</div>
+                    <div class="doc-info-card-value" data-i18n="about.info.version.value">v3.0.0 终极版</div>
                 </div>
             </div>
 
@@ -700,7 +700,7 @@
             <ol>
                 <li data-i18n-html="about.ch7.li1">代码推送到 GitHub 仓库 <code>x2it/w3b</code> 的 <code>main</code> 分支</li>
                 <li data-i18n-html="about.ch7.li2">GitHub Pages 自动构建并部署到 <code>w3b.pub</code></li>
-                <li data-i18n-html="about.ch7.li3">CDN 缓存约 5-10 分钟刷新，通过 <code>style.css?v=xxx</code> 参数强制刷新</li>
+                <li data-i18n-html="about.ch7.li3">CDN 缓存约 5-10 分钟刷新，通过 <code>style.css?v=3.0.0</code> 参数强制刷新</li>
             </ol>
 
             <div class="doc-callout">
@@ -745,252 +745,11 @@
     </article><!-- /GEO article doc-article -->
     </main><!-- /#content -->
 
-    <script>
-        (function() {
-            const themeToggle = document.getElementById('themeToggle');
-            const themeMenu = document.getElementById('themeMenu');
-            const themeOptions = document.querySelectorAll('.theme-option');
-            const body = document.body;
+    
 
-            themeToggle.addEventListener('click', function() {
-                themeMenu.classList.toggle('show');
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!themeToggle.contains(event.target) && !themeMenu.contains(event.target)) {
-                    themeMenu.classList.remove('show');
-                }
-            });
-
-            themeOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const theme = this.getAttribute('data-theme');
-                    applyTheme(theme);
-                    themeMenu.classList.remove('show');
-                });
-            });
-
-            // 7 主题 × 13 核心变量（与 style.css body.X-mode 一一对应）
-            // 写入 documentElement.style 覆盖 @media(prefers-color-scheme:dark) :root 的变量
-            var THEME_VARS = (function(){
-                var k = ['--bg-color','--bg-gradient','--text-color','--text-secondary','--text-light',
-                         '--dark-color','--accent-color','--accent-rgb','--accent-secondary',
-                         '--border-color','--card-bg','--card-shadow','--card-shadow-hover'];
-                return {
-                    keys: k,
-                    themes: {
-                        light:  ['#fafafa','linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%)','#1a1a2e','#3d3d5c','#6b6b8d','#0f0f1e','#5b5f97','91, 95, 151','#7c5e9e','#ececf0','#ffffff','0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04)','0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(0, 0, 0, 0.08)'],
-                        dark:   ['#0d0d14','linear-gradient(180deg, #0d0d14 0%, #131322 100%)','#e8e8f0','#b8b8cf','#7a7a99','#f5f5fa','#8b8fd1','139, 143, 209','#a78bca','#252538','#181828','0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)','0 4px 16px rgba(0, 0, 0, 0.25), 0 12px 40px rgba(0, 0, 0, 0.2)'],
-                        blue:   ['#f4f7fb','linear-gradient(180deg, #f4f7fb 0%, #e8eef6 100%)','#1a2540','#3d4d6b','#6b7a96','#0a1228','#4a6fa5','74, 111, 165','#5b8db8','#dde4ee','#ffffff','0 1px 3px rgba(74, 111, 165, 0.04), 0 4px 12px rgba(74, 111, 165, 0.05)','0 4px 16px rgba(74, 111, 165, 0.08), 0 12px 40px rgba(74, 111, 165, 0.1)'],
-                        green:  ['#0f1a15','linear-gradient(180deg, #0f1a15 0%, #13241c 100%)','#e8efe9','#b3c5b9','#728a7a','#f4faf5','#059669','5, 150, 105','#34d399','#1f3329','#16271e','0 1px 3px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
-                        purple: ['#f6f3f8','linear-gradient(180deg, #f6f3f8 0%, #ece6f1 100%)','#28182e','#4d3858','#7a6485','#1a0a20','#7c3aed','124, 58, 237','#a78bfa','#e0d8e6','#ffffff','0 1px 3px rgba(125, 91, 166, 0.04), 0 4px 12px rgba(125, 91, 166, 0.05)','0 4px 16px rgba(125, 91, 166, 0.08), 0 12px 40px rgba(125, 91, 166, 0.1)'],
-                        orange: ['#1a1209','linear-gradient(180deg, #1a1209 0%, #231910 100%)','#f4eadd','#c9b499','#8d7857','#fbf3e7','#b45309','180, 83, 9','#f59e0b','#332617','#251a0d','0 1px 3px rgba(0,0,0,0.24), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
-                        teal:   ['#f2f7f8','linear-gradient(180deg, #f2f7f8 0%, #e4eff1 100%)','#122a2e','#38595e','#6b8388','#081e22','#0d9488','13, 148, 136','#14b8a6','#d6e6e9','#ffffff','0 1px 3px rgba(58, 138, 150, 0.04), 0 4px 12px rgba(58, 138, 150, 0.05)','0 4px 16px rgba(58, 138, 150, 0.08), 0 12px 40px rgba(58, 138, 150, 0.1)']
-                    }
-                };
-            })();
-            function syncRootVars(n){var r=document.documentElement,i;if(n==='system'||!THEME_VARS.themes[n]){for(i=0;i<THEME_VARS.keys.length;i++)r.style.removeProperty(THEME_VARS.keys[i]);return;}var v=THEME_VARS.themes[n];for(i=0;i<THEME_VARS.keys.length;i++)r.style.setProperty(THEME_VARS.keys[i],v[i]);}
-
-            function themeToStyle(theme, resolvedDark) {
-                if (theme === 'light') return 'classic';
-                if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
-                if (theme === 'blue' || theme === 'purple' || theme === 'teal') return 'studio';
-                if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
-                return 'classic';
-            }
-            function applyTheme(theme) {
-                const THEME_CLASSES = [
-                    'light-mode', 'default-mode', 'serif_dark-mode',
-                    'dark-mode',
-                    'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
-                    'teal-mode', 'cyan-mode'
-                ];
-                body.classList.remove.apply(body.classList, THEME_CLASSES);
-
-                let raw = (theme || 'system').toString();
-                if (raw === 'cyan') raw = 'teal';
-                else if (raw === 'default' || raw === 'serif_dark') raw = 'light';
-
-                themeOptions.forEach(option => {
-                    option.classList.remove('active');
-                    if (option.getAttribute('data-theme') === raw) {
-                        option.classList.add('active');
-                    }
-                });
-                let resolvedDark = false;
-                const t = raw;
-                if (t === 'dark') { body.classList.add('dark-mode'); resolvedDark = true; }
-                else if (t === 'light') { body.classList.add('light-mode'); }
-                else if (t === 'blue') { body.classList.add('blue-mode'); }
-                else if (t === 'green') { body.classList.add('green-mode'); resolvedDark = true; }
-                else if (t === 'purple') { body.classList.add('purple-mode'); }
-                else if (t === 'orange') { body.classList.add('orange-mode'); resolvedDark = true; }
-                else if (t === 'teal') { body.classList.add('teal-mode'); }
-                else if (t === 'system') {
-                    resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (resolvedDark) body.classList.add('dark-mode');
-                    else body.classList.add('light-mode');
-                }
-                body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
-                syncRootVars(t);
-                try { localStorage.setItem('theme', t); } catch(e) {}
-            }
-
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-                var currentTheme = 'system';
-                try { currentTheme = localStorage.getItem('theme') || 'system'; } catch(e) {}
-                if (currentTheme === 'system') {
-                    applyTheme('system');
-                }
-            });
-
-            var savedTheme = 'system';
-            try { savedTheme = localStorage.getItem('theme') || 'system'; } catch(e) {}
-            applyTheme(savedTheme);
-
-            // ===== i18n 多语言 =====
-            var savedLang = null;
-            try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
-
-            // GEO / 语言自动检测：
-            //   1) 手动切换过的 savedLang 优先
-            //   2) 否则取 navigator.languages[0]（浏览器/系统语言偏好列表首项），
-            //      降级 navigator.language；
-            //   3) locale 归一：zh-Hans/zh-CN/zh-SG/zh → 简中；
-            //                    zh-Hant/zh-TW/zh-HK/zh-MO → 繁中；
-            //                    其它一律 → English
-            var candidateLang = '';
-            try {
-                if (window.navigator.languages && window.navigator.languages.length) {
-                    candidateLang = String(window.navigator.languages[0] || '');
-                }
-            } catch(e) {}
-            if (!candidateLang) candidateLang = String(navigator.language || '');
-            candidateLang = candidateLang.replace(/_/g, '-');
-
-            var autoLang;
-            if (/^zh(-|$)/i.test(candidateLang)) {
-                if (/(TW|HK|MO|Hant)/i.test(candidateLang)) {
-                    autoLang = 'zh-TW';
-                } else {
-                    // zh / zh-CN / zh-Hans / zh-SG / 默认 zh 族一律简中
-                    autoLang = 'zh';
-                }
-            } else {
-                autoLang = 'en';
-            }
-            var currentLang = savedLang || autoLang;
-
-            var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
-            document.documentElement.lang = htmlLang;
-
-            var I18N = window.I18N || null;
-            var i18nReady = !!(I18N && I18N.zh);
-
-            function t(key) {
-                if (!i18nReady) return null;
-                try {
-                    var dict = I18N[currentLang] || I18N['zh'];
-                    if (dict && dict[key]) return dict[key];
-                    if (I18N['zh'] && I18N['zh'][key]) return I18N['zh'][key];
-                    return null;
-                } catch(e) { return null; }
-            }
-
-            function applyI18n() {
-                if (!i18nReady) return;
-                try {
-                    var htmlLang = currentLang === 'zh-TW' ? 'zh-TW' : currentLang === 'en' ? 'en' : 'zh-CN';
-                    document.documentElement.lang = htmlLang;
-                    var ogLocale = document.querySelector('meta[property="og:locale"]');
-                    if (ogLocale) ogLocale.setAttribute('content', htmlLang.replace('-', '_'));
-                    document.querySelectorAll('[data-i18n]').forEach(function(el) {
-                        var text = t(el.getAttribute('data-i18n'));
-                        if (text) el.textContent = text;
-                    });
-                    document.querySelectorAll('[data-i18n-content]').forEach(function(el) {
-                        var text = t(el.getAttribute('data-i18n-content'));
-                        if (text) el.setAttribute('content', text);
-                    });
-                    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
-                        var text = t(el.getAttribute('data-i18n-title'));
-                        if (text) el.setAttribute('title', text);
-                    });
-                    document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
-                        var text = t(el.getAttribute('data-i18n-aria'));
-                        if (text) el.setAttribute('aria-label', text);
-                    });
-                    document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
-                        var html = t(el.getAttribute('data-i18n-html'));
-                        if (html) el.innerHTML = html;
-                    });
-                    var titleText = t('about.meta.title');
-                    if (titleText) document.title = titleText;
-                    var langToggle = document.getElementById('langToggle');
-                    var langMenuRef = document.getElementById('langMenu');
-                    if (langToggle) langToggle.textContent = currentLang === 'zh' ? '简' : currentLang === 'zh-TW' ? '繁' : 'EN';
-                    if (langMenuRef) {
-                        langMenuRef.querySelectorAll('.lang-option').forEach(function(opt) {
-                            opt.classList.toggle('active', opt.getAttribute('data-lang') === currentLang);
-                        });
-                    }
-                } catch(e) {
-                    console.warn('i18n apply failed:', e);
-                }
-            }
-
-            // 语言切换事件
-            var langToggle = document.getElementById('langToggle');
-            var langMenu = document.getElementById('langMenu');
-            langToggle.addEventListener('click', function() {
-                langMenu.classList.toggle('show');
-                langMenu.setAttribute('aria-expanded', langMenu.classList.contains('show'));
-                themeMenu.classList.remove('show');
-            });
-            document.addEventListener('click', function(e) {
-                if (!langToggle.contains(e.target) && !langMenu.contains(e.target)) {
-                    langMenu.classList.remove('show');
-                    langMenu.setAttribute('aria-expanded', 'false');
-                }
-            });
-            document.querySelectorAll('.lang-option').forEach(function(opt) {
-                function onSelect() {
-                    currentLang = opt.getAttribute('data-lang');
-                    try { localStorage.setItem('w3b_lang', currentLang); } catch(e) {}
-                    applyI18n();
-                    langMenu.classList.remove('show');
-                    langMenu.setAttribute('aria-expanded', 'false');
-                }
-                opt.addEventListener('click', onSelect);
-                opt.addEventListener('keydown', function(e) {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onSelect();
-                    }
-                });
-            });
-
-            applyI18n();
-
-            // 滚动视差（rAF 节流）
-            (function() {
-                var ticking = false;
-                var items = document.querySelectorAll('.theme-deco__parallax');
-                function update() {
-                    var y = window.scrollY || 0;
-                    if (items.length >= 4) {
-                        items[0].style.transform = 'translateY(' + (y * 0.08) + 'px)';
-                        items[1].style.transform = 'translateY(' + (-y * 0.08) + 'px)';
-                        items[2].style.transform = 'translateY(' + (y * 0.14) + 'px)';
-                        items[3].style.transform = 'translateY(' + (-y * 0.14) + 'px)';
-                    }
-                    ticking = false;
-                }
-                window.addEventListener('scroll', function() {
-                    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
-                }, { passive: true });
-            })();
-        })();
-    </script>
+  <script src="assets/js/i18n-init.js?v=3.0.0" defer></script>
+  <script src="assets/js/theme.js?v=3.0.0" defer></script>
+  <script src="assets/js/balance.js?v=3.0.0" defer></script>
+  <script src="assets/js/extras-about.js?v=3.0.0" defer></script>
 </body>
 </html>

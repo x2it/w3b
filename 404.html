@@ -27,8 +27,8 @@
     <meta name="description" content="知行工作室 - 页面未找到" data-i18n-content="404.meta.description">
     <meta name="robots" content="noindex, nofollow">
     <title data-i18n-content="404.meta.title">页面未找到 · 知行工作室</title>
-    <link rel="stylesheet" href="/assets/css/style.css?v=2.5.0">
-    <script src="/assets/js/i18n.js?v=2.5.0"></script>
+    <link rel="stylesheet" href="/assets/css/style.css?v=3.0.0">
+    <script src="/assets/js/i18n.js?v=3.0.0"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
@@ -275,166 +275,10 @@
         <p class="copyright" data-i18n="footer.copyright">© 2026 知行工作室 - 理会 · 践行</p>
     </footer>
 
-    <script>
-        (function() {
-            // 主题切换逻辑
-            const themes = ['light', 'dark', 'blue', 'green', 'purple', 'orange', 'teal', 'system'];
-            const themeBtn = document.getElementById('themeBtn');
-            const themePanel = document.getElementById('themePanel');
-            const themeOptions = document.querySelectorAll('.theme-option');
+    
 
-            // 7 主题 × 13 核心变量 → 写入 documentElement.style 覆盖 @media dark :root
-            var THEME_VARS = (function(){
-                var k = ['--bg-color','--bg-gradient','--text-color','--text-secondary','--text-light',
-                         '--dark-color','--accent-color','--accent-rgb','--accent-secondary',
-                         '--border-color','--card-bg','--card-shadow','--card-shadow-hover'];
-                return {
-                    keys: k,
-                    themes: {
-                        light:  ['#fafafa','linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%)','#1a1a2e','#3d3d5c','#6b6b8d','#0f0f1e','#5b5f97','91, 95, 151','#7c5e9e','#ececf0','#ffffff','0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04)','0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(0, 0, 0, 0.08)'],
-                        dark:   ['#0d0d14','linear-gradient(180deg, #0d0d14 0%, #131322 100%)','#e8e8f0','#b8b8cf','#7a7a99','#f5f5fa','#8b8fd1','139, 143, 209','#a78bca','#252538','#181828','0 1px 3px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)','0 4px 16px rgba(0, 0, 0, 0.25), 0 12px 40px rgba(0, 0, 0, 0.2)'],
-                        blue:   ['#f4f7fb','linear-gradient(180deg, #f4f7fb 0%, #e8eef6 100%)','#1a2540','#3d4d6b','#6b7a96','#0a1228','#4a6fa5','74, 111, 165','#5b8db8','#dde4ee','#ffffff','0 1px 3px rgba(74, 111, 165, 0.04), 0 4px 12px rgba(74, 111, 165, 0.05)','0 4px 16px rgba(74, 111, 165, 0.08), 0 12px 40px rgba(74, 111, 165, 0.1)'],
-                        green:  ['#0f1a15','linear-gradient(180deg, #0f1a15 0%, #13241c 100%)','#e8efe9','#b3c5b9','#728a7a','#f4faf5','#059669','5, 150, 105','#34d399','#1f3329','#16271e','0 1px 3px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
-                        purple: ['#f6f3f8','linear-gradient(180deg, #f6f3f8 0%, #ece6f1 100%)','#28182e','#4d3858','#7a6485','#1a0a20','#7c3aed','124, 58, 237','#a78bfa','#e0d8e6','#ffffff','0 1px 3px rgba(125, 91, 166, 0.04), 0 4px 12px rgba(125, 91, 166, 0.05)','0 4px 16px rgba(125, 91, 166, 0.08), 0 12px 40px rgba(125, 91, 166, 0.1)'],
-                        orange: ['#1a1209','linear-gradient(180deg, #1a1209 0%, #231910 100%)','#f4eadd','#c9b499','#8d7857','#fbf3e7','#b45309','180, 83, 9','#f59e0b','#332617','#251a0d','0 1px 3px rgba(0,0,0,0.24), 0 4px 12px rgba(0,0,0,0.16)','0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22)'],
-                        teal:   ['#f2f7f8','linear-gradient(180deg, #f2f7f8 0%, #e4eff1 100%)','#122a2e','#38595e','#6b8388','#081e22','#0d9488','13, 148, 136','#14b8a6','#d6e6e9','#ffffff','0 1px 3px rgba(58, 138, 150, 0.04), 0 4px 12px rgba(58, 138, 150, 0.05)','0 4px 16px rgba(58, 138, 150, 0.08), 0 12px 40px rgba(58, 138, 150, 0.1)']
-                    }
-                };
-            })();
-            function syncRootVars(n){var r=document.documentElement,i;if(n==='system'||!THEME_VARS.themes[n]){for(i=0;i<THEME_VARS.keys.length;i++)r.style.removeProperty(THEME_VARS.keys[i]);return;}var v=THEME_VARS.themes[n];for(i=0;i<THEME_VARS.keys.length;i++)r.style.setProperty(THEME_VARS.keys[i],v[i]);}
-
-            function themeToStyle(theme, resolvedDark) {
-                if (theme === 'light') return 'classic';
-                if (theme === 'system') return resolvedDark ? 'philosophic' : 'classic';
-                if (theme === 'blue' || theme === 'purple' || theme === 'teal') return 'studio';
-                if (theme === 'dark' || theme === 'green' || theme === 'orange') return 'philosophic';
-                return 'classic';
-            }
-
-            function applyTheme(themeName) {
-                const THEME_CLASSES = [
-                    'light-mode', 'default-mode', 'serif_dark-mode',
-                    'dark-mode',
-                    'blue-mode', 'green-mode', 'purple-mode', 'orange-mode',
-                    'teal-mode', 'cyan-mode'
-                ];
-                document.body.classList.remove.apply(document.body.classList, THEME_CLASSES);
-
-                let raw = (themeName || 'system').toString();
-                if (raw === 'cyan') raw = 'teal';
-                else if (raw === 'default' || raw === 'serif_dark') raw = 'light';
-
-                let resolvedDark = false;
-                const t = raw;
-                if (t === 'system') {
-                    resolvedDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (resolvedDark) document.body.classList.add('dark-mode');
-                    else document.body.classList.add('light-mode');
-                } else if (t === 'dark') {
-                    document.body.classList.add('dark-mode'); resolvedDark = true;
-                } else if (t === 'green') {
-                    document.body.classList.add('green-mode'); resolvedDark = true;
-                } else if (t === 'orange') {
-                    document.body.classList.add('orange-mode'); resolvedDark = true;
-                } else {
-                    document.body.classList.add(t + '-mode');
-                }
-                document.body.setAttribute('data-theme-style', themeToStyle(t, resolvedDark));
-                syncRootVars(t);
-                try { localStorage.setItem('theme', t); } catch(e) {}
-                themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.theme === t));
-            }
-
-            function initTheme() {
-                var savedTheme = 'system';
-                try { savedTheme = localStorage.getItem('theme') || 'system'; } catch(e) {}
-                applyTheme(savedTheme);
-            }
-            // 滚动视差（rAF 节流）
-            (function() {
-                var ticking = false;
-                var items = document.querySelectorAll('.theme-deco__parallax');
-                function update() {
-                    var y = window.scrollY || 0;
-                    if (items.length >= 4) {
-                        items[0].style.transform = 'translateY(' + (y * 0.08) + 'px)';
-                        items[1].style.transform = 'translateY(' + (-y * 0.08) + 'px)';
-                        items[2].style.transform = 'translateY(' + (y * 0.14) + 'px)';
-                        items[3].style.transform = 'translateY(' + (-y * 0.14) + 'px)';
-                    }
-                    ticking = false;
-                }
-                window.addEventListener('scroll', function() {
-                    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
-                }, { passive: true });
-            })();
-
-            themeBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                themePanel.classList.toggle('show');
-            });
-
-            themeOptions.forEach(option => {
-                option.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    applyTheme(this.dataset.theme);
-                    themePanel.classList.remove('show');
-                });
-            });
-
-            document.addEventListener('click', function(e) {
-                if (!themePanel.contains(e.target) && !themeBtn.contains(e.target)) {
-                    themePanel.classList.remove('show');
-                }
-            });
-
-            initTheme();
-
-            // i18n
-            // 自动检测浏览器语言：手动切换过的优先，否则按环境自动判断
-            // 与 index.html 一致：navigator.languages[0] 优先，locale 归一
-            var savedLang = null;
-            try { savedLang = localStorage.getItem('w3b_lang'); } catch(e) {}
-
-            var candidateLang = '';
-            try {
-                if (window.navigator.languages && window.navigator.languages.length) {
-                    candidateLang = String(window.navigator.languages[0] || '');
-                }
-            } catch(e) {}
-            if (!candidateLang) candidateLang = String(navigator.language || '');
-            candidateLang = candidateLang.replace(/_/g, '-');
-
-            var autoLang;
-            if (/^zh(-|$)/i.test(candidateLang)) {
-                if (/(TW|HK|MO|Hant)/i.test(candidateLang)) {
-                    autoLang = 'zh-TW';
-                } else {
-                    autoLang = 'zh';
-                }
-            } else {
-                autoLang = 'en';
-            }
-            var cl = savedLang || autoLang;
-            var I18N = window.I18N || null;
-            var i18nReady = !!(I18N && I18N.zh);
-            function t(k) {
-                if (!i18nReady) return null;
-                try {
-                    var d = I18N[cl] || I18N['zh'];
-                    if (d && d[k]) return d[k];
-                    if (I18N['zh'] && I18N['zh'][k]) return I18N['zh'][k];
-                    return null;
-                } catch(e) { return null; }
-            }
-            if (i18nReady) {
-                document.documentElement.lang = cl === 'zh-TW' ? 'zh-TW' : cl === 'en' ? 'en' : 'zh-CN';
-                document.querySelectorAll('[data-i18n]').forEach(function(el) { var v = t(el.getAttribute('data-i18n')); if (v) el.textContent = v; });
-                document.querySelectorAll('[data-i18n-content]').forEach(function(el) { var v = t(el.getAttribute('data-i18n-content')); if (v) el.setAttribute('content', v); });
-                var title = t('404.meta.title');
-                if (title) document.title = title;
-            }
-        })();
-    </script>
+  <script src="assets/js/i18n-init.js?v=3.0.0" defer></script>
+  <script src="assets/js/theme.js?v=3.0.0" defer></script>
+  <script src="assets/js/balance.js?v=3.0.0" defer></script>
 </body>
 </html>
