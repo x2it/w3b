@@ -404,17 +404,17 @@
 
   function _updateProjectFilterMode() {
     // 项目嵌入（output.coze.site）忽略所有 theme 参数，用 CSS filter 近似明暗
+    // 注意：filter 作用在 iframe 本身（而不是 container），避免 container 的 ::after 装饰层被同时反色
     var darkMode = _getEmbedThemeMode() === 'dark';
-    var wrapper = document.getElementById('projectIframeContainer');
     var iframe = document.getElementById('qmeow-embed');
-    if (wrapper) {
-      wrapper.style.filter = darkMode
-        ? 'invert(1) hue-rotate(180deg) contrast(0.95)'
-        : '';
-    }
     if (iframe) {
-      // 背景色兜底：暗主题时给一个深色底，filter 反色后变成白
-      iframe.style.background = darkMode ? '#fafafa' : 'var(--card-bg, #fff)';
+      iframe.style.filter = darkMode
+        ? 'invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.9)'
+        : '';
+      // 背景：暗主题时 Coze 默认白底，被 invert 后变成黑底，完美贴合暗主题
+      iframe.style.background = darkMode ? '#ffffff' : 'var(--card-bg, #fff)';
+      // 强制独立堆叠上下文，防止被父层样式覆盖
+      iframe.style.isolation = 'isolate';
     }
   }
 
