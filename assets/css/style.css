@@ -485,7 +485,11 @@ body {
     border: none;
     background: var(--card-bg);
     overflow: visible;
-    transition: height var(--transition-smooth);
+    transition: height var(--transition-smooth), filter 0.4s ease, background 0.4s ease;
+}
+
+.iframe-container {
+    transition: filter 0.4s ease, background 0.4s ease;
 }
 
 .iframe-loading {

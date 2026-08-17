@@ -357,10 +357,89 @@
     });
   }
 
+  // ==================================================================
+  // 嵌入内容主题同步（v3.2.1：让 iframe 明暗跟随 w3b 主题切换）
+  // ==================================================================
+  function _getEmbedThemeMode() {
+    // 暗主题：文字偏浅色，需要 iframe 也用 dark
+    var darkModes = ['dark-mode', 'green-mode', 'orange-mode'];
+    var cls = document.body.className || '';
+    for (var i = 0; i < darkModes.length; i++) {
+      if (cls.indexOf(darkModes[i]) !== -1) return 'dark';
+    }
+    // 其他所有（default/blue/purple/teal/cyan）都走 light
+    // 也兜底用 CSS 变量 --text-color 亮度判断，防止遗漏
+    try {
+      var bg = getComputedStyle(document.body).getPropertyValue('--bg-color').trim();
+      if (bg) {
+        var m = bg.match(/#([0-9a-f]{6})/i);
+        if (m) {
+          var hex = m[1];
+          var r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b = parseInt(hex.substr(4,2),16);
+          var lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+          if (lum < 0.35) return 'dark';
+        }
+      }
+    } catch(_) {}
+    return 'light';
+  }
+
+  function _updateIframeThemeParam(iframeId, themeKey) {
+    var iframe = document.getElementById(iframeId);
+    if (!iframe || !iframe.src) return;
+    try {
+      var url = new URL(iframe.src, location.href);
+      var oldTheme = url.searchParams.get('theme') || '';
+      if (oldTheme === themeKey) return; // 相同不重刷新
+      url.searchParams.set('theme', themeKey);
+      iframe.src = url.toString();
+    } catch (_) {
+      // 旧浏览器兜底：字符串替换
+      var src = iframe.src;
+      var re = /([?&])theme=[^&]*/;
+      if (re.test(src)) iframe.src = src.replace(re, '$1theme=' + themeKey);
+      else iframe.src += (src.indexOf('?') >= 0 ? '&' : '?') + 'theme=' + themeKey;
+    }
+  }
+
+  function _updateProjectFilterMode() {
+    // 项目嵌入（output.coze.site）忽略所有 theme 参数，用 CSS filter 近似明暗
+    var darkMode = _getEmbedThemeMode() === 'dark';
+    var wrapper = document.getElementById('projectIframeContainer');
+    var iframe = document.getElementById('qmeow-embed');
+    if (wrapper) {
+      wrapper.style.filter = darkMode
+        ? 'invert(1) hue-rotate(180deg) contrast(0.95)'
+        : '';
+    }
+    if (iframe) {
+      // 背景色兜底：暗主题时给一个深色底，filter 反色后变成白
+      iframe.style.background = darkMode ? '#fafafa' : 'var(--card-bg, #fff)';
+    }
+  }
+
+  function _syncEmbedThemes() {
+    var mode = _getEmbedThemeMode();
+    // 博客：Coze 支持 theme=light/dark
+    _updateIframeThemeParam('blog-embed', mode);
+    // 项目：只能用 filter
+    _updateProjectFilterMode();
+  }
+
+  function _initEmbedThemeSync() {
+    // 初始同步
+    _syncEmbedThemes();
+    // 主题切换事件（theme.js 派发的 themeChanged）
+    document.addEventListener('themeChanged', function () {
+      // 延迟一帧，确保 body class 已经被 applyTheme 改掉
+      setTimeout(_syncEmbedThemes, 30);
+    });
+  }
+
   function _initEmbeds() {
-    // 超时统一 20s（但 iframe load 事件会提前清除计时器，只有加载失败才会走到超时）
     _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    20000);
     _wireIframeEmbed('qmeow-embed',  'projectIframeContainer', 'projectFallback', 20000);
+    _initEmbedThemeSync();
   }
 
   // ==================================================================
