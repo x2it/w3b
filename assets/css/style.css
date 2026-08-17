@@ -482,12 +482,14 @@ body {
     padding: 0 !important;
 }
 
-/* 降级金句卡片 */
+/* 降级金句卡片（v3.0.1：默认先显示，收到 iframe 高度再隐藏，保证失败时永远有内容）*/
 .fallback-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
     margin: 1rem 0;
+    visibility: visible;
+    min-height: 120px;
 }
 
 .fallback-card {
@@ -626,6 +628,7 @@ header {
     margin-top: 1rem;
     position: relative;
     overflow: hidden;
+    min-height: 8rem;
 }
 
 header > * {
@@ -711,10 +714,12 @@ section {
 /* 粒子区域 (index) */
 #particle-section {
     min-height: 60vh;
+    height: 60vh;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 2rem 1rem 3rem;
     overflow: hidden;
 }
 @media (max-width: 768px) {

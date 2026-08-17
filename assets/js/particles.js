@@ -324,6 +324,10 @@
   }
 
   function startParticles() {
+    // v3.0.1：第一步就刷新颜色缓存，避免 applyTheme 竞态导致初期画布全透明
+    if (typeof window.updateCachedColors === 'function') {
+      try { window.updateCachedColors(); } catch (_) {}
+    }
     if (!updateCanvasSize()) {
       setTimeout(startParticles, 100);
       return;
