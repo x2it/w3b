@@ -112,6 +112,7 @@
     updateCachedColors();
     if (typeof window._onThemeChanged === 'function') window._onThemeChanged();
     document.dispatchEvent(new Event('themeChanged'));
+    document.dispatchEvent(new Event('themeChanged'));
   }
   window.applyTheme = applyTheme;
 

@@ -98,6 +98,7 @@
     }
   }
 
+  window._updateBalanceVisualColors = function() { _updateVisualColors(); };
   function _updateVisualColors() {
     var acc = _accentRgb();
     var accentColor = 'rgb(' + acc + ')';
