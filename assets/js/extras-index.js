@@ -427,23 +427,39 @@
   }
 
   function _updateProjectFilterMode() {
-    // 项目嵌入（output.coze.site）忽略所有 theme 参数，浏览器跨域 iframe filter 也无效
-    // 策略：暗主题时用容器"画框"，让亮色 Coze 卡片在暗背景里有清晰的嵌入感
+    // v3.2.7 实测确认：浏览器跨域 iframe 的 CSS filter 完全正常工作！
+    // 暗家族：invert(1) 把白底翻成黑底，hue-rotate(180deg) 把颜色翻回正确色相，微调 contrast/saturate
+    // 亮家族：清空 filter
     var darkMode = _getEmbedThemeMode() === 'dark';
     var wrapper = document.getElementById('projectIframeContainer');
     var iframe = document.getElementById('qmeow-embed');
+    if (iframe) {
+      if (darkMode) {
+        // 真·明暗反色：Coze 默认白底亮卡片 → 暗底深卡片
+        iframe.style.filter = 'invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.92)';
+        iframe.style.webkitFilter = iframe.style.filter;
+        iframe.style.isolation = 'isolate';
+        // 反色后纯白 (#ffffff → #000000) 太刺眼，换成一个接近我们 card-bg 的灰
+        // 这样 invert 后是 ~#20202e，和 philosophic 风格背景协调
+        iframe.style.background = '#e6eaf3';
+        iframe.style.borderRadius = 'calc(var(--radius-md, 14px) - 2px)';
+      } else {
+        iframe.style.filter = '';
+        iframe.style.webkitFilter = '';
+        iframe.style.isolation = '';
+        iframe.style.background = 'var(--card-bg, #fff)';
+        iframe.style.borderRadius = '';
+      }
+    }
+    // 容器（外层）保持，但简化——有了真·filter 后，容器只做轻微 frame 感，不要重 overlay 压住反色
     if (wrapper) {
       if (darkMode) {
-        // v3.2.6: 更明显的包裹——padding 翻倍 + accent 边框 + 双层阴影（外投影 + 内发光）
-        wrapper.style.padding = '1rem';
+        wrapper.style.padding = '0.5rem';
         wrapper.style.borderRadius = 'var(--radius-md, 14px)';
         wrapper.style.background = 'var(--card-bg, #181828)';
-        wrapper.style.border = '1px solid rgba(var(--accent-rgb), 0.25)';
-        wrapper.style.boxShadow =
-          'var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(var(--accent-rgb), 0.06)';
-        wrapper.style.margin = '1.25rem auto';
-        // data-attr 给 CSS ::after 伪元素用（暗色 overlay 柔和 Coze 卡片白对比度）
-        wrapper.setAttribute('data-embed-theme', 'dark');
+        wrapper.style.border = '1px solid rgba(var(--accent-rgb), 0.18)';
+        wrapper.style.boxShadow = 'var(--card-shadow)';
+        wrapper.style.margin = '1rem auto';
       } else {
         wrapper.style.padding = '';
         wrapper.style.borderRadius = '';
@@ -451,18 +467,9 @@
         wrapper.style.border = '';
         wrapper.style.boxShadow = '';
         wrapper.style.margin = '';
-        wrapper.removeAttribute('data-embed-theme');
       }
-    }
-    if (iframe) {
-      iframe.style.filter = '';
-      iframe.style.isolation = '';
-      iframe.style.background = darkMode ? '#ffffff' : 'var(--card-bg, #fff)';
-      if (darkMode) {
-        iframe.style.borderRadius = 'calc(var(--radius-md, 14px) - 6px)';
-      } else {
-        iframe.style.borderRadius = '';
-      }
+      // 移除旧的 data-attr overlay（invert 后内容已是深卡片，再盖暗色会糊）
+      wrapper.removeAttribute('data-embed-theme');
     }
   }
 
