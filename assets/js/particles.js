@@ -150,7 +150,7 @@
 
         ctx.beginPath();
         ctx.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.25, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255, 255, 255, ' + (this.opacity * 0.6) + ')';
+        ctx.fillStyle = 'rgba(' + textRgb + ', ' + (this.opacity * 0.6) + ')';
         ctx.fill();
       } else {
         var gradient = ctx.createRadialGradient(

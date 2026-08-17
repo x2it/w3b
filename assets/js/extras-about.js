@@ -73,8 +73,8 @@
       btn.textContent = 'Copy';
       btn.style.cssText = [
         'position:absolute;top:8px;right:8px;padding:4px 10px;font-size:12px',
-        'border-radius:6px;border:1px solid rgba(148,163,184,0.4)',
-        'background:rgba(255,255,255,0.85);color:#0f172a;cursor:pointer',
+        'border-radius:6px;border:1px solid var(--border-color)',
+        'background:var(--card-bg);color:var(--text-color);cursor:pointer',
         'opacity:0.85;transition:opacity .15s'
       ].join(';');
       blk.style.position = 'relative';
