@@ -226,14 +226,20 @@
   function _showFallback(containerId, fallbackId) {
     var c = document.getElementById(containerId);
     var f = document.getElementById(fallbackId);
+    var iframe = c ? c.querySelector('iframe') : null;
     if (c) {
       c.classList.add('iframe-loading');
       c.style.display = 'none';
+    }
+    if (iframe) {
+      iframe.style.display = 'none';
+      iframe.style.visibility = 'hidden';
     }
     if (f) {
       f.style.setProperty('display', 'grid', 'important');
       f.style.setProperty('visibility', 'visible', 'important');
       f.style.setProperty('opacity', '1', 'important');
+      f.style.setProperty('min-height', '300px', 'important');
     }
   }
   function _showIframe(containerId, fallbackId, iframeEl, height) {
@@ -242,17 +248,21 @@
     if (iframeEl) {
       var h = (typeof height === 'number' && height > 0) ? Math.floor(height) : EMBED_DEFAULT_H;
       iframeEl.style.height = h + 'px';
+      iframeEl.style.width = '100%';
+      iframeEl.style.display = 'block';
+      iframeEl.style.visibility = 'visible';
       iframeEl.height = String(h);
     }
     if (c) {
       c.classList.remove('iframe-loading');
       c.style.display = '';
       c.style.visibility = '';
+      c.style.minHeight = '200px';
     }
     if (f) {
-      f.style.setProperty('display', 'none');
-      f.style.setProperty('visibility', 'hidden');
-      f.style.setProperty('opacity', '0');
+      f.style.setProperty('display', 'none', 'important');
+      f.style.setProperty('visibility', 'hidden', 'important');
+      f.style.setProperty('opacity', '0', 'important');
     }
   }
 
@@ -263,32 +273,54 @@
     var resolved = false;
     var container = document.getElementById(containerId);
     var fallbackEl = document.getElementById(fallbackId);
+    var timer = null;
 
-    // 先给 iframe 一个默认高度，避免高度为 0 的空窗期
-    iframe.style.height = EMBED_DEFAULT_H + 'px';
-    iframe.height = String(EMBED_DEFAULT_H);
-    if (container) {
-      container.classList.remove('iframe-loading');
-      container.style.display = '';
-      container.style.visibility = '';
-    }
-    if (fallbackEl) {
-      fallbackEl.style.setProperty('display', 'none');
-      fallbackEl.style.setProperty('visibility', 'hidden');
+    function _startTimer() {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (resolved) return;
+        resolved = true;
+        _showFallback(containerId, fallbackId);
+      }, timeoutMs || 20000);
     }
 
-    // 超时降级：15s 若仍未收到任何成功信号，切到 fallback
-    var timer = setTimeout(function () {
+    function _initNow() {
       if (resolved) return;
-      resolved = true;
-      _showFallback(containerId, fallbackId);
-    }, timeoutMs || 15000);
+      // 先给 iframe 一个默认高度，避免高度为 0 的空窗期
+      iframe.style.height = EMBED_DEFAULT_H + 'px';
+      iframe.height = String(EMBED_DEFAULT_H);
+      if (container) {
+        container.classList.remove('iframe-loading');
+        container.style.display = '';
+        container.style.visibility = '';
+      }
+      if (fallbackEl) {
+        fallbackEl.style.setProperty('display', 'none');
+        fallbackEl.style.setProperty('visibility', 'hidden');
+      }
+      _startTimer();
+    }
+
+    // 用 IntersectionObserver 延迟初始化：iframe 接近视口时才启动计时器
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            io.disconnect();
+            _initNow();
+          }
+        });
+      }, { rootMargin: '200px', threshold: 0.01 });
+      io.observe(container || iframe);
+    } else {
+      _initNow();
+    }
 
     // iframe 自身错误 → 立即降级
     iframe.addEventListener('error', function () {
       if (resolved) return;
       resolved = true;
-      clearTimeout(timer);
+      if (timer) clearTimeout(timer);
       _showFallback(containerId, fallbackId);
     });
 
@@ -298,7 +330,7 @@
       // 继续等待 postMessage 来调整高度
     });
 
-    // 监听 postMessage 获取动态高度
+    // 监听 postMessage 获取动态高度（独立于 resolved 状态，始终响应）
     window.addEventListener('message', function (ev) {
       try {
         var src = (iframe.contentWindow && iframe.contentWindow === ev.source);
@@ -312,8 +344,10 @@
         else if (d && d.data && typeof d.data.height === 'number') h = d.data.height;
         else if (d && typeof d.value === 'number' && (d.type === 'height')) h = d.value;
         if (h && h > 0 && h < 30000) {
-          resolved = true;
-          clearTimeout(timer);
+          if (!resolved) {
+            resolved = true;
+            if (timer) clearTimeout(timer);
+          }
           _showIframe(containerId, fallbackId, iframe, h);
         }
       } catch (_) {}
