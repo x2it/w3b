@@ -186,13 +186,13 @@
     var items = document.querySelectorAll('.timeline-item');
     if (!items.length || !('IntersectionObserver' in window)) {
       // 不支持 IO 则直接全部展示
-      items.forEach(function (i) { i.classList.add('in-view'); });
+      items.forEach(function (i) { i.classList.add('visible'); });
       return;
     }
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
         if (en.isIntersecting) {
-          en.target.classList.add('in-view');
+          en.target.classList.add('visible');
           io.unobserve(en.target);
         }
       });
@@ -214,34 +214,35 @@
   }
 
   // ==================================================================
-  // 9) v3.0.1 博客 & 作品集 iframe 初始化 + 降级卡片切换
+  // 9) v3.0.2 博客 & 作品集 iframe 初始化 + 降级卡片切换
   //
-  // 降级策略（翻转：默认先显示 fallback，永远有可见内容）：
-  //   - 启动时：立即隐藏 iframe 容器（height=0 / visibility:hidden），显示 fallback 卡片
-  //   - 收到 iframe postMessage 含高度：确认成功才把 iframe 展开并隐藏 fallback
-  //   - onerror / timeout / 一直无消息：fallback 一直显示，用户不会看到空白
+  // 策略（默认显示 iframe，失败才降级）：
+  //   - 启动时：iframe 容器默认可见 + 给 iframe 一个默认高度
+  //   - iframe onload：保持显示；若有 postMessage 高度则动态调整
+  //   - iframe onerror / 超时：隐藏 iframe，显示 fallback 金句卡片
   // ==================================================================
-  function _showFallbackNow(containerId, fallbackId, iframeEl) {
+  var EMBED_DEFAULT_H = 520;
+
+  function _showFallback(containerId, fallbackId) {
     var c = document.getElementById(containerId);
     var f = document.getElementById(fallbackId);
     if (c) {
-      c.classList.add('iframe-loading'); // 保持 CSS 里 visibility:hidden + height:0
+      c.classList.add('iframe-loading');
       c.style.display = 'none';
     }
     if (f) {
-      // 兜底：无论 fallback 初始 CSS 是什么，强制展开
       f.style.setProperty('display', 'grid', 'important');
       f.style.setProperty('visibility', 'visible', 'important');
       f.style.setProperty('opacity', '1', 'important');
     }
-    if (iframeEl) { iframeEl.setAttribute('aria-hidden', 'true'); }
   }
   function _showIframe(containerId, fallbackId, iframeEl, height) {
     var c = document.getElementById(containerId);
     var f = document.getElementById(fallbackId);
-    if (iframeEl && typeof height === 'number' && height > 0) {
-      iframeEl.style.height = Math.floor(height) + 'px';
-      iframeEl.height = String(Math.floor(height));
+    if (iframeEl) {
+      var h = (typeof height === 'number' && height > 0) ? Math.floor(height) : EMBED_DEFAULT_H;
+      iframeEl.style.height = h + 'px';
+      iframeEl.height = String(h);
     }
     if (c) {
       c.classList.remove('iframe-loading');
@@ -249,7 +250,6 @@
       c.style.visibility = '';
     }
     if (f) {
-      // iframe 成功 → 隐藏 fallback
       f.style.setProperty('display', 'none');
       f.style.setProperty('visibility', 'hidden');
       f.style.setProperty('opacity', '0');
@@ -258,29 +258,48 @@
 
   function _wireIframeEmbed(iframeId, containerId, fallbackId, timeoutMs) {
     var iframe = document.getElementById(iframeId);
-    var fallbackEl = document.getElementById(fallbackId);
-    // v3.0.1：立刻先显示 fallback —— 保证加载过程永远"不是空白"
-    _showFallbackNow(containerId, fallbackId, iframe);
     if (!iframe) return;
 
     var resolved = false;
+    var container = document.getElementById(containerId);
+    var fallbackEl = document.getElementById(fallbackId);
+
+    // 先给 iframe 一个默认高度，避免高度为 0 的空窗期
+    iframe.style.height = EMBED_DEFAULT_H + 'px';
+    iframe.height = String(EMBED_DEFAULT_H);
+    if (container) {
+      container.classList.remove('iframe-loading');
+      container.style.display = '';
+      container.style.visibility = '';
+    }
+    if (fallbackEl) {
+      fallbackEl.style.setProperty('display', 'none');
+      fallbackEl.style.setProperty('visibility', 'hidden');
+    }
+
+    // 超时降级：15s 若仍未收到任何成功信号，切到 fallback
     var timer = setTimeout(function () {
       if (resolved) return;
-      // 12 秒没收到 resize → 保持 fallback，清理 timer
       resolved = true;
-      // 如果之前的 _showFallbackNow 失效（比如被别的逻辑改回），这里再次确保
-      _showFallbackNow(containerId, fallbackId, iframe);
-    }, timeoutMs || 12000);
+      _showFallback(containerId, fallbackId);
+    }, timeoutMs || 15000);
 
+    // iframe 自身错误 → 立即降级
     iframe.addEventListener('error', function () {
       if (resolved) return;
       resolved = true;
       clearTimeout(timer);
-      _showFallbackNow(containerId, fallbackId, iframe);
+      _showFallback(containerId, fallbackId);
     });
 
+    // iframe 加载成功 → 保持可见，等待 postMessage 动态调高度
+    iframe.addEventListener('load', function () {
+      // 加载成功即视为"初始可用"，不降级
+      // 继续等待 postMessage 来调整高度
+    });
+
+    // 监听 postMessage 获取动态高度
     window.addEventListener('message', function (ev) {
-      if (resolved) return;
       try {
         var src = (iframe.contentWindow && iframe.contentWindow === ev.source);
         if (!src) return;
@@ -291,7 +310,7 @@
         var h = null;
         if (d && typeof d.height === 'number') h = d.height;
         else if (d && d.data && typeof d.data.height === 'number') h = d.data.height;
-        else if (d && typeof d.value === 'number' && (d.type === 'height' || typeof d.event === 'undefined')) h = d.value;
+        else if (d && typeof d.value === 'number' && (d.type === 'height')) h = d.value;
         if (h && h > 0 && h < 30000) {
           resolved = true;
           clearTimeout(timer);
@@ -302,7 +321,7 @@
   }
 
   function _initEmbeds() {
-    _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    12000);
+    _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    15000);
     _wireIframeEmbed('qmeow-embed',  'projectIframeContainer', 'projectFallback', 15000);
   }
 

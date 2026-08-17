@@ -56,7 +56,7 @@
     var beam = document.getElementById('balanceBeam');
     if (beam) {
       var deg = (a - k) * 12;
-      beam.style.setProperty('transform', 'rotate(' + deg.toFixed(2) + 'deg)');
+      beam.style.setProperty('transform', 'translate(-50%, -50%) rotate(' + deg.toFixed(2) + 'deg)');
       beam.style.setProperty('transform-origin', '50% 50%');
       beam.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
     }
@@ -64,13 +64,13 @@
     var wk = document.getElementById('weightKnow');
     if (wk) {
       var x = (-k * 70).toFixed(1);
-      wk.style.setProperty('transform', 'translateX(' + x + '%)');
+      wk.style.setProperty('transform', 'translate(-50%, -50%) translateX(' + x + '%)');
       wk.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
     }
     var wa = document.getElementById('weightAction');
     if (wa) {
       var x2 = (a * 70).toFixed(1);
-      wa.style.setProperty('transform', 'translateX(' + x2 + '%)');
+      wa.style.setProperty('transform', 'translate(-50%, -50%) translateX(' + x2 + '%)');
       wa.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
     }
     // 状态文案
