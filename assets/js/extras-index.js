@@ -324,10 +324,13 @@
       _showFallback(containerId, fallbackId);
     });
 
-    // iframe 加载成功 → 保持可见，等待 postMessage 动态调高度
+    // iframe 加载成功 → 视为成功，不再触发超时降级
+    // （Coze 页面能渲染就不算失败，postMessage 即使没收到也有默认高度）
     iframe.addEventListener('load', function () {
-      // 加载成功即视为"初始可用"，不降级
-      // 继续等待 postMessage 来调整高度
+      if (resolved) return;
+      resolved = true;
+      if (timer) clearTimeout(timer);
+      // 保持可见，继续等待 postMessage 来调整高度（如果发来的话）
     });
 
     // 监听 postMessage 获取动态高度（独立于 resolved 状态，始终响应）
@@ -355,8 +358,9 @@
   }
 
   function _initEmbeds() {
-    _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    15000);
-    _wireIframeEmbed('qmeow-embed',  'projectIframeContainer', 'projectFallback', 15000);
+    // 超时统一 20s（但 iframe load 事件会提前清除计时器，只有加载失败才会走到超时）
+    _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    20000);
+    _wireIframeEmbed('qmeow-embed',  'projectIframeContainer', 'projectFallback', 20000);
   }
 
   // ==================================================================
