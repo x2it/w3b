@@ -84,6 +84,7 @@ body.blue-mode {
     --accent-secondary: #5b8db8;
     --border-color: #dde4ee;
     --card-bg: #ffffff;
+    --backdrop-bg: rgba(255, 255, 255, 0.72);
     --card-shadow: 0 1px 3px rgba(74, 111, 165, 0.04), 0 4px 12px rgba(74, 111, 165, 0.05);
     --card-shadow-hover: 0 4px 16px rgba(74, 111, 165, 0.08), 0 12px 40px rgba(74, 111, 165, 0.1);
 }
@@ -100,6 +101,7 @@ body.green-mode {
     --accent-secondary: #34d399;
     --border-color: #273d31;
     --card-bg: #16271e;
+    --backdrop-bg: rgba(22, 39, 30, 0.72);
     --card-shadow: 0 1px 3px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.16);
     --card-shadow-hover: 0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22);
 }
@@ -116,6 +118,7 @@ body.purple-mode {
     --accent-secondary: #a78bfa;
     --border-color: #e0d8e6;
     --card-bg: #ffffff;
+    --backdrop-bg: rgba(255, 255, 255, 0.72);
     --card-shadow: 0 1px 3px rgba(125, 91, 166, 0.04), 0 4px 12px rgba(125, 91, 166, 0.05);
     --card-shadow-hover: 0 4px 16px rgba(125, 91, 166, 0.08), 0 12px 40px rgba(125, 91, 166, 0.1);
 }
@@ -132,6 +135,7 @@ body.orange-mode {
     --accent-secondary: #f59e0b;
     --border-color: #3d2f20;
     --card-bg: #251a0d;
+    --backdrop-bg: rgba(37, 26, 13, 0.72);
     --card-shadow: 0 1px 3px rgba(0,0,0,0.24), 0 4px 12px rgba(0,0,0,0.16);
     --card-shadow-hover: 0 4px 16px rgba(0,0,0,0.28), 0 12px 40px rgba(0,0,0,0.22);
 }
@@ -148,6 +152,7 @@ body.teal-mode, body.cyan-mode {
     --accent-secondary: #14b8a6;
     --border-color: #d6e6e9;
     --card-bg: #ffffff;
+    --backdrop-bg: rgba(255, 255, 255, 0.72);
     --card-shadow: 0 1px 3px rgba(58, 138, 150, 0.04), 0 4px 12px rgba(58, 138, 150, 0.05);
     --card-shadow-hover: 0 4px 16px rgba(58, 138, 150, 0.08), 0 12px 40px rgba(58, 138, 150, 0.1);
 }
@@ -1595,6 +1600,7 @@ body.default-mode {
     --accent-secondary: #7c5e9e;
     --border-color: #ececf0;
     --card-bg: #ffffff;
+    --backdrop-bg: rgba(255, 255, 255, 0.72);
     --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 12px rgba(0, 0, 0, 0.04);
     --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 40px rgba(0, 0, 0, 0.08);
 }
