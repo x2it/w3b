@@ -481,6 +481,7 @@ body {
 .iframe-container iframe {
     display: block;
     width: 100%;
+    min-height: 600px;
     border: none;
     background: var(--card-bg);
     overflow: visible;
@@ -606,9 +607,14 @@ html { scroll-behavior: smooth; font-size: 16px; }
 }
 .skip-link:focus { top: 0; }
 
-img, video, iframe, canvas, svg {
+img, video, canvas, svg {
     max-width: 100%;
     height: auto;
+    display: block;
+}
+
+iframe {
+    max-width: 100%;
     display: block;
 }
 
