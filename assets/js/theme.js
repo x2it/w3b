@@ -125,6 +125,7 @@
       w.style.boxShadow = '0 4px 12px rgba(' + (window.cachedAccentRgb || '99,102,241') + ', 0.25)';
     });
     if (typeof window.updateBalance === 'function') window.updateBalance();
+    if (typeof window._updateBalanceVisualColors === 'function') window._updateBalanceVisualColors();
   }
   window.updateBalanceColors = updateBalanceColors;
 
