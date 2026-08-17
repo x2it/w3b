@@ -392,7 +392,26 @@
       var oldTheme = url.searchParams.get('theme') || '';
       if (oldTheme === themeKey) return; // 相同不重刷新
       url.searchParams.set('theme', themeKey);
-      iframe.src = url.toString();
+      // 先 fade out，等 opacity 下来后再换 src 重加载 → fade in，避免白闪烁
+      var originalTransition = iframe.style.transition || '';
+      iframe.style.opacity = '0';
+      iframe.style.visibility = 'hidden';
+      setTimeout(function () {
+        iframe.src = url.toString();
+        // iframe onload 后再 fade in
+        var fadeHandler = function () {
+          iframe.removeEventListener('load', fadeHandler);
+          iframe.style.visibility = 'visible';
+          iframe.style.opacity = '1';
+        };
+        iframe.addEventListener('load', fadeHandler);
+        // 兜底：500ms 后即使 load 没到也淡入（避免全白）
+        setTimeout(function () {
+          if (iframe.style.visibility === 'hidden') {
+            fadeHandler();
+          }
+        }, 500);
+      }, 300); // 等 opacity 动画差不多完成（0.35s 我们用 0.3s 切）
     } catch (_) {
       // 旧浏览器兜底：字符串替换
       var src = iframe.src;
