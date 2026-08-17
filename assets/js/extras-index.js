@@ -403,18 +403,36 @@
   }
 
   function _updateProjectFilterMode() {
-    // 项目嵌入（output.coze.site）忽略所有 theme 参数，用 CSS filter 近似明暗
-    // 注意：filter 作用在 iframe 本身（而不是 container），避免 container 的 ::after 装饰层被同时反色
+    // 项目嵌入（output.coze.site）忽略所有 theme 参数，浏览器 iframe filter 也不生效
+    // 所以暗主题下：给容器加一个深色 padding 边框，让亮色项目卡片有"嵌入暗色展示"的感觉
     var darkMode = _getEmbedThemeMode() === 'dark';
+    var wrapper = document.getElementById('projectIframeContainer');
     var iframe = document.getElementById('qmeow-embed');
+    if (wrapper) {
+      if (darkMode) {
+        wrapper.style.padding = '0.5rem';
+        wrapper.style.borderRadius = 'var(--radius-md, 14px)';
+        wrapper.style.background = 'var(--card-bg, #181828)';
+        wrapper.style.boxShadow = 'var(--card-shadow, none)';
+        wrapper.style.margin = '1rem auto';
+      } else {
+        wrapper.style.padding = '';
+        wrapper.style.borderRadius = '';
+        wrapper.style.background = '';
+        wrapper.style.boxShadow = '';
+        wrapper.style.margin = '';
+      }
+    }
     if (iframe) {
-      iframe.style.filter = darkMode
-        ? 'invert(1) hue-rotate(180deg) contrast(0.95) saturate(0.9)'
-        : '';
-      // 背景：暗主题时 Coze 默认白底，被 invert 后变成黑底，完美贴合暗主题
+      // 清理无效的 filter 设置（浏览器对 iframe 跨域不生效，留着反而误导调试）
+      iframe.style.filter = '';
+      iframe.style.isolation = '';
       iframe.style.background = darkMode ? '#ffffff' : 'var(--card-bg, #fff)';
-      // 强制独立堆叠上下文，防止被父层样式覆盖
-      iframe.style.isolation = 'isolate';
+      if (darkMode) {
+        iframe.style.borderRadius = 'calc(var(--radius-md, 14px) - 4px)';
+      } else {
+        iframe.style.borderRadius = '';
+      }
     }
   }
 
