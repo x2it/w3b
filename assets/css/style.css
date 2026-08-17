@@ -2,9 +2,9 @@
 :root {
     --bg-color: #fafafa;
     --bg-gradient: linear-gradient(180deg, #fafafa 0%, #f5f5f7 100%);
-    --text-color: #1a1a2e;
-    --text-secondary: #3d3d5c;
-    --text-light: #6b6b8d;
+    --text-color: #161628;
+    --text-secondary: #343450;
+    --text-light: #616181;
     --dark-color: #0f0f1e;
     --accent-color: #6366f1;
     --accent-rgb: 99, 102, 241;
@@ -40,9 +40,9 @@
     :root {
         --bg-color: #0d0d14;
         --bg-gradient: linear-gradient(180deg, #0d0d14 0%, #131322 100%);
-        --text-color: #e8e8f0;
-        --text-secondary: #b8b8cf;
-        --text-light: #7a7a99;
+        --text-color: #f0f0f7;
+        --text-secondary: #c8c8dc;
+        --text-light: #9595b4;
         --dark-color: #f5f5fa;
         --accent-color: #a5a8e8;
         --accent-rgb: 165, 168, 232;
@@ -58,9 +58,9 @@
 body.dark-mode {
     --bg-color: #0d0d14;
     --bg-gradient: linear-gradient(180deg, #0d0d14 0%, #131322 100%);
-    --text-color: #e8e8f0;
-    --text-secondary: #c8c8dc;
-    --text-light: #9b9bb5;
+    --text-color: #f0f0f7;
+    --text-secondary: #d1d1e4;
+    --text-light: #a5a5c5;
     --dark-color: #f5f5fa;
     --accent-color: #b4b7ec;
     --accent-rgb: 180, 183, 236;
@@ -75,9 +75,9 @@ body.dark-mode {
 body.blue-mode {
     --bg-color: #f4f7fb;
     --bg-gradient: linear-gradient(180deg, #f4f7fb 0%, #e8eef6 100%);
-    --text-color: #1a2540;
-    --text-secondary: #3d4d6b;
-    --text-light: #5a6a85;
+    --text-color: #17223b;
+    --text-secondary: #334463;
+    --text-light: #4f5f7e;
     --dark-color: #0a1228;
     --accent-color: #4a6fa5;
     --accent-rgb: 74, 111, 165;
@@ -92,9 +92,9 @@ body.blue-mode {
 body.green-mode {
     --bg-color: #0f1a15;
     --bg-gradient: linear-gradient(180deg, #0f1a15 0%, #13241c 100%);
-    --text-color: #e8efe9;
-    --text-secondary: #c3d6c8;
-    --text-light: #96ae9c;
+    --text-color: #f0f7f2;
+    --text-secondary: #cfe0d3;
+    --text-light: #a4bfaa;
     --dark-color: #f4faf5;
     --accent-color: #10b981;
     --accent-rgb: 16, 185, 129;
@@ -109,9 +109,9 @@ body.green-mode {
 body.purple-mode {
     --bg-color: #f6f3f8;
     --bg-gradient: linear-gradient(180deg, #f6f3f8 0%, #ece6f1 100%);
-    --text-color: #28182e;
-    --text-secondary: #4d3858;
-    --text-light: #6a5475;
+    --text-color: #241429;
+    --text-secondary: #443050;
+    --text-light: #614c6c;
     --dark-color: #1a0a20;
     --accent-color: #7c3aed;
     --accent-rgb: 124, 58, 237;
@@ -126,9 +126,9 @@ body.purple-mode {
 body.orange-mode {
     --bg-color: #1a1209;
     --bg-gradient: linear-gradient(180deg, #1a1209 0%, #231910 100%);
-    --text-color: #f4eadd;
-    --text-secondary: #d8c8b0;
-    --text-light: #b89b72;
+    --text-color: #f8efe3;
+    --text-secondary: #e0d2be;
+    --text-light: #c2a682;
     --dark-color: #fbf3e7;
     --accent-color: #d97706;
     --accent-rgb: 217, 119, 6;
@@ -143,9 +143,9 @@ body.orange-mode {
 body.teal-mode, body.cyan-mode {
     --bg-color: #f2f7f8;
     --bg-gradient: linear-gradient(180deg, #f2f7f8 0%, #e4eff1 100%);
-    --text-color: #122a2e;
-    --text-secondary: #38595e;
-    --text-light: #57747a;
+    --text-color: #0f262a;
+    --text-secondary: #2f5054;
+    --text-light: #4d6a70;
     --dark-color: #081e22;
     --accent-color: #0d9488;
     --accent-rgb: 13, 148, 136;
@@ -165,10 +165,10 @@ body {
     color: var(--text-color);
     /* 过渡覆盖背景、文字、所有由 body class 控制的 CSS 变量驱动属性 */
     transition:
-        background 0.45s ease,
-        background-image 0.45s ease,
-        background-color 0.45s ease,
-        color 0.45s ease;
+        background 0.5s var(--ease-out-expo),
+        background-image 0.5s var(--ease-out-expo),
+        background-color 0.5s var(--ease-out-expo),
+        color 0.5s var(--ease-out-expo);
 }
 
 /* 全局隐藏滚动条（保留滚动功能） */
@@ -207,7 +207,9 @@ body {
     -webkit-text-fill-color: transparent;
     color: transparent;
     position: relative;
-    transition: all var(--transition-normal);
+    letter-spacing: 0.025em;
+    margin-bottom: 0.25rem;
+    transition: all 0.5s var(--ease-out-expo);
 }
 
 /* 模块区域卡片通用样式 */
@@ -220,11 +222,11 @@ body {
     -webkit-backdrop-filter: var(--backdrop-blur, none);
     backdrop-filter: var(--backdrop-blur, none);
     border-radius: var(--radius-lg);
-    margin: 3rem 0 1rem;
-    padding: 3rem 1.5rem 2rem;
+    margin: 3.25rem 0 1rem;
+    padding: 3.5rem 1.75rem 2.25rem;
     border: 1px solid var(--border-color);
     box-shadow: var(--card-shadow);
-    transition: background-color var(--transition-normal), box-shadow var(--transition-normal), transform var(--transition-normal), border-color var(--transition-normal);
+    transition: all 0.5s var(--ease-out-expo);
     position: relative;
 }
 
@@ -447,7 +449,8 @@ body {
 }
 
 .theme-option:hover {
-    background: var(--border-color);
+    background: rgba(var(--accent-rgb), 0.09);
+    color: var(--accent-color);
 }
 
 .theme-option:active {
@@ -457,6 +460,20 @@ body {
 .theme-option.active {
     background: var(--accent-color);
     color: white;
+    box-shadow: 0 6px 18px rgba(var(--accent-rgb), 0.28);
+    transform: translateY(-1px);
+}
+
+/* 无障碍焦点环 */
+.theme-toggle:focus-visible,
+.lang-toggle:focus-visible,
+.back-to-top:focus-visible,
+.theme-option:focus-visible,
+.email-link:focus-visible,
+.timeline-source a:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    border-radius: 6px;
 }
 
 .theme-preview {
@@ -480,7 +497,9 @@ body {
 }
 
 .iframe-container:hover {
-    border-color: rgba(var(--accent-rgb), 0.2);
+    border-color: rgba(var(--accent-rgb), 0.3);
+    box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.07);
+    transform: translateY(-1px);
 }
 
 .iframe-container iframe {
@@ -490,15 +509,14 @@ body {
     border: none;
     background: var(--card-bg);
     overflow: visible;
-    transition: height var(--transition-smooth), filter 0.4s ease, background 0.4s ease;
+    will-change: opacity, height;
+    transition: height var(--transition-smooth), opacity 0.35s ease,
+                background 0.45s ease, border-radius 0.45s ease;
 }
 
 .iframe-container {
-    transition: background 0.4s ease, padding 0.4s ease, box-shadow 0.4s ease, border-radius 0.4s ease;
-}
-
-.iframe-container iframe {
-    transition: height var(--transition-smooth), filter 0.4s ease, background 0.4s ease, border-radius 0.4s ease;
+    will-change: background, padding;
+    transition: all 0.45s var(--ease-out-expo);
 }
 
 .iframe-loading {
@@ -559,9 +577,10 @@ body {
 .section-intro {
     text-align: center;
     color: var(--text-secondary);
-    max-width: 500px;
-    margin: 0 auto 1.5rem;
-    line-height: 1.6;
+    max-width: 520px;
+    margin: 0 auto 2.25rem;
+    line-height: 1.85;
+    letter-spacing: 0.01em;
     font-size: 0.95rem;
 }
 
@@ -898,11 +917,11 @@ section {
 }
 .timeline-item {
     position: relative;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     width: 100%;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.7s var(--ease-out-expo), transform 0.7s var(--ease-out-expo);
 }
 .timeline-item.visible {
     opacity: 1;
@@ -1401,7 +1420,7 @@ body.dark-mode .footer-link {
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: all 0.4s var(--ease-out-expo);
     box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.25);
     z-index: 1000;
     border: none;
@@ -1878,6 +1897,27 @@ body[data-theme-style="philosophic"] .theme-deco {
 }
 body[data-theme-style="philosophic"] .theme-deco__corner--tl { top: -180px; left: -160px; }
 body[data-theme-style="philosophic"] .theme-deco__corner--br { bottom: -180px; right: -160px; }
+/* 所有风格的 AI 金句：header 内联单行，角落轻微光晕（v3.2.5） */
+#ai-quote {
+    position: relative;
+    transition: color 0.5s var(--ease-out-expo), opacity 0.5s ease;
+}
+#ai-quote::before,
+#ai-quote::after {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.5;
+    background: radial-gradient(circle, rgba(var(--accent-rgb), 0.12) 0%, transparent 70%);
+    top: -24px;
+    filter: blur(4px);
+}
+#ai-quote::before { left: 50%; transform: translateX(-140px); }
+#ai-quote::after  { left: 50%; transform: translateX(60px); }
+
 body[data-theme-style="philosophic"] #ai-quote {
     position: relative;
     padding-left: 1.25rem;
