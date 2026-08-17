@@ -1,153 +1,148 @@
 /* ======================================================================
- * balance.js  —  知识 / 情感 / 经济 三维平衡条
+ * balance.js  —  知 / 行 双滑块 + 杠杆平衡可视化
  *
- *   - 从 #knowledgeSlider / #balanceSlider（旧兼容） 读数
- *   - 自动更新 window.STATE 与 data-* 进度属性（用于 CSS 渐变条）
- *   - 文案通过 window.t() 取三语翻译，切语言时 i18n-init.js 会调用
- *     window.updateBalance() 重新渲染。
- *   - updateBalanceColors() 读 CSS 变量，渲染滑块与进度条视觉。
+ * DOM（均为可选，缺失则对应功能静默失效）：
+ *   - #knowledgeSlider (知，0-100)  /  #actionSlider (行，0-100)
+ *   - #knowledgeValue 显示 % 值 / #actionValue 显示 % 值
+ *   - #balanceState 状态文案（默认三语翻译：balance.equal / balance.knowMore /
+ *     balance.actionMore / balance.knowHeavy / balance.actionHeavy）
+ *   - #balanceBeam 杠杆横梁（transform: rotate 控制倾斜）
+ *   - #weightKnow  知砝码（translateX 左移）
+ *   - #weightAction 行砝码（translateX 右移）
  *
- *  注意：文件同时在 index.html / 404.html / about.html 中复用。
- *        某些控件仅在特定页面存在（如 about.html 没有知识滑块），
- *        因此所有 DOM 查询均做空值保护。
+ * 主题切换：监听 themeChanged 事件刷新强调色。
+ * 三语切换：window._resetBalanceText() 重新翻译状态文案。
  * ==================================================================== */
 (function () {
   'use strict';
 
-  // window.STATE 为公开句柄，便于其他代码（例如历史粒子状态）读取
-  if (!window.STATE) {
-    window.STATE = { 知识: 0.4, 情感: 0.3, 经济: 0.3 };
+  var state = { know: 0.5, action: 0.5 };
+
+  function t(k, fallback) {
+    if (typeof window.t !== 'function') return fallback || '';
+    var v = window.t(k);
+    return v || fallback || '';
   }
 
-  function getSliderValue() {
+  function _getVal(id, def) {
+    var s = document.getElementById(id);
+    if (!s) return def;
+    var v = parseFloat(s.value || String(def * 100));
+    if (isNaN(v)) v = def * 100;
+    return Math.max(0, Math.min(100, v)) / 100;
+  }
+  function _setVal(id, v) {
+    var s = document.getElementById(id);
+    if (s) s.value = String(Math.round(v * 100));
+  }
+  function _setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = String(Math.round(val * 100));
+  }
+  function _accentRgb() {
     try {
-      var s1 = document.getElementById('knowledgeSlider');
-      if (s1) return parseFloat(s1.value || '0') / 100;
-      var s2 = document.getElementById('balanceSlider');
-      if (s2) return parseFloat(s2.value || '0') / 100;
+      var v = getComputedStyle(document.body).getPropertyValue('--accent-rgb').trim();
+      if (v) return v;
     } catch (_) {}
-    return 0.4;
+    return '99, 102, 241';
   }
 
-  function setSliderValue(v) {
-    var s1 = document.getElementById('knowledgeSlider');
-    if (s1) s1.value = String(Math.round(v * 100));
-    var s2 = document.getElementById('balanceSlider');
-    if (s2) s2.value = String(Math.round(v * 100));
-  }
+  function renderState() {
+    var k = state.know, a = state.action;
+    _setText('knowledgeValue', k);
+    _setText('actionValue', a);
 
-  function _pickLabel(key) {
-    if (typeof window.t !== 'function') return key;
-    var translated = window.t('state.' + key);
-    return translated || key;
-  }
-
-  function _pickStatusText(k) {
-    if (typeof window.t !== 'function') return '';
-    if (k < 0.2)  return window.t('balance.status.risk') || '';
-    if (k <= 0.6) return window.t('balance.status.balanced') || '';
-    return window.t('balance.status.bias') || '';
-  }
-
-  function _updateAttrs() {
-    var S = window.STATE;
-    var k = (S.知识 || 0);
-    var e = (S.情感 || 0);
-    var j = (S.经济 || 0);
-    var list = document.querySelectorAll('[data-progress]');
-    for (var i = 0; i < list.length; i++) {
-      var el = list[i];
-      var dim = el.getAttribute('data-progress');
-      var val = 0;
-      if (dim === 'knowledge' || dim === '知识') val = k;
-      else if (dim === 'emotion' || dim === '情感') val = e;
-      else if (dim === 'economy' || dim === '经济') val = j;
-      else if (dim === 'total' || dim === '总和') val = k + e + j;
-      el.setAttribute('data-progress-value', val.toFixed(2));
-      el.style.setProperty('--bar', Math.max(0, Math.min(1, val)));
+    // 杠杆：横梁倾斜角度。k=a → 0°；k=1 → -12°；a=1 → +12°
+    var beam = document.getElementById('balanceBeam');
+    if (beam) {
+      var deg = (a - k) * 12;
+      beam.style.setProperty('transform', 'rotate(' + deg.toFixed(2) + 'deg)');
+      beam.style.setProperty('transform-origin', '50% 50%');
+      beam.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
     }
-  }
-
-  function updateBalance() {
-    var k = getSliderValue();
-    if (isNaN(k)) k = 0.4;
-    var rest = 1 - k;
-    var emo = (Math.round(rest * 0.5 * 100)) / 100;
-    var eco = (Math.round((rest - emo) * 100)) / 100;
-    // 保证三者之和精确为 1（0.00 精度）
-    if (Math.abs(k + emo + eco - 1) > 1e-6) {
-      eco = Math.round((1 - k - emo) * 100) / 100;
+    // 砝码位置：左侧知砝码随知强度左移，右侧行砝码随行强度右移
+    var wk = document.getElementById('weightKnow');
+    if (wk) {
+      var x = (-k * 70).toFixed(1);
+      wk.style.setProperty('transform', 'translateX(' + x + '%)');
+      wk.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
     }
-    window.STATE = { 知识: k, 情感: emo, 经济: eco };
-
-    var b = document.getElementById('balanceSummary');
-    if (b && typeof window.t === 'function') {
-      var kk = _pickLabel('知识');
-      var ee = _pickLabel('情感');
-      var jj = _pickLabel('经济');
-      var status = _pickStatusText(k);
-      var tmpl = window.t('balance.summary');
+    var wa = document.getElementById('weightAction');
+    if (wa) {
+      var x2 = (a * 70).toFixed(1);
+      wa.style.setProperty('transform', 'translateX(' + x2 + '%)');
+      wa.style.setProperty('transition', 'transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)');
+    }
+    // 状态文案
+    var st = document.getElementById('balanceState');
+    if (st) {
+      var sum = k + a;
+      var key;
+      if (sum === 0) key = 'balance.equal';
+      else if (Math.abs(k - a) < 0.08) key = 'balance.equal';
+      else if (k > a) {
+        key = (k - a > 0.35) ? 'balance.knowHeavy' : 'balance.knowMore';
+      } else {
+        key = (a - k > 0.35) ? 'balance.actionHeavy' : 'balance.actionMore';
+      }
+      var labelKnow = t('balance.know', '知');
+      var labelAct  = t('balance.action', '行');
+      var tmpl = t(key, '');
       if (tmpl) {
-        b.textContent = tmpl
-          .replace('{知识}', kk).replace('{情感}', ee).replace('{经济}', jj)
-          .replace('{k}', Math.round(k * 100))
-          .replace('{e}', Math.round(emo * 100))
-          .replace('{j}', Math.round(eco * 100))
-          .replace('{status}', status);
+        st.textContent = tmpl
+          .replace('{k}', String(Math.round(k * 100)))
+          .replace('{a}', String(Math.round(a * 100)))
+          .replace('{知}', labelKnow)
+          .replace('{行}', labelAct);
       }
     }
-
-    _updateAttrs();
   }
-  window.updateBalance = updateBalance;
 
-  function updateBalanceColors() {
-    try {
-      var cs = getComputedStyle(document.body);
-      var acc = cs.getPropertyValue('--accent-rgb').trim() || '99, 102, 241';
-      var bar = cs.getPropertyValue('--bar-track-rgb').trim() || '229, 231, 235';
-
-      // 滑块轨道
-      var styles = document.querySelectorAll('[data-progress-style]');
-      for (var i = 0; i < styles.length; i++) {
-        styles[i].style.setProperty('--accent-rgb', acc);
-        styles[i].style.setProperty('--bar-track-rgb', bar);
-      }
-
-      // 滑块拇指
-      var sliders = document.querySelectorAll('input[type="range"].knowledge-slider');
-      for (var j = 0; j < sliders.length; j++) {
-        var s = sliders[j];
-        s.style.setProperty('--thumb-bg', 'rgb(' + acc + ')');
-      }
-
-      var summary = document.getElementById('balanceSummary');
-      if (summary) summary.style.color = 'rgb(' + acc + ')';
-    } catch (_) {}
+  function _updateVisualColors() {
+    var acc = _accentRgb();
+    var accentColor = 'rgb(' + acc + ')';
+    ['weightKnow','weightAction'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.style.setProperty('background', accentColor);
+      el.style.setProperty('box-shadow', '0 4px 14px rgba(' + acc + ', 0.35)');
+    });
+    var beam = document.getElementById('balanceBeam');
+    if (beam) beam.style.setProperty('background', accentColor);
+    var st = document.getElementById('balanceState');
+    if (st) st.style.setProperty('color', accentColor);
+    var rangeLabels = document.querySelectorAll('.balance-section input[type="range"]');
+    for (var i = 0; i < rangeLabels.length; i++) {
+      rangeLabels[i].style.setProperty('--thumb-bg', accentColor);
+    }
   }
-  window.updateBalanceColors = updateBalanceColors;
 
-  // ---------- 监听滑块输入 ----------
-  function _wireSlider(id) {
+  function syncFromSliders() {
+    state.know   = _getVal('knowledgeSlider', 0.5);
+    state.action = _getVal('actionSlider',    0.5);
+    renderState();
+  }
+
+  function _wire(id) {
     var s = document.getElementById(id);
     if (!s) return;
-    s.addEventListener('input', function () {
-      updateBalance();
-    });
+    s.addEventListener('input', syncFromSliders);
   }
 
   function init() {
-    _wireSlider('knowledgeSlider');
-    _wireSlider('balanceSlider');
-    setSliderValue(window.STATE.知识 || 0.4);
-    updateBalance();
-    updateBalanceColors();
+    _setVal('knowledgeSlider', state.know);
+    _setVal('actionSlider',    state.action);
+    _wire('knowledgeSlider');
+    _wire('actionSlider');
+    syncFromSliders();
+    _updateVisualColors();
 
-    // 主题切换后重新取颜色
     document.addEventListener('themeChanged', function () {
-      updateBalanceColors();
+      _updateVisualColors();
     });
   }
+
+  window._resetBalanceText = renderState;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

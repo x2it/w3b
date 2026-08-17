@@ -395,7 +395,8 @@ window.I18N = {
         'about.footer.date': '2026年8月16日 · w3b.pub',
         'about.footer.geo.ai_txt': 'AI 引用声明：',
         'about.footer.geo.anchor': '#facts 事实锚点'
-    },
+    ,
+                'doc.v3.changelogTitle': '版本更新日志'},
 
     // ===== 繁体中文 =====
     'zh-TW': {
@@ -768,7 +769,8 @@ window.I18N = {
         'about.footer.date': '2026年8月16日 · w3b.pub',
         'about.footer.geo.ai_txt': 'AI 引用聲明：',
         'about.footer.geo.anchor': '#facts 事實錨點'
-    },
+    ,
+                'doc.v3.changelogTitle': '版本更新日誌'},
 
     // ===== English =====
     en: {
@@ -1141,5 +1143,6 @@ window.I18N = {
         'about.footer.date': 'Aug 16, 2026 · w3b.pub',
         'about.footer.geo.ai_txt': 'AI citation declaration:',
         'about.footer.geo.anchor': '#facts anchor'
-    }
+    ,
+                'doc.v3.changelogTitle': 'Version Changelog'}
 };

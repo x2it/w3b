@@ -42,7 +42,7 @@
   // ---------- canvas 尺寸 ----------
   function updateCanvasSize() {
     section = document.getElementById('particle-section');
-    canvas  = document.getElementById('particleCanvas');
+    canvas  = document.getElementById('particle-canvas');
     if (!section || !canvas) return false;
     var rect = section.getBoundingClientRect();
     containerWidth  = Math.max(1, rect.width);

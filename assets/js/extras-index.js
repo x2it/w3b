@@ -2,14 +2,14 @@
  * extras-index.js  —  index.html 专属的小交互集合
  *
  *   1) AI金句 打字机效果（多语言切换会自动重置）
- *   2) 邮箱一键复制
- *   3) 回到顶部按钮
- *   4) Banner 视差滚动 + 导航栏背景毛玻璃
- *   5) 侧边导航展开 / 折叠
- *   6) 章节锚点（nav-dots + scrollspy）
- *   7) 时间线滚入淡入（IntersectionObserver）
- *   8) 移动端禁用双击缩放（no-double-tap-zoom 元素）
- *   9) 链接 hover 下划线动画（已通过 CSS 完成，此处为兼容降级）
+ *   2) 邮箱一键复制（若DOM存在）
+ *   3) 回到顶部按钮（若DOM存在）
+ *   4) Banner 视差滚动 + 导航栏背景毛玻璃（若DOM存在）
+ *   5) 侧边导航展开 / 折叠（若DOM存在）
+ *   6) 章节锚点（nav-dots + scrollspy）（若DOM存在）
+ *   7) 时间线滚入淡入（IntersectionObserver）（若DOM存在）
+ *   8) 移动端禁用双击缩放（no-double-tap-zoom 元素）（若DOM存在）
+ *   9) 博客 & 作品集 iframe 初始化 + 降级卡片切换（v3.0.0 新增）
  * ==================================================================== */
 (function () {
   'use strict';
@@ -37,7 +37,7 @@
     if (typewriterTimer) { clearInterval(typewriterTimer); typewriterTimer = null; }
     twIndex = 0; twChar = 0;
     twQuotes = _loadQuotes();
-    var el = document.getElementById('aiTypewriter');
+    var el = document.getElementById('ai-quote-text') || document.getElementById('aiTypewriter');
     if (el) el.textContent = '';
     _tickTypewriter();
   }
@@ -45,7 +45,7 @@
 
   function _tickTypewriter() {
     if (!twQuotes.length) return;
-    var el = document.getElementById('aiTypewriter');
+    var el = document.getElementById('ai-quote-text') || document.getElementById('aiTypewriter');
     if (!el) return;
     var cur = twQuotes[twIndex] || '';
     if (twChar <= cur.length) {
@@ -123,7 +123,7 @@
 
   // ---------- 4. 视差 / 导航栏毛玻璃 ----------
   function _wireParallax() {
-    var ban = document.getElementById('banner');
+    var ban = document.getElementById('banner') || document.querySelector('header');
     var nav = document.getElementById('mainNav');
     if (!ban && !nav) return;
     window.addEventListener('scroll', function () {
@@ -214,6 +214,91 @@
   }
 
   // ==================================================================
+  // 9) v3.0.0 新增：博客 & 作品集 iframe 初始化 + 降级卡片切换
+  //
+  // 降级策略：
+  //   - iframe 加载成功（收到子页 postMessage 含 height 数据）→ 展示 iframe
+  //   - iframe 加载失败（onerror 触发，或 12 秒超时未收到 resize）→ 展示 fallback
+  // ==================================================================
+  function _showFallback(containerId, fallbackId) {
+    var c = document.getElementById(containerId);
+    var f = document.getElementById(fallbackId);
+    if (c) {
+      c.classList.remove('iframe-loading');
+      c.style.display = 'none';
+    }
+    if (f) {
+      f.style.setProperty('display', 'flex');
+      f.style.setProperty('opacity', '1');
+    }
+  }
+  function _showIframe(containerId, fallbackId, iframeEl, height) {
+    var c = document.getElementById(containerId);
+    var f = document.getElementById(fallbackId);
+    if (iframeEl && typeof height === 'number' && height > 0) {
+      iframeEl.style.height = Math.floor(height) + 'px';
+      iframeEl.height = String(Math.floor(height));
+    }
+    if (c) {
+      c.classList.remove('iframe-loading');
+      c.style.display = '';
+    }
+    if (f) {
+      f.style.setProperty('display', 'none');
+      f.style.setProperty('opacity', '0');
+    }
+  }
+
+  function _wireIframeEmbed(iframeId, containerId, fallbackId, timeoutMs) {
+    var iframe = document.getElementById(iframeId);
+    if (!iframe) return;
+    var resolved = false;
+    var timer = setTimeout(function () {
+      if (resolved) return;
+      resolved = true;
+      _showFallback(containerId, fallbackId);
+    }, timeoutMs || 12000);
+
+    // iframe 自身错误 → 降级
+    iframe.addEventListener('error', function () {
+      if (resolved) return;
+      resolved = true;
+      clearTimeout(timer);
+      _showFallback(containerId, fallbackId);
+    });
+
+    // postMessage 子域告知高度 → 视为成功
+    // 数据格式兼容多种：{event:'resize', data:{height:N}} / {type:'height', value:N} / {height:N}
+    window.addEventListener('message', function (ev) {
+      if (resolved) return;
+      try {
+        var src = (iframe.contentWindow && iframe.contentWindow === ev.source);
+        if (!src) return; // 只接受该 iframe 发来的消息
+        var d = ev.data || {};
+        if (typeof d === 'string') {
+          try { d = JSON.parse(d); } catch (_) { d = {}; }
+        }
+        var h = null;
+        if (d && typeof d.height === 'number') h = d.height;
+        else if (d && d.data && typeof d.data.height === 'number') h = d.data.height;
+        else if (d && typeof d.value === 'number' && (d.type === 'height' || typeof d.event === 'undefined')) h = d.value;
+        if (h && h > 0 && h < 30000) {
+          resolved = true;
+          clearTimeout(timer);
+          _showIframe(containerId, fallbackId, iframe, h);
+        }
+      } catch (_) {}
+    });
+  }
+
+  function _initEmbeds() {
+    _wireIframeEmbed('blog-embed',    'blogIframeContainer',    'blogFallback',    12000);
+    _wireIframeEmbed('qmeow-embed',  'projectIframeContainer', 'projectFallback', 15000);
+    // 同时给 fallback 容器默认加上 flex 样式占位，避免加载过程中出现塌陷；
+    // 但在 0ms 时先只保持现状（iframe-container 是 iframe-loading 隐藏），等超时再切换
+  }
+
+  // ==================================================================
   // 初始化
   // ==================================================================
   function init() {
@@ -225,6 +310,7 @@
     _wireNavDots();
     _wireTimelineObserver();
     _wireNoDoubleTapZoom();
+    _initEmbeds();
   }
 
   if (document.readyState === 'loading') {

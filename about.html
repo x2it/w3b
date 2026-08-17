@@ -524,7 +524,7 @@
             <div class="doc-section-label" data-i18n="about.ch2.label">Chapter 02</div>
             <h2 id="ch2-title" data-i18n="about.ch2.title">技术架构</h2>
 
-            <h3 data-i18n="about.ch2.s1.title">2.1 文件结构</h3>
+            <h3 id="file-structure-v3" data-i18n="about.ch2.s1.title">2.1 文件结构</h3>
             <div class="doc-table-wrap">
                 <table>
                     <thead>
@@ -545,7 +545,18 @@
                         <tr><td><code>README.md</code></td><td data-i18n-html="about.ch2.s1.td12">仓库 README，项目概览 / 亮点 / 技术栈 / 7 主题 × 3 家族表 / 部署流程</td></tr>
                         <tr><td><code>CNAME</code></td><td data-i18n-html="about.ch2.s1.td8">GitHub Pages 自定义域名配置</td></tr>
                         <tr><td><code>.gitignore</code></td><td data-i18n-html="about.ch2.s1.td9">Git 忽略规则（排除 node_modules、系统文件等）</td></tr>
-                    </tbody>
+                    
+                        <tr><td><code>assets/js/theme.js</code></td><td>主题切换核心：从 CSS 计算值读变量同步到 :root，<strong>消除 THEME_VARS 双份维护</strong>；七主题 × 三色温家族切换、缓存强调色、减少 prefers-reduced-motion 动画</td></tr>
+                        <tr><td><code>assets/js/i18n-init.js</code></td><td>三语初始化：自动识别浏览器语言（zh / zh-TW / en）、语言菜单下拉切换、data-i18n* 属性翻译、JSON-LD inLanguage 同步</td></tr>
+                        <tr><td><code>assets/js/particles.js</code></td><td>四模式粒子画布（秩序 / 发散 / 聚焦 / AI 神经网络）；<strong>移动端粒子数降至桌面 45%</strong>、visibilitychange 暂停 rAF、颜色全局缓存</td></tr>
+                        <tr><td><code>assets/js/balance.js</code></td><td>知识 / 情感 / 经济 三维平衡条：滑杆读数、状态文案、进度条颜色跟随主题强调色</td></tr>
+                        <tr><td><code>assets/js/extras-index.js</code></td><td>首页杂项：AI金句打字机、邮箱一键复制、回到顶部按钮、Banner 视差、侧栏导航、章节锚点 scrollspy、时间线滚入淡入</td></tr>
+                        <tr><td><code>assets/js/extras-about.js</code></td><td>文档页杂项：侧目录高亮（scrollspy）、代码块复制按钮、头图视差</td></tr>
+                        <tr><td><code>scripts/check_i18n_keys.js</code></td><td>三语 key 对齐校验（zh / zh-TW / en 共 343 个 key 集合完全一致）+ 281 个 HTML data-i18n 引用合法性</td></tr>
+                        <tr><td><code>scripts/check_jsonld.js</code></td><td>JSON-LD 结构化数据校验：@context/schema.org、@type、inLanguage、HTML lang 一致性</td></tr>
+                        <tr><td><code>scripts/check_sitemap.js</code></td><td>sitemap.xml 结构校验：XML 良构、namespace、&lt;loc&gt; 绝对 URL / &lt;lastmod&gt; 日期 / &lt;changefreq&gt; 枚举 / &lt;priority&gt; 范围</td></tr>
+                        <tr><td><code>scripts/check_node_syntax.js</code></td><td>对 assets/js/ 与 scripts/ 下全部非压缩 JS 执行 <code>node --check</code> 语法检查</td></tr>
+                        <tr><td><code>.github/workflows/validate.yml</code></td><td>GitHub Actions 流水线：每次 push 到 main / 创建 PR 时，自动串行执行上方四项校验</td></tr></tbody>
                 </table>
             </div>
 
@@ -562,7 +573,18 @@
                     </tbody>
                 </table>
             </div>
-        </section>
+        
+            <hr class="doc-divider-sub">
+
+            <h3 id="tech-architecture-v3">2.3 架构设计要点（v3.0.0 新增）</h3>
+            <ul>
+              <li><strong>CSS 唯一真相源：</strong>主题颜色与字体仅在 style.css <code>:root</code> + <code>.x-mode</code> 中声明；<code>theme.js</code> 用 <code>getComputedStyle</code> 读取后写回 <code>:root</code>，不再维护 JS 常量 <code>THEME_VARS</code> 副本，改色/改主题只改 CSS。</li>
+              <li><strong>JS 模块化 script defer：内联脚本 → 模块化 defer：</strong>原 index.html 单页即含 1100+ 行内联 IIFE（主题 + i18n + 粒子 + 平衡 + 打字机 + 杂项）。v3.0.0 按职责切为 6 个 JS 模块，全部用 <code>&lt;script defer&gt;</code> 加载，首屏 HTML 解析与执行互不阻塞。</li>
+              <li><strong>性能预算 &amp; 移动端关怀：</strong>粒子系统在窄屏（768px 以下）粒子数降为桌面 45%；<code>visibilitychange</code> 切换到后台立即取消 rAF，节省 CPU/电量；所有动画遵从 <code>prefers-reduced-motion</code>，为眩晕症用户自动降级。</li>
+              <li><strong>GEO + SEO + A11y 三保险：</strong>robots.txt 覆盖 13 种 AI 爬虫；<code>/ai.txt</code> 发布引用条款与事实锚点；JSON-LD 结构化数据随语言切换；每个页面含 SkipLink、ARIA 标签、<code>role=</code> 语义化，键盘可达。</li>
+              <li><strong>回归防线（CI）：</strong>每次 push / PR 自动跑「i18n key 对齐 · JSON-LD · sitemap · 全部 JS 语法」四项检查，防止新增翻译漏 key、结构化数据破坏等回归。</li>
+            </ul>
+</section>
 
         <hr class="doc-divider">
 
@@ -743,7 +765,37 @@
         </div>
     </div>
     </article><!-- /GEO article doc-article -->
-    </main><!-- /#content -->
+    
+        <hr class="doc-divider">
+
+        <section id="changelog" aria-labelledby="changelog-title" class="doc-section">
+            <div class="doc-section-label">Changelog</div>
+            <h2 id="changelog-title" data-i18n="doc.v3.changelogTitle">版本更新日志</h2>
+            <ol class="changelog-list">
+                <li>
+                    <strong>v3.0.0 终极版</strong>
+                    <span class="changelog-date">2026-08-17</span>
+                    <ul>
+                        <li>消除 THEME_VARS 双份维护：主题颜色只在 CSS 定义，<code>theme.js</code> 运行时读取 CSS 变量，JS / CSS 两处常量永不漂移。</li>
+                        <li>内联脚本大拆分：index / about / 404 三页原内联脚本拆分为 6 个模块（theme / i18n-init / particles / balance / extras-index / extras-about）。</li>
+                        <li>粒子系统性能优化：移动端粒子数缩减为桌面 45%；页面隐藏时暂停 <code>requestAnimationFrame</code>；颜色使用全局缓存避免每帧 DOM 查询。</li>
+                        <li>引入 GitHub Actions CI：4 个校验脚本（i18n-keys / JSON-LD / sitemap / node-syntax）+ <code>validate.yml</code> 工作流，每次 PR/Push 自动执行。</li>
+                        <li>全局版本升级：<code>style.css</code>、<code>i18n.js</code> 及全部新模块引用的缓存参数统一为 <code>?v=3.0.0</code>。</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>v2.5.1</strong>
+                    <span class="changelog-date">2026-08-16</span>
+                    <ul>
+                        <li>七主题 × 三色温家族样式完整落地（含书卷、哲学、森林、晨光、星夜、商务、黄昏）。</li>
+                        <li>GEO 准备工作：robots.txt 加 13 种 AI 爬虫白名单、发布 <code>/ai.txt</code> + <code>/ads.txt</code> 引用条款。</li>
+                        <li>三语切换（简中 / 繁中 / English）339 个 key 对齐 + HTML data-i18n 属性全覆盖。</li>
+                        <li>响应式断点（PC / Pad / Mobile）+ 侧目录 / SkipLink / ARIA 可访问性完善。</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+</main><!-- /#content -->
 
     
 
