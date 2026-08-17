@@ -361,11 +361,16 @@
   // 嵌入内容主题同步（v3.2.1：让 iframe 明暗跟随 w3b 主题切换）
   // ==================================================================
   function _getEmbedThemeMode() {
-    // 暗主题：文字偏浅色，需要 iframe 也用 dark
+    // 暗主题：body class 命中 dark/green/orange → 暗家族
     var darkModes = ['dark-mode', 'green-mode', 'orange-mode'];
+    var lightModes = ['light-mode', 'blue-mode', 'purple-mode', 'teal-mode', 'cyan-mode'];
     var cls = document.body.className || '';
     for (var i = 0; i < darkModes.length; i++) {
       if (cls.indexOf(darkModes[i]) !== -1) return 'dark';
+    }
+    // 显式亮家族直接返回 light（避免 system 主题下 CSS 变量解析错误）
+    for (var j = 0; j < lightModes.length; j++) {
+      if (cls.indexOf(lightModes[j]) !== -1) return 'light';
     }
     // 其他所有（default/blue/purple/teal/cyan）都走 light
     // 也兜底用 CSS 变量 --text-color 亮度判断，防止遗漏
@@ -422,33 +427,39 @@
   }
 
   function _updateProjectFilterMode() {
-    // 项目嵌入（output.coze.site）忽略所有 theme 参数，浏览器 iframe filter 也不生效
-    // 所以暗主题下：给容器加一个深色 padding 边框，让亮色项目卡片有"嵌入暗色展示"的感觉
+    // 项目嵌入（output.coze.site）忽略所有 theme 参数，浏览器跨域 iframe filter 也无效
+    // 策略：暗主题时用容器"画框"，让亮色 Coze 卡片在暗背景里有清晰的嵌入感
     var darkMode = _getEmbedThemeMode() === 'dark';
     var wrapper = document.getElementById('projectIframeContainer');
     var iframe = document.getElementById('qmeow-embed');
     if (wrapper) {
       if (darkMode) {
-        wrapper.style.padding = '0.5rem';
+        // v3.2.6: 更明显的包裹——padding 翻倍 + accent 边框 + 双层阴影（外投影 + 内发光）
+        wrapper.style.padding = '1rem';
         wrapper.style.borderRadius = 'var(--radius-md, 14px)';
         wrapper.style.background = 'var(--card-bg, #181828)';
-        wrapper.style.boxShadow = 'var(--card-shadow, none)';
-        wrapper.style.margin = '1rem auto';
+        wrapper.style.border = '1px solid rgba(var(--accent-rgb), 0.25)';
+        wrapper.style.boxShadow =
+          'var(--card-shadow), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(var(--accent-rgb), 0.06)';
+        wrapper.style.margin = '1.25rem auto';
+        // data-attr 给 CSS ::after 伪元素用（暗色 overlay 柔和 Coze 卡片白对比度）
+        wrapper.setAttribute('data-embed-theme', 'dark');
       } else {
         wrapper.style.padding = '';
         wrapper.style.borderRadius = '';
         wrapper.style.background = '';
+        wrapper.style.border = '';
         wrapper.style.boxShadow = '';
         wrapper.style.margin = '';
+        wrapper.removeAttribute('data-embed-theme');
       }
     }
     if (iframe) {
-      // 清理无效的 filter 设置（浏览器对 iframe 跨域不生效，留着反而误导调试）
       iframe.style.filter = '';
       iframe.style.isolation = '';
       iframe.style.background = darkMode ? '#ffffff' : 'var(--card-bg, #fff)';
       if (darkMode) {
-        iframe.style.borderRadius = 'calc(var(--radius-md, 14px) - 4px)';
+        iframe.style.borderRadius = 'calc(var(--radius-md, 14px) - 6px)';
       } else {
         iframe.style.borderRadius = '';
       }
