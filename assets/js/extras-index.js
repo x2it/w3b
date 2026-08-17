@@ -221,7 +221,7 @@
   //   - iframe onload：保持显示；若有 postMessage 高度则动态调整
   //   - iframe onerror / 超时：隐藏 iframe，显示 fallback 金句卡片
   // ==================================================================
-  var EMBED_DEFAULT_H = 520;
+  var EMBED_DEFAULT_H = 900;
 
   function _showFallback(containerId, fallbackId) {
     var c = document.getElementById(containerId);
