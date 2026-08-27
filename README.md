@@ -10,7 +10,7 @@
 |------|----|
 | 站点地址 | https://w3b.pub |
 | 内容版本 | **v3.2.0**（fact:version / 文档封面 / changelog） |
-| 静态资源缓存版本 | **v3.3.2**（CSS / JS 引用的 `?v=x.y.z`，用于强制 CDN 刷新） |
+| 静态资源缓存版本 | **v3.3.3**（CSS / JS 引用的 `?v=x.y.z`，用于强制 CDN 刷新） |
 | 最近更新 | **2026-08-27**（fact:updated_on / citation_publication_date / JSON-LD dateModified） |
 | 部署方式 | GitHub Pages（`main` 分支）→ 自定义域名 w3b.pub · Cloudflare CDN 边缘缓存 5–10 分钟 |
 | 构建 | **零构建纯静态站**（原生 HTML / CSS / JS，ES5 兼容） |
