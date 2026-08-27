@@ -214,14 +214,60 @@
   }
 
   // ==================================================================
-  // 9) v3.0.2 博客 & 作品集 iframe 初始化 + 降级卡片切换
+  // 9) v3.0.2 → v3.3.0 博客 & 作品集 iframe 初始化 + 降级卡片切换
   //
   // 策略（默认显示 iframe，失败才降级）：
-  //   - 启动时：iframe 容器默认可见 + 给 iframe 一个默认高度
-  //   - iframe onload：保持显示；若有 postMessage 高度则动态调整
+  //   - 启动时：iframe 容器默认可见 + 根据「嵌入类型 × 当前视口」给出合适默认高度
+  //   - iframe onload：保持显示；若有 postMessage 高度，会夹紧到 [minH, maxH] 区间后再应用
   //   - iframe onerror / 超时：隐藏 iframe，显示 fallback 金句卡片
+  //   - window resize：移动端/桌面端切换时，按新视口重新夹紧高度（避免横→竖屏切后博客被截断）
   // ==================================================================
-  var EMBED_DEFAULT_H = 1000;
+
+  /* ---------- 响应式断点与嵌入配置 ---------- */
+  var MOBILE_BP  = 768;   // ≤768px 视为移动端（与 CSS 保持一致）
+  var SMALL_BP   = 480;   // ≤480px 小屏
+  function _isMobile() {
+    return window.innerWidth <= MOBILE_BP;
+  }
+  function _isSmall() {
+    return window.innerWidth <= SMALL_BP;
+  }
+
+  /* 每个嵌入的默认高度区间（单位 px）。
+     博客（10 篇竖向卡片）：
+       桌面：标题 + 10 行卡片 + 间距 ≈ 1300，留缓冲给未来新增
+       移动：窄屏卡片更高，1500～1600 才能完整显示 10 篇
+     项目（12 宫格卡片 + 入口按钮）：
+       桌面：3 列 × 4 行实际只需 ~650，封顶 820 避免底下大片空白
+       移动：用户反馈「够用」，保持 950 左右 */
+  var EMBED_CONFIGS = {
+    'blog-embed': {
+      desktop: { default: 1400, min: 1300, max: 2400 },
+      mobile:  { default: 1600, min: 1500, max: 2600 },
+      small:   { default: 1650, min: 1550, max: 2700 }
+    },
+    'qmeow-embed': {
+      desktop: { default: 780,  min: 620,  max: 820 },
+      mobile:  { default: 950,  min: 850,  max: 1200 },
+      small:   { default: 980,  min: 880,  max: 1250 }
+    }
+  };
+
+  function _getEmbedCfg(iframeId) {
+    var cfg = EMBED_CONFIGS[iframeId];
+    if (!cfg) return { default: 1000, min: 500, max: 30000 };
+    if (_isSmall())  return cfg.small;
+    if (_isMobile()) return cfg.mobile;
+    return cfg.desktop;
+  }
+
+  function _clampHeight(iframeId, h) {
+    var cfg = _getEmbedCfg(iframeId);
+    var x = (typeof h === 'number' && h > 0) ? Math.floor(h) : cfg.default;
+    if (x < cfg.min) x = cfg.min;
+    if (x > cfg.max) x = cfg.max;
+    return x;
+  }
 
   function _showFallback(containerId, fallbackId) {
     var c = document.getElementById(containerId);
@@ -242,16 +288,22 @@
       f.style.setProperty('min-height', '300px', 'important');
     }
   }
-  function _showIframe(containerId, fallbackId, iframeEl, height) {
+  /* 当前每个 iframe 最后一次成功应用的「原始高度」（来自 postMessage），
+     resize 时用它重新夹紧，避免桌面↔移动断点切换后高度不对。 */
+  var _lastHeights = {}; // { iframeId: rawHeightNumber }
+  var _resizeTimer = null;
+
+  function _applyHeightNow(iframeId, containerId, fallbackId, iframe, rawHeight) {
     var c = document.getElementById(containerId);
     var f = document.getElementById(fallbackId);
-    if (iframeEl) {
-      var h = (typeof height === 'number' && height > 0) ? Math.floor(height) : EMBED_DEFAULT_H;
-      iframeEl.style.height = h + 'px';
-      iframeEl.style.width = '100%';
-      iframeEl.style.display = 'block';
-      iframeEl.style.visibility = 'visible';
-      iframeEl.height = String(h);
+    // 夹紧：结合当前视口与该嵌入的区间配置
+    var h = _clampHeight(iframeId, rawHeight);
+    if (iframe) {
+      iframe.style.height = h + 'px';
+      iframe.style.width = '100%';
+      iframe.style.display = 'block';
+      iframe.style.visibility = 'visible';
+      iframe.height = String(h);
     }
     if (c) {
       c.classList.remove('iframe-loading');
@@ -266,6 +318,12 @@
     }
   }
 
+  function _showIframe(containerId, fallbackId, iframe, height) {
+    // 兼容旧调用：这里无法拿到 iframeId，退化为「拿到 iframe 元素 id」即可
+    var iframeId = iframe ? iframe.id : '';
+    _applyHeightNow(iframeId, containerId, fallbackId, iframe, height);
+  }
+
   function _wireIframeEmbed(iframeId, containerId, fallbackId, timeoutMs) {
     var iframe = document.getElementById(iframeId);
     if (!iframe) return;
@@ -274,6 +332,11 @@
     var container = document.getElementById(containerId);
     var fallbackEl = document.getElementById(fallbackId);
     var timer = null;
+
+    // 在「注册阶段」就给 iframe 一个合理的初始值（避免首屏 HTML 里写死的 1000 先闪出不合适高度）
+    // 不过这一步只是保险，真正的初始值仍然在 _initNow 里统一设置。
+    var initCfg = _getEmbedCfg(iframeId);
+    _lastHeights[iframeId] = initCfg.default;
 
     function _startTimer() {
       if (timer) clearTimeout(timer);
@@ -286,9 +349,11 @@
 
     function _initNow() {
       if (resolved) return;
-      // 先给 iframe 一个默认高度，避免高度为 0 的空窗期
-      iframe.style.height = EMBED_DEFAULT_H + 'px';
-      iframe.height = String(EMBED_DEFAULT_H);
+      var cfg = _getEmbedCfg(iframeId);
+      // 按当前视口取默认高度
+      iframe.style.height = cfg.default + 'px';
+      iframe.height = String(cfg.default);
+      _lastHeights[iframeId] = cfg.default;
       if (container) {
         container.classList.remove('iframe-loading');
         container.style.display = '';
@@ -325,12 +390,11 @@
     });
 
     // iframe 加载成功 → 视为成功，不再触发超时降级
-    // （Coze 页面能渲染就不算失败，postMessage 即使没收到也有默认高度）
     iframe.addEventListener('load', function () {
       if (resolved) return;
       resolved = true;
       if (timer) clearTimeout(timer);
-      // 保持可见，继续等待 postMessage 来调整高度（如果发来的话）
+      // 没收到 postMessage 也没关系：我们已经在 _initNow 给了合适默认高度
     });
 
     // 监听 postMessage 获取动态高度（独立于 resolved 状态，始终响应）
@@ -351,10 +415,30 @@
             resolved = true;
             if (timer) clearTimeout(timer);
           }
-          _showIframe(containerId, fallbackId, iframe, h);
+          // 记录「原始高度」，resize 时会用它重新夹紧
+          _lastHeights[iframeId] = h;
+          _applyHeightNow(iframeId, containerId, fallbackId, iframe, h);
         }
       } catch (_) {}
     });
+
+    // resize 防抖：桌面↔移动端跨越断点时，用最后一次 rawHeight 重新夹紧
+    window.addEventListener('resize', function () {
+      if (_resizeTimer) clearTimeout(_resizeTimer);
+      _resizeTimer = setTimeout(function () {
+        var raw = _lastHeights[iframeId];
+        if (typeof raw !== 'number') return;
+        // 只在「跨过断点」时重算，避免高频像素级抖动
+        var need = false;
+        var _lastBreakpoint = iframe._bp || '';
+        var cur = _isSmall() ? 'S' : (_isMobile() ? 'M' : 'D');
+        if (_lastBreakpoint && _lastBreakpoint !== cur) need = true;
+        iframe._bp = cur;
+        if (need || !iframe.style.height) {
+          _applyHeightNow(iframeId, containerId, fallbackId, iframe, raw);
+        }
+      }, 120);
+    }, { passive: true });
   }
 
   // ==================================================================

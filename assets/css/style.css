@@ -514,6 +514,38 @@ body {
                 background 0.45s ease, border-radius 0.45s ease;
 }
 
+/* ===== v3.3.0 嵌入高度兜底（与 extras-index.js 的 EMBED_CONFIGS 对齐） ===== */
+/* 博客：10 篇竖向卡片 → 必须足够高，否则底部被截断 */
+#blog-embed {
+    min-height: 1300px;
+    /* 不加 max，允许未来文章增加时更高 */
+}
+/* 项目：桌面端 3 列布局实际不需要 1000px，用 max-height 「削掉」底部空白 */
+#qmeow-embed {
+    max-height: 820px;
+    min-height: 620px;
+}
+
+/* —— 响应式覆写 —— */
+@media (max-width: 768px) {
+    #blog-embed {
+        min-height: 1500px;
+    }
+    #qmeow-embed {
+        max-height: none;     /* 移动端不要封顶，用户说够用 */
+        min-height: 850px;
+    }
+}
+@media (max-width: 480px) {
+    #blog-embed {
+        min-height: 1550px;
+    }
+    #qmeow-embed {
+        max-height: none;
+        min-height: 880px;
+    }
+}
+
 .iframe-container {
     will-change: background, padding;
     transition: all 0.45s var(--ease-out-expo);
