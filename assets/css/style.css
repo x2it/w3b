@@ -515,10 +515,11 @@ body {
 }
 
 /* ===== v3.3.0 嵌入高度兜底（与 extras-index.js 的 EMBED_CONFIGS 对齐） ===== */
-/* 博客：10 篇竖向卡片 → 必须足够高，否则底部被截断 */
+/* 博客（10 篇竖向卡片 + header + CTA）：min-height 贴近真实渲染高度，不要再设过高——
+   上游 Coze 卡片真实高度≈桌面 950 / 手机 1200 / 小屏 1250，min 比真实多 0-50 即可 */
 #blog-embed {
-    min-height: 1300px;
-    /* 不加 max，允许未来文章增加时更高 */
+    min-height: 950px;
+    /* 不加 max，允许未来文章增加时更高，由 JS clamp(max=1500) 兜底 */
 }
 /* 项目：桌面端 3 列布局实际不需要 1000px，用 max-height 「削掉」底部空白 */
 #qmeow-embed {
@@ -529,7 +530,7 @@ body {
 /* —— 响应式覆写 —— */
 @media (max-width: 768px) {
     #blog-embed {
-        min-height: 1500px;
+        min-height: 1200px;
     }
     #qmeow-embed {
         max-height: none;     /* 移动端不要封顶，用户说够用 */
@@ -538,7 +539,7 @@ body {
 }
 @media (max-width: 480px) {
     #blog-embed {
-        min-height: 1550px;
+        min-height: 1250px;
     }
     #qmeow-embed {
         max-height: none;
