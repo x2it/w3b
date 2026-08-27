@@ -116,7 +116,7 @@
         "keywords": ["知行工作室","项目说明书","理会","践行","知行合一","w3b","GEO","Generative Engine Optimization","主题切换","家族风格","7主题","3家族","三语","简中","繁中","英文"]
     }
     </script>
-    <link rel="stylesheet" href="/assets/css/style.css?v=3.3.2">
+    <link rel="stylesheet" href="/assets/css/style.css?v=3.3.3">
     <link rel="alternate" type="application/rss+xml" title="知行工作室 · 更新日志" href="/feed.xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -389,7 +389,7 @@
 
 /* about页面特有样式 · Theme toggle 样式：见 /assets/css/style.css */
     </style>
-    <script src="/assets/js/i18n.js?v=3.3.2"></script>
+    <script src="/assets/js/i18n.js?v=3.3.3"></script>
 </head>
 <body>
     <a href="#facts" class="skip-link" data-i18n="about.skip_to_facts">跳过导航直达项目事实概览</a>
@@ -629,7 +629,7 @@
             </ul>
             <p data-i18n-html="about.ch3.s4.p3"><strong>加载策略（v3.3.0 响应式高度）</strong>：首屏不会「一直等到 postMessage 才显示」，而是按 <em>嵌入类型 × 当前视口</em> 先给出足够高的默认值，收到消息后再夹紧到 [minH, maxH] 区间重设。通信与容错流程：</p>
             <ul>
-                <li data-i18n-html="about.ch3.s4.li7"><code>IntersectionObserver</code>（rootMargin=200px）命中后立即显容器并按当前断点设默认高度：博客 1070/1280/1330、项目 780/950/980（桌面/≤768px/≤480px）。<strong>不会先隐藏等消息</strong>。</li>
+                <li data-i18n-html="about.ch3.s4.li7"><code>IntersectionObserver</code>（rootMargin=200px）命中后立即显容器并按当前断点设默认高度：博客 1100/1250/1300、项目 780/950/980（桌面/≤768px/≤480px）。<strong>不会先隐藏等消息</strong>。</li>
                 <li data-i18n-html="about.ch3.s4.li8">支持三种 postMessage 协议：<code>{height}</code>、<code>{data:{height}}</code>、<code>{type:'height',value}</code>；收到后先夹紧（min≤h≤max）再应用到 <code>iframe.style.height</code> 与 <code>height</code> 属性。</li>
                 <li data-i18n-html="about.ch3.s4.li9">桌面端项目区封顶 820px（削掉 3 列 4 行卡片下方大片空白）；移动端项目区与博客两端 <strong>均不封顶</strong>，内容多时允许更高。</li>
                 <li data-i18n-html="about.ch3.s4.li10">超时由 800ms 改为 <strong>20s</strong>。20 秒或 <code>iframe.onerror</code> 仍未收到成功信号时，降级为「知行节律」时段金句卡片。</li>
@@ -776,12 +776,12 @@
                     <strong>v3.2.0（内容版本） / v3.3.0（资源缓存版本）</strong>
                     <span class="changelog-date">2026-08-27</span>
                     <ul>
-                        <li><strong>嵌入响应式高度重构（核心修复）：</strong>废弃 <code>EMBED_DEFAULT_H=1000</code> 单值，改为按 <em>嵌入 ID × 断点 D/M/S</em> 独立配置 default/min/max：博客 1070/1280/1330（夹紧 970-1780，历经三轮微调：桌面+20 手机-20 定稿），项目 780/950/980（桌面端封顶 820 消除空白）。</li>
-                        <li><strong>桌面端博客不再截断、项目不再留白（三轮校准）：</strong>初版 1000→1400 + 移动端 min-height 兜底 1500+，解决 10 篇竖向卡片底部被切；二轮按用户截图实测发现兜底过高反撑空白，下调至博客 default=1050/1300/1350、min=950/1200/1250；三轮用户要求「桌面+20、手机-20」再次精准微调至 1070/1280/1330、min=970/1180/1230。项目桌面 max-height=820，削掉「访问 7喵仓库」按钮→联系交流之间的 180px 空白。</li>
+                        <li><strong>嵌入响应式高度重构（核心修复）：</strong>废弃 <code>EMBED_DEFAULT_H=1000</code> 单值，改为按 <em>嵌入 ID × 断点 D/M/S</em> 独立配置 default/min/max：博客 1100/1250/1300（夹紧 1000-1750，历经四轮微调：桌面+20+30 手机-20-30 定稿），项目 780/950/980（桌面端封顶 820 消除空白）。</li>
+                        <li><strong>桌面端博客不再截断、项目不再留白（四轮校准）：</strong>初版 1000→1400 + 移动端 min-height 兜底 1500+，解决 10 篇竖向卡片底部被切；二轮按用户截图实测发现兜底过高反撑空白，下调至博客 default=1050/1300/1350、min=950/1200/1250；三轮用户要求「桌面+20、手机-20」再次精准微调至 1070/1280/1330、min=970/1180/1230；四轮用户要求「桌面再加 30、手机再减 30」终至 1100/1250/1300、min=1000/1150/1200。项目桌面 max-height=820，削掉「访问 7喵仓库」按钮→联系交流之间的 180px 空白。</li>
                         <li><strong>高度夹紧 + 跨断点重算：</strong>postMessage 收到 <code>{height}</code> 后先夹紧再应用；resize 防抖 120ms 跨断点重算，横竖屏切换高度不再漂移。</li>
                         <li><strong>超时时长修正：</strong>800ms → 20000ms（20s），与实际 <code>_wireIframeEmbed</code> 代码一致；<code>IntersectionObserver</code> 懒启动，避免首屏无意义计时。</li>
                         <li><strong>文档全面对齐代码：</strong>about.html fact/JSON-LD 升为 v3.2.0，更新日期 2026-08-27；三语 i18n 字典中说明书版本号、日期、ch3.s4 加载策略描述全部改写为 v3.3.0 实际行为；README 嵌入章节、目录结构、维护小贴士补全。</li>
-                        <li><strong>三页静态资源缓存版本：</strong>index.html / about.html / 404.html 所有 <code>&lt;link&gt;</code> / <code>&lt;script defer&gt;</code> 引用的 <code>?v=</code> 统一升为 <code>v=3.3.0</code>；二轮博客高度实测下调 bump 至 <code>v=3.3.1</code>；三轮「桌面+20 手机-20」微调 bump 至 <code>v=3.3.2</code>。</li>
+                        <li><strong>三页静态资源缓存版本：</strong>index.html / about.html / 404.html 所有 <code>&lt;link&gt;</code> / <code>&lt;script defer&gt;</code> 引用的 <code>?v=</code> 统一升为 <code>v=3.3.0</code>；二轮博客高度实测下调 bump 至 <code>v=3.3.1</code>；三轮「桌面+20 手机-20」微调 bump 至 <code>v=3.3.2</code>；四轮「桌面+30 手机-30」微调 bump 至 <code>v=3.3.3</code>。</li>
                     </ul>
                 </li>
                 <li>
@@ -821,9 +821,9 @@
 
     
 
-  <script src="assets/js/i18n-init.js?v=3.3.2" defer></script>
-  <script src="assets/js/theme.js?v=3.3.2" defer></script>
-  <script src="assets/js/balance.js?v=3.3.2" defer></script>
-  <script src="assets/js/extras-about.js?v=3.3.2" defer></script>
+  <script src="assets/js/i18n-init.js?v=3.3.3" defer></script>
+  <script src="assets/js/theme.js?v=3.3.3" defer></script>
+  <script src="assets/js/balance.js?v=3.3.3" defer></script>
+  <script src="assets/js/extras-about.js?v=3.3.3" defer></script>
 </body>
 </html>
