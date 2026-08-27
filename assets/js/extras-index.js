@@ -235,41 +235,56 @@
 
   /* 每个嵌入的默认高度区间（单位 px）。
      博客（10 篇竖向卡片 + header + CTA）：
-       桌面：标题 + 10 卡 + 间距 + CTA ≈ 950（实测截图），兜底 min=1025 / 默认=1125 / 允许上游+新增到 1575（六轮微调：桌面+20+30+20+5 手机-20-30-30-20 定稿）
-       移动 ≤768：窄屏卡片更高 ≈ 1200，min=1100 / 默认=1200 / 上限 1600
-       小屏 ≤480：文字更紧凑但换行稍多 ≈ 1250，min=1150 / 默认=1250 / 上限 1700
-       ⚠ min 设为「真实高度 + 50」即可，不能再高——min 超过真实值会硬撑出底部空白
+       · min / default / max：「自然值」，不掺杂任何用户手动微调偏好，贴近真实渲染高度 ± buffer
+         （min 用于 clamp 下界，default 用于 timeout 兜底基础，max 用于 clamp 上界）
+       · bias：用户累计手动校准偏移（像素），**始终叠加在 clamp 后的最终高度上**
+         （无论上游 postMessage 发不发、发什么，bias 保证用户每次 ± 调参都有真实像素变化）
+         六轮累计：R3(+20/-20/-20) + R4(+30/-30/-30) + R5(+20/-30/-30) + R6(+5/-20/-20)
+         → desktop = +75；mobile = -100；small = -100
+       · 真实渲染参考（截图数卡）：桌面≈950；手机≤768≈1200；小屏≤480≈1250
      项目（12 宫格卡片 + 入口按钮）：
        桌面：3 列 × 4 行实际只需 ~650，封顶 820 避免底下大片空白
-       移动：用户反馈「够用」，保持 950 左右 */
+       移动：用户反馈「够用」，保持 950 左右（bias=0） */
   var EMBED_CONFIGS = {
     'blog-embed': {
-      desktop: { default: 1125, min: 1025, max: 1575 },
-      mobile:  { default: 1200, min: 1100, max: 1600 },
-      small:   { default: 1250, min: 1150, max: 1700 }
+      desktop: { default: 1000, min:  950, max: 1500, bias:  +75 },
+      mobile:  { default: 1200, min: 1150, max: 1700, bias: -100 },
+      small:   { default: 1250, min: 1200, max: 1750, bias: -100 }
     },
     'qmeow-embed': {
-      desktop: { default: 780,  min: 620,  max: 820 },
-      mobile:  { default: 950,  min: 850,  max: 1200 },
-      small:   { default: 980,  min: 880,  max: 1250 }
+      desktop: { default: 780,  min: 620,  max: 820,  bias: 0 },
+      mobile:  { default: 950,  min: 850,  max: 1200, bias: 0 },
+      small:   { default: 980,  min: 880,  max: 1250, bias: 0 }
     }
   };
 
   function _getEmbedCfg(iframeId) {
     var cfg = EMBED_CONFIGS[iframeId];
-    if (!cfg) return { default: 1000, min: 500, max: 30000 };
+    if (!cfg) return { default: 1000, min: 500, max: 30000, bias: 0 };
     if (_isSmall())  return cfg.small;
     if (_isMobile()) return cfg.mobile;
     return cfg.desktop;
   }
 
-  function _clampHeight(iframeId, h) {
+  function _finalHeight(iframeId, rawHeight) {
     var cfg = _getEmbedCfg(iframeId);
-    var x = (typeof h === 'number' && h > 0) ? Math.floor(h) : cfg.default;
+    var bias = (typeof cfg.bias === 'number') ? cfg.bias : 0;
+    // 1) 先按自然 min / max 夹紧上游 raw（或兜底 default）
+    var x = (typeof rawHeight === 'number' && rawHeight > 0) ? Math.floor(rawHeight) : cfg.default;
     if (x < cfg.min) x = cfg.min;
     if (x > cfg.max) x = cfg.max;
-    return x;
+    // 2) 叠加用户校准 bias（这一步才是前几轮「±调参」真正生效的位置）
+    x += bias;
+    // 3) 宽松边界：bias 后允许越过自然 max 最多 +500、允许低于自然 min 最多 -100
+    //    （避免用户极端偏好时又被自然边界吞掉）
+    var lo = cfg.min - 100; if (lo < 200) lo = 200;
+    var hi = cfg.max + 500;
+    if (x < lo) x = lo;
+    if (x > hi) x = hi;
+    return { h: x, cfg: cfg, bias: bias };
   }
+  // 兼容旧调用（之前直接叫 _clampHeight 的位置）
+  function _clampHeight(iframeId, h) { return _finalHeight(iframeId, h).h; }
 
   function _showFallback(containerId, fallbackId) {
     var c = document.getElementById(containerId);
@@ -298,13 +313,19 @@
   function _applyHeightNow(iframeId, containerId, fallbackId, iframe, rawHeight) {
     var c = document.getElementById(containerId);
     var f = document.getElementById(fallbackId);
-    // 夹紧：结合当前视口与该嵌入的区间配置
-    var h = _clampHeight(iframeId, rawHeight);
+    // 先 clamp（自然区间）→ 再叠加 bias（用户校准）→ 再宽松限界
+    var r = _finalHeight(iframeId, rawHeight);
+    var h = r.h;
+    var cfg = r.cfg;
+    var effectiveMin = cfg.min + (r.bias || 0);
+    if (effectiveMin < 200) effectiveMin = 200;
     if (iframe) {
       iframe.style.height = h + 'px';
       iframe.style.width = '100%';
       iframe.style.display = 'block';
       iframe.style.visibility = 'visible';
+      // 强制 inline minHeight 覆盖 style.css，消除「样式表没生效 / 优先级被吞」的疑虑
+      iframe.style.minHeight = effectiveMin + 'px';
       iframe.height = String(h);
     }
     if (c) {
@@ -351,11 +372,16 @@
 
     function _initNow() {
       if (resolved) return;
-      var cfg = _getEmbedCfg(iframeId);
-      // 按当前视口取默认高度
-      iframe.style.height = cfg.default + 'px';
-      iframe.height = String(cfg.default);
-      _lastHeights[iframeId] = cfg.default;
+      var r = _finalHeight(iframeId); // 不传 raw → 用 cfg.default + bias
+      var h = r.h;
+      var cfg = r.cfg;
+      var effectiveMin = cfg.min + (r.bias || 0);
+      if (effectiveMin < 200) effectiveMin = 200;
+      // 按当前视口取默认高度 + 用户校准 bias
+      iframe.style.height = h + 'px';
+      iframe.style.minHeight = effectiveMin + 'px'; // inline 覆盖 CSS，手感立即
+      iframe.height = String(h);
+      _lastHeights[iframeId] = cfg.default; // 保留"未收 postMessage"状态的基准，resize 时再叠 bias
       if (container) {
         container.classList.remove('iframe-loading');
         container.style.display = '';
