@@ -19,8 +19,7 @@ jobs:
       - name: 安装 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 24
 
       # 当前项目无依赖；但预留 install 步骤，方便未来加 npm 包
       - name: 依赖（占位）
