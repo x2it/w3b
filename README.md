@@ -6,6 +6,17 @@
 
 🌐 **在线访问：https://w3b.pub**
 
+| 项目 | 值 |
+|------|----|
+| 站点地址 | https://w3b.pub |
+| 内容版本 | **v3.2.0**（fact:version / 文档封面 / changelog） |
+| 静态资源缓存版本 | **v3.3.0**（CSS / JS 引用的 `?v=x.y.z`，用于强制 CDN 刷新） |
+| 最近更新 | **2026-08-27**（fact:updated_on / citation_publication_date / JSON-LD dateModified） |
+| 部署方式 | GitHub Pages（`main` 分支）→ 自定义域名 w3b.pub · Cloudflare CDN 边缘缓存 5–10 分钟 |
+| 构建 | **零构建纯静态站**（原生 HTML / CSS / JS，ES5 兼容） |
+| 维护邮箱 | support@w3b.pub |
+| 仓库地址 | https://github.com/x2it/w3b |
+
 ---
 
 ## 核心理念
@@ -68,9 +79,17 @@
 - 每个时段 6 条金句，随机显示 3 条
 
 ### 🧩 嵌入内容（博文随笔 & 笃行成果）
-- iframe 嵌入外部 Coze 站点，自动同步最新数据
-- `postMessage` 精确高度通信，一步到位显示避免跳变
-- 800ms 超时兜底默认高度，`?debug=1` 调试模式
+- iframe 嵌入外部 Coze 站点，自动同步最新数据（博文 10 条列表 / 7喵仓库 3×4 成果网格）
+- **v3.3.0 响应式高度体系**（`assets/js/extras-index.js` + `style.css` 双重兜底）：
+  - `IntersectionObserver` 懒初始化：容器进入视口 200px 内才开始 20s 超时计时，避免首屏 race
+  - 按 **3 档断点**（desktop > 768 / mobile ≤ 768 / small ≤ 480）分别配置 `{default, min, max}` 高度
+  - postMessage 兼容 3 种上游格式：`{height}` / `{data:{height}}` / `{type:'height', value}`
+  - 收到上游高度先写入 `_lastHeights{}` 再 **clamp(min/max)** 后赋值；桌面 7喵仓库被强制 ≤820px 消除底部大空白
+  - `window.resize` 120ms debounce：当浏览器宽度跨越断点（S↔M↔D）时，拿最近一次收到的 raw 高度按新断点 re-clamp
+  - CSS `min-height` / `max-height` 媒体查询兜底（`style.css` L517-547），JS 未执行时视觉也基本正确
+  - **20000ms（20s）超时兜底**：若上游未发 postMessage，自动使用当前断点的 `default` 高度（博客 D=1400 / M=1600 / S=1650；7喵 D=780 / M=950 / S=980）
+- iframe 加载失败时自动降级显示「知行节律」按时段（晨间理会/午后践行/晚间合一/深夜静思）× 6 条随机 3 金句卡片
+- `?debug=1` 调试模式：控制台打印每次 postMessage 原始值、断点切换、clamp 结果
 - 滚动联动粒子：到博文切换"有序"，到成果切换"专注"
 
 ### 🔤 AI 金句打字机
@@ -104,18 +123,32 @@
 
 ```
 w3b/
-├── index.html              # 首页：粒子/时间线/平衡器/嵌入/页脚
-├── about.html              # 项目说明书（7 章完整文档）
-├── 404.html                # 404 错误页（noindex）
+├── index.html              # 首页：粒子 / 时间线 / 平衡器 / 嵌入（博客+7喵仓库）/ 页脚
+├── about.html              # 项目说明书（7 章完整文档 + 10 条事实 + changelog）
+├── 404.html                # 404 错误页（noindex，3 页统一引用 ?v=x.y.z 资源版本）
 ├── assets/
-│   ├── css/style.css       # 通用样式 + 主题变量体系 + 响应式
-│   └── js/i18n.js          # 多语言翻译字典（zh / zh-TW / en）
+│   ├── css/style.css       # 通用样式 + 主题变量体系 + 响应式 + v3.3.0 嵌入高度兜底（L517-547）
+│   └── js/
+│       ├── i18n.js         # 多语言翻译字典（zh-CN / zh-TW / en，3 语 key 对齐）
+│       ├── i18n-init.js    # 首次访问语言检测 + <html lang/hreflang> 注入
+│       ├── theme.js        # 主题 × 家族双层切换（7 主题 / 3 家族）+ localStorage 持久化
+│       ├── particles.js    # Canvas 粒子系统（4 思维状态：有序 / 发散 / 专注 / AI 神经网络）
+│       ├── balance.js      # 知行平衡器：双滑块 + 天平倾斜动画
+│       ├── extras-index.js # 首页专属：IntersectionObserver 懒嵌入 + 3 档断点 clamp + resize debounce
+│       └── extras-about.js # about.html 专属：锚点滚动、时间线展开、金句打字机
+├── scripts/                # 提交 / 发布前校验脚本（node 运行）
+│   ├── check_node_syntax.js    # 对所有 .js 做 node --check
+│   ├── check_i18n_keys.js      # 三语 i18n key 集一致性 + HTML data-i18n 引用有效性
+│   ├── check_jsonld.js         # about.html JSON-LD / fact meta 版本与缓存号一致性
+│   └── check_sitemap.js        # sitemap.xml hreflang × 3 locale × URL 完整性
+├── .github/
+│   └── workflows/validate.yml  # CI：push / PR 时跑 scripts/* 四项校验
 ├── favicon.svg             # 站点图标
-├── robots.txt              # 爬虫规则（含 AI 爬虫白名单）
-├── sitemap.xml             # 站点地图（hreflang 三语）
+├── robots.txt              # 爬虫规则（含 13 种 AI 爬虫白名单）
+├── sitemap.xml             # 站点地图（hreflang 三语交替）
 ├── feed.xml                # RSS 订阅源（更新日志）
 ├── ai.txt                  # GEO 生成式引擎声明（IAF 标准）
-├── ads.txt                 # IAB 广告授权 + AI 引用声明
+├── ads.txt                 # IAB 广告授权 + AI 引用条款
 ├── CNAME                   # GitHub Pages 自定义域名：w3b.pub
 ├── .gitignore              # Git 忽略规则
 └── README.md               # 本文件
@@ -128,14 +161,25 @@ w3b/
 本项目为纯静态站点，**无需构建步骤**：
 
 1. 代码推送到 `x2it/w3b` 仓库的 `main` 分支
-2. GitHub Pages 自动构建并部署到 **https://w3b.pub**
-3. CDN 缓存约 5-10 分钟刷新；修改 `style.css` 后需更新 `index.html` / `about.html` 中的 `?v=xxx` 版本参数强制刷新
+2. `.github/workflows/validate.yml` 自动运行 4 项校验（JS 语法 / i18n key / JSON-LD / sitemap）
+3. 通过后 GitHub Pages 自动构建并部署到 **https://w3b.pub**
+4. Cloudflare CDN 缓存约 5-10 分钟刷新；修改 CSS / JS 后务必同步更新 `index.html` / `about.html` / `404.html` 中的 `?v=x.y.z` 版本号（三页保持一致，当前 `?v=3.3.0`）
 
 ### 维护小贴士
 
-- iframe 在收到 `embed-height` postMessage 后才显示，网络错误时保持降级金句卡片
-- 每次修改 CSS 务必同步更新 `<link>` 引用的版本号，否则旧缓存可能造成样式错乱
-- 金句字典集中在 `assets/js/i18n.js`，增删金句只需编辑一个文件
+- **嵌入高度体系（v3.3.0 起）不使用固定像素常量了**；调高度直接改 2 处即可：
+  1. JS 层：`assets/js/extras-index.js` 顶部的 `EMBED_CONFIGS` 字典（按 iframeId × desktop/mobile/small 三档分别改 `default / min / max`）
+  2. CSS 层：`assets/css/style.css` 末尾 L517-547 的 `#blog-embed` / `#qmeow-embed` min/max-height 媒体查询，和 JS 保持一致
+- **超时兜底已从 800ms 改为 20000ms（20s）**，并改为 IntersectionObserver 懒触发（元素进入 200px 根距才开始计时），不会在首屏空状态就提前超时；Coze 上游偶尔需要 5–12s 才发 `postMessage`
+- 上游 `postMessage` 支持 3 种格式：`{height}` / `{data:{height}}` / `{type:'height', value}`，任何一种都会被存入 `_lastHeights[id]` 并 clamp 后应用
+- iframe 加载失败（网络错误 / Content-Security-Policy 拒绝）→ 自动降级显示「知行节律」按时间段的 3 张金句卡片，不空白
+- **每次修改 CSS / JS（哪怕 1 行）必须同步 bump 3 个页面的 `?v=` 查询参数**：
+  - `<link rel="stylesheet" href="assets/css/style.css?v=...">`
+  - 所有 `<script defer src="assets/js/*.js?v=...">`
+  - 当前 3 页：`index.html` / `about.html` / `404.html` 必须完全一致（目前为 `?v=3.3.0`）
+- 每次修改 `about.html` 里的版本 / changelog / 新增章节后，同步更新 **4 处叙事以保持一致**（本 README 顶部信息表、`about.html` 静态 fallback 文本、`assets/js/i18n.js` 三语 `about.*` 字典、`fact:*` meta / JSON-LD）
+- 提交前本地运行：`node scripts/check_node_syntax.js` + `node scripts/check_i18n_keys.js` + `node scripts/check_jsonld.js` + `node scripts/check_sitemap.js`，全部通过再 push
+- 金句字典 / i18n 文案集中在 `assets/js/i18n.js`，增删金句或翻译只需编辑这一个文件
 
 ---
 
