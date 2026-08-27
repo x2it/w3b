@@ -1,0 +1,324 @@
+From 397316e0c50ba5ef3d57001b919840a053a61b1a Mon Sep 17 00:00:00 2001
+From: x2it <x2it@users.noreply.github.com>
+Date: Thu, 27 Aug 2026 15:45:09 +0000
+Subject: [PATCH] =?UTF-8?q?fix(embed):=20=E5=93=8D=E5=BA=94=E5=BC=8F?=
+ =?UTF-8?q?=E5=B5=8C=E5=85=A5=E9=AB=98=E5=BA=A6=E4=BC=98=E5=8C=96=20v3.3.0?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- 博客区块：桌面端默认高度 1000→1400（夹紧 1300-2400），
+  移动端 ≤768px 默认 1600（夹紧 1500-2600），≤480px 默认 1650
+  解决电脑/手机端底部文章被截断的问题（CSS 同步加 min-height 兜底）
+- 项目区块：桌面端默认高度 1000→780（max=820，削掉 3×4 卡片下方大片空白）
+  移动端仍保持 950/980，不封顶（用户反馈移动端高度够用）
+- extras-index.js：重构 EMBED_DEFAULT_H → 按 iframeId × 断点（D/M/S）独立配置
+  新增 _clampHeight、resize 跨断点重新夹紧、原始高度 _lastHeights 持久化
+- 资源版本号 v=3.2.7→v=3.3.0 强制清缓存；fact:version 3.1.5→3.2.0，updated_on 更新至今日
+
+(cherry picked from commit a1a082fbcbd6376aaef5d8a918df3a86f0299955)
+---
+ assets/css/style.css      |  32 ++++++++++
+ assets/js/extras-index.js | 120 ++++++++++++++++++++++++++++++++------
+ index.html                |  22 +++----
+ 3 files changed, 145 insertions(+), 29 deletions(-)
+
+diff --git a/assets/css/style.css b/assets/css/style.css
+index a77a31e..2aeb4d7 100644
+--- a/assets/css/style.css
++++ b/assets/css/style.css
+@@ -514,6 +514,38 @@ body {
+                 background 0.45s ease, border-radius 0.45s ease;
+ }
+ 
++/* ===== v3.3.0 嵌入高度兜底（与 extras-index.js 的 EMBED_CONFIGS 对齐） ===== */
++/* 博客：10 篇竖向卡片 → 必须足够高，否则底部被截断 */
++#blog-embed {
++    min-height: 1300px;
++    /* 不加 max，允许未来文章增加时更高 */
++}
++/* 项目：桌面端 3 列布局实际不需要 1000px，用 max-height 「削掉」底部空白 */
++#qmeow-embed {
++    max-height: 820px;
++    min-height: 620px;
++}
++
++/* —— 响应式覆写 —— */
++@media (max-width: 768px) {
++    #blog-embed {
++        min-height: 1500px;
++    }
++    #qmeow-embed {
++        max-height: none;     /* 移动端不要封顶，用户说够用 */
++        min-height: 850px;
++    }
++}
++@media (max-width: 480px) {
++    #blog-embed {
++        min-height: 1550px;
++    }
++    #qmeow-embed {
++        max-height: none;
++        min-height: 880px;
++    }
++}
++
+ .iframe-container {
+     will-change: background, padding;
+     transition: all 0.45s var(--ease-out-expo);
+diff --git a/assets/js/extras-index.js b/assets/js/extras-index.js
+index 49462db..e79873b 100644
+--- a/assets/js/extras-index.js
++++ b/assets/js/extras-index.js
+@@ -214,14 +214,60 @@
+   }
+ 
+   // ==================================================================
+-  // 9) v3.0.2 博客 & 作品集 iframe 初始化 + 降级卡片切换
++  // 9) v3.0.2 → v3.3.0 博客 & 作品集 iframe 初始化 + 降级卡片切换
+   //
+   // 策略（默认显示 iframe，失败才降级）：
+-  //   - 启动时：iframe 容器默认可见 + 给 iframe 一个默认高度
+-  //   - iframe onload：保持显示；若有 postMessage 高度则动态调整
++  //   - 启动时：iframe 容器默认可见 + 根据「嵌入类型 × 当前视口」给出合适默认高度
++  //   - iframe onload：保持显示；若有 postMessage 高度，会夹紧到 [minH, maxH] 区间后再应用
+   //   - iframe onerror / 超时：隐藏 iframe，显示 fallback 金句卡片
++  //   - window resize：移动端/桌面端切换时，按新视口重新夹紧高度（避免横→竖屏切后博客被截断）
+   // ==================================================================
+-  var EMBED_DEFAULT_H = 1000;
++
++  /* ---------- 响应式断点与嵌入配置 ---------- */
++  var MOBILE_BP  = 768;   // ≤768px 视为移动端（与 CSS 保持一致）
++  var SMALL_BP   = 480;   // ≤480px 小屏
++  function _isMobile() {
++    return window.innerWidth <= MOBILE_BP;
++  }
++  function _isSmall() {
++    return window.innerWidth <= SMALL_BP;
++  }
++
++  /* 每个嵌入的默认高度区间（单位 px）。
++     博客（10 篇竖向卡片）：
++       桌面：标题 + 10 行卡片 + 间距 ≈ 1300，留缓冲给未来新增
++       移动：窄屏卡片更高，1500～1600 才能完整显示 10 篇
++     项目（12 宫格卡片 + 入口按钮）：
++       桌面：3 列 × 4 行实际只需 ~650，封顶 820 避免底下大片空白
++       移动：用户反馈「够用」，保持 950 左右 */
++  var EMBED_CONFIGS = {
++    'blog-embed': {
++      desktop: { default: 1400, min: 1300, max: 2400 },
++      mobile:  { default: 1600, min: 1500, max: 2600 },
++      small:   { default: 1650, min: 1550, max: 2700 }
++    },
++    'qmeow-embed': {
++      desktop: { default: 780,  min: 620,  max: 820 },
++      mobile:  { default: 950,  min: 850,  max: 1200 },
++      small:   { default: 980,  min: 880,  max: 1250 }
++    }
++  };
++
++  function _getEmbedCfg(iframeId) {
++    var cfg = EMBED_CONFIGS[iframeId];
++    if (!cfg) return { default: 1000, min: 500, max: 30000 };
++    if (_isSmall())  return cfg.small;
++    if (_isMobile()) return cfg.mobile;
++    return cfg.desktop;
++  }
++
++  function _clampHeight(iframeId, h) {
++    var cfg = _getEmbedCfg(iframeId);
++    var x = (typeof h === 'number' && h > 0) ? Math.floor(h) : cfg.default;
++    if (x < cfg.min) x = cfg.min;
++    if (x > cfg.max) x = cfg.max;
++    return x;
++  }
+ 
+   function _showFallback(containerId, fallbackId) {
+     var c = document.getElementById(containerId);
+@@ -242,16 +288,22 @@
+       f.style.setProperty('min-height', '300px', 'important');
+     }
+   }
+-  function _showIframe(containerId, fallbackId, iframeEl, height) {
++  /* 当前每个 iframe 最后一次成功应用的「原始高度」（来自 postMessage），
++     resize 时用它重新夹紧，避免桌面↔移动断点切换后高度不对。 */
++  var _lastHeights = {}; // { iframeId: rawHeightNumber }
++  var _resizeTimer = null;
++
++  function _applyHeightNow(iframeId, containerId, fallbackId, iframe, rawHeight) {
+     var c = document.getElementById(containerId);
+     var f = document.getElementById(fallbackId);
+-    if (iframeEl) {
+-      var h = (typeof height === 'number' && height > 0) ? Math.floor(height) : EMBED_DEFAULT_H;
+-      iframeEl.style.height = h + 'px';
+-      iframeEl.style.width = '100%';
+-      iframeEl.style.display = 'block';
+-      iframeEl.style.visibility = 'visible';
+-      iframeEl.height = String(h);
++    // 夹紧：结合当前视口与该嵌入的区间配置
++    var h = _clampHeight(iframeId, rawHeight);
++    if (iframe) {
++      iframe.style.height = h + 'px';
++      iframe.style.width = '100%';
++      iframe.style.display = 'block';
++      iframe.style.visibility = 'visible';
++      iframe.height = String(h);
+     }
+     if (c) {
+       c.classList.remove('iframe-loading');
+@@ -266,6 +318,12 @@
+     }
+   }
+ 
++  function _showIframe(containerId, fallbackId, iframe, height) {
++    // 兼容旧调用：这里无法拿到 iframeId，退化为「拿到 iframe 元素 id」即可
++    var iframeId = iframe ? iframe.id : '';
++    _applyHeightNow(iframeId, containerId, fallbackId, iframe, height);
++  }
++
+   function _wireIframeEmbed(iframeId, containerId, fallbackId, timeoutMs) {
+     var iframe = document.getElementById(iframeId);
+     if (!iframe) return;
+@@ -275,6 +333,11 @@
+     var fallbackEl = document.getElementById(fallbackId);
+     var timer = null;
+ 
++    // 在「注册阶段」就给 iframe 一个合理的初始值（避免首屏 HTML 里写死的 1000 先闪出不合适高度）
++    // 不过这一步只是保险，真正的初始值仍然在 _initNow 里统一设置。
++    var initCfg = _getEmbedCfg(iframeId);
++    _lastHeights[iframeId] = initCfg.default;
++
+     function _startTimer() {
+       if (timer) clearTimeout(timer);
+       timer = setTimeout(function () {
+@@ -286,9 +349,11 @@
+ 
+     function _initNow() {
+       if (resolved) return;
+-      // 先给 iframe 一个默认高度，避免高度为 0 的空窗期
+-      iframe.style.height = EMBED_DEFAULT_H + 'px';
+-      iframe.height = String(EMBED_DEFAULT_H);
++      var cfg = _getEmbedCfg(iframeId);
++      // 按当前视口取默认高度
++      iframe.style.height = cfg.default + 'px';
++      iframe.height = String(cfg.default);
++      _lastHeights[iframeId] = cfg.default;
+       if (container) {
+         container.classList.remove('iframe-loading');
+         container.style.display = '';
+@@ -325,12 +390,11 @@
+     });
+ 
+     // iframe 加载成功 → 视为成功，不再触发超时降级
+-    // （Coze 页面能渲染就不算失败，postMessage 即使没收到也有默认高度）
+     iframe.addEventListener('load', function () {
+       if (resolved) return;
+       resolved = true;
+       if (timer) clearTimeout(timer);
+-      // 保持可见，继续等待 postMessage 来调整高度（如果发来的话）
++      // 没收到 postMessage 也没关系：我们已经在 _initNow 给了合适默认高度
+     });
+ 
+     // 监听 postMessage 获取动态高度（独立于 resolved 状态，始终响应）
+@@ -351,10 +415,30 @@
+             resolved = true;
+             if (timer) clearTimeout(timer);
+           }
+-          _showIframe(containerId, fallbackId, iframe, h);
++          // 记录「原始高度」，resize 时会用它重新夹紧
++          _lastHeights[iframeId] = h;
++          _applyHeightNow(iframeId, containerId, fallbackId, iframe, h);
+         }
+       } catch (_) {}
+     });
++
++    // resize 防抖：桌面↔移动端跨越断点时，用最后一次 rawHeight 重新夹紧
++    window.addEventListener('resize', function () {
++      if (_resizeTimer) clearTimeout(_resizeTimer);
++      _resizeTimer = setTimeout(function () {
++        var raw = _lastHeights[iframeId];
++        if (typeof raw !== 'number') return;
++        // 只在「跨过断点」时重算，避免高频像素级抖动
++        var need = false;
++        var _lastBreakpoint = iframe._bp || '';
++        var cur = _isSmall() ? 'S' : (_isMobile() ? 'M' : 'D');
++        if (_lastBreakpoint && _lastBreakpoint !== cur) need = true;
++        iframe._bp = cur;
++        if (need || !iframe.style.height) {
++          _applyHeightNow(iframeId, containerId, fallbackId, iframe, raw);
++        }
++      }, 120);
++    }, { passive: true });
+   }
+ 
+   // ==================================================================
+diff --git a/index.html b/index.html
+index baac4d6..ad787c7 100644
+--- a/index.html
++++ b/index.html
+@@ -24,8 +24,8 @@
+     <!-- ===== 事实锚点（Fact Anchors / AI 抽取确定性信息直接读下面不猜） ===== -->
+     <meta property="fact:site.title.zh" content="知行工作室">
+     <meta property="fact:site.title.en" content="Zhixing Studio">
+-    <meta property="fact:version" content="3.1.5">
+-    <meta property="fact:updated_on" content="2026-08-17">
++    <meta property="fact:version" content="3.2.0">
++    <meta property="fact:updated_on" content="2026-08-27">
+     <meta property="fact:theme.count" content="7">
+     <meta property="fact:theme.families" content="3">
+     <meta property="fact:theme.family.names.zh" content="📜书卷(Classic), 🏢工作室(Studio), 🪷哲学(Philosophic)">
+@@ -114,7 +114,7 @@
+         }
+     }
+     </script>
+-    <link rel="stylesheet" href="/assets/css/style.css?v=3.2.7">
++    <link rel="stylesheet" href="/assets/css/style.css?v=3.3.0">
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="dns-prefetch" href="//fudawei.coze.site">
+@@ -122,7 +122,7 @@
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+     <link rel="alternate" type="application/rss+xml" title="知行工作室 · 更新日志" href="/feed.xml">
+-    <script src="/assets/js/i18n.js?v=3.2.7"></script>
++    <script src="/assets/js/i18n.js?v=3.3.0"></script>
+     <!-- 提前设置iframe message监听器：只记录高度数据，不操作DOM -->
+     
+ </head>
+@@ -298,7 +298,7 @@
+                     id="blog-embed"
+                     src="https://fudawei.coze.site/embed?limit=10&theme=auto"
+                     width="100%"
+-                    height="1000"
++                    height="1400"
+                     frameborder="0"
+                     scrolling="auto"
+                     title="理会 · 博文随笔"
+@@ -332,7 +332,7 @@
+                     id="qmeow-embed"
+                     src="https://output.coze.site/embed?theme=colorful&gap=12"
+                     width="100%"
+-                    height="1000"
++                    height="780"
+                     frameborder="0"
+                     scrolling="auto"
+                     referrerpolicy="no-referrer-when-downgrade"
+@@ -418,10 +418,10 @@
+ 
+     
+ 
+-  <script src="assets/js/i18n-init.js?v=3.2.7" defer></script>
+-  <script src="assets/js/theme.js?v=3.2.7" defer></script>
+-  <script src="assets/js/balance.js?v=3.2.7" defer></script>
+-  <script src="assets/js/particles.js?v=3.2.7" defer></script>
+-  <script src="assets/js/extras-index.js?v=3.2.7" defer></script>
++  <script src="assets/js/i18n-init.js?v=3.3.0" defer></script>
++  <script src="assets/js/theme.js?v=3.3.0" defer></script>
++  <script src="assets/js/balance.js?v=3.3.0" defer></script>
++  <script src="assets/js/particles.js?v=3.3.0" defer></script>
++  <script src="assets/js/extras-index.js?v=3.3.0" defer></script>
+ </body>
+ </html>
+-- 
+2.43.0
+
