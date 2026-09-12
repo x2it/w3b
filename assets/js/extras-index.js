@@ -10,6 +10,7 @@
  *   7) 时间线滚入淡入（IntersectionObserver）（若DOM存在）
  *   8) 移动端禁用双击缩放（no-double-tap-zoom 元素）（若DOM存在）
  *   9) 博客 & 作品集 iframe 初始化 + 降级卡片切换（v3.0.0 新增）
+ *  10) 订阅弹窗（v3.3.6 修复：HTML/CSS 早已存在，但 JS 从未绑定事件）
  * ==================================================================== */
 (function () {
   'use strict';
@@ -610,6 +611,75 @@
   }
 
   // ==================================================================
+  // 10) 订阅弹窗（若DOM存在）
+  // ==================================================================
+  function _wireSubscribeModal() {
+    var trigger = document.getElementById('subscribe-trigger');
+    var overlay = document.getElementById('subscribe-overlay');
+    if (!trigger || !overlay) return;
+
+    var closeBtn = document.getElementById('subscribe-close');
+    var copyBtn  = document.getElementById('subscribe-copy-btn');
+    var feedInput = document.getElementById('subscribe-feed-url');
+
+    function open() {
+      overlay.removeAttribute('hidden');
+      // 强制 reflow 后加 active 触发 CSS 过渡
+      void overlay.offsetWidth;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      // 等过渡结束再 hidden
+      setTimeout(function () { overlay.setAttribute('hidden', ''); }, 300);
+    }
+
+    // 点击「订阅」链接 → 打开弹窗（阻止 href="#" 跳转）
+    trigger.addEventListener('click', function (e) {
+      e.preventDefault();
+      open();
+    });
+
+    // 关闭按钮
+    if (closeBtn) closeBtn.addEventListener('click', close);
+
+    // 点击遮罩空白处关闭
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) close();
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('active')) close();
+    });
+
+    // 复制 RSS 链接
+    if (copyBtn && feedInput) {
+      copyBtn.addEventListener('click', function () {
+        var url = feedInput.value;
+        var done = function () {
+          var original = copyBtn.textContent;
+          copyBtn.textContent = (typeof window.t === 'function') ? window.t('subscribe.copied') : '已复制';
+          copyBtn.classList.add('copied');
+          setTimeout(function () {
+            copyBtn.textContent = original;
+            copyBtn.classList.remove('copied');
+          }, 2000);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(done).catch(function () {
+            feedInput.select(); document.execCommand('copy'); done();
+          });
+        } else {
+          feedInput.select(); document.execCommand('copy'); done();
+        }
+      });
+    }
+  }
+
+  // ==================================================================
   // 初始化
   // ==================================================================
   function init() {
@@ -622,6 +692,7 @@
     _wireTimelineObserver();
     _wireNoDoubleTapZoom();
     _initEmbeds();
+    _wireSubscribeModal();
   }
 
   if (document.readyState === 'loading') {

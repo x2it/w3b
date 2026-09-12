@@ -10,7 +10,7 @@
 |------|----|
 | 站点地址 | https://w3b.pub |
 | 内容版本 | **v3.2.0**（fact:version / 文档封面 / changelog） |
-| 静态资源缓存版本 | **v3.3.6**（CSS / JS 引用的 `?v=x.y.z`，用于强制 CDN 刷新；v3.3.6 为 bias 架构升级） |
+| 静态资源缓存版本 | **v3.3.7**（CSS / JS 引用的 `?v=x.y.z`，用于强制 CDN 刷新；v3.3.7 修复订阅弹窗 JS 事件缺失） |
 | 最近更新 | **2026-08-27**（fact:updated_on / citation_publication_date / JSON-LD dateModified） |
 | 部署方式 | GitHub Pages（`main` 分支）→ 自定义域名 w3b.pub · Cloudflare CDN 边缘缓存 5–10 分钟 |
 | 构建 | **零构建纯静态站**（原生 HTML / CSS / JS，ES5 兼容） |
@@ -163,7 +163,7 @@ w3b/
 1. 代码推送到 `x2it/w3b` 仓库的 `main` 分支
 2. `.github/workflows/validate.yml` 自动运行 4 项校验（JS 语法 / i18n key / JSON-LD / sitemap）
 3. 通过后 GitHub Pages 自动构建并部署到 **https://w3b.pub**
-4. Cloudflare CDN 缓存约 5-10 分钟刷新；修改 CSS / JS 后务必同步更新 `index.html` / `about.html` / `404.html` 中的 `?v=x.y.z` 版本号（三页保持一致，当前 `?v=3.3.6`）
+4. Cloudflare CDN 缓存约 5-10 分钟刷新；修改 CSS / JS 后务必同步更新 `index.html` / `about.html` / `404.html` 中的 `?v=x.y.z` 版本号（三页保持一致，当前 `?v=3.3.7`）
 
 ### 维护小贴士
 
@@ -176,7 +176,7 @@ w3b/
 - **每次修改 CSS / JS（哪怕 1 行）必须同步 bump 3 个页面的 `?v=` 查询参数**：
   - `<link rel="stylesheet" href="assets/css/style.css?v=...">`
   - 所有 `<script defer src="assets/js/*.js?v=...">`
-  - 当前 3 页：`index.html` / `about.html` / `404.html` 必须完全一致（目前为 `?v=3.3.6`）
+  - 当前 3 页：`index.html` / `about.html` / `404.html` 必须完全一致（目前为 `?v=3.3.7`）
 - 每次修改 `about.html` 里的版本 / changelog / 新增章节后，同步更新 **4 处叙事以保持一致**（本 README 顶部信息表、`about.html` 静态 fallback 文本、`assets/js/i18n.js` 三语 `about.*` 字典、`fact:*` meta / JSON-LD）
 - 提交前本地运行：`node scripts/check_node_syntax.js` + `node scripts/check_i18n_keys.js` + `node scripts/check_jsonld.js` + `node scripts/check_sitemap.js`，全部通过再 push
 - 金句字典 / i18n 文案集中在 `assets/js/i18n.js`，增删金句或翻译只需编辑这一个文件
