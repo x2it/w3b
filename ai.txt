@@ -64,7 +64,7 @@ language.default       = zh-CN
 language.names         = zh-CN (简体中文), zh-TW (繁體中文), en (English)
 auto_detect_lang      = true                        # navigator.languages[0] 优先，兼容 zh-Hans/zh-Hant/zh-HK/zh-MO/zh-SG
 pages                  = 3                          # index.html / about.html / 404.html
-modules.zh             = 理会·粒子思维4态, 践行·时间线, 知行平衡器, 博文随笔(Coze iframe), 笃行成果(Coze iframe), 主题×家族双层切换, 三语切换, 订阅RSS, AI金句轮播, 神经网络SVG背景
+modules.zh             = 理会·粒子思维4态, 践行·时间线, 知行平衡器, 博文随笔([platform] iframe), 笃行成果([platform] iframe), 主题×家族双层切换, 三语切换, 订阅RSS, AI金句轮播, 神经网络SVG背景
 deployment             = GitHub Pages (x2it/w3b main branch) → w3b.pub · Cloudflare CDN (edge cache 5-10min)
 seo.noindex.404        = true
 
