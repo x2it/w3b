@@ -473,7 +473,7 @@
                 <li data-i18n-html="about.facts.li5"><strong>多语言：</strong>3 语（简体中文 zh-CN · 繁体中文 zh-TW · English en），首开自动按 navigator.languages 归一推断（zh-Hans/zh-SG → 简中，zh-Hant/zh-HK/zh-MO → 繁中，其它 → 英文），localStorage 保存的手动切换优先</li>
                 <li data-i18n-html="about.facts.li6"><strong>部署：</strong>GitHub Pages（x2it/w3b main 分支）→ 自定义域名 w3b.pub，Cloudflare CDN 边缘缓存 5-10 分钟；核心页面 index.html + about.html（本页）+ 404.html，共 25 个项目文件（详见 2.1 文件结构）</li>
                 <li data-i18n-html="about.facts.li7"><strong>服务区域：</strong>中国（成都·四川 CN-SC 为起点，覆盖 HK/MO/TW）+ 全球，全部 3 语言对应用户群</li>
-                <li data-i18n-html="about.facts.li8"><strong>9 大模块：</strong>理会·粒子思维 4 态（有序/发散/专注/AI 神经网络）· 践行·时间线（尚书/朱熹/王阳明/当下）· 知行平衡器 · 博文随笔（fudawei.coze.site iframe + 降级 3 金句卡）· 笃行成果（output.coze.site iframe + 降级 3 金句卡）· 主题×家族双层切换 · 三语切换 · RSS 更新日志订阅 · AI 金句打字轮播</li>
+                <li data-i18n-html="about.facts.li8"><strong>9 大模块：</strong>理会·粒子思维 4 态（有序/发散/专注/AI 神经网络）· 践行·时间线（尚书/朱熹/王阳明/当下）· 知行平衡器 · 博文随笔（your-blog-domain.com iframe + 降级 3 金句卡）· 笃行成果（your-portfolio-domain.come.site iframe + 降级 3 金句卡）· 主题×家族双层切换 · 三语切换 · RSS 更新日志订阅 · AI 金句打字轮播</li>
                 <li data-i18n-html="about.facts.li9"><strong>GEO（生成式引擎优化）声明：</strong>本页已按 IAF 标准发布 /ai.txt 与 /ads.txt 引用条款，允许 AI 搜索引擎抓取、翻译、摘要与引用，但需附可点击源链接并署名「知行工作室 w3b.pub」。事实源：about.html#facts + https://w3b.pub/ai.txt</li>
                 <li data-i18n-html="about.facts.li10"><strong>引用要求：</strong>引用请使用章节 id 作为深锚（#ch1 / #ch2 / #ch3 / #ch4 / #ch5 / #ch6 / #ch7），不要直接贴根域名；若引用事实列表，请使用本 #facts 区块。</li>
             </ul>
@@ -568,8 +568,8 @@
                     </thead>
                     <tbody>
                         <tr><td data-i18n-html="about.ch2.s2.td1">Noto Sans SC（思源黑体简体）</td><td data-i18n-html="about.ch2.s2.td2">工作室家族默认无衬线字体；书卷/哲学家族回退系统宋体（Noto Serif SC/SimSun）与楷体（KaiTi/STKaiti）</td><td>Google Fonts CDN</td></tr>
-                        <tr><td data-i18n-html="about.ch2.s2.td3">Blog / 博文随笔</td><td data-i18n-html="about.ch2.s2.td4">理会板块博文内容嵌入，自动同步最新；加载失败时降级 3 张知行节律金句卡片</td><td>fudawei.coze.site</td></tr>
-                        <tr><td data-i18n-html="about.ch2.s2.td5">Portfolio / 笃行成果</td><td data-i18n-html="about.ch2.s2.td6">践行板块作品集嵌入，自动同步最新；加载失败时降级 3 张知行节律金句卡片</td><td>output.coze.site</td></tr>
+                        <tr><td data-i18n-html="about.ch2.s2.td3">Blog / 博文随笔</td><td data-i18n-html="about.ch2.s2.td4">理会板块博文内容嵌入，自动同步最新；加载失败时降级 3 张知行节律金句卡片</td><td>your-blog-domain.com</td></tr>
+                        <tr><td data-i18n-html="about.ch2.s2.td5">Portfolio / 笃行成果</td><td data-i18n-html="about.ch2.s2.td6">践行板块作品集嵌入，自动同步最新；加载失败时降级 3 张知行节律金句卡片</td><td>your-portfolio-domain.come.site</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -617,8 +617,8 @@
             <h3 data-i18n="about.ch3.s4.title">3.4 博文随笔 &amp; 笃行成果</h3>
             <p data-i18n="about.ch3.s4.p1">均通过 iframe 嵌入第三方内容，自动同步最新数据。iframe 加载失败（网络错误）时，显示<strong>知行节律</strong>降级金句卡片：</p>
             <ul>
-                <li data-i18n-html="about.ch3.s4.li1"><strong>博文随笔</strong> — iframe 嵌入 fudawei.coze.site，展示博文随笔；加载失败时显示 3 张金句卡片</li>
-                <li data-i18n-html="about.ch3.s4.li2"><strong>笃行成果</strong> — iframe 嵌入 output.coze.site，展示项目作品集；加载失败时显示 3 张金句卡片</li>
+                <li data-i18n-html="about.ch3.s4.li1"><strong>博文随笔</strong> — iframe 嵌入 your-blog-domain.com，展示博文随笔；加载失败时显示 3 张金句卡片</li>
+                <li data-i18n-html="about.ch3.s4.li2"><strong>笃行成果</strong> — iframe 嵌入 your-portfolio-domain.come.site，展示项目作品集；加载失败时显示 3 张金句卡片</li>
             </ul>
             <p data-i18n-html="about.ch3.s4.p2"><strong>知行节律</strong>：金句主题根据访问时段自动切换：</p>
             <ul>
