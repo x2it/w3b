@@ -73,8 +73,8 @@ seo.noindex.404        = true
 frontend             = 原生 HTML5 + CSS3 + 原生 JavaScript (ES5 兼容，无构建)
 css_architecture     = CSS Variables + body.class mode-switch + data-theme-style family-switch (13 theme vars + 6 global vars)
 fonts                = Noto Sans SC (工作室家族), Noto Serif SC / SimSun (书卷家族), KaiTi / STKaiti (哲学家族)
-cdn_resources        = Google Fonts, fudawei.coze.site (Blog iframe), output.coze.site (Portfolio iframe)
-iframe_contract      = postMessage {type:'embed-height', height:number} from *.coze.site
+cdn_resources        = Google Fonts, your-blog-domain.com (Blog iframe), your-portfolio-domain.come.site (Portfolio iframe)
+iframe_contract      = postMessage {type:'embed-height', height:number} from *.[platform].site
 seo_features         = robots.txt, sitemap.xml, feed.xml (RSS), canonical, Open Graph, Twitter Card, JSON-LD (WebSite/TechArticle), hreflang alternates (zh-CN/zh-TW/en/x-default)
 
 # [contact / social / sameAs]
