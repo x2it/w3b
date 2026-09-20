@@ -24,8 +24,9 @@
   function _loadQuotes() {
     var out = [];
     if (typeof window.t !== 'function') return out;
-    for (var i = 1; i <= 16; i++) {
-      var q = window.t('aiQuotes.q' + i);
+    // 字典键名与 i18n.js 对齐：ai.quote.0 ~ ai.quote.14（15 条，三语齐备）
+    for (var i = 0; i < 15; i++) {
+      var q = window.t('ai.quote.' + i);
       if (q) out.push(q);
     }
     return out.length ? out : [

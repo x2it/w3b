@@ -119,6 +119,12 @@
       var titleText = t(titleKey);
       if (titleText) document.title = titleText;
 
+      // 语言切换按钮短文（简体/繁体/英文），随当前语言联动
+      var langBtn = document.getElementById('langToggle');
+      if (langBtn) {
+        langBtn.textContent = currentLang === 'zh-TW' ? '繁' : (currentLang === 'en' ? 'EN' : '简');
+      }
+
       // 通知其他模块
       if (typeof window.updateBalance === 'function') window.updateBalance();
       if (typeof window._resetTypewriter === 'function') window._resetTypewriter();
