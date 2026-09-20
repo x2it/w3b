@@ -61,11 +61,25 @@
 
   function _startTypewriter() {
     twQuotes = _loadQuotes();
-    _tickTypewriter();
-    typewriterTimer = setInterval(function () {
-      if (document.hidden) return;
-      _tickTypewriter();
-    }, 180);
+    // Wait for fonts to load before starting typewriter
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function() {
+        _tickTypewriter();
+        typewriterTimer = setInterval(function () {
+          if (document.hidden) return;
+          _tickTypewriter();
+        }, 180);
+      });
+    } else {
+      // Fallback for browsers without FontFaceSet
+      setTimeout(function() {
+        _tickTypewriter();
+        typewriterTimer = setInterval(function () {
+          if (document.hidden) return;
+          _tickTypewriter();
+        }, 180);
+      }, 800);
+    }
   }
 
   // ---------- 2. 邮箱复制 ----------
