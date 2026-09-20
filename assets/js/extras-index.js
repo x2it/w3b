@@ -42,6 +42,11 @@
     var el = document.getElementById('ai-quote-text') || document.getElementById('aiTypewriter');
     if (el) el.textContent = '';
     _tickTypewriter();
+    // 重新启动 interval，让打字机在新语言下继续连续打字
+    typewriterTimer = setInterval(function () {
+      if (document.hidden) return;
+      _tickTypewriter();
+    }, 180);
   }
   window._resetTypewriter = _resetTypewriter;
 
