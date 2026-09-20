@@ -1,0 +1,24 @@
+[submodule "repos/Relay"]
+	path = repos/Relay
+	url = https://github.com/x2it/Relay.git
+[submodule "repos/TMA"]
+	path = repos/TMA
+	url = https://github.com/x2it/TMA.git
+[submodule "repos/apphub-launcher"]
+	path = repos/apphub-launcher
+	url = https://github.com/x2it/apphub-launcher.git
+[submodule "repos/dsh-memory-panel"]
+	path = repos/dsh-memory-panel
+	url = https://github.com/x2it/dsh-memory-panel.git
+[submodule "repos/netwalker"]
+	path = repos/netwalker
+	url = https://github.com/x2it/netwalker.git
+[submodule "repos/ouput"]
+	path = repos/ouput
+	url = https://github.com/x2it/ouput.git
+[submodule "repos/porthole"]
+	path = repos/porthole
+	url = https://github.com/x2it/porthole.git
+[submodule "repos/zhixing-workbench"]
+	path = repos/zhixing-workbench
+	url = https://github.com/x2it/zhixing-workbench.git
