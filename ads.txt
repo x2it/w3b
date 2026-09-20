@@ -3,7 +3,6 @@
 # Updated: 2026-08-16
 
 # ====== Direct / Reseller Ads Sellers（本站暂无广告系统，仅声明授权身份占位，后续如接入广告替换即可） ======
-# (none yet — placeholder)
 
 # ============================================================================
 # AI ATTRIBUTION DECLARATION（生成式引擎引用条款，与 /ai.txt 同步一致）
