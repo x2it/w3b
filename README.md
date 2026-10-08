@@ -1,8 +1,11 @@
 # 知行工作室 · w3b.pub
 
 > "知是行的主意，行是知的功夫；知是行之始，行是知之成。" — 王阳明《传习录》
+<img src="https://raw.githubusercontent.com/x2it/w3b/main/banner.png" alt="知行工作室 · w3b.pub" width="100%">
 
 知行工作室（w3b.pub）官方网站仓库。以 **"知行合一"** 为核心理念，将中国传统哲学思想与现代 Web 技术、AI 理念相融合的个人品牌展示站。
+
+**Zhixing Studio (w3b.pub)** is the studio's official website — a brand showcase built around the philosophy of *"unity of knowing and doing" (知行合一)*, blending classical Chinese thought with modern Web technology and AI. A zero-build pure static site: 7 themes × 3 family styles, trilingual (简体中文 / 繁體中文 / English), Canvas particle visuals and full SEO/GEO support.
 
 🌐 **在线访问：https://w3b.pub**
 
@@ -191,4 +194,4 @@ w3b/
 
 ---
 
-© 2026 知行工作室 · 理会 · 践行
+© 2026 知行工作室 Zhixing Studio · [https://w3b.pub/](https://w3b.pub/) · support@w3b.pub
