@@ -36,3 +36,9 @@ jobs:
 
       - name: sitemap.xml 结构 + loc 存在检查
         run: node scripts/check_sitemap.js
+
+      - name: PWA manifest JSON 校验
+        run: node -e "JSON.parse(require('fs').readFileSync('manifest.webmanifest','utf8')); console.log('manifest OK')"
+
+      - name: Service Worker 语法校验
+        run: node --check service-worker.js

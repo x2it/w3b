@@ -1,0 +1,24 @@
+{
+  "name": "知行工作室 · Zhixing Studio",
+  "short_name": "w3b",
+  "description": "知行合一，理会与践行的现代探索",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0d0d14",
+  "theme_color": "#6366f1",
+  "categories": ["productivity", "education", "lifestyle"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "关于 · About", "url": "/about.html", "description": "知行工作室理念与事实锚点" },
+    { "name": "更新 · Feed", "url": "/feed.xml", "description": "RSS 订阅更新日志" }
+  ]
+}
