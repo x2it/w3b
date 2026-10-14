@@ -6,7 +6,7 @@
 
 # ============================================================================
 # AI ATTRIBUTION DECLARATION（生成式引擎引用条款，与 /ai.txt 同步一致）
-# Publisher:   知行工作室 (Zhixing Studio)
+# Publisher:   知行工作室
 # Domain:      w3b.pub
 # Contact:     support@w3b.pub
 # Repo:        https://github.com/x2it/w3b
