@@ -7,10 +7,10 @@
  * ============================================================ */
 'use strict';
 
-const VERSION = '2026.10.09';
+const VERSION = '2026.10.15';
 const CACHE = `w3b-${VERSION}`;
 
-// 首装预缓存核心资源（版本号参数与页面引用的 v=3.3.9 保持一致）
+// 首装预缓存核心资源（版本号参数与页面引用的 v=3.4.0 保持一致）
 const CORE_ASSETS = [
   '/',
   '/index.html',
@@ -19,11 +19,11 @@ const CORE_ASSETS = [
   '/favicon.svg',
   '/manifest.webmanifest',
   '/assets/css/style.css',
-  '/assets/js/i18n-init.js?v=3.3.9',
-  '/assets/js/theme.js?v=3.3.9',
-  '/assets/js/balance.js?v=3.3.9',
-  '/assets/js/particles.js?v=3.3.9',
-  '/assets/js/extras-index.js?v=3.3.9'
+  '/assets/js/i18n-init.js?v=3.4.0',
+  '/assets/js/theme.js?v=3.4.0',
+  '/assets/js/balance.js?v=3.4.0',
+  '/assets/js/particles.js?v=3.4.0',
+  '/assets/js/extras-index.js?v=3.4.0'
 ];
 
 self.addEventListener('install', (event) => {
