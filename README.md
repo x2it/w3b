@@ -1,5 +1,7 @@
 # 知行工作室 · w3b.pub
 
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+
 > "知是行的主意，行是知的功夫；知是行之始，行是知之成。" — 王阳明《传习录》
 <img src="https://raw.githubusercontent.com/x2it/w3b/main/banner.png" alt="知行工作室 · w3b.pub" width="100%">
 
@@ -7,7 +9,7 @@
 
 **Zhixing Studio (w3b.pub)** is the studio's official website — a brand showcase built around the philosophy of *"unity of knowing and doing" (知行合一)*, blending classical Chinese thought with modern Web technology and AI. A zero-build pure static site: 7 themes × 3 family styles, trilingual (简体中文 / 繁體中文 / English), Canvas particle visuals and full SEO/GEO support.
 
-🌐 **在线访问：https://w3b.pub**
+**在线访问：https://w3b.pub**
 
 | 项目 | 值 |
 |------|----|
@@ -37,16 +39,16 @@
 
 ## 功能亮点
 
-### 🎨 主题系统
+### 主题系统
 - **7 种主题 × 3 家族风格**（切主题不仅换色，还换布局 / 字体 / 装饰 / 时间线排布）：
 
 | 家族 | 主题名 | 内部标识 | 亮暗 | 风格身份 |
 |---|---|---|---|---|
-| 📜 书卷（Classic） | 书卷·米白 | `light` | 亮 | 宋体衬线 · 900px 窄栏居中 · 细分割线 · 角落淡纹 |
-| 🏢 工作室（Studio） | 工作室·靛蓝 | `blue` | 亮 | 无衬线粗体 · 1200px 宽屏 · 网格背景 · 卡片左侧色条 · 双栏时间线 |
+| 书卷（Classic） | 书卷·米白 | `light` | 亮 | 宋体衬线 · 900px 窄栏居中 · 细分割线 · 角落淡纹 |
+| 工作室（Studio） | 工作室·靛蓝 | `blue` | 亮 | 无衬线粗体 · 1200px 宽屏 · 网格背景 · 卡片左侧色条 · 双栏时间线 |
 |  | 工作室·紫罗兰 | `purple` | 亮 | 同上 |
 |  | 工作室·青瓷 | `teal` | 亮 | 同上 |
-| 🪷 哲学（Philosophic） | 哲学·深夜 | `dark` | 暗深 | 楷体混排 · 780px 阅读窄栏 · 首字下沉 · 左侧引用边条 · 墨滴晕染 · 粒子减弱 |
+| 哲学（Philosophic） | 哲学·深夜 | `dark` | 暗深 | 楷体混排 · 780px 阅读窄栏 · 首字下沉 · 左侧引用边条 · 墨滴晕染 · 粒子减弱 |
 |  | 哲学·松绿 | `green` | 暗深暖绿 | 同上 |
 |  | 哲学·琥珀 | `orange` | 暗深暖棕 | 同上 |
 | 自动 | 跟随系统 | `system` | — | 系统浅 → 书卷·米白；系统暗 → 哲学·深夜 |
@@ -55,12 +57,12 @@
 - 偏好通过 `localStorage` 持久化，刷新自动恢复
 - 旧值兼容：`cyan→teal`、`default/serif_dark→light`，老用户缓存不崩溃
 
-### 🌐 多语言（i18n）
+### 多语言（i18n）
 - **3 种语言**：简体中文、繁体中文、English
 - 自动检测浏览器语言，手动切换偏好本地保存
 - 覆盖所有页面文案、SEO meta、aria 属性、JSON-LD 结构化数据
 
-### 🧠 粒子系统（Canvas）
+### 粒子系统（Canvas）
 - **4 种思维模式** 一键切换
   - 有序思维：规则网格排列
   - 发散联想：自由运动 + 邻近连线
@@ -69,19 +71,19 @@
 - `requestAnimationFrame` 驱动，60-120 粒子自适应
 - 颜色跟随主题变量动态变化，支持 `prefers-reduced-motion`
 
-### ⚖️ 知行平衡器
+### 知行平衡器
 - 交互式天平可视化
 - 双滑块独立控制"理的深度"与"行的力度"
 - 横梁实时倾斜，状态文案反馈平衡/偏向
 
-### 📜 知行节律（降级金句卡片）
+### 知行节律（降级金句卡片）
 - iframe 加载失败时自动显示，不空白
 - **按时段自动切换主题**：
   - 晨间（6-12）理会、午后（12-18）践行
   - 晚间（18-24）合一、深夜（0-6）静思
 - 每个时段 6 条金句，随机显示 3 条
 
-### 🧩 嵌入内容（博文随笔 & 笃行成果）
+### 嵌入内容（博文随笔 & 笃行成果）
 - iframe 嵌入外部 Coze 站点，自动同步最新数据（博文 10 条列表 / 7喵仓库 3×4 成果网格）
 - **v3.3.0 响应式高度体系**（`assets/js/extras-index.js` + `style.css` 双重兜底）：
   - `IntersectionObserver` 懒初始化：容器进入视口 200px 内才开始 20s 超时计时，避免首屏 race
@@ -95,14 +97,14 @@
 - `?debug=1` 调试模式：控制台打印每次 postMessage 原始值、断点切换、clamp 结果
 - 滚动联动粒子：到博文切换"有序"，到成果切换"专注"
 
-### 🔤 AI 金句打字机
+### AI 金句打字机
 - Header 区域 15 条 AI × 知行合一 金句循环
 - 逐字打字 / 退格效果，语言切换后重建
 
-### 📱 响应式
+### 响应式
 - 三版本适配：PC（>768px）/ 平板（481-768px）/ 手机（≤480px）
 
-### 🔍 SEO + GEO 完整
+### SEO + GEO 完整
 - `robots.txt`（含 13 种 AI 爬虫白名单）+ `sitemap.xml`（hreflang 三语）+ `feed.xml`（RSS 订阅）
 - canonical URL、Open Graph、Twitter Card、JSON-LD（WebSite + TechArticle）
 - 404 页面 `noindex`，避免错误索引
@@ -190,7 +192,7 @@ w3b/
 
 思以广之，行以践之。期待与你交流。
 
-📧 **support@w3b.pub**（一般 1-2 天内回复）
+**support@w3b.pub**（一般 1-2 天内回复）
 
 ---
 
